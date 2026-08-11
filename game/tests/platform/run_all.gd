@@ -50,6 +50,7 @@ func _run() -> void:
 	_test_mode_transition_invariants()
 	_test_mode_switch_near_edge()
 	_test_hit_region_bounds()
+	_test_headless_native_gate()
 	if _failures.is_empty():
 		print("RESULT: PASS (%d assertions)" % _assertions)
 		quit(0)
@@ -183,6 +184,19 @@ func _test_hit_region_bounds() -> void:
 	var polygon := PackedVector2Array([Vector2(10, 10), Vector2(30, 10), Vector2(30, 30), Vector2(10, 30)])
 	var region := OverlayHitRegion.single(polygon, 5, "test")
 	_assert_equal(region.bounds(), Rect2(5, 5, 30, 30), "INP-LOGIC-001 hit-region bounds include padding")
+
+
+func _test_headless_native_gate() -> void:
+	if DisplayServer.get_name() != "headless":
+		return
+	var adapter := DesktopWindowAdapterFactory.create_for_current_host(root)
+	var adapter_matches_host: bool = (
+		(OS.get_name() == "macOS" and adapter is MacOSDesktopWindowAdapter)
+		or (OS.get_name() == "Windows" and adapter is WindowsDesktopWindowAdapter)
+		or (OS.get_name() not in ["macOS", "Windows"] and adapter.get_script() == DesktopWindowAdapter)
+	)
+	_assert_equal(adapter_matches_host, true, "ENV-HEADLESS-001 platform adapter selection remains host-specific")
+	_assert_equal(adapter.is_host_supported(), false, "ENV-HEADLESS-002 headless display is not native-window evidence")
 
 
 func _standard_monitors() -> Array[OverlayMonitorInfo]:

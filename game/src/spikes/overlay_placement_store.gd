@@ -2,7 +2,7 @@ class_name OverlayPlacementStore
 extends RefCounted
 
 const VERSION := 1
-const DEFAULT_PATH := "user://windows_overlay_spike/placement.json"
+const DEFAULT_PATH := "user://desktop_overlay_spike/placement.json"
 
 
 static func default_envelope() -> Dictionary:

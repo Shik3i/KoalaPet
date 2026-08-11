@@ -4,7 +4,7 @@
 
 | Tool | Verified version/path | Role |
 |---|---|---|
-| Godot | `4.7.1.stable.official.a13da4feb` at `/Applications/Godot.app/Contents/MacOS/Godot` | Pinned development version, headless shell validation, and Prompt 1 harness preparation |
+| Godot | `4.7.1.stable.official.a13da4feb` at `/Applications/Godot.app/Contents/MacOS/Godot` | Pinned development version, headless validation, and native macOS Prompt 1 spike |
 | Python | `3.9.6` at `/usr/bin/python3` | Content/schema and deterministic asset tooling |
 | FFmpeg | `/opt/homebrew/bin/ffmpeg` | Optional future animation previews |
 
@@ -23,5 +23,7 @@ Godot is pinned for development reproducibility, not evidence that Windows overl
 
 - Preparation host: macOS `26.5.2` build `25F84`, arm64, Apple M4. It is not a Windows test environment.
 - Project renderer: `gl_compatibility`; headless diagnostics reported DisplayServer `headless` and driver `opengl3`, with no graphics adapter name.
+- Native macOS diagnostics reported DisplayServer `macOS`, driver `opengl3`, Apple M4, Retina scale `2.0`, and `225` DPI. These facts are macOS-only.
+- macOS entry point: `tools/macos_overlay_spike/run_spike.sh`; headless runs are logic/parser gates and cannot satisfy native rows.
 - Windows entry point: PowerShell `tools/windows_overlay_spike/run_spike.ps1`, with an exact Godot version gate and privacy-reviewed diagnostics.
 - `pwsh` availability and Windows script execution are host-dependent; a macOS/headless run cannot validate native windows.

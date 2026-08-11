@@ -37,6 +37,8 @@
 - [Glossary](GLOSSARY.md)
 - [Windows overlay spike report](spikes/WINDOWS_OVERLAY_SPIKE.md)
 - [Windows overlay evidence](evidence/windows-overlay/README.md)
+- [macOS overlay validation report](spikes/MACOS_OVERLAY_SPIKE.md)
+- [macOS overlay evidence](evidence/macos-overlay/README.md)
 
 ## Decision and history records
 

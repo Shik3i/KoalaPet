@@ -8,7 +8,7 @@ Dependencies: none. Acceptance: authority hierarchy, useful system docs, accepte
 
 ## 1. Windows desktop-overlay technical spike
 
-Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable harness, tests, and 49-row matrix prepared; acceptance blocked on an interactive Windows 10/11 run.**
+Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable cross-platform harness, 41 logic assertions, separate Windows/macOS matrices, and supplementary native macOS findings completed. Acceptance remains blocked on an interactive Windows 10/11 run; macOS evidence does not substitute for it.**
 
 ## 2. Content and simulation foundation
 

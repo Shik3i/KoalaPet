@@ -6,6 +6,8 @@
 
 The reusable harness, Windows launch/diagnostic scripts, platform adapter contract, placement store, pure tests, evidence structure, and full matrix are prepared. No interactive Windows 10/11 desktop was available, so no Windows compositor, shell, input, DPI, tray, multi-monitor, or performance behavior is accepted.
 
+A separate native macOS pass is recorded in [`MACOS_OVERLAY_SPIKE.md`](MACOS_OVERLAY_SPIKE.md). It informs the shared adapter design but does not change a single Windows row.
+
 ## Preflight
 
 | Item | Result |
@@ -29,7 +31,7 @@ Reference SHA-256 values: Expanded `45d5be185a125a2469dc2bea766f969bdc12d64dd1d6
 - `WindowsDesktopWindowAdapter`: Godot high-level Windows implementation, host-gated and capability-reporting.
 - `OverlayPlacementSanitizer`: deterministic monitor fallback, normalized anchoring, usable-rect clamping, and off-screen recovery.
 - `OverlayPlacementStore`: spike-only version `1` JSON envelope with temporary file, backup rotation, and replaceable write.
-- `WindowsOverlaySpike`: one native root `Window` reconfigured across Minimal, Small, and Expanded; technical code-drawn placeholder only.
+- `DesktopOverlaySpike`: one native root `Window` reconfigured across Minimal, Small, and Expanded; technical code-drawn placeholder only.
 - `StatusIndicator` recovery menu: generated icon, native-menu preference, cleanup on exit. Product adoption remains open.
 - `run_spike.ps1` and `collect_environment.ps1`: exact-version gate, test execution, privacy-reviewed diagnostics, and launch.
 
@@ -95,7 +97,7 @@ Command:
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/platform/run_all.gd
 ```
 
-Result: `PASS (39 assertions)`. Covered valid, partial, fully off-screen, negative-coordinate, removed-monitor, resolution/taskbar usable-rect, oversized-window, corrupt/future-version, per-mode placement, all transition paths, a near-edge mode switch, 100 rapid transitions, and hit-region bounds. Full output: [`platform-neutral-tests.txt`](../evidence/windows-overlay/logs/platform-neutral-tests.txt).
+Current result: `PASS (41 assertions)`. It adds adapter-selection and headless/native-evidence gate checks to the prior geometry, recovery, persistence, transition, stress, and hit-region coverage. Full current output is recorded with the [macOS supplementary evidence](../evidence/macos-overlay/logs/platform-neutral-tests.txt); the Windows evidence snapshot remains the original 39-assertion preparation run.
 
 Headless import and a three-frame spike-scene smoke start also completed without parser/runtime errors. None validates native Windows behavior.
 

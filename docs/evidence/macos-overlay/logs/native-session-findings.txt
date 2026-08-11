@@ -1,0 +1,25 @@
+Platform: macOS 26.5.2 (25F84)
+Environment: interactive local desktop; one Built-in Retina Display; Godot 4.7.1; Compatibility/OpenGL 3; Apple M4
+
+Native diagnostics:
+- monitor full_rect=[0,0,2560,1664], usable_rect=[0,58,2560,1606], scale=2.0, dpi=225
+- Minimal position=[24,58], size=[240,180]
+- Small position=[400,300], size=[480,240]
+- Expanded position=[1600,1124], size=[960,540]
+
+Direct event/results excerpts:
+- Full passthrough: underlay click_count 7 -> 8 at local [242,242]; overlay_click_count=0; mouse_passthrough=true; window_focused=false.
+- Polygon outside: click within native bounds but outside polygon reached underlay at local [340,288]; overlay_click_count=0.
+- Polygon inside: overlay event position=[122,124]; overlay_click_count=1.
+- Moving polygon after throttle: hit_region_update_count increased by 60 in 2 seconds (30 Hz).
+- Native drag: pointer [370,162] -> [470,242]; window [400,300] -> [590,452].
+- Focus acquisition: Small click made the overlay frontmost and window_focused=true.
+- Focus avoidance from inactive Minimal: window_focused remained false after polygon click.
+- Focused Small -> Minimal: unfocusable=true and focus_policy=no_focus, but window_focused remained true and the Godot process stayed frontmost.
+- Always-on-top=true remained above the active neutral underlay. always_on_top=false allowed the underlay to cover it.
+- Borderless minimize request was ignored until MacOSDesktopWindowAdapter temporarily restored native decoration; then window_mode=1 and focused=false.
+- Main-window hide emitted: Can't change visibility of main window. Adapter now returns MAIN_WINDOW_HIDE_UNSUPPORTED instead of calling the failing operation.
+- StatusIndicator reported visible=true but rect=[-9120,-6,44,64]; the privacy-safe menu-bar capture contains no visible generated indicator.
+- Stage Manager setting was 0 (disabled); Dock auto-hide setting was 1; only one display was attached.
+
+No claim is made for Cmd+Tab, Dock restoration, Mission Control, Spaces, Show Desktop, native close, mixed-scale monitors, negative-coordinate real displays, or per-process GPU use.

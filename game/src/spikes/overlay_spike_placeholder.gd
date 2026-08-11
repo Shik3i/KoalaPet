@@ -6,7 +6,9 @@ signal hit_region_changed(region: OverlayHitRegion)
 var animate := true
 var lane_width := 180.0
 var interaction_padding := 10
+var hit_region_update_hz := 30.0
 var _elapsed := 0.0
+var _hit_region_elapsed := 0.0
 var _lane_origin := Vector2(24, 72)
 
 
@@ -23,7 +25,11 @@ func _process(delta: float) -> void:
 	_elapsed += delta
 	var lane_offset := (sin(_elapsed * 0.8) * 0.5 + 0.5) * lane_width
 	position = _lane_origin + Vector2(lane_offset, 0)
-	hit_region_changed.emit(OverlayHitRegion.single(window_hit_polygon(), interaction_padding, "moving-placeholder"))
+	_hit_region_elapsed += delta
+	var update_interval := 1.0 / maxf(1.0, hit_region_update_hz)
+	if _hit_region_elapsed >= update_interval:
+		_hit_region_elapsed = fmod(_hit_region_elapsed, update_interval)
+		hit_region_changed.emit(OverlayHitRegion.single(window_hit_polygon(), interaction_padding, "moving-placeholder"))
 
 
 func window_hit_polygon() -> PackedVector2Array:

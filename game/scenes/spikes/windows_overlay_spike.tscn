@@ -2,7 +2,7 @@
 
 [ext_resource path="res://src/spikes/windows_overlay_spike.gd" type="Script" id="1_spike"]
 
-[node name="WindowsOverlaySpike" type="Control"]
+[node name="DesktopOverlaySpike" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

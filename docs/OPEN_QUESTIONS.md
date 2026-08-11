@@ -18,6 +18,8 @@ Each item requires product-owner acceptance or spike evidence. Do not treat defa
 | Windows | Which Minimal interaction strategy preserves both input safety and visual effects? | Compare complete passthrough, polygonal hit region, and timed interaction on Windows; polygonal passthrough may clip drawing outside the region. |
 | Windows | Is one reconfigured native window sufficient for all three modes? | Provisional harness choice; measure flicker, focus, clipping, resource lifetime, and transition stress on Windows. |
 | Performance | Which renderer and active/idle update rates meet the overlay budget? | Measure Compatibility against another supported Windows renderer and record CPU/GPU/memory before selecting values. |
+| macOS | If macOS becomes a release target, how should focused Minimal deactivate and how should root-window hide/recovery work? | Native pass found retained activation and an unsupported root hide; decide only after platform scope is accepted. |
+| macOS | Is Godot `StatusIndicator` reliable enough for recovery on supported macOS versions? | Current native run reported an off-screen rect and produced no visible item; reproduce on a packaged app before any commitment. |
 | Platforms | When, if ever, should Linux and macOS support begin? | Windows architecture findings and platform demand. |
 | Licensing | What open-source code license and asset/content licenses apply? | Product-owner/legal choice. No `LICENSE` until chosen. |
 

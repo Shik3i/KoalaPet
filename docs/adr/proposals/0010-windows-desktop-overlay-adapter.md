@@ -5,17 +5,18 @@
 
 ## Context
 
-KoalaPet requires Minimal, Small, and Expanded over one authoritative state. Godot 4.7 exposes high-level native-window, transparency, passthrough, dragging, focus, monitor, and status-indicator APIs, but Prompt 1 ran on macOS. API inspection and headless logic cannot establish Windows compositor or shell behavior.
+KoalaPet requires Minimal, Small, and Expanded over one authoritative state. Godot 4.7 exposes high-level native-window, transparency, passthrough, dragging, focus, monitor, and status-indicator APIs. A supplementary native macOS pass now validates part of the shared contract, but cannot establish Windows compositor or shell behavior.
 
 ## Proposed decision
 
-Keep a narrow `DesktopWindowAdapter` contract. Use one native root `Window` reconfigured across all three presentations. Implement Windows behavior through `WindowsDesktopWindowAdapter`; keep placement sanitation and mode coordination platform-neutral. Add no native extension until a measured high-level API gap requires it.
+Keep a narrow `DesktopWindowAdapter` contract. Use one native root `Window` reconfigured across all three presentations. Keep shared Godot-native mechanics in `GodotNativeWindowAdapter`; isolate host differences in thin Windows/macOS subclasses and OS selection in a platform factory. Keep placement sanitation and mode coordination platform-neutral. Add no native extension until a measured Windows high-level API gap requires it.
 
 ## Current evidence
 
 - Godot 4.7.1 parsed/imported the complete harness and started the spike scene headlessly.
-- 39 deterministic assertions passed for geometry, persistence envelope, recovery, transitions including a near-edge mode switch, and hit-region bounds.
+- 41 deterministic assertions passed for geometry, persistence envelope, recovery, transitions, hit-region bounds, adapter selection, and rejecting headless as native evidence.
 - Official Godot documentation exposes required baseline APIs but no dedicated taskbar/Alt+Tab visibility controls.
+- Native macOS validated transparency, passthrough, topmost, drag, Retina geometry, and selected focus paths. It found retained activation on focused Small → Minimal, unsupported root hide, degraded borderless minimize, and an unusable status indicator.
 - No interactive Windows behavior was run.
 
 ## Expected consequences

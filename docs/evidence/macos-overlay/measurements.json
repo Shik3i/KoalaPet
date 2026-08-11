@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "platform": "macOS",
+  "os_version": "26.5.2 (25F84)",
+  "test_environment": "Interactive local desktop session; Compatibility renderer; technical placeholder moving in Minimal",
+  "samples": [
+    {
+      "test_id": "PERF-001",
+      "configuration": "Minimal, dynamic polygon, uncapped native run",
+      "cpu_percent_samples": [4.7, 5.9, 6.1, 5.7],
+      "cpu_percent_mean": 5.6,
+      "top_memory_reported_mib": 89,
+      "ps_rss_kib": 213632,
+      "gpu_percent": null,
+      "status": "PASS_WITH_LIMITATION",
+      "limitation": "Approximate short samples from a development run; tools disagreed on memory and no per-process GPU counter was available."
+    },
+    {
+      "test_id": "PERF-002",
+      "configuration": "Minimal, dynamic polygon throttled to 30 Hz",
+      "observed_region_updates": 60,
+      "sample_seconds": 2,
+      "update_rate_hz": 30,
+      "cpu_percent_samples": [6.3, 7.5, 7.6, 7.5],
+      "cpu_percent_mean": 7.225,
+      "top_memory_reported_mib": 138,
+      "gpu_percent": null,
+      "status": "PASS_WITH_LIMITATION",
+      "limitation": "The update-rate reduction is direct. CPU and memory samples were taken from a separate process run and do not demonstrate an optimization win."
+    }
+  ]
+}

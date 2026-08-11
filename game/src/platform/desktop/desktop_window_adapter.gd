@@ -1,6 +1,12 @@
 class_name DesktopWindowAdapter
 extends RefCounted
 
+const INPUT_INTERACTIVE := "interactive"
+const INPUT_FULL_PASSTHROUGH := "full_passthrough"
+const INPUT_HIT_REGION := "hit_region"
+const FOCUS_NORMAL := "normal"
+const FOCUS_NO_FOCUS := "no_focus"
+
 var target_window: Window
 
 
@@ -10,6 +16,10 @@ func _init(window: Window = null) -> void:
 
 func detect_capabilities() -> OverlayCapabilities:
 	return OverlayCapabilities.new()
+
+
+func is_host_supported() -> bool:
+	return false
 
 
 func enumerate_monitors() -> Array[OverlayMonitorInfo]:

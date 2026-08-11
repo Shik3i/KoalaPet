@@ -9,4 +9,4 @@ Target: cozy, polished, detailed pixel art with modern readable compact UI—not
 
 Asset families: full/layered habitat backgrounds, ground strips/edges, modular furniture/props, functional stations, lighting/particles, transparent pet sprites, preview icons, portraits, UI icons, dungeon backgrounds, enemy sprites, and effects. No traditional generic tileset is required.
 
-The three expected references are currently unavailable; see `references/ui-modes/README.md`. Do not invent or substitute images.
+The three supplied mode references are indexed with dimensions and checksums in `references/ui-modes/README.md`. They remain directional concepts outside `res://`, not runtime or production assets.

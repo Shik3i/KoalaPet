@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-08-11T07:35:07Z",
+  "host_id": "macos-preparation-2026-08-11",
+  "classification": "macos_codex_desktop_workspace",
+  "interactive_windows": false,
+  "ci": false,
+  "remote_windows_session": false,
+  "os": {
+    "name": "macOS",
+    "version": "26.5.2",
+    "build": "25F84",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64"
+  },
+  "hardware": {
+    "model": "MacBook Air (Mac16,12)",
+    "chip": "Apple M4",
+    "memory_bytes": 17179869184,
+    "graphics": "Apple M4 integrated GPU, 8 cores"
+  },
+  "godot": {
+    "path": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.1.stable.official.a13da4feb",
+    "project_rendering_method": "gl_compatibility",
+    "headless_display_server": "headless",
+    "headless_rendering_driver": "opengl3",
+    "headless_video_adapter": ""
+  },
+  "starting_commit": "9e06f25f0e4cdbc5d739f8b79a5d1f0aa0e77310",
+  "limitations": [
+    "No interactive Windows compositor or shell was available.",
+    "Headless DisplayServer values are not desktop-window evidence.",
+    "No personal usernames, hostnames, notifications, or account data are recorded."
+  ]
+}

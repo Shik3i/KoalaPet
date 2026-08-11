@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "completion_state": "PREPARED_BUT_BLOCKED",
+  "required_host": "interactive Windows 10/11 desktop",
+  "modes": {
+    "MINIMAL": {"status": "BLOCKED_NOT_RUN", "cpu_percent": null, "gpu_percent": null, "memory_bytes": null, "frame_rate": null, "notes": "No Windows host."},
+    "SMALL": {"status": "BLOCKED_NOT_RUN", "cpu_percent": null, "gpu_percent": null, "memory_bytes": null, "frame_rate": null, "notes": "No Windows host."},
+    "EXPANDED": {"status": "BLOCKED_NOT_RUN", "cpu_percent": null, "gpu_percent": null, "memory_bytes": null, "frame_rate": null, "notes": "No Windows host."}
+  },
+  "dynamic_hit_region": {"status": "BLOCKED_NOT_RUN", "update_rate_hz": null, "cpu_delta_percent": null, "notes": "No Windows host."}
+}

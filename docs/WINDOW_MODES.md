@@ -17,3 +17,14 @@ Optional inspection/customization/management for detailed values, history, inven
 ## Required Prompt 1 evidence
 
 On Windows 10/11 test transparency, passthrough, hit regions, always-on-top, dragging, focus, DPI scaling, taskbar and auto-hide edges, mixed-DPI multiple monitors, minimize/restore, lost-window recovery, and persisted position. Godot API presence is not proof. Platform behavior stays behind a Windows adapter.
+
+## Prompt 1 prepared implementation
+
+- One native root `Window` is reconfigured across all modes; this is provisional pending Windows evidence.
+- `WindowModeController` owns presentation transitions and per-mode placement intent without domain state.
+- `DesktopWindowAdapter` defines explicit capability and degraded/unsupported results; `WindowsDesktopWindowAdapter` contains Godot/Windows behavior.
+- Minimal supports complete passthrough, polygonal hit-region, and temporary-interaction strategies in the harness. A generated status-indicator menu provides a recovery path.
+- Positions are stored per mode with monitor, usable rectangle, absolute and normalized coordinates, size, scale/DPI, and bottom-right anchor metadata. Restore sanitizes against current usable rectangles.
+- The code-drawn spike visual is diagnostic only. The supplied concept references are not runtime assets.
+
+All native Windows observations remain `BLOCKED_NOT_RUN`; see `spikes/WINDOWS_OVERLAY_SPIKE.md`.

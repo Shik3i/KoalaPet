@@ -35,10 +35,13 @@
 - [AI asset pipeline](AI_ASSET_PIPELINE.md)
 - [Legal and IP boundaries](LEGAL_AND_IP_BOUNDARIES.md)
 - [Glossary](GLOSSARY.md)
+- [Windows overlay spike report](spikes/WINDOWS_OVERLAY_SPIKE.md)
+- [Windows overlay evidence](evidence/windows-overlay/README.md)
 
 ## Decision and history records
 
 - [Accepted ADRs](adr/README.md)
+- [Proposed Windows adapter ADR](adr/proposals/0010-windows-desktop-overlay-adapter.md) — not accepted; gated on Windows evidence
 - [Historical prompts](prompts/README.md)
 
 Authority: `PROJECT_CANON.md` → accepted ADRs → detailed system documents → `ROADMAP.md` → historical prompts and temporary notes.

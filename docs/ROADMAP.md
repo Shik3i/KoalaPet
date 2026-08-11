@@ -4,15 +4,15 @@ Sequencing protects coherence; it is not permission to remove later accepted sys
 
 ## 0. Repository and canon bootstrap
 
-Dependencies: none. Acceptance: authority hierarchy, useful system docs, accepted foundation ADRs, draft schemas/example pack, runnable validator, minimal Godot shell if possible, quality evidence, and explicit blockers. **Current milestone.**
+Dependencies: none. Acceptance: authority hierarchy, useful system docs, accepted foundation ADRs, draft schemas/example pack, runnable validator, minimal Godot shell if possible, quality evidence, and explicit blockers. **Complete.**
 
 ## 1. Windows desktop-overlay technical spike
 
-Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay.
+Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable harness, tests, and 49-row matrix prepared; acceptance blocked on an interactive Windows 10/11 run.**
 
 ## 2. Content and simulation foundation
 
-Dependencies: milestone 1 architecture findings. Acceptance: content registry and validation, draft-to-supported schema decision, save envelope and migrations, clock abstraction, offline policy, feature gates, base-pack loading, missing-content quarantine, deterministic tests.
+Dependencies: milestone 1 architecture findings. Acceptance: content registry and validation, draft-to-supported schema decision, save envelope and migrations, clock abstraction, offline policy, feature gates, base-pack loading, missing-content quarantine, deterministic tests. **Not started; do not begin until milestone 1 is accepted.**
 
 ## 3. Single-pet classic V-pet vertical slice
 

@@ -12,7 +12,9 @@
 - **Platform:** desktop-window adapter; Windows implementation isolated from domain/UI intent.
 - **Art source/generated assets:** source outside `res://`; game-ready output inside a controlled generated root.
 
-Conceptual boundaries include `ContentPackRegistry`, `ContentValidator`, `SimulationClock`, `OfflineProgressService`, `PetLifecycleService`, `CareService`, `EvolutionResolver`, `BattleService`, `DungeonService`, `FeatureGateService`, `FarmJobService`, `SaveRepository`, `SaveMigrationService`, `WindowModeController`, and a Windows desktop adapter. Prompt 0 does not create empty class hierarchies for them.
+Conceptual boundaries include `ContentPackRegistry`, `ContentValidator`, `SimulationClock`, `OfflineProgressService`, `PetLifecycleService`, `CareService`, `EvolutionResolver`, `BattleService`, `DungeonService`, `FeatureGateService`, `FarmJobService`, `SaveRepository`, `SaveMigrationService`, `WindowModeController`, and a Windows desktop adapter.
+
+Prompt 1 implements only the platform/presentation spike boundary: `WindowModeController`, `DesktopWindowAdapter`, `WindowsDesktopWindowAdapter`, capability/result/monitor/placement value objects, `OverlayPlacementSanitizer`, and bounded hit-region logic. `OverlayPlacementStore`, `WindowsOverlaySpike`, diagnostics, and its code-drawn placeholder remain spike-owned. They do not define gameplay or the production save format. Unsupported host/platform operations return explicit results instead of silently succeeding.
 
 Commands produce explicit results/events. Identical state, content versions, timestamps, and seeds should produce identical domain outcomes. Rendering and frame timing never define balance. Content registry resolution completes before saves bind IDs; missing definitions produce recoverable quarantine, not deletion.
 

@@ -1,7 +1,18 @@
 {
   "$schema": "../../../../schemas/feature-gate.schema.json",
   "id": "example.neutral:quiet_hollow_gate",
-  "feature": "quiet_hollow_theme",
+  "feature": "example.neutral:quiet_hollow_theme",
   "presentation_before_unlock": "hidden",
-  "all": [{"fact": "dungeon_clears", "operator": "contains", "value": "example.neutral:quiet_hollow"}]
+  "reward_ids": ["example.neutral:quiet_hollow_access"],
+  "condition": {
+    "all": [
+      {"fact": "dungeon_clears", "operator": "contains", "value": "example.neutral:quiet_hollow"},
+      {
+        "any": [
+          {"fact": "milestone_count", "operator": "gte", "value": 1},
+          {"not": {"fact": "gates_disabled", "operator": "eq", "value": true}}
+        ]
+      }
+    ]
+  }
 }

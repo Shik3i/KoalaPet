@@ -10,6 +10,7 @@
     "display_name_key": {"type": "string", "minLength": 1},
     "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"},
     "content_api_version": {"const": "0.1"},
+    "enabled": {"type": "boolean", "default": true},
     "type": {"enum": ["skin", "content", "total_conversion"]},
     "authors": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
     "license": {"type": "object", "required": ["code", "assets"], "properties": {"code": {"type": "string"}, "assets": {"type": "string"}, "source": {"type": "string"}}, "additionalProperties": false},
@@ -22,6 +23,6 @@
     "asset_roots": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"}},
     "overrides": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}}
   },
-  "$defs": {"packRefs": {"type": "array", "uniqueItems": true, "items": {"type": "object", "required": ["pack_id", "version"], "properties": {"pack_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}, "version": {"type": "string", "minLength": 1}}, "additionalProperties": false}}},
+  "$defs": {"packRefs": {"type": "array", "uniqueItems": true, "items": {"type": "object", "required": ["pack_id", "version"], "properties": {"pack_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}, "version": {"type": "string", "pattern": "^(?:\\*|(?:>=|\\^)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?)$"}}, "additionalProperties": false}}},
   "additionalProperties": false
 }

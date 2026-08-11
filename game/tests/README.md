@@ -6,4 +6,10 @@ Prompt 1 adds deterministic platform-neutral placement, recovery, persistence-en
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/platform/run_all.gd
 ```
 
-Future domain, content-registry, save/migration, offline-time, scene, and production presentation tests arrive with their implementations.
+Milestone 2 foundation gate:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/foundation/run_all.gd
+```
+
+It covers content resolution/security/snapshots, clocks/offline policy, save replacement/recovery/migration/quarantine, feature gates, and bootstrap. It does not validate native windows or pet gameplay.

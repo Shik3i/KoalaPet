@@ -44,6 +44,7 @@
 
 - [Accepted ADRs](adr/README.md)
 - [Proposed Windows adapter ADR](adr/proposals/0010-windows-desktop-overlay-adapter.md) — not accepted; gated on Windows evidence
+- [Accepted runtime foundation ADRs](adr/README.md) — deterministic content, time semantics, save/migration/quarantine
 - [Historical prompts](prompts/README.md)
 
 Authority: `PROJECT_CANON.md` → accepted ADRs → detailed system documents → `ROADMAP.md` → historical prompts and temporary notes.

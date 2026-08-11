@@ -8,11 +8,11 @@ Dependencies: none. Acceptance: authority hierarchy, useful system docs, accepte
 
 ## 1. Windows desktop-overlay technical spike
 
-Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable cross-platform harness, 41 logic assertions, separate Windows/macOS matrices, and supplementary native macOS findings completed. Acceptance remains blocked on an interactive Windows 10/11 run; macOS evidence does not substitute for it.**
+Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable cross-platform harness, 41 logic assertions, separate Windows/macOS matrices, and supplementary native macOS findings completed. Acceptance remains blocked on an interactive Windows 10/11 run; ADR 0010 stays proposed. This pending platform gate does not block platform-neutral simulation milestones.**
 
 ## 2. Content and simulation foundation
 
-Dependencies: milestone 1 architecture findings. Acceptance: content registry and validation, draft-to-supported schema decision, save envelope and migrations, clock abstraction, offline policy, feature gates, base-pack loading, missing-content quarantine, deterministic tests. **Not started; do not begin until milestone 1 is accepted.**
+Dependencies: platform-neutral architecture boundaries established by milestone 1; native topology acceptance is not required. Acceptance: content registry and validation, explicit experimental schema status, save envelope and migrations, clock abstraction, offline policy, feature gates, base-pack loading, missing-content quarantine, deterministic tests. **Complete: runtime registry/snapshot, Content API `0.1` trust boundary, clocks/offline policy, save v2/migration/backup/quarantine, gates/unlock ledger, bootstrap, and 87 headless assertions.**
 
 ## 3. Single-pet classic V-pet vertical slice
 

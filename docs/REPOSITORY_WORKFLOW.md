@@ -6,6 +6,6 @@ Conventional Commits are required: `feat:`, `fix:`, `docs:`, `test:`, `refactor:
 
 Before review: run applicable validator/tests, Godot headless import, `git diff --check`, link/path checks, IP terminology scan, artifact/binary scan, and inspect the staged diff. Report exact commands and results.
 
-## First intended CI workflow
+## Intended first CI workflow
 
-Deferred until the foundation commit. The first workflow should use pinned Python, install `tools/content_validation/requirements.txt`, run the content validator, verify Markdown links/local paths, run `git diff --check` against the PR diff, and headlessly import the pinned Godot project using a verified runner acquisition method. It must cache safely, pin actions by immutable revisions, and fail on missing checks; do not add a knowingly broken workflow.
+CI is not implemented or claimed. A future first workflow should use pinned Python, install `tools/content_validation/requirements.txt`, run `tools/run_foundation_checks.py` with a verified pinned Godot executable, and fail on missing checks. It must cache safely and pin actions by immutable revisions; do not add a knowingly broken workflow.

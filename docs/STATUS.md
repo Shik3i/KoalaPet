@@ -1,12 +1,11 @@
 # Project Status
 
-**Phase:** Prompt 1 — macOS supplementary pass complete; Windows validation `BLOCKED_NOT_RUN`
+**Phase:** Milestone 2 — Content and Simulation Foundation complete
 
 ## Repository state
 
-- Prompt 0 foundation remains intact.
-- The reusable overlay harness now has explicit Windows and macOS adapter boundaries.
-- Native macOS findings are recorded separately and make no Windows claims.
+- Windows desktop-overlay validation remains pending and ADR 0010 remains a proposal.
+- Milestone 2 proceeded independently because content, time, persistence, gates, and bootstrap have no native-window dependency.
 - KoalaPet remains a replaceable codename.
 
 ## Implemented
@@ -21,17 +20,25 @@
 - Status-indicator recovery harness and Windows PowerShell launcher/diagnostics
 - Full 49-row Windows validation matrix plus a separate 42-row macOS evidence matrix and privacy-safe captures
 - Three supplied UI-mode concept PNGs preserved byte-for-byte outside `res://`
+- Runtime discovery for bundled, external `user://mods`, and injected fixture roots through one `ContentPackRegistry`
+- Deterministic dependency/priority resolution, conflict and override policy, rejected-pack diagnostics, localization index, safe asset paths, and reproducible content snapshots
+- Experimental Content API `0.1` runtime trust-boundary validation aligned with the Python authoring validator
+- Injectable system/fake clocks and explicit capped offline-time anomaly policy
+- Save envelope version `2`, validated temporary replacement, previous-valid backup, fallback recovery, sequential migration fixture, and lossless missing-content quarantine/restoration
+- Declarative recursive feature-gate evaluation, failed-condition explanations, unlock ledger, and idempotent rewards
+- Platform-neutral application bootstrap wiring configuration, registry, snapshot, clock, save repository, migrations, and gates
 
 ## Documented only
 
-All pet simulation, care, time/offline progression, production persistence, production presentation UI, accepted Windows overlay behavior, evolution, battle, dungeon, habitat, farm, Trading Post, and production art behavior. The spike does not implement gameplay or claim native Windows behavior.
+All actual pet simulation, care effects, starter selection, hatching, production presentation UI, accepted Windows overlay behavior, evolution execution, battle, dungeon, habitat, farm, Trading Post, and production art behavior. Milestone 2 provides infrastructure and neutral fixture records only.
 
 ## Latest quality checks
 
 - Content validation passed for 2 packs and 17 content documents.
 - Godot `4.7.1.stable.official.a13da4feb` completed a headless editor import of `game/`.
-- Repository-relative Markdown link validation passed for 49 local targets.
+- Repository-relative Markdown link validation passed for 63 local targets.
 - Platform-neutral overlay tests passed with 41 assertions, including rejection of headless runs as native-window evidence.
+- Milestone 2 foundation tests passed with 87 deterministic assertions across content, time, saves, quarantine, gates, and bootstrap.
 - Godot headless import and three-frame spike-scene smoke start passed on macOS.
 - macOS matrix: 15 `PASS`, 10 `PASS_WITH_LIMITATION`, 4 `FAIL`, 8 `BLOCKED_NOT_RUN`, 5 `NOT_AVAILABLE`.
 - Windows matrix remains unchanged: 6 `PASS`, 4 `PASS_WITH_LIMITATION`, 39 `BLOCKED_NOT_RUN`, 0 `FAIL`.
@@ -44,4 +51,4 @@ All pet simulation, care, time/offline progression, production persistence, prod
 
 ## Next recommended milestone
 
-Continue Prompt 1 on an interactive Windows 10/11 machine using `tools/windows_overlay_spike/run_spike.ps1`, execute all 39 blocked rows, and record direct evidence. Do not begin Prompt 2 or accept ADR 0010 before that evidence exists.
+Begin Milestone 3 only with a data-defined single-pet classic V-pet vertical slice over the completed foundation. Keep Windows overlay validation as a parallel pending technical gate; do not accept ADR 0010 or make production window-topology assumptions until its 39 blocked rows are executed on Windows.

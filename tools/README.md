@@ -7,3 +7,11 @@
 - `macos_overlay_spike/`: supplementary macOS native runner, neutral underlay, and deterministic pointer probes
 
 Tools are local, deterministic, and must not require accounts or network services.
+
+Run the complete local Milestone 2 gate with the pinned Python environment:
+
+```sh
+.venv/bin/python tools/run_foundation_checks.py
+```
+
+On other hosts, pass the pinned executable with `--godot` or set `GODOT_PATH`.

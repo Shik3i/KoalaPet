@@ -1,3 +1,6 @@
-[gd_scene format=3]
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://src/app/foundation_bootstrap_node.gd" type="Script" id="1_foundation"]
 
 [node name="Bootstrap" type="Node"]
+script = ExtResource("1_foundation")

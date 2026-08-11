@@ -14,6 +14,11 @@ from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK_ROOTS = (ROOT / "game" / "content_packs", ROOT / "mods" / "examples")
+FORBIDDEN_EXTENSIONS = {
+    ".gd", ".gdc", ".cs", ".dll", ".so", ".dylib", ".exe", ".com", ".bat", ".cmd",
+    ".ps1", ".sh", ".app", ".jar", ".class", ".py", ".rb", ".js", ".mjs", ".wasm",
+    ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz", ".pkg", ".dmg", ".msi",
+}
 
 
 @dataclass
@@ -115,9 +120,81 @@ def load_packs(report: ValidationReport) -> List[Tuple[Path, Dict[str, Any]]]:
             if manifest is None:
                 continue
             validate_schema(manifest_path, pack_root, manifest, report)
+            validate_pack_payloads(pack_root, manifest_path, report)
             packs.append((pack_root, manifest))
             report.pack_count += 1
     return packs
+
+
+def validate_pack_payloads(pack_root: Path, manifest_path: Path, report: ValidationReport) -> None:
+    files = sorted(path for path in pack_root.rglob("*") if path.is_file() or path.is_symlink())
+    if len(files) > 512:
+        report.error(manifest_path, "$", "pack exceeds 512 files")
+    total_size = 0
+    for path in files:
+        relative = path.relative_to(pack_root)
+        if path.is_symlink():
+            report.error(path, "$", "symbolic links and reparse points are forbidden in packs")
+            continue
+        if path.suffix.lower() in FORBIDDEN_EXTENSIONS:
+            report.error(path, "$", "executable or archive payload is forbidden")
+        try:
+            size = path.stat().st_size
+        except OSError as exc:
+            report.error(path, "$", f"could not inspect payload: {exc}")
+            continue
+        total_size += size
+        if path.suffix.lower() == ".json" and size > 2 * 1024 * 1024:
+            report.error(path, "$", "JSON file exceeds 2097152 bytes")
+    if total_size > 64 * 1024 * 1024:
+        report.error(manifest_path, "$", "pack exceeds 67108864 bytes")
+
+
+def version_matches(actual: str, requirement: str) -> bool:
+    if requirement in {"", "*"}:
+        return True
+    prefix = ""
+    if requirement.startswith((">=", "^")):
+        prefix, requirement = (requirement[:2], requirement[2:]) if requirement.startswith(">=") else ("^", requirement[1:])
+    try:
+        actual_parts = tuple(int(part) for part in actual.split("-", 1)[0].split(".")[:3])
+        required_parts = tuple(int(part) for part in requirement.split("-", 1)[0].split(".")[:3])
+    except ValueError:
+        return False
+    if prefix == ">=":
+        return actual_parts >= required_parts
+    if prefix == "^":
+        return actual_parts >= required_parts and actual_parts[0] == required_parts[0]
+    return actual == requirement
+
+
+def validate_pack_relationships(packs: List[Tuple[Path, Dict[str, Any]]], report: ValidationReport) -> None:
+    by_id: Dict[str, Tuple[Path, Dict[str, Any]]] = {}
+    duplicate_ids: Set[str] = set()
+    for pack_root, manifest in packs:
+        pack_id = manifest.get("pack_id")
+        if not isinstance(pack_id, str):
+            continue
+        if pack_id in by_id:
+            duplicate_ids.add(pack_id)
+            report.error(pack_root / "manifest.json", "$.pack_id", f"duplicate pack ID also defined in {by_id[pack_id][0].relative_to(ROOT)}")
+        else:
+            by_id[pack_id] = (pack_root, manifest)
+    for pack_id in duplicate_ids:
+        first_root, _ = by_id[pack_id]
+        report.error(first_root / "manifest.json", "$.pack_id", "duplicate pack ID")
+    for pack_root, manifest in packs:
+        pack_id = manifest.get("pack_id")
+        for index, dependency in enumerate(manifest.get("dependencies", [])):
+            required_id = dependency.get("pack_id") if isinstance(dependency, dict) else None
+            if required_id not in by_id:
+                report.error(pack_root / "manifest.json", f"$.dependencies[{index}]", f"missing required dependency: {required_id}")
+            elif not version_matches(str(by_id[required_id][1].get("version", "")), str(dependency.get("version", ""))):
+                report.error(pack_root / "manifest.json", f"$.dependencies[{index}].version", f"dependency version mismatch: {required_id}")
+        for index, conflict in enumerate(manifest.get("incompatibilities", [])):
+            conflict_id = conflict.get("pack_id") if isinstance(conflict, dict) else None
+            if conflict_id in by_id and version_matches(str(by_id[conflict_id][1].get("version", "")), str(conflict.get("version", ""))):
+                report.error(pack_root / "manifest.json", f"$.incompatibilities[{index}]", f"enabled pack conflicts with {conflict_id}")
 
 
 def load_entries(pack_root: Path, manifest: Dict[str, Any], report: ValidationReport) -> None:
@@ -240,6 +317,7 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
 def main() -> int:
     report = ValidationReport()
     packs = load_packs(report)
+    validate_pack_relationships(packs, report)
     for pack_root, manifest in packs:
         load_entries(pack_root, manifest, report)
     validate_cross_references(packs, report)

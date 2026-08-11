@@ -15,11 +15,21 @@ Evidence must match claims. Repository checks cover schemas/examples, cross-refe
 
 Headless, macOS, API presence, synthetic geometry, and unit tests must never be reported as evidence of Windows compositor, shell, input routing, DPI movement, tray, or performance behavior. Headless macOS validates logic only; `DisplayServer=headless` is explicitly rejected by the native adapter gate.
 
+## Milestone 2 foundation evidence
+
+- `game/tests/foundation/run_all.gd`: 87 deterministic assertions.
+- Content coverage: bundled/external common loader, stable snapshot, topology/priority, required/optional dependencies, conflicts, disabled/total-conversion policy, explicit and unauthorized overrides, skin restrictions, duplicate packs/IDs, invalid IDs/API/manifests/documents, logical diagnostics, traversal, absolute paths, unsupported media, executable payloads, symlinks, localization, and reference explanations.
+- Time coverage: normal/zero elapsed, rollback, negative drift, forward jump, cap, missing/invalid UTC, and fake wall/monotonic clocks.
+- Save coverage: v2 round trip, validated replacement, backup, malformed-primary recovery, both-invalid failure, v1 migration/idempotence, content snapshot, quarantine, raw preservation, and restoration.
+- Gate/bootstrap coverage: pass/fail, `all`/`any`/`not`, explanations, repeat determinism, idempotent grants, duplicate prevention, and injected platform-neutral service composition.
+- `tools/run_foundation_checks.py`: JSON parse, in-memory Python compile, Python content validation, Markdown links, mod payload/symlink scan, terminology scan, repository artifact/cache scan, Godot import, foundation tests, platform-neutral regressions, and `git diff --check`.
+
+Headless tests prove only platform-neutral foundation behavior. They preserve the existing rule that native Windows validation remains pending.
+
 Future quality layers:
 
-- Pure deterministic domain unit tests with fake clock and fixed seeds
-- Schema, dependency, collision, override, and malicious-path tests
-- Save round-trip, atomic-write failure, corruption recovery, migration, and missing-pack tests
+- Pure pet-domain unit tests with fake clock and fixed seeds
+- Atomic-write failure injection beyond the successful replacement/recovery paths
 - Long offline intervals, clock rollback, cap, and version-transition tests
 - Scene/UI interaction tests across Minimal, Small, and Expanded modes
 - Rendered screenshots at compact sizes, DPI scales, and accessibility settings

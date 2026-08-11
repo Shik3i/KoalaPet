@@ -2,7 +2,7 @@
 
 KoalaPet is a replaceable codename for a Windows-first, local-first desktop virtual-pet game. One personally raised companion begins in a classic care loop, then the same persistent simulation gradually opens into branching evolution, dungeons, habitat customization, collection, and farm/idle progression.
 
-The project is in **Prompt 1 / desktop-overlay technical validation**. The supplementary macOS pass is recorded; the binding Windows validation remains blocked. There is no playable build or implemented pet simulation yet.
+The project has completed **Milestone 2 / content and simulation foundation**. Binding Windows overlay validation remains pending in parallel. There is no playable build or implemented pet-care simulation yet.
 
 ## Product pillars
 

@@ -1,5 +1,5 @@
 ; Engine configuration file.
-; Minimal Prompt 0 shell: no gameplay or platform behavior.
+; Milestone 2 platform-neutral foundation: no pet gameplay or native-window dependency.
 config_version=5
 
 [application]

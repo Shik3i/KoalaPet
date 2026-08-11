@@ -1,3 +1,3 @@
 # Infrastructure Layer
 
-Future content loading, save repositories, migrations, backups, and external adapters live here behind domain/application interfaces.
+Milestone 2 implements save envelopes, validated temporary replacement, backups, recovery, migrations, and missing-content reconciliation here. Pack loading lives in `src/content/`; future external adapters remain behind application boundaries.

@@ -1,3 +1,3 @@
 # Application Layer
 
-Future use cases coordinate domain services, content, persistence, clocks, and platform ports here. No gameplay is implemented in Prompt 0.
+`FoundationBootstrap` composes injected configuration, content registry/snapshot, clock, save repository/migrations, and feature-gate service. It has no presentation or platform dependency. No pet gameplay is implemented.

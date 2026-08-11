@@ -13,3 +13,12 @@ Initial mod loading treats every pack as untrusted data.
 - Do not log secrets or arbitrary private filesystem paths in user-facing mod diagnostics.
 
 Later archive import must defend against decompression bombs and extraction traversal. Executable mod support requires a separate threat model and accepted ADR; it is not part of the current architecture.
+
+## Implemented Milestone 2 boundary
+
+- Reject absolute/URI/drive paths, backslashes, empty/current/parent segments, paths outside declared asset roots, missing non-placeholder assets, unsupported media extensions, symlinks/reparse points, executable/script/library suffixes, and nested archive payloads.
+- Limit each pack to 512 files, 64 MiB total, and 2 MiB per JSON file before parsing.
+- Keep internal filesystem roots out of public diagnostics by using injected logical root labels.
+- Validate temporary saves before replacement and preserve every field of missing-content records structurally.
+
+Image dimensions and audio duration are not decoded in this milestone; enforce those limits when runtime media decoding/import is introduced. Archive import remains unsupported rather than partially trusted.

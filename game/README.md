@@ -1,6 +1,6 @@
 # Godot Project
 
-Minimal Prompt 0 shell only. It proves project structure and importability; it contains no gameplay, production UI, pet simulation, or Windows overlay behavior.
+Milestone 2 platform-neutral foundation: runtime content registry, clocks/offline policy, local save/migration/quarantine, feature gates, and injectable bootstrap. It contains no gameplay, production UI, or accepted native overlay behavior.
 
 Open with the pinned Godot version from `docs/TECH_STACK.md` or run:
 

@@ -6,4 +6,8 @@ No GDScript, DLL, shared library, native binary, executable archive, macro, or a
 
 Packs declare dependencies, conflicts, type, license/source metadata, entry points, asset roots, priority, and explicit overrides. Deterministic resolution follows `CONTENT_MODEL.md`. Errors identify the file and JSON path. Removing a pack quarantines affected pet/save records without deleting raw data.
 
+Runtime discovery uses injected roots: bundled `res://content_packs/`, external `user://mods/`, and test/development roots. Immediate child directories with `manifest.json` are candidates. Official and external packs follow the same validation and resolution functions.
+
+Replacement policy is explicit: content packs list every replaced ID, skins can replace presentation definitions only, and total conversions alone may disable the base pack. Duplicate or unauthorized definitions never win by filesystem order.
+
 `mods/examples/example.neutral/` is a fictitious architecture fixture, not official product content or balance. The bundled `koalapet.base` pack uses the same manifest/registry rules.

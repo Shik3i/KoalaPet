@@ -14,7 +14,15 @@
 
 Conceptual boundaries include `ContentPackRegistry`, `ContentValidator`, `SimulationClock`, `OfflineProgressService`, `PetLifecycleService`, `CareService`, `EvolutionResolver`, `BattleService`, `DungeonService`, `FeatureGateService`, `FarmJobService`, `SaveRepository`, `SaveMigrationService`, `WindowModeController`, and desktop adapters.
 
-Prompt 1 implements only the platform/presentation spike boundary: `WindowModeController`, platform-neutral `DesktopWindowAdapter`, shared `GodotNativeWindowAdapter`, thin `WindowsDesktopWindowAdapter` and `MacOSDesktopWindowAdapter`, `DesktopWindowAdapterFactory`, capability/result/monitor/placement value objects, `OverlayPlacementSanitizer`, and bounded hit-region logic. `OverlayPlacementStore`, `DesktopOverlaySpike`, diagnostics, and its code-drawn placeholder remain spike-owned. They do not define gameplay or the production save format. OS selection exists only in the platform factory. Unsupported hosts and headless display servers return explicit results instead of silently succeeding.
+Prompt 1 implements only the platform/presentation spike boundary: `WindowModeController`, platform-neutral `DesktopWindowAdapter`, shared `GodotNativeWindowAdapter`, thin host adapters, placement sanitation, and spike-owned persistence/diagnostics. It does not define gameplay or production saves.
+
+Milestone 2 implements the platform-neutral foundation:
+
+- `ContentPackRegistry` validates and resolves injected bundled/external/fixture roots into immutable dictionary records and a deterministic snapshot.
+- `SimulationClock`, `SystemSimulationClock`, `FakeSimulationClock`, and `OfflineProgressPolicy` isolate wall and monotonic time.
+- `SaveRepository`, `SaveMigrationRegistry`, `SaveEnvelope`, and `ContentBindingReconciler` own local persistence, recovery, migrations, and quarantine.
+- `ProgressionFacts`, `FeatureGateEvaluator`, `FeatureGateService`, and `UnlockLedger` own declarative gates and idempotent grants.
+- `FoundationBootstrap` composes configuration → content → snapshot → clock → saves/migrations → gates. Dependencies are injected; it has no presentation, platform, or window-topology reference.
 
 Commands produce explicit results/events. Identical state, content versions, timestamps, and seeds should produce identical domain outcomes. Rendering and frame timing never define balance. Content registry resolution completes before saves bind IDs; missing definitions produce recoverable quarantine, not deletion.
 

@@ -1,9 +1,51 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://koalapet.invalid/schemas/0.1/feature-gate.schema.json",
-  "title": "Feature gate 0.1",
+  "title": "Feature gate 0.1 experimental",
   "type": "object",
-  "required": ["id", "feature", "presentation_before_unlock", "all"],
-  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "feature": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}, "presentation_before_unlock": {"enum": ["hidden", "hinted", "locked"]}, "all": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["fact", "operator", "value"], "properties": {"fact": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}, "operator": {"enum": ["eq", "gte", "contains"]}, "value": {}}, "additionalProperties": false}}},
+  "required": ["id", "feature", "presentation_before_unlock", "reward_ids", "condition"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "id": {"$ref": "#/$defs/namespacedId"},
+    "feature": {"$ref": "#/$defs/namespacedId"},
+    "presentation_before_unlock": {"enum": ["hidden", "hinted", "locked"]},
+    "reward_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/namespacedId"}},
+    "condition": {"$ref": "#/$defs/condition"}
+  },
+  "$defs": {
+    "namespacedId": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"},
+    "condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["fact", "operator", "value"],
+          "properties": {
+            "fact": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+            "operator": {"enum": ["eq", "neq", "gte", "lte", "gt", "lt", "contains", "has"]},
+            "value": {}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["all"],
+          "properties": {"all": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/condition"}}},
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["any"],
+          "properties": {"any": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/condition"}}},
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["not"],
+          "properties": {"not": {"$ref": "#/$defs/condition"}},
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
   "additionalProperties": false
 }

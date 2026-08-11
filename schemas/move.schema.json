@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/move.schema.json",
+  "title": "Move 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "power", "energy_cost", "tags"],
+  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "display_name_key": {"type": "string"}, "power": {"type": "integer", "minimum": 0}, "energy_cost": {"type": "integer", "minimum": 0}, "tags": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}},
+  "additionalProperties": false
+}

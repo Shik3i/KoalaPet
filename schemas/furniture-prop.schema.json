@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/furniture-prop.schema.json",
+  "title": "Furniture or prop 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "asset", "kind", "footprint"],
+  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "display_name_key": {"type": "string"}, "asset": {"type": "string"}, "kind": {"enum": ["furniture", "prop", "station", "trophy"]}, "footprint": {"type": "object", "required": ["width", "height"], "properties": {"width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1}}, "additionalProperties": false}},
+  "additionalProperties": false
+}

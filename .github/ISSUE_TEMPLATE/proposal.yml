@@ -1,0 +1,23 @@
+name: Product or architecture proposal
+description: Propose a canon, system, or architectural change
+title: "proposal: "
+labels: [proposal]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed decision
+    validations:
+      required: true
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences and alternatives
+    validations:
+      required: true

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../schemas/move.schema.json",
+  "id": "example.neutral:steady_tap",
+  "display_name_key": "move.example.name",
+  "power": 3,
+  "energy_cost": 1,
+  "tags": ["practice"]
+}

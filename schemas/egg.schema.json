@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/egg.schema.json",
+  "title": "Egg 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "family_id", "hatch_form_id", "animation_profile_id"],
+  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "family_id": {"$ref": "#/$defs/id"}, "hatch_form_id": {"$ref": "#/$defs/id"}, "animation_profile_id": {"$ref": "#/$defs/id"}},
+  "$defs": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}},
+  "additionalProperties": false
+}

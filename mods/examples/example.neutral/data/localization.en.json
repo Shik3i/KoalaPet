@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../schemas/localization-bundle.schema.json",
+  "locale": "en",
+  "strings": {
+    "pack.example_neutral.name": "Neutral Example Pack",
+    "pool.example.name": "Example Starters",
+    "egg.example.name": "Speckled Example Egg",
+    "family.example.name": "Meadow Family",
+    "form.hatchling.name": "Meadow Hatchling",
+    "form.bright.name": "Bright Meadow Form",
+    "form.rugged.name": "Rugged Meadow Form",
+    "move.example.name": "Steady Tap",
+    "item.example.name": "Plain Seed",
+    "encounter.example.name": "Practice Target",
+    "dungeon.example.name": "Quiet Hollow",
+    "theme.example.name": "Quiet Hollow Habitat",
+    "furniture.example.name": "Resting Cushion",
+    "job.example.name": "Seed Sorting"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/enemy-encounter.schema.json",
+  "title": "Enemy encounter 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "level", "move_ids", "drops"],
+  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "level": {"type": "integer", "minimum": 1}, "move_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "drops": {"type": "array", "items": {"type": "object", "required": ["item_id", "weight"], "properties": {"item_id": {"$ref": "#/$defs/id"}, "weight": {"type": "integer", "minimum": 1}}, "additionalProperties": false}}},
+  "$defs": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}},
+  "additionalProperties": false
+}

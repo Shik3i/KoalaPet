@@ -1,0 +1,40 @@
+# Godot
+.godot/
+game/.godot/
+*.import
+export.cfg
+export_presets.cfg
+build/
+dist/
+exports/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Generated and local art output
+art_source/generated/
+tools/**/output/
+tools/**/tmp/
+*.contact-sheet.png
+*.preview.gif
+*.preview.mp4
+
+# Editors and OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/

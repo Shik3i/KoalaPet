@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/content-pack-manifest.schema.json",
+  "pack_id": "koalapet.base",
+  "display_name_key": "pack.koalapet_base.name",
+  "version": "0.0.0",
+  "content_api_version": "0.1",
+  "type": "content",
+  "authors": ["KoalaPet project contributors"],
+  "license": {
+    "code": "UNDECIDED",
+    "assets": "UNDECIDED"
+  },
+  "dependencies": [],
+  "optional_dependencies": [],
+  "incompatibilities": [],
+  "load_priority": 0,
+  "base_pack_enabled": true,
+  "entry_points": [],
+  "asset_roots": [],
+  "overrides": []
+}

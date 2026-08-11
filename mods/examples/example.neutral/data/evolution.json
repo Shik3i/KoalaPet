@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../../schemas/evolution-graph.schema.json",
+  "id": "example.neutral:meadow_evolution",
+  "rules": [
+    {
+      "id": "example.neutral:bright_care_path",
+      "from_form_id": "example.neutral:meadow_hatchling",
+      "to_form_id": "example.neutral:bright_meadow",
+      "priority": 20,
+      "all": [
+        {"metric": "stage_hours", "operator": "gte", "value": 24},
+        {"metric": "care_mistakes", "operator": "lte", "value": 2}
+      ]
+    },
+    {
+      "id": "example.neutral:rugged_mistake_path",
+      "from_form_id": "example.neutral:meadow_hatchling",
+      "to_form_id": "example.neutral:rugged_meadow",
+      "priority": 10,
+      "all": [
+        {"metric": "stage_hours", "operator": "gte", "value": 24},
+        {"metric": "care_mistakes", "operator": "gte", "value": 3}
+      ]
+    }
+  ]
+}

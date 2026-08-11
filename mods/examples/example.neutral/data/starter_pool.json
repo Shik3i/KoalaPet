@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../schemas/starter-pool.schema.json",
+  "id": "example.neutral:starter_pool",
+  "display_name_key": "pool.example.name",
+  "egg_ids": ["example.neutral:speckled_egg"]
+}

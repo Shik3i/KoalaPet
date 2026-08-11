@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/farm-job.schema.json",
+  "title": "Farm job or station 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "station_id", "output_item_id", "base_units_per_hour", "offline_cap_hours", "stat_weights"],
+  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "station_id": {"$ref": "#/$defs/id"}, "output_item_id": {"$ref": "#/$defs/id"}, "base_units_per_hour": {"type": "number", "exclusiveMinimum": 0}, "offline_cap_hours": {"type": "number", "minimum": 0}, "stat_weights": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}}},
+  "$defs": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}},
+  "additionalProperties": false
+}

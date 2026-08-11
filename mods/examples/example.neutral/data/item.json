@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../schemas/item.schema.json",
+  "id": "example.neutral:plain_seed",
+  "display_name_key": "item.example.name",
+  "category": "material",
+  "baseline_available": false,
+  "effects": {}
+}

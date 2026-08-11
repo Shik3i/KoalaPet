@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../schemas/dungeon.schema.json",
+  "id": "example.neutral:quiet_hollow",
+  "display_name_key": "dungeon.example.name",
+  "encounter_ids": ["example.neutral:practice_target"],
+  "boss_encounter_id": "example.neutral:practice_target",
+  "reward_item_ids": ["example.neutral:plain_seed"],
+  "unlock_ids": ["example.neutral:quiet_hollow_theme"]
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/item.schema.json",
+  "title": "Item 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "category", "baseline_available", "effects"],
+  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "display_name_key": {"type": "string"}, "category": {"enum": ["food", "medicine", "training", "material", "key"]}, "baseline_available": {"type": "boolean"}, "effects": {"type": "object", "additionalProperties": {"type": "number"}}},
+  "additionalProperties": false
+}

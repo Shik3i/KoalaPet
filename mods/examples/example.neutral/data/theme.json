@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../schemas/habitat-theme.schema.json",
+  "id": "example.neutral:quiet_hollow_theme",
+  "display_name_key": "theme.example.name",
+  "background_asset": "assets/placeholders/quiet-hollow-background.png",
+  "ground_asset": "assets/placeholders/quiet-hollow-ground.png",
+  "furniture_ids": ["example.neutral:resting_cushion"],
+  "unlock_gate_id": "example.neutral:quiet_hollow_gate"
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../schemas/feature-gate.schema.json",
+  "id": "example.neutral:quiet_hollow_gate",
+  "feature": "quiet_hollow_theme",
+  "presentation_before_unlock": "hidden",
+  "all": [{"fact": "dungeon_clears", "operator": "contains", "value": "example.neutral:quiet_hollow"}]
+}

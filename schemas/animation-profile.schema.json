@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/animation-profile.schema.json",
+  "title": "Animation profile 0.1",
+  "type": "object",
+  "required": ["id", "preview", "portrait", "world_animations"],
+  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "preview": {"type": "string"}, "portrait": {"type": "string"}, "world_animations": {"type": "object", "required": ["idle"], "additionalProperties": {"type": "object", "required": ["asset", "frames", "fps"], "properties": {"asset": {"type": "string"}, "frames": {"type": "integer", "minimum": 1}, "fps": {"type": "number", "exclusiveMinimum": 0}, "loop": {"type": "boolean"}}, "additionalProperties": false}}},
+  "additionalProperties": false
+}

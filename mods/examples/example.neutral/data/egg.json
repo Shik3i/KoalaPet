@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../schemas/egg.schema.json",
+  "id": "example.neutral:speckled_egg",
+  "display_name_key": "egg.example.name",
+  "family_id": "example.neutral:meadow_family",
+  "hatch_form_id": "example.neutral:meadow_hatchling",
+  "animation_profile_id": "example.neutral:meadow_animation"
+}

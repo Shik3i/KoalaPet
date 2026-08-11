@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "example.neutral:rugged_meadow",
+  "family_id": "example.neutral:meadow_family",
+  "display_name_key": "form.rugged.name",
+  "stage": "juvenile",
+  "animation_profile_id": "example.neutral:meadow_animation",
+  "base_stats": {"vitality": 8, "effort": 3},
+  "traits": ["resilient"]
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../schemas/enemy-encounter.schema.json",
+  "id": "example.neutral:practice_target",
+  "display_name_key": "encounter.example.name",
+  "level": 1,
+  "move_ids": ["example.neutral:steady_tap"],
+  "drops": [{"item_id": "example.neutral:plain_seed", "weight": 1}]
+}

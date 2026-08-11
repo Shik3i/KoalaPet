@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "example.neutral:bright_meadow",
+  "family_id": "example.neutral:meadow_family",
+  "display_name_key": "form.bright.name",
+  "stage": "juvenile",
+  "animation_profile_id": "example.neutral:meadow_animation",
+  "base_stats": {"vitality": 6, "effort": 5},
+  "traits": ["attentive"]
+}

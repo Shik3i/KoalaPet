@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/habitat-theme.schema.json",
+  "title": "Habitat theme 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "background_asset", "ground_asset", "furniture_ids", "unlock_gate_id"],
+  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "background_asset": {"type": "string"}, "ground_asset": {"type": "string"}, "furniture_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "unlock_gate_id": {"$ref": "#/$defs/id"}},
+  "$defs": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}},
+  "additionalProperties": false
+}

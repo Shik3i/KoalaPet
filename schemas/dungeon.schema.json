@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/dungeon.schema.json",
+  "title": "Dungeon 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "encounter_ids", "boss_encounter_id", "reward_item_ids", "unlock_ids"],
+  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "encounter_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/id"}}, "boss_encounter_id": {"$ref": "#/$defs/id"}, "reward_item_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}}, "unlock_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}}},
+  "$defs": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}},
+  "additionalProperties": false
+}

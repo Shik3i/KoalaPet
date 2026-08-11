@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "example.neutral:meadow_hatchling",
+  "family_id": "example.neutral:meadow_family",
+  "display_name_key": "form.hatchling.name",
+  "stage": "hatchling",
+  "animation_profile_id": "example.neutral:meadow_animation",
+  "base_stats": {"vitality": 4, "effort": 1},
+  "traits": ["curious"]
+}

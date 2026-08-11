@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../schemas/farm-job.schema.json",
+  "id": "example.neutral:seed_sorting",
+  "display_name_key": "job.example.name",
+  "station_id": "example.neutral:resting_cushion",
+  "output_item_id": "example.neutral:plain_seed",
+  "base_units_per_hour": 1.5,
+  "offline_cap_hours": 8,
+  "stat_weights": {"effort": 0.25}
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/localization-bundle.schema.json",
+  "title": "Localization bundle 0.1",
+  "type": "object",
+  "required": ["locale", "strings"],
+  "properties": {"$schema": {"type": "string"}, "locale": {"type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"}, "strings": {"type": "object", "minProperties": 1, "propertyNames": {"pattern": "^[a-z0-9_.-]+$"}, "additionalProperties": {"type": "string"}}},
+  "additionalProperties": false
+}

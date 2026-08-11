@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../schemas/species-family.schema.json",
+  "id": "example.neutral:meadow_family",
+  "display_name_key": "family.example.name",
+  "form_ids": ["example.neutral:meadow_hatchling", "example.neutral:bright_meadow", "example.neutral:rugged_meadow"],
+  "evolution_graph_id": "example.neutral:meadow_evolution"
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/species-family.schema.json",
+  "title": "Species family 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "form_ids", "evolution_graph_id"],
+  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "form_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "evolution_graph_id": {"$ref": "#/$defs/id"}},
+  "$defs": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}},
+  "additionalProperties": false
+}

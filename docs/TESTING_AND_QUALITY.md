@@ -7,13 +7,13 @@ Evidence must match claims. Repository checks cover schemas/examples, cross-refe
 - `game/tests/platform/run_all.gd`: 41 deterministic assertions for placement, recovery, persistence envelopes, transition invariants, near-edge mode switching, stress transitions, hit-region bounds, platform adapter selection, and the headless/native evidence gate.
 - `game/scenes/spikes/windows_overlay_spike.tscn`: parser/runtime smoke target; successful headless startup is not native-window proof.
 - `docs/evidence/windows-overlay/test-matrix.json`: all 49 required rows with environment, configuration, method, expected, actual, status, artifacts, notes, and timing fields.
-- Current matrix: 6 `PASS`, 4 `PASS_WITH_LIMITATION`, 39 `BLOCKED_NOT_RUN`, 0 `FAIL`.
+- Current matrix after Prompt 3.5: 10 `PASS`, 10 `PASS_WITH_LIMITATION`, 28 `BLOCKED_NOT_RUN`, 1 `NOT_AVAILABLE`, 0 `FAIL`.
 - `tools/windows_overlay_spike/run_spike.ps1`: exact-version Windows launcher and evidence path.
 - `docs/evidence/macos-overlay/test-matrix.json`: separate macOS results with direct native, headless-only, unavailable, and blocked cases kept distinct.
 - macOS matrix: 15 `PASS`, 10 `PASS_WITH_LIMITATION`, 4 `FAIL`, 8 `BLOCKED_NOT_RUN`, 5 `NOT_AVAILABLE`.
 - `tools/macos_overlay_spike/`: exact-version native runners plus deterministic pointer probes used for direct input and drag reproduction.
 
-Headless, macOS, API presence, synthetic geometry, and unit tests must never be reported as evidence of Windows compositor, shell, input routing, DPI movement, tray, or performance behavior. Headless macOS validates logic only; `DisplayServer=headless` is explicitly rejected by the native adapter gate.
+Headless, macOS, API presence, synthetic geometry, and unit tests must never be reported as evidence of Windows compositor, shell, input routing, DPI movement, tray, or performance behavior. Prompt 3.5 adds direct Windows process/window diagnostics and privacy-safe native captures, but lock-screen-limited shell interactions remain explicitly blocked. Headless macOS validates logic only; `DisplayServer=headless` is explicitly rejected by the native adapter gate.
 
 ## Milestone 2 foundation evidence
 
@@ -24,15 +24,15 @@ Headless, macOS, API presence, synthetic geometry, and unit tests must never be 
 - Gate/bootstrap coverage: pass/fail, `all`/`any`/`not`, explanations, repeat determinism, idempotent grants, duplicate prevention, and injected platform-neutral service composition.
 - `tools/run_foundation_checks.py`: JSON parse, in-memory Python compile, Python content validation, Markdown links, mod payload/symlink scan, terminology scan, repository artifact/cache scan, Godot import, foundation tests, platform-neutral regressions, and `git diff --check`.
 
-Headless tests prove only platform-neutral foundation behavior. They preserve the existing rule that native Windows validation remains pending.
+Headless tests prove only platform-neutral foundation behavior. Direct Windows diagnostics now supplement them; native shell acceptance remains pending.
 
 ## Milestone 3 vertical-slice evidence
 
-- `game/tests/pet/run_all.gd`: 28 deterministic assertions covering three starters, egg state, timed hatching, required bindings, nickname, meal/digestion/waste/cleaning, training, sleep/wake, ailment/treatment, bounded simulated time, all three view models, save/reload, and missing-content quarantine.
+- `game/tests/pet/run_all.gd`: 32 deterministic assertions covering three starters, egg state, hatch progress and timed hatching, required bindings, nickname, meal/digestion/waste/cleaning, training, sleep/wake, ailment/treatment, attention calls and missed care mistakes, bounded simulated time, all three view models, save/reload, and missing-content quarantine.
 - `tools/art_pipeline/validate_vertical_slice_assets.py`: validates every animation-referenced PNG as a readable RGBA asset with minimum 48×48 dimensions; latest result is 39 referenced assets.
 - `game/src/domain/pet_simulation.gd`: pure domain transition boundary; test inputs use fixed fake time and explicit simulated seconds.
 - `game/src/app/pet_application.gd`: application/save/catalog boundary; test fixture uses a disposable local save path.
-- `game/scenes/pet_game.tscn`: headless startup smoke target. No screenshot or interactive accessibility claim is made without direct evidence.
+- `game/scenes/pet_game.tscn`: headless startup smoke target. Prompt 3.5 direct Windows product evidence is catalogued in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md); screen-reader, contrast, and reduced-motion acceptance remain open.
 
 Future quality layers:
 

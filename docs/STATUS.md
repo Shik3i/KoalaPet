@@ -3,7 +3,7 @@
 **As of:** 2026-08-12
 
 **Phase:** Milestone 3 — Single-pet classic V-pet vertical slice implemented
-**Readiness:** Locally validated vertical slice; no release build, signing, deployment, or accepted native Windows overlay
+**Readiness:** Interactive Windows product review completed with partial native overlay evidence; no release build, signing, deployment, or accepted native Windows overlay
 
 ## Executive status
 
@@ -21,6 +21,7 @@ Implemented and validated:
 - Minimal, Small, and Expanded UI modes over one authoritative pet state
 - deterministic provisional RGBA assets and provenance/brief records
 - headless Godot runtime smoke and dedicated pet test suite
+- interactive Windows product walkthrough with isolated saves, three starter runs, care lifecycle, mode screenshots, native overlay diagnostics, and performance samples
 
 Not product-ready:
 
@@ -28,7 +29,8 @@ Not product-ready:
 - no export, packaging, signing, release, or deployment pipeline
 - no final product name, final art-rights approval, production art package, or accessibility acceptance
 - evolution, battle, dungeon, habitat, farm/residents, economy, and trading systems remain data/contracts/roadmap scope
-- no interactive visual QA evidence was captured in this run; headless startup is not a native-window or accessibility proof
+- native Windows shell acceptance remains incomplete; the active lock screen prevented direct mouse, Alt+Tab, taskbar, tray callback, and restore observation
+- accessibility acceptance remains incomplete; screen-reader, contrast, and reduced-motion review are still open
 
 ## Repository and Git state
 
@@ -83,7 +85,7 @@ Not product-ready:
 | Habitat and furniture | Architecture/data contracts only |
 | Farm, residents, idle jobs | Roadmap/data contracts only |
 | Trading Post/economy | Roadmap only |
-| Native overlay | Platform spike and evidence matrices; interactive Windows acceptance pending |
+| Native overlay | Windows interactive spike reached `READY` for native creation/transparency/hit-region/status-indicator diagnostics; shell/DPI acceptance remains open |
 | Export/release/deployment | Not implemented |
 
 ## Validation evidence
@@ -91,13 +93,13 @@ Not product-ready:
 Latest full local gate with Godot `4.7.1.stable.official.a13da4feb` and Python `3.13`:
 
 - Content validator: `2` packs, `41` content documents — PASS
-- JSON parse: `71` files — PASS
+- JSON parse: `75` files — PASS
 - Python in-memory compile: `5` source files — PASS
-- Markdown links: `63` local targets — PASS
+- Markdown links: `88` local targets — PASS
 - Vertical-slice assets: `39` referenced PNGs, RGBA, minimum 48×48 — PASS
 - Godot headless editor import — PASS
 - Godot project headless startup — PASS
-- Pet vertical-slice suite: `28` assertions — PASS
+- Pet vertical-slice suite: `32` assertions — PASS
 - Foundation suite: `99` assertions — PASS
 - Platform-neutral suite: `41` assertions — PASS
 - Mod payload, neutral-terminology, repository-artifact, and `git diff --check` — PASS
@@ -107,11 +109,11 @@ Evidence boundary:
 
 - Headless Godot proves parsing/import/startup and platform-neutral behavior only
 - It does not prove native Windows transparency, input passthrough, focus, taskbar/Alt+Tab, tray, DPI, multi-monitor, performance, accessibility, or release behavior
-- No interactive screenshot or manual UI acceptance result is claimed here
+- Interactive Windows product evidence is recorded in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md); native shell and accessibility limits remain explicit
 
 ## Known blockers and risks
 
-- Interactive Windows overlay rows remain blocked: compositor transparency, passthrough, focus, taskbar/Alt+Tab, tray/status recovery, DPI, multi-monitor placement, mode transitions, recovery, and performance
+- Interactive Windows overlay rows remain partially blocked: foreground mouse/shell routing, taskbar/Alt+Tab policy, tray callbacks/cleanup, restore paths, and mixed-DPI adapter parity
 - Provisional generated art has no final rights/approval decision
 - Domain balance is a coherent deterministic slice, not final product tuning
 - Save schema is v2; future pet/evolution/battle systems require explicit migrations and accepted ADRs

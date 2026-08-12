@@ -1,0 +1,181 @@
+{
+	"adapter_host_os": "Windows",
+	"capabilities": {
+		"alt_tab_visibility_control": false,
+		"always_on_top": true,
+		"dpi_query": true,
+		"full_mouse_passthrough": true,
+		"monitor_enumeration": true,
+		"native_drag": true,
+		"native_windows": true,
+		"no_focus": true,
+		"polygonal_mouse_passthrough": true,
+		"status_indicator": true,
+		"taskbar_visibility_control": false,
+		"transparency": true,
+		"usable_rect": true
+	},
+	"captured_at_utc": "2026-08-12T15:40:15",
+	"display_server": "Windows",
+	"engine_max_fps": 60,
+	"events": [
+		{
+			"details": {},
+			"label": "status_indicator_created",
+			"timestamp": "2026-08-12T15:39:39"
+		},
+		{
+			"details": {
+				"value": "MINIMAL"
+			},
+			"label": "mode",
+			"timestamp": "2026-08-12T15:39:39"
+		},
+		{
+			"details": {
+				"value": "SMALL"
+			},
+			"label": "mode",
+			"timestamp": "2026-08-12T15:39:39"
+		},
+		{
+			"details": {
+				"arguments": [
+					"--mode=SMALL",
+					"--input=interactive",
+					"--focus=normal",
+					"--evidence-auto",
+					"--max-fps=60"
+				]
+			},
+			"label": "arguments_applied",
+			"timestamp": "2026-08-12T15:39:39"
+		},
+		{
+			"details": {
+				"adapter_host": "Windows",
+				"supported": true
+			},
+			"label": "ready",
+			"timestamp": "2026-08-12T15:39:39"
+		}
+	],
+	"focus_policy": "normal",
+	"godot_version": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"hit_region_update_count": 1093,
+	"input_policy": "interactive",
+	"interactive_native_host_required": true,
+	"monitors": [
+		{
+			"dpi": 120,
+			"full_rect": [
+				5600,
+				4,
+				2400,
+				1350
+			],
+			"index": 0,
+			"position": [
+				5600,
+				4
+			],
+			"primary": false,
+			"scale": 1.0,
+			"usable_rect": [
+				5600,
+				4,
+				2400,
+				1290
+			]
+		},
+		{
+			"dpi": 120,
+			"full_rect": [
+				0,
+				4,
+				2400,
+				1500
+			],
+			"index": 1,
+			"position": [
+				0,
+				4
+			],
+			"primary": false,
+			"scale": 1.0,
+			"usable_rect": [
+				0,
+				4,
+				2400,
+				1440
+			]
+		},
+		{
+			"dpi": 120,
+			"full_rect": [
+				2400,
+				0,
+				2560,
+				1440
+			],
+			"index": 2,
+			"position": [
+				2400,
+				0
+			],
+			"primary": true,
+			"scale": 1.0,
+			"usable_rect": [
+				2400,
+				0,
+				2560,
+				1380
+			]
+		}
+	],
+	"observed_fps": 60.0,
+	"os_name": "Windows",
+	"os_version": "10.0.26200",
+	"overlay_click_count": 0,
+	"presentation_mode": "SMALL",
+	"rendering_driver": "opengl3",
+	"rendering_method": "gl_compatibility",
+	"schema_version": 1,
+	"session_gate": "READY",
+	"status_indicator_rect": [
+		4553.0,
+		1380.0,
+		40.0,
+		60.0
+	],
+	"status_indicator_visible": true,
+	"video_adapter": "NVIDIA GeForce RTX 4080 SUPER",
+	"viewport_transparent_bg": true,
+	"window_always_on_top": false,
+	"window_borderless": true,
+	"window_focused": true,
+	"window_mode": 0,
+	"window_mouse_passthrough": false,
+	"window_mouse_passthrough_polygon": [],
+	"window_position": [
+		7520,
+		1054
+	],
+	"window_size": [
+		480,
+		240
+	],
+	"window_transparent": true,
+	"window_unfocusable": false,
+	"window_visible": true
+}

@@ -8,7 +8,7 @@ Dependencies: none. Acceptance: authority hierarchy, useful system docs, accepte
 
 ## 1. Windows desktop-overlay technical spike
 
-Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable cross-platform harness, 41 logic assertions, separate Windows/macOS matrices, and supplementary native macOS findings completed. Acceptance remains blocked on an interactive Windows 10/11 run; ADR 0010 stays proposed. This pending platform gate does not block platform-neutral simulation milestones.**
+Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable cross-platform harness, 41 logic assertions, direct Windows 11 native diagnostics, separate Windows/macOS matrices, and supplementary native macOS findings completed. Shell interaction, tray recovery, and mixed-DPI parity remain open; ADR 0010 stays proposed. This pending platform gate does not block platform-neutral simulation milestones.**
 
 ## 2. Content and simulation foundation
 
@@ -18,7 +18,7 @@ Dependencies: platform-neutral architecture boundaries established by milestone 
 
 Dependencies: milestone 2. Acceptance: data-defined egg choice/hatching and a coherent care lifecycle covering baseline needs, sleep, waste, attention, illness/treatment, training, save/reload, offline progress, and all three presentations. Baseline care never requires currency.
 
-**Implemented and locally validated on 2026-08-12:** three starter eggs, deterministic pure simulation, care profiles, hatching, waste/attention/illness/treatment/training, bounded history and aggregates, save/reload/quarantine bindings, Minimal/Small/Expanded UI, 42 provisional generated assets, and 28 dedicated assertions. Interactive visual/accessibility acceptance remains open.
+**Implemented and locally validated on 2026-08-12:** three starter eggs, deterministic pure simulation, care profiles, hatching, waste/attention/illness/treatment/training, bounded history and aggregates, save/reload/quarantine bindings, Minimal/Small/Expanded UI, 42 provisional generated assets, and 32 dedicated assertions. Prompt 3.5 added direct Windows product evidence and fixed confirmed UI P1 defects. Native shell and accessibility acceptance remain open.
 
 ## 4. Branching evolution, normal battles, and first dungeon
 

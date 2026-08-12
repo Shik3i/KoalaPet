@@ -20,6 +20,38 @@ if (-not (Test-Path -LiteralPath $GodotPath -PathType Leaf)) {
 }
 
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public static class KoalaWindowsEnvironmentNative {
+    [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
+    [StructLayout(LayoutKind.Sequential)] public struct APPBARDATA { public int cbSize; public IntPtr hWnd; public uint uCallbackMessage; public uint uEdge; public RECT rc; public IntPtr lParam; }
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)] public static extern uint SHAppBarMessage(uint message, ref APPBARDATA data);
+    [DllImport("shcore.dll")] public static extern int GetDpiForMonitor(IntPtr hMonitor, int type, out uint dpiX, out uint dpiY);
+    [DllImport("user32.dll")] public static extern IntPtr MonitorFromPoint(POINT point, uint flags);
+    [DllImport("user32.dll")] public static extern bool SetProcessDpiAwarenessContext(IntPtr value);
+    [StructLayout(LayoutKind.Sequential)] public struct POINT { public int X; public int Y; }
+    public static object GetTaskbar() {
+        var data = new APPBARDATA();
+        data.cbSize = Marshal.SizeOf(typeof(APPBARDATA));
+        var positionResult = SHAppBarMessage(5, ref data);
+        var stateData = new APPBARDATA();
+        stateData.cbSize = Marshal.SizeOf(typeof(APPBARDATA));
+        var state = SHAppBarMessage(4, ref stateData);
+        return new object[] { positionResult != 0, (int)data.uEdge, data.rc.Left, data.rc.Top, data.rc.Right - data.rc.Left, data.rc.Bottom - data.rc.Top, (int)state };
+    }
+    public static object GetDpiForPoint(int x, int y) {
+        var point = new POINT { X = x, Y = y };
+        var monitor = MonitorFromPoint(point, 2);
+        uint dpiX;
+        uint dpiY;
+        var hr = GetDpiForMonitor(monitor, 0, out dpiX, out dpiY);
+        return new object[] { hr, (int)dpiX, (int)dpiY };
+    }
+}
+"@
+
+[KoalaWindowsEnvironmentNative]::SetProcessDpiAwarenessContext([IntPtr](-4)) | Out-Null
 
 $operatingSystem = Get-CimInstance -ClassName Win32_OperatingSystem
 $computerSystem = Get-CimInstance -ClassName Win32_ComputerSystem
@@ -33,14 +65,22 @@ $videoControllers = @(Get-CimInstance -ClassName Win32_VideoController | ForEach
     }
 })
 $screens = @([System.Windows.Forms.Screen]::AllScreens | ForEach-Object {
+    $centerX = $_.Bounds.X + [int]($_.Bounds.Width / 2)
+    $centerY = $_.Bounds.Y + [int]($_.Bounds.Height / 2)
+    $dpi = [KoalaWindowsEnvironmentNative]::GetDpiForPoint($centerX, $centerY)
     [ordered]@{
         device_name = $_.DeviceName
         primary = $_.Primary
         bounds = @($_.Bounds.X, $_.Bounds.Y, $_.Bounds.Width, $_.Bounds.Height)
         working_area = @($_.WorkingArea.X, $_.WorkingArea.Y, $_.WorkingArea.Width, $_.WorkingArea.Height)
+        dpi_query_hresult = $dpi[0]
+        dpi_x = $dpi[1]
+        dpi_y = $dpi[2]
+        scale_percent = [int]($dpi[1] * 100 / 96)
     }
 })
 $godotVersion = (& $GodotPath --version | Select-Object -First 1).Trim()
+$taskbar = [KoalaWindowsEnvironmentNative]::GetTaskbar()
 
 $environment = [ordered]@{
     schema_version = 1
@@ -67,10 +107,17 @@ $environment = [ordered]@{
     }
     graphics = $videoControllers
     screens = $screens
+    taskbar = [ordered]@{
+        query_succeeded = [bool]$taskbar[0]
+        edge = @("left", "top", "right", "bottom")[[int]$taskbar[1]]
+        bounds = @($taskbar[2], $taskbar[3], $taskbar[4], $taskbar[5])
+        auto_hide = (([int]$taskbar[6] -band 1) -ne 0)
+        always_on_top = (([int]$taskbar[6] -band 2) -ne 0)
+    }
 }
 
 $resolvedOutput = [IO.Path]::GetFullPath($OutputPath)
 $outputDirectory = Split-Path -Parent $resolvedOutput
 New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
-$environment | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $resolvedOutput -Encoding utf8
+[IO.File]::WriteAllText($resolvedOutput, ($environment | ConvertTo-Json -Depth 8), [Text.UTF8Encoding]::new($false))
 Write-Host "Environment evidence written: $resolvedOutput"

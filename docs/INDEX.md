@@ -37,6 +37,7 @@
 - [Glossary](GLOSSARY.md)
 - [Windows overlay spike report](spikes/WINDOWS_OVERLAY_SPIKE.md)
 - [Windows overlay evidence](evidence/windows-overlay/README.md)
+- [Prompt 3.5 interactive product review](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md)
 - [macOS overlay validation report](spikes/MACOS_OVERLAY_SPIKE.md)
 - [macOS overlay evidence](evidence/macos-overlay/README.md)
 

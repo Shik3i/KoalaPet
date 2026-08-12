@@ -1,11 +1,20 @@
 {
   "schema_version": 1,
-  "completion_state": "PREPARED_BUT_BLOCKED",
-  "required_host": "interactive Windows 10/11 desktop",
-  "modes": {
-    "MINIMAL": {"status": "BLOCKED_NOT_RUN", "cpu_percent": null, "gpu_percent": null, "memory_bytes": null, "frame_rate": null, "notes": "No Windows host."},
-    "SMALL": {"status": "BLOCKED_NOT_RUN", "cpu_percent": null, "gpu_percent": null, "memory_bytes": null, "frame_rate": null, "notes": "No Windows host."},
-    "EXPANDED": {"status": "BLOCKED_NOT_RUN", "cpu_percent": null, "gpu_percent": null, "memory_bytes": null, "frame_rate": null, "notes": "No Windows host."}
-  },
-  "dynamic_hit_region": {"status": "BLOCKED_NOT_RUN", "update_rate_hz": null, "cpu_delta_percent": null, "notes": "No Windows host."}
+  "captured_at_utc": "2026-08-12T15:42:00Z",
+  "host": "Windows 11 Pro 10.0.26200",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "renderer": "gl_compatibility / opengl3",
+  "sampling": "real visible Godot process; 3 s warm-up, 5 s CPU sample; process working set at sample end",
+  "results": [
+    {"mode": "small", "working_set_mb": 167.6, "private_mb": 144.1, "cpu_percent_all_cores": 0.43},
+    {"mode": "expanded", "working_set_mb": 166.8, "private_mb": 142.5, "cpu_percent_all_cores": 0.43},
+    {"mode": "minimal", "working_set_mb": 167.0, "private_mb": 142.4, "cpu_percent_all_cores": 0.43}
+  ],
+  "native_overlay_fps": {"minimal": 60.0, "small": 60.0, "expanded": 60.0},
+  "gpu_percent": null,
+  "limitations": [
+    "CPU is normalized over 16 logical processors and is an idle sample, not a performance budget acceptance.",
+    "GPU utilization was not collected; no telemetry dependency was added.",
+    "Overlay native diagnostics reported 60 FPS at Engine.max_fps=60."
+  ]
 }

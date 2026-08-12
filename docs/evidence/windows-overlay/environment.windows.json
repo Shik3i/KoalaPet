@@ -1,0 +1,114 @@
+{
+    "schema_version":  1,
+    "captured_at_utc":  "2026-08-12T16:04:09.4798525Z",
+    "host_id":  "windows-interactive-candidate",
+    "classification":  "interactive_windows",
+    "user_interactive":  true,
+    "remote_session":  false,
+    "os":  {
+               "caption":  "Microsoft Windows 11 Pro",
+               "version":  "10.0.26200",
+               "build_number":  "26200",
+               "architecture":  "64-Bit"
+           },
+    "hardware":  {
+                     "manufacturer":  "Micro-Star International Co., Ltd.",
+                     "model":  "MS-7E26",
+                     "logical_processors":  16,
+                     "total_physical_memory_bytes":  33397133312
+                 },
+    "godot":  {
+                  "executable_name":  "Godot_v4.7.1-stable_win64.exe",
+                  "version":  "4.7.1.stable.official.a13da4feb"
+              },
+    "graphics":  [
+                     {
+                         "name":  "NVIDIA GeForce RTX 4080 SUPER",
+                         "driver_version":  "32.0.16.1062",
+                         "current_horizontal_resolution":  1920,
+                         "current_vertical_resolution":  1080,
+                         "current_refresh_rate":  60
+                     },
+                     {
+                         "name":  "AMD Radeon(TM) Graphics",
+                         "driver_version":  "32.0.21045.1000",
+                         "current_horizontal_resolution":  null,
+                         "current_vertical_resolution":  null,
+                         "current_refresh_rate":  null
+                     }
+                 ],
+    "screens":  [
+                    {
+                        "device_name":  "\\\\.\\DISPLAY1",
+                        "primary":  false,
+                        "bounds":  [
+                                       2560,
+                                       3,
+                                       1920,
+                                       1080
+                                   ],
+                        "working_area":  [
+                                             2560,
+                                             3,
+                                             1920,
+                                             1032
+                                         ],
+                        "dpi_query_hresult":  0,
+                        "dpi_x":  96,
+                        "dpi_y":  96,
+                        "scale_percent":  100
+                    },
+                    {
+                        "device_name":  "\\\\.\\DISPLAY2",
+                        "primary":  false,
+                        "bounds":  [
+                                       -1920,
+                                       3,
+                                       1920,
+                                       1200
+                                   ],
+                        "working_area":  [
+                                             -1920,
+                                             3,
+                                             1920,
+                                             1152
+                                         ],
+                        "dpi_query_hresult":  0,
+                        "dpi_x":  96,
+                        "dpi_y":  96,
+                        "scale_percent":  100
+                    },
+                    {
+                        "device_name":  "\\\\.\\DISPLAY3",
+                        "primary":  true,
+                        "bounds":  [
+                                       0,
+                                       0,
+                                       2560,
+                                       1440
+                                   ],
+                        "working_area":  [
+                                             0,
+                                             0,
+                                             2560,
+                                             1380
+                                         ],
+                        "dpi_query_hresult":  0,
+                        "dpi_x":  120,
+                        "dpi_y":  120,
+                        "scale_percent":  125
+                    }
+                ],
+    "taskbar":  {
+                    "query_succeeded":  true,
+                    "edge":  "bottom",
+                    "bounds":  [
+                                   0,
+                                   1380,
+                                   2560,
+                                   60
+                               ],
+                    "auto_hide":  false,
+                    "always_on_top":  false
+                }
+}

@@ -28,6 +28,7 @@ func create_new(egg: Dictionary, form: Dictionary, profile: Dictionary, owner_pa
 		"nickname": "",
 		"created_at_utc": now_text,
 		"selected_at_utc": now_text,
+		"selected_at_unix": now_unix,
 		"hatched_at_utc": "",
 		"hatch_due_unix": now_unix + int(profile_data.hatch_duration_seconds),
 		"hatched": false,

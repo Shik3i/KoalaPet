@@ -1,10 +1,10 @@
 # Windows Desktop Overlay Spike
 
 **Milestone:** Prompt 1
-**Completion state:** `PREPARED_BUT_BLOCKED`
+**Completion state:** `INTERACTIVE_WINDOWS_PARTIAL`
 **Starting commit:** `9e06f25f0e4cdbc5d739f8b79a5d1f0aa0e77310`
 
-The reusable harness, Windows launch/diagnostic scripts, platform adapter contract, placement store, pure tests, evidence structure, and full matrix are prepared. No interactive Windows 10/11 desktop was available, so no Windows compositor, shell, input, DPI, tray, multi-monitor, or performance behavior is accepted.
+The reusable harness, Windows launch/diagnostic scripts, platform adapter contract, placement store, pure tests, evidence structure, and full matrix were prepared. A real Windows 11 run is now recorded. Native creation, transparency flags, hit-region state, monitor/taskbar inventory, status-indicator creation, renderer diagnostics, and idle performance were directly captured. Shell input, Alt+Tab/taskbar policy, tray callbacks, restore paths, and mixed-DPI parity remain unaccepted.
 
 A separate native macOS pass is recorded in [`MACOS_OVERLAY_SPIKE.md`](MACOS_OVERLAY_SPIKE.md). It informs the shared adapter design but does not change a single Windows row.
 
@@ -13,12 +13,12 @@ A separate native macOS pass is recorded in [`MACOS_OVERLAY_SPIKE.md`](MACOS_OVE
 | Item | Result |
 |---|---|
 | Repository | Clean `main`, tracking `origin/main`; `git pull --ff-only` returned `Already up to date.` |
-| Host | macOS `26.5.2` build `25F84`, Darwin `25.5.0`, arm64 |
-| Session | Codex desktop workspace on macOS; not Windows, CI, SSH, Wine, or a Windows VM |
-| Hardware | MacBook Air `Mac16,12`; Apple M4; 16 GB; integrated 8-core Apple GPU |
-| Godot | `/Applications/Godot.app/Contents/MacOS/Godot`, `4.7.1.stable.official.a13da4feb` |
-| Project renderer | `gl_compatibility`; headless check used `headless` DisplayServer and `opengl3` driver |
-| References | `3/3` supplied 1672×941 UI-mode concept PNGs preserved byte-for-byte outside `res://` |
+| Host | Windows 11 Pro `10.0.26200` build `26200`, interactive local session |
+| Session | `UserInteractive=True`, remote session `False`; foreground shell was at the Windows lock screen during native input attempts |
+| Hardware | Micro-Star International `MS-7E26`; 16 logical processors; 33,397,133,312 bytes RAM; NVIDIA GeForce RTX 4080 SUPER |
+| Godot | `C:\tmp\Godot-4.7.1\Godot_v4.7.1-stable_win64.exe`, `4.7.1.stable.official.a13da4feb` |
+| Project renderer | `gl_compatibility`; native spike used Windows DisplayServer and `opengl3` driver |
+| Displays/taskbar | 3 monitors; primary 2560×1440 at 125%, two side monitors at 100%; taskbar bottom, 60 px, auto-hide false |
 
 Headless DisplayServer functions return dummy values by design and are not window evidence.
 
@@ -56,38 +56,40 @@ API availability supports harness feasibility. It does not establish Windows beh
 
 | Status | Count | Meaning |
 |---|---:|---|
-| `PASS` | 6 | Host/engine classification or deterministic placement/persistence logic |
-| `PASS_WITH_LIMITATION` | 4 | Synthetic geometry/state-machine evidence only |
+| `PASS` | 10 | Host/engine, monitor/taskbar inventory, and deterministic placement/persistence logic |
+| `PASS_WITH_LIMITATION` | 10 | Native diagnostics, synthetic geometry/state-machine, status-indicator, and idle/performance evidence with explicit limits |
 | `FAIL` | 0 | Nothing was executed and observed to fail |
-| `BLOCKED_NOT_RUN` | 39 | Requires an interactive Windows desktop |
-| `NOT_AVAILABLE` | 0 | Windows hardware/configuration availability is not yet known |
+| `BLOCKED_NOT_RUN` | 28 | Requires unlocked shell interaction or untested Windows configurations |
+| `NOT_AVAILABLE` | 1 | A second non-100% comparison configuration was unavailable |
 | `NOT_APPLICABLE` | 0 | No required row was removed |
 
 Machine-readable source: [`test-matrix.json`](../evidence/windows-overlay/test-matrix.json).
 
 | ID | Status | Current result |
 |---|---|---|
-| ENV-001 | PASS | macOS preparation host classified honestly |
-| ENV-002 | PASS | Godot/version/headless renderer recorded |
-| ENV-003 | BLOCKED_NOT_RUN | Windows monitor/DPI inventory |
-| ENV-004 | BLOCKED_NOT_RUN | Windows graphics adapter |
+| ENV-001 | PASS | Windows 11 10.0.26200, interactive and non-remote |
+| ENV-002 | PASS | Godot/Windows renderer/GPU recorded |
+| ENV-003 | PASS | Three Windows monitors, usable rects, DPI, and primary state recorded |
+| ENV-004 | PASS | NVIDIA adapter/driver and Godot adapter recorded |
 | TRN-001..004 | BLOCKED_NOT_RUN | Transparency, alpha, borderless composition, renderer comparison |
 | INP-001..005 | BLOCKED_NOT_RUN | Full/polygonal passthrough, underlying-app routing, movement, recovery |
 | FOC-001..006 | BLOCKED_NOT_RUN | Launch/click focus, no-focus, Alt+Tab, taskbar, Show Desktop |
 | TOP-001..002 | BLOCKED_NOT_RUN | Always-on-top enabled/disabled |
 | DRG-001..003 | BLOCKED_NOT_RUN | Native drag and post-drag restart evidence |
-| DPI-001..002 | BLOCKED_NOT_RUN | Real Windows scaling and non-100% configuration |
-| MON-001 | BLOCKED_NOT_RUN | Real enumeration |
+| DPI-001 | PASS | Primary 125% and side 100% capture; mixed-DPI parity remains limited |
+| DPI-002 | NOT_AVAILABLE | No second non-100% comparison configuration |
+| MON-001 | PASS_WITH_LIMITATION | Three monitors match in count; mixed-DPI logical rectangles differ |
 | MON-002 | PASS_WITH_LIMITATION | Negative-coordinate synthetic placement passed |
 | MON-003..004 | BLOCKED_NOT_RUN | Real multi-monitor and mixed-DPI movement |
 | TSK-001 | PASS_WITH_LIMITATION | Synthetic usable-rect clamping passed |
-| TSK-002 | BLOCKED_NOT_RUN | Existing auto-hide configuration observation |
+| TSK-002 | PASS | Bottom taskbar, 60 px, auto-hide false recorded |
 | WIN-001..003 | BLOCKED_NOT_RUN | Minimize/restore, hide/show, native close lifecycle |
 | PST-001..002 | PASS | Per-mode position/size serialization and restoration passed |
 | REC-001..002 | PASS | Missing-monitor/off-screen and corrupted/future-input recovery passed |
 | MOD-001..002 | PASS_WITH_LIMITATION | Six paths + 100 logical stress transitions; native effects blocked |
-| TRY-001..004 | BLOCKED_NOT_RUN | Status indicator visibility/menu/recovery/cleanup |
-| PERF-001..004 | BLOCKED_NOT_RUN | CPU/GPU/memory/update-cost measurements |
+| TRY-001 | PASS_WITH_LIMITATION | Native status indicator created/visible; tray callbacks blocked |
+| TRY-002..004 | BLOCKED_NOT_RUN | Tray menu actions, restore, and cleanup |
+| PERF-001..004 | PASS_WITH_LIMITATION | Product idle samples and native 60 FPS/update diagnostics; GPU delta unavailable |
 
 ## Platform-neutral evidence
 
@@ -97,7 +99,7 @@ Command:
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/platform/run_all.gd
 ```
 
-Current result: `PASS (41 assertions)`. It adds adapter-selection and headless/native-evidence gate checks to the prior geometry, recovery, persistence, transition, stress, and hit-region coverage. Full current output is recorded with the [macOS supplementary evidence](../evidence/macos-overlay/logs/platform-neutral-tests.txt); the Windows evidence snapshot remains the original 39-assertion preparation run.
+Current result: `PASS (41 assertions)`. It adds adapter-selection and headless/native-evidence gate checks to the prior geometry, recovery, persistence, transition, stress, and hit-region coverage. The Windows-host run is recorded in [`platform-neutral-tests.windows.txt`](../evidence/windows-overlay/logs/platform-neutral-tests.windows.txt); native Windows artifacts are listed in the Prompt 3.5 review report.
 
 Headless import and a three-frame spike-scene smoke start also completed without parser/runtime errors. None validates native Windows behavior.
 

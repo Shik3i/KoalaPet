@@ -1,0 +1,6 @@
+COMMAND: C:\tmp\Godot-4.7.1\Godot_v4.7.1-stable_win64_console.exe --headless --path game --script res://tests/platform/run_all.gd
+HOST: Windows 11 Pro 10.0.26200 build 26200
+GODOT: 4.7.1.stable.official.a13da4feb
+DISPLAY_SERVER: headless (platform-neutral logic run; not native-window evidence)
+RENDERER: gl_compatibility / opengl3
+RESULT: PASS (41 assertions)

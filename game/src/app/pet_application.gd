@@ -194,6 +194,7 @@ func get_view_model(mode := "small", locale := "de") -> Dictionary:
 		"form_name": form_name,
 		"hatched": is_hatched(),
 		"hatch_due_unix": int(pet_state.get("hatch_due_unix", 0)),
+		"hatch_progress_bps": _hatch_progress_bps(),
 		"current_simulation_unix": int(pet_state.get("current_simulation_unix", 0)),
 		"sleeping": bool(pet_state.get("sleeping", false)),
 		"sickness": not pet_state.get("sickness", {}).is_empty(),
@@ -201,12 +202,25 @@ func get_view_model(mode := "small", locale := "de") -> Dictionary:
 		"care": care.duplicate(true),
 		"aggregate": pet_state.get("aggregate", {}).duplicate(true),
 		"history": pet_state.get("history", []).duplicate(true),
+		"offline": last_offline_result.duplicate(true),
 	}
 	if mode == "minimal":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline}
 	if mode == "small":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0)}}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0)}}
 	return model
+
+
+func _hatch_progress_bps() -> int:
+	if bool(pet_state.get("hatched", false)):
+		return 10000
+	var profile := _record(str(pet_state.get("care_profile_id", "")))
+	var duration := int(profile.get("data", {}).get("hatch_duration_seconds", 0))
+	if duration <= 0:
+		return 0
+	var started := int(pet_state.get("selected_at_unix", pet_state.get("current_simulation_unix", 0)))
+	var elapsed := maxi(0, int(pet_state.get("current_simulation_unix", started)) - started)
+	return clampi(int(float(elapsed) * 10000.0 / float(duration)), 0, 10000)
 
 
 func _sync_now() -> void:

@@ -26,6 +26,9 @@ func _run() -> void:
 	var selected := app.choose_starter("koalapet.base:moss_egg")
 	_assert_true(selected.ok, "PET-004 starter selection persists an egg")
 	_assert_true(not app.is_hatched(), "PET-005 selected starter begins as egg")
+	_assert_equal(int(app.get_view_model("small").hatch_progress_bps), 0, "PET-005A hatch progress starts at zero")
+	var half_hatch := app.advance_simulated(30)
+	_assert_true(half_hatch.ok and not app.is_hatched() and int(app.get_view_model("small").hatch_progress_bps) > 0, "PET-005B hatch progress is deterministic before completion")
 	var hatched := app.advance_simulated(60)
 	_assert_true(hatched.ok and hatched.summary.hatched, "PET-006 hatch occurs at deterministic duration")
 	_assert_true(app.is_hatched(), "PET-007 hatched state is active")
@@ -48,29 +51,41 @@ func _run() -> void:
 	_assert_true(woke.ok and not app.get_current_state().sleeping, "PET-017 wake command changes state")
 	var sickness := app.command({"type": "force_sickness"})
 	_assert_true(sickness.ok and not app.get_current_state().sickness.is_empty(), "PET-018 development ailment path is deterministic")
+	var call_opened := app.advance_simulated(1)
+	var has_open_sickness_call := false
+	for attention_call in app.get_current_state().attention_calls:
+		if str(attention_call.get("reason", "")) == "sickness" and str(attention_call.get("status", "")) == "open":
+			has_open_sickness_call = true
+	_assert_true(call_opened.ok and has_open_sickness_call, "PET-019 sickness opens an attention call")
+	var call_missed := app.advance_simulated(7200)
+	var has_missed_call := false
+	for attention_call in app.get_current_state().attention_calls:
+		if str(attention_call.get("reason", "")) == "sickness" and str(attention_call.get("status", "")) == "missed":
+			has_missed_call = true
+	_assert_true(call_missed.ok and has_missed_call and int(app.get_current_state().aggregate.care_mistakes) > 0, "PET-020 missed attention call records a care mistake")
 	var treated := app.command({"type": "medicine", "item_id": app.find_item_by_kind("medicine")})
-	_assert_true(treated.ok and app.get_current_state().sickness.is_empty(), "PET-019 medicine clears ailment")
+	_assert_true(treated.ok and app.get_current_state().sickness.is_empty(), "PET-021 medicine clears ailment")
 	var advanced := app.advance_simulated(8 * 60 * 60)
-	_assert_true(advanced.ok and app.get_current_state().aggregate.last_accepted_simulation_seconds >= 8 * 60 * 60 + 60 + 901, "PET-020 bounded simulation advances without frame dependence")
+	_assert_true(advanced.ok and app.get_current_state().aggregate.last_accepted_simulation_seconds >= 8 * 60 * 60 + 60 + 901 + 1 + 7200, "PET-022 bounded simulation advances without frame dependence")
 	var view_minimal := app.get_view_model("minimal")
 	var view_small := app.get_view_model("small")
 	var view_expanded := app.get_view_model("expanded")
-	_assert_equal(view_minimal.mode, "minimal", "PET-021 minimal presentation mode is explicit")
-	_assert_true(view_small.has("care"), "PET-022 small presentation exposes compact care")
-	_assert_true(view_expanded.has("history") and view_expanded.history.size() > 0, "PET-023 expanded presentation exposes history")
+	_assert_equal(view_minimal.mode, "minimal", "PET-023 minimal presentation mode is explicit")
+	_assert_true(view_small.has("care"), "PET-024 small presentation exposes compact care")
+	_assert_true(view_expanded.has("history") and view_expanded.history.size() > 0, "PET-025 expanded presentation exposes history")
 	var reloaded := PetApplication.new(config, clock)
 	var reload_result := reloaded.initialize()
-	_assert_true(reload_result.ok and reloaded.has_pet(), "PET-024 save reload restores the active pet")
-	_assert_equal(reloaded.get_current_state().nickname, "Moss", "PET-025 save reload preserves nickname")
+	_assert_true(reload_result.ok and reloaded.has_pet(), "PET-026 save reload restores the active pet")
+	_assert_equal(reloaded.get_current_state().nickname, "Moss", "PET-027 save reload preserves nickname")
 	var malformed_state: Dictionary = reloaded.foundation.current_save.simulation_state.records[0].duplicate(true)
 	malformed_state.definition_id = "missing.pack:removed_form"
 	reloaded.foundation.current_save.simulation_state.records = [malformed_state]
 	var corrupted_binding_save := reloaded.foundation.save_current()
-	_assert_true(corrupted_binding_save.ok, "PET-026 test fixture writes a missing-content binding")
+	_assert_true(corrupted_binding_save.ok, "PET-028 test fixture writes a missing-content binding")
 	var quarantined := PetApplication.new(config, clock)
 	var quarantine_result := quarantined.initialize()
-	_assert_true(quarantine_result.ok and not quarantined.has_pet(), "PET-027 missing pet content is quarantined")
-	_assert_equal(quarantined.get_quarantine_count(), 1, "PET-028 quarantine record is retained")
+	_assert_true(quarantine_result.ok and not quarantined.has_pet(), "PET-029 missing pet content is quarantined")
+	_assert_equal(quarantined.get_quarantine_count(), 1, "PET-030 quarantine record is retained")
 	_remove_save()
 	if failures.is_empty():
 		print("RESULT: PASS (%d assertions)" % assertions)

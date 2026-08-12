@@ -53,6 +53,7 @@ func discover_and_resolve() -> Dictionary:
 	var unique := _reject_duplicate_pack_ids(candidates)
 	unique = _apply_disabled_and_total_conversion_policy(unique)
 	unique = _validate_relationships(unique)
+	unique = _validate_candidate_references(unique)
 	var ordered := _topological_order(unique)
 	_apply_ordered_packs(ordered)
 	return {
@@ -183,6 +184,9 @@ func _load_candidate(pack_root: String, directory_name: String, root_config: Dic
 	var pack_id := str(manifest.get("pack_id", ""))
 	var start_errors := _error_count()
 	_validate_manifest(manifest, manifest_source, pack_id)
+	if _error_count() > start_errors:
+		_reject(pack_id, source_prefix, "INVALID_MANIFEST")
+		return {}
 	_validate_pack_file_inventory(pack_root, source_prefix, pack_id)
 	if _error_count() > start_errors:
 		_reject(pack_id, source_prefix, "INVALID_MANIFEST_OR_PAYLOAD")
@@ -233,9 +237,15 @@ func _load_candidate(pack_root: String, directory_name: String, root_config: Dic
 
 func _validate_manifest(manifest: Dictionary, source: String, pack_id: String) -> void:
 	var required := ["pack_id", "display_name_key", "version", "content_api_version", "type", "authors", "license", "dependencies", "optional_dependencies", "incompatibilities", "load_priority", "base_pack_enabled", "entry_points", "asset_roots", "overrides"]
+	var allowed := ["$schema", "pack_id", "display_name_key", "version", "content_api_version", "enabled", "type", "authors", "license", "dependencies", "optional_dependencies", "incompatibilities", "load_priority", "base_pack_enabled", "entry_points", "asset_roots", "overrides"]
 	for key in required:
 		if not manifest.has(key):
 			_add_error("MISSING_MANIFEST_FIELD", "Required manifest field is missing", source, "$.%s" % key, pack_id)
+	for key in manifest:
+		if str(key) not in allowed:
+			_add_error("SCHEMA_ADDITIONAL_PROPERTY", "Additional manifest property is not allowed", source, "$.%s" % str(key), pack_id)
+	if manifest.has("$schema") and not manifest["$schema"] is String:
+		_add_error("SCHEMA_TYPE", "$schema must be a string", source, "$.$schema", pack_id)
 	if not ContentPathPolicy.is_pack_id(manifest.get("pack_id")):
 		_add_error("INVALID_PACK_ID", "Pack ID must use lowercase stable characters", source, "$.pack_id", pack_id)
 	if not ContentPathPolicy.is_semver(manifest.get("version")):
@@ -246,12 +256,27 @@ func _validate_manifest(manifest: Dictionary, source: String, pack_id: String) -
 		_add_error("INCOMPATIBLE_CONTENT_API", "Expected experimental content API %s" % CONTENT_API_VERSION, source, "$.content_api_version", pack_id)
 	if manifest.get("type") not in ["skin", "content", "total_conversion"]:
 		_add_error("INVALID_PACK_TYPE", "Unknown pack type", source, "$.type", pack_id)
+	if manifest.get("type") != "total_conversion" and manifest.get("base_pack_enabled") == false:
+		_add_error("INVALID_BASE_PACK_POLICY", "Only total_conversion packs may disable the bundled base pack", source, "$.base_pack_enabled", pack_id)
 	if (not manifest.get("load_priority") is float and not manifest.get("load_priority") is int) or float(manifest.get("load_priority", 0)) != floorf(float(manifest.get("load_priority", 0))):
 		_add_error("INVALID_LOAD_PRIORITY", "Load priority must be an integer", source, "$.load_priority", pack_id)
 	if not manifest.get("authors") is Array or manifest.get("authors").is_empty():
 		_add_error("INVALID_AUTHORS", "authors must contain at least one value", source, "$.authors", pack_id)
+	else:
+		for index in manifest.authors.size():
+			if not manifest.authors[index] is String or str(manifest.authors[index]).is_empty():
+				_add_error("INVALID_AUTHOR", "Author names must be non-empty strings", source, "$.authors[%d]" % index, pack_id)
 	if not manifest.get("license") is Dictionary or not manifest.get("license").has("code") or not manifest.get("license").has("assets"):
 		_add_error("INVALID_LICENSE", "license must declare code and assets", source, "$.license", pack_id)
+	else:
+		for license_key in manifest.license:
+			if str(license_key) not in ["code", "assets", "source"]:
+				_add_error("SCHEMA_ADDITIONAL_PROPERTY", "Additional license property is not allowed", source, "$.license.%s" % str(license_key), pack_id)
+		for license_key in ["code", "assets"]:
+			if not manifest.license[license_key] is String:
+				_add_error("SCHEMA_TYPE", "License values must be strings", source, "$.license.%s" % license_key, pack_id)
+		if manifest.license.has("source") and not manifest.license.source is String:
+			_add_error("SCHEMA_TYPE", "License source must be a string", source, "$.license.source", pack_id)
 	if not manifest.get("base_pack_enabled") is bool:
 		_add_error("INVALID_BASE_PACK_POLICY", "base_pack_enabled must be boolean", source, "$.base_pack_enabled", pack_id)
 	if manifest.has("enabled") and not manifest.enabled is bool:
@@ -264,6 +289,8 @@ func _validate_manifest(manifest: Dictionary, source: String, pack_id: String) -
 			var reference: Variant = manifest[field][index]
 			if not reference is Dictionary or not ContentPathPolicy.is_pack_id(reference.get("pack_id")) or not _is_version_requirement(reference.get("version")):
 				_add_error("INVALID_PACK_REFERENCE", "Pack reference requires pack_id and version", source, "$.%s[%d]" % [field, index], pack_id)
+			elif reference.size() != 2:
+				_add_error("SCHEMA_ADDITIONAL_PROPERTY", "Pack references may only contain pack_id and version", source, "$.%s[%d]" % [field, index], pack_id)
 	for field in ["entry_points", "asset_roots", "overrides"]:
 		if not manifest.get(field) is Array:
 			_add_error("INVALID_MANIFEST_FIELD", "%s must be an array" % field, source, "$.%s" % field, pack_id)
@@ -288,6 +315,8 @@ func _validate_manifest(manifest: Dictionary, source: String, pack_id: String) -
 func _validate_content_record(record: Dictionary, manifest: Dictionary, pack_id: String, seen_ids: Dictionary) -> void:
 	var document: Dictionary = record.data
 	var source: String = record.source_file
+	for schema_error in ContentSchemaValidator.validate(record.schema_name, document):
+		_add_error(schema_error.code, schema_error.message, source, schema_error.json_path, pack_id)
 	var content_id: Variant = document.get("id")
 	if not ContentPathPolicy.is_namespaced_id(content_id):
 		_add_error("INVALID_CONTENT_ID", "Content ID must be namespaced", source, "$.id", pack_id)
@@ -313,8 +342,111 @@ func _validate_content_record(record: Dictionary, manifest: Dictionary, pack_id:
 	record["id"] = content_id
 
 
+func _validate_candidate_references(candidates: Array[Dictionary]) -> Array[Dictionary]:
+	var remaining := candidates.duplicate()
+	while true:
+		var definitions: Dictionary = {}
+		var localization_keys: Dictionary = {}
+		for candidate in remaining:
+			var pack_localization: Dictionary = {}
+			for record in candidate.documents:
+				if record.schema_name == "localization-bundle.schema.json":
+					for key in record.data.strings:
+						pack_localization[str(key)] = true
+				elif record.has("id"):
+					definitions[str(record.id)] = record.schema_name
+			localization_keys[candidate.pack_id] = pack_localization
+
+		var invalid_pack_ids: Dictionary = {}
+		for candidate in remaining:
+			var start_errors := _error_count()
+			var pack_localization: Dictionary = localization_keys.get(candidate.pack_id, {})
+			var display_name_key := str(candidate.manifest.get("display_name_key", ""))
+			if not candidate.manifest.entry_points.is_empty() and not pack_localization.has(display_name_key):
+				_add_error("MISSING_LOCALIZATION_KEY", "Pack display name key is not defined by the pack", candidate.source + "/manifest.json", "$.display_name_key", candidate.pack_id)
+			for record in candidate.documents:
+				if record.schema_name == "localization-bundle.schema.json":
+					continue
+				_validate_record_localization(record, pack_localization, candidate.pack_id)
+				_validate_record_references(record, definitions, candidate.pack_id)
+			if _error_count() > start_errors:
+				invalid_pack_ids[candidate.pack_id] = true
+
+		if invalid_pack_ids.is_empty():
+			return remaining
+		var next: Array[Dictionary] = []
+		for candidate in remaining:
+			if invalid_pack_ids.has(candidate.pack_id):
+				_reject(candidate.pack_id, candidate.source, "INVALID_REFERENCES")
+			else:
+				next.append(candidate)
+		remaining = next
+	return remaining
+
+
+func _validate_record_localization(record: Dictionary, localization_keys: Dictionary, pack_id: String) -> void:
+	if not record.data.has("display_name_key"):
+		return
+	var display_name_key := str(record.data.display_name_key)
+	if not localization_keys.has(display_name_key):
+		_add_error("MISSING_LOCALIZATION_KEY", "Content display name key is not defined by the pack", record.source_file, "$.display_name_key", pack_id)
+
+
+func _validate_record_references(record: Dictionary, definitions: Dictionary, pack_id: String) -> void:
+	var data: Dictionary = record.data
+	match record.schema_name:
+		"starter-pool.schema.json":
+			_validate_reference_array(data.egg_ids, "$.egg_ids", ["egg.schema.json"], record, definitions, pack_id)
+		"egg.schema.json":
+			_validate_reference(data.family_id, "$.family_id", ["species-family.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.hatch_form_id, "$.hatch_form_id", ["form.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.animation_profile_id, "$.animation_profile_id", ["animation-profile.schema.json"], record, definitions, pack_id)
+		"species-family.schema.json":
+			_validate_reference_array(data.form_ids, "$.form_ids", ["form.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.evolution_graph_id, "$.evolution_graph_id", ["evolution-graph.schema.json"], record, definitions, pack_id)
+		"form.schema.json":
+			_validate_reference(data.family_id, "$.family_id", ["species-family.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.animation_profile_id, "$.animation_profile_id", ["animation-profile.schema.json"], record, definitions, pack_id)
+		"evolution-graph.schema.json":
+			for index in data.rules.size():
+				var rule: Dictionary = data.rules[index]
+				_validate_reference(rule.from_form_id, "$.rules[%d].from_form_id" % index, ["form.schema.json"], record, definitions, pack_id)
+				_validate_reference(rule.to_form_id, "$.rules[%d].to_form_id" % index, ["form.schema.json"], record, definitions, pack_id)
+		"enemy-encounter.schema.json":
+			_validate_reference_array(data.move_ids, "$.move_ids", ["move.schema.json"], record, definitions, pack_id)
+			for index in data.drops.size():
+				_validate_reference(data.drops[index].item_id, "$.drops[%d].item_id" % index, ["item.schema.json"], record, definitions, pack_id)
+		"dungeon.schema.json":
+			_validate_reference_array(data.encounter_ids, "$.encounter_ids", ["enemy-encounter.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.boss_encounter_id, "$.boss_encounter_id", ["enemy-encounter.schema.json"], record, definitions, pack_id)
+			_validate_reference_array(data.reward_item_ids, "$.reward_item_ids", ["item.schema.json"], record, definitions, pack_id)
+			_validate_reference_array(data.unlock_ids, "$.unlock_ids", ["habitat-theme.schema.json", "feature-gate.schema.json"], record, definitions, pack_id)
+		"habitat-theme.schema.json":
+			_validate_reference_array(data.furniture_ids, "$.furniture_ids", ["furniture-prop.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.unlock_gate_id, "$.unlock_gate_id", ["feature-gate.schema.json"], record, definitions, pack_id)
+		"farm-job.schema.json":
+			_validate_reference(data.station_id, "$.station_id", ["furniture-prop.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.output_item_id, "$.output_item_id", ["item.schema.json"], record, definitions, pack_id)
+
+
+func _validate_reference_array(values: Array, json_path: String, expected_schemas: Array, record: Dictionary, definitions: Dictionary, pack_id: String) -> void:
+	for index in values.size():
+		_validate_reference(values[index], "%s[%d]" % [json_path, index], expected_schemas, record, definitions, pack_id)
+
+
+func _validate_reference(content_id: Variant, json_path: String, expected_schemas: Array, record: Dictionary, definitions: Dictionary, pack_id: String) -> void:
+	var id := str(content_id)
+	if not definitions.has(id):
+		_add_error("UNRESOLVED_REFERENCE", "Referenced content ID is not available", record.source_file, json_path, pack_id)
+		return
+	if definitions[id] not in expected_schemas:
+		_add_error("CONTENT_KIND_MISMATCH", "Referenced content ID resolves to an unexpected schema", record.source_file, json_path, pack_id)
+
+
 func _validate_localization_record(record: Dictionary, pack_id: String) -> void:
 	var document: Dictionary = record.data
+	for schema_error in ContentSchemaValidator.validate(record.schema_name, document):
+		_add_error(schema_error.code, schema_error.message, record.source_file, schema_error.json_path, pack_id)
 	if not document.get("locale") is String or str(document.get("locale")).is_empty():
 		_add_error("INVALID_LOCALE", "Localization locale is required", record.source_file, "$.locale", pack_id)
 	if not document.get("strings") is Dictionary:

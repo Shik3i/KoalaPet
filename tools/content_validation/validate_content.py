@@ -19,6 +19,11 @@ FORBIDDEN_EXTENSIONS = {
     ".ps1", ".sh", ".app", ".jar", ".class", ".py", ".rb", ".js", ".mjs", ".wasm",
     ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz", ".pkg", ".dmg", ".msi",
 }
+SKIN_OVERRIDE_SCHEMAS = {
+    "animation-profile.schema.json",
+    "furniture-prop.schema.json",
+    "habitat-theme.schema.json",
+}
 
 
 @dataclass
@@ -98,7 +103,14 @@ def validate_schema(document_path: Path, pack_root: Path, data: Dict[str, Any], 
     return schema_path.name
 
 
-def validate_asset_path(document: Document, location: str, pointer: str, report: ValidationReport) -> None:
+def validate_asset_path(document: Document, manifest: Dict[str, Any], location: Any, pointer: str, report: ValidationReport) -> None:
+    if not isinstance(location, str) or not location:
+        report.error(document.path, pointer, "asset path must be a non-empty string")
+        return
+    asset_roots = manifest.get("asset_roots", [])
+    if not any(location == root or location.startswith(f"{root}/") for root in asset_roots if isinstance(root, str)):
+        report.error(document.path, pointer, "asset path is outside declared asset roots")
+        return
     target = contained_path(document.pack_root, location)
     if target is None:
         report.error(document.path, pointer, "asset path escapes pack root")
@@ -185,6 +197,8 @@ def validate_pack_relationships(packs: List[Tuple[Path, Dict[str, Any]]], report
         report.error(first_root / "manifest.json", "$.pack_id", "duplicate pack ID")
     for pack_root, manifest in packs:
         pack_id = manifest.get("pack_id")
+        if manifest.get("type") != "total_conversion" and manifest.get("base_pack_enabled") is False:
+            report.error(pack_root / "manifest.json", "$.base_pack_enabled", "only total_conversion packs may disable the bundled base pack")
         for index, dependency in enumerate(manifest.get("dependencies", [])):
             required_id = dependency.get("pack_id") if isinstance(dependency, dict) else None
             if required_id not in by_id:
@@ -216,8 +230,12 @@ def load_entries(pack_root: Path, manifest: Dict[str, Any], report: ValidationRe
         if schema_name is None:
             continue
         content_id = data.get("id")
-        if isinstance(content_id, str) and isinstance(pack_id, str) and not content_id.startswith(pack_id + ":"):
+        is_owned = isinstance(content_id, str) and isinstance(pack_id, str) and content_id.startswith(pack_id + ":")
+        is_override = isinstance(content_id, str) and content_id in manifest.get("overrides", [])
+        if isinstance(content_id, str) and isinstance(pack_id, str) and not is_owned and not is_override:
             report.error(path, "$.id", f"ID namespace must be owned by pack {pack_id!r}")
+        if is_override and manifest.get("type") == "skin" and schema_name not in SKIN_OVERRIDE_SCHEMAS:
+            report.error(path, "$.id", "skin packs may override presentation definitions only")
         report.documents.append(Document(path, pack_root, data, schema_name))
 
 
@@ -240,6 +258,7 @@ def require_many(document: Document, pointer: str, values: Any, expected: Set[st
 def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: ValidationReport) -> None:
     by_id: Dict[str, Document] = {}
     localized: Dict[Path, Set[str]] = {}
+    manifests: Dict[Path, Dict[str, Any]] = {pack_root: manifest for pack_root, manifest in packs}
     for document in report.documents:
         if document.schema_name == "localization-bundle.schema.json":
             localized.setdefault(document.pack_root, set()).update(document.data.get("strings", {}).keys())
@@ -302,16 +321,17 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
             require_reference(document, "$.station_id", data.get("station_id"), {"furniture-prop.schema.json"}, by_id, report)
             require_reference(document, "$.output_item_id", data.get("output_item_id"), {"item.schema.json"}, by_id, report)
 
+        manifest = manifests[document.pack_root]
         if schema == "animation-profile.schema.json":
-            validate_asset_path(document, data.get("preview", ""), "$.preview", report)
-            validate_asset_path(document, data.get("portrait", ""), "$.portrait", report)
+            validate_asset_path(document, manifest, data.get("preview", ""), "$.preview", report)
+            validate_asset_path(document, manifest, data.get("portrait", ""), "$.portrait", report)
             for name, animation in data.get("world_animations", {}).items():
-                validate_asset_path(document, animation.get("asset", ""), f"$.world_animations.{name}.asset", report)
+                validate_asset_path(document, manifest, animation.get("asset", ""), f"$.world_animations.{name}.asset", report)
         elif schema == "habitat-theme.schema.json":
-            validate_asset_path(document, data.get("background_asset", ""), "$.background_asset", report)
-            validate_asset_path(document, data.get("ground_asset", ""), "$.ground_asset", report)
+            validate_asset_path(document, manifest, data.get("background_asset", ""), "$.background_asset", report)
+            validate_asset_path(document, manifest, data.get("ground_asset", ""), "$.ground_asset", report)
         elif schema == "furniture-prop.schema.json":
-            validate_asset_path(document, data.get("asset", ""), "$.asset", report)
+            validate_asset_path(document, manifest, data.get("asset", ""), "$.asset", report)
 
 
 def main() -> int:

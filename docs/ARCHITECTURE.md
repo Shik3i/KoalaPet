@@ -18,9 +18,9 @@ Prompt 1 implements only the platform/presentation spike boundary: `WindowModeCo
 
 Milestone 2 implements the platform-neutral foundation:
 
-- `ContentPackRegistry` validates and resolves injected bundled/external/fixture roots into immutable dictionary records and a deterministic snapshot.
+- `ContentPackRegistry` validates schemas, localization, cross-references, declared asset roots, and untrusted payloads before resolving injected bundled/external/fixture roots into immutable dictionary records and a deterministic snapshot.
 - `SimulationClock`, `SystemSimulationClock`, `FakeSimulationClock`, and `OfflineProgressPolicy` isolate wall and monotonic time.
-- `SaveRepository`, `SaveMigrationRegistry`, `SaveEnvelope`, and `ContentBindingReconciler` own local persistence, recovery, migrations, and quarantine.
+- `SaveRepository`, `SaveMigrationRegistry`, `SaveEnvelope`, and `ContentBindingReconciler` own local persistence, recovery, migrations, and quarantine. `FoundationBootstrap` compares loaded and active content snapshots and persists reconciliation metadata only from a valid primary; recovered sources require an explicit save.
 - `ProgressionFacts`, `FeatureGateEvaluator`, `FeatureGateService`, and `UnlockLedger` own declarative gates and idempotent grants.
 - `FoundationBootstrap` composes configuration → content → snapshot → clock → saves/migrations → gates. Dependencies are injected; it has no presentation, platform, or window-topology reference.
 

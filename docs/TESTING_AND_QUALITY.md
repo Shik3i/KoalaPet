@@ -17,7 +17,7 @@ Headless, macOS, API presence, synthetic geometry, and unit tests must never be 
 
 ## Milestone 2 foundation evidence
 
-- `game/tests/foundation/run_all.gd`: 87 deterministic assertions.
+- `game/tests/foundation/run_all.gd`: 99 deterministic assertions; the symlink fixture is explicitly skipped when the host cannot create links.
 - Content coverage: bundled/external common loader, stable snapshot, topology/priority, required/optional dependencies, conflicts, disabled/total-conversion policy, explicit and unauthorized overrides, skin restrictions, duplicate packs/IDs, invalid IDs/API/manifests/documents, logical diagnostics, traversal, absolute paths, unsupported media, executable payloads, symlinks, localization, and reference explanations.
 - Time coverage: normal/zero elapsed, rollback, negative drift, forward jump, cap, missing/invalid UTC, and fake wall/monotonic clocks.
 - Save coverage: v2 round trip, validated replacement, backup, malformed-primary recovery, both-invalid failure, v1 migration/idempotence, content snapshot, quarantine, raw preservation, and restoration.

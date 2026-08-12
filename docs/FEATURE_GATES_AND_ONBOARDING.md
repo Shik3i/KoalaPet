@@ -2,7 +2,7 @@
 
 Feature gates are versioned content definitions evaluated from stable progression facts. UI queries gate state; it does not invent unlock rules. Gates can be hidden, hinted, available, or completed, with product-specific rules controlling presentation.
 
-Milestone 2 implements read-only `ProgressionFacts`, recursive `all`/`any`/`not` conditions, boolean/equality/inequality and numeric min/max comparisons, collection membership, explicit failed-condition paths, and deterministic repeated evaluation. Gate IDs, feature IDs, and reward IDs are namespaced.
+Milestone 2 implements read-only `ProgressionFacts`, recursive `all`/`any`/`not` conditions, boolean/equality/inequality and numeric min/max comparisons, collection membership, explicit failed-condition paths, and deterministic repeated evaluation. Gate IDs, feature IDs, and reward IDs are namespaced. Invalid conditions fail closed; malformed operands cannot pass through `not` or `any`.
 
 `UnlockLedger` grants each reward ID at most once and records its originating gate. Re-evaluating a passing gate is safe and returns `ALREADY_GRANTED` rather than duplicating effects. Definition changes cannot remove a consumed ledger grant. No onboarding UI or farm reveal is implemented.
 

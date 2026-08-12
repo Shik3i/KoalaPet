@@ -149,7 +149,7 @@ func _test_overrides_and_skin_policy() -> void:
 	var allowed := _registry_for(allowed_root)
 	allowed.discover_and_resolve()
 	_assert_equal(allowed.identify_owner("fixture.owner:shared"), "fixture.replacement", "CONTENT-017 explicit later override replaces owner deterministically")
-	_assert_equal(allowed.resolve("fixture.owner:shared").data.marker, "replacement", "CONTENT-018 resolved override data")
+	_assert_equal(allowed.resolve("fixture.owner:shared").data.effects.marker, 2, "CONTENT-018 resolved override data")
 	_assert_equal(allowed.inspect_overrides().size(), 1, "CONTENT-019 override audit record")
 
 	var denied_root := _case_root("denied_override")
@@ -196,6 +196,30 @@ func _test_incompatible_and_malformed_content() -> void:
 	invalid_manifest.discover_and_resolve()
 	_assert_diagnostic(invalid_manifest, "INVALID_AUTHORS", "$.authors", "CONTENT-025A manifest fields are validated at runtime")
 
+	var missing_manifest_field_root := _case_root("missing_manifest_field")
+	_create_pack(missing_manifest_field_root, "fixture.missing", {"omit_fields": ["entry_points"]})
+	var missing_manifest_field := _registry_for(missing_manifest_field_root)
+	missing_manifest_field.discover_and_resolve()
+	_assert_diagnostic(missing_manifest_field, "MISSING_MANIFEST_FIELD", "$.entry_points", "CONTENT-025B missing manifest fields reject without null dereference")
+
+	var schema_root := _case_root("schema_validation")
+	_create_pack(schema_root, "fixture.schema", {"documents": [_document("data/item.json", {"$schema": "item.schema.json", "id": "fixture.schema:invalid_item"})]})
+	var schema_registry := _registry_for(schema_root)
+	schema_registry.discover_and_resolve()
+	_assert_diagnostic(schema_registry, "SCHEMA_REQUIRED_FIELD", "$.display_name_key", "CONTENT-025C runtime schema validation rejects incomplete documents")
+
+	var reference_root := _case_root("reference_validation")
+	_create_pack(reference_root, "fixture.references", {"documents": [_document("data/pool.json", {"$schema": "starter-pool.schema.json", "id": "fixture.references:pool", "display_name_key": "pool.fixture.name", "egg_ids": ["fixture.references:missing_egg"]})]})
+	var reference_registry := _registry_for(reference_root)
+	reference_registry.discover_and_resolve()
+	_assert_diagnostic(reference_registry, "UNRESOLVED_REFERENCE", "$.egg_ids[0]", "CONTENT-025D unresolved references reject the pack")
+
+	var invalid_base_root := _case_root("invalid_base_policy")
+	_create_pack(invalid_base_root, "fixture.invalid_base", {"base_pack_enabled": false})
+	var invalid_base := _registry_for(invalid_base_root)
+	invalid_base.discover_and_resolve()
+	_assert_diagnostic(invalid_base, "INVALID_BASE_PACK_POLICY", "$.base_pack_enabled", "CONTENT-025E only total conversions may disable base")
+
 	var api_root := _case_root("api")
 	_create_pack(api_root, "fixture.future", {"content_api_version": "9.9"})
 	var api := _registry_for(api_root)
@@ -241,10 +265,13 @@ func _test_path_and_payload_security() -> void:
 	var pack_directory := ProjectSettings.globalize_path(symlink_root.path_join("fixture.symlink"))
 	var directory := DirAccess.open(pack_directory)
 	var link_error := directory.create_link("manifest.json", "linked-manifest.json") if directory != null else ERR_CANT_OPEN
-	_assert_equal(link_error, OK, "CONTENT-032A symlink fixture created")
-	var symlink := _registry_for(symlink_root)
-	symlink.discover_and_resolve()
-	_assert_diagnostic(symlink, "SYMLINK_PAYLOAD", "$", "CONTENT-032B symlink payload rejected before traversal")
+	if link_error != OK:
+		print("SKIP: CONTENT-032 symlink fixture unavailable: %s" % error_string(link_error))
+	else:
+		_assert_equal(link_error, OK, "CONTENT-032A symlink fixture created")
+		var symlink := _registry_for(symlink_root)
+		symlink.discover_and_resolve()
+		_assert_diagnostic(symlink, "SYMLINK_PAYLOAD", "$", "CONTENT-032B symlink payload rejected before traversal")
 
 
 func _test_reference_and_localization_queries() -> void:
@@ -368,6 +395,7 @@ func _test_feature_gate_evaluation_and_grants() -> void:
 	var evaluator := FeatureGateEvaluator.new()
 	var composition := {"all": [{"fact": "counter", "operator": "gte", "value": 2}, {"any": [{"fact": "flag", "operator": "eq", "value": true}, {"not": {"fact": "blocked", "operator": "eq", "value": true}}]}]}
 	_assert_equal(evaluator.evaluate(composition, ProgressionFacts.new({"counter": 2, "flag": false, "blocked": false})).passed, true, "GATE-004 all/any/not composition")
+	_assert_equal(evaluator.evaluate({"not": {"fact": "blocked", "operator": "unknown", "value": true}}, ProgressionFacts.new({"blocked": false})).passed, false, "GATE-004A invalid negated condition cannot pass")
 	var repeated_a := JSON.stringify(service.evaluate_gate("example.neutral:quiet_hollow_gate", passing), "", true, true)
 	var repeated_b := JSON.stringify(service.evaluate_gate("example.neutral:quiet_hollow_gate", passing), "", true, true)
 	_assert_equal(repeated_a, repeated_b, "GATE-005 repeated evaluation is deterministic")
@@ -391,6 +419,24 @@ func _test_application_bootstrap() -> void:
 	_assert_equal(result.resolved_pack_ids, ["koalapet.base", "example.neutral"], "APP-002 bootstrap resolves content before save binding")
 	_assert_true(bootstrap.save_repository != null and bootstrap.feature_gate_service != null and bootstrap.migration_registry != null, "APP-003 bootstrap injects functional foundation services")
 	_assert_equal(DisplayServer.get_name(), "headless", "APP-004 foundation test remains headless and platform-neutral")
+	var initial_save := bootstrap.save_current()
+	_assert_equal(initial_save.ok, true, "APP-005 explicit save writes the active content snapshot")
+	var changed_roots: Array[Dictionary] = [ContentPackRegistry.root("res://content_packs", "bundled", "bundled")]
+	var changed := FoundationBootstrap.new({"content_roots": changed_roots, "save_path": save_path}, FakeSimulationClock.new(1_767_225_601))
+	var changed_result := changed.initialize()
+	_assert_equal(changed_result.content_snapshot_status, "MISMATCH", "APP-006 content snapshot changes are explicit")
+	_assert_equal(changed_result.content_snapshot_match, false, "APP-007 changed content cannot be treated as compatible")
+	_assert_equal(changed_result.save_persisted, true, "APP-008 primary reconciliation metadata is persisted")
+	var persisted := changed.save_repository.load()
+	_assert_equal(persisted.data.recovery_metadata.content_snapshot_status, "MISMATCH", "APP-009 persisted mismatch remains visible")
+	_assert_true(not persisted.data.recovery_metadata.reconciliation.has("data"), "APP-009A reconciliation metadata stays summary-sized")
+	var primary_path := ProjectSettings.globalize_path(save_path)
+	_write_text(primary_path, "{malformed")
+	var recovered := FoundationBootstrap.new({"content_roots": changed_roots, "save_path": save_path}, FakeSimulationClock.new(1_767_225_602))
+	var recovered_result := recovered.initialize()
+	_assert_equal(recovered_result.save_source, "backup", "APP-010 bootstrap reports backup recovery source")
+	_assert_equal(recovered_result.save_persisted, false, "APP-011 recovered save is not written over malformed primary")
+	_assert_equal(recovered_result.save_persistence_required, true, "APP-012 recovered reconciliation requires explicit save")
 
 
 func _create_pack(root_path: String, pack_id: String, options: Dictionary = {}) -> void:
@@ -401,6 +447,19 @@ func _create_pack(root_path: String, pack_id: String, options: Dictionary = {}) 
 	if entry_points.is_empty():
 		for document in documents:
 			entry_points.append(document.path)
+		if not documents.is_empty():
+			var strings := {"pack.%s.name" % pack_id.replace(".", "_"): "Fixture Pack"}
+			for document in documents:
+				var display_name_key: Variant = document.data.get("display_name_key")
+				if display_name_key is String:
+					strings[display_name_key] = "Fixture Content"
+			var localization := {
+				"$schema": "localization-bundle.schema.json",
+				"locale": "en",
+				"strings": strings,
+			}
+			documents.append(_document("data/localization.en.json", localization))
+			entry_points.append("data/localization.en.json")
 	var manifest := {
 		"$schema": "content-pack-manifest.schema.json",
 		"pack_id": pack_id,
@@ -421,6 +480,8 @@ func _create_pack(root_path: String, pack_id: String, options: Dictionary = {}) 
 	}
 	if options.has("enabled"):
 		manifest["enabled"] = options.enabled
+	for field in options.get("omit_fields", []):
+		manifest.erase(str(field))
 	_write_json(pack_path.path_join("manifest.json"), manifest)
 	var raw_documents: Dictionary = options.get("raw_documents", {})
 	for document in documents:
@@ -437,11 +498,19 @@ func _document(path: String, data: Dictionary) -> Dictionary:
 
 
 func _item(content_id: String, marker := "") -> Dictionary:
-	return {"$schema": "item.schema.json", "id": content_id, "marker": marker}
+	var marker_value := 2 if marker == "replacement" else 1 if marker == "owner" else 0
+	return {
+		"$schema": "item.schema.json",
+		"id": content_id,
+		"display_name_key": "item.fixture.name",
+		"category": "material",
+		"baseline_available": false,
+		"effects": {"marker": marker_value},
+	}
 
 
 func _animation(content_id: String, asset_path: String) -> Dictionary:
-	return {"$schema": "animation-profile.schema.json", "id": content_id, "preview": asset_path, "portrait": asset_path, "world_animations": {}}
+	return {"$schema": "animation-profile.schema.json", "id": content_id, "preview": asset_path, "portrait": asset_path, "world_animations": {"idle": {"asset": asset_path, "frames": 1, "fps": 1}}}
 
 
 func _registry_for(root_path: String) -> ContentPackRegistry:

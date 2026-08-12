@@ -11,7 +11,7 @@
   "optional_dependencies": [],
   "incompatibilities": [],
   "load_priority": 100,
-  "base_pack_enabled": false,
+  "base_pack_enabled": true,
   "entry_points": [
     "data/localization.en.json",
     "data/starter_pool.json",

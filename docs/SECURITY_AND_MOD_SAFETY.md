@@ -5,10 +5,10 @@ Initial mod loading treats every pack as untrusted data.
 - Normalize paths, reject absolute paths, traversal (`..`), symlink escapes, and roots outside the pack.
 - Allowlist JSON and safe media extensions; reject scripts, libraries, executables, and nested executable containers.
 - Apply configurable per-file, total-size, file-count, image-dimension, audio-duration, and JSON-depth limits before expensive processing.
-- Validate schemas, dependencies, content API ranges, duplicates, explicit overrides, and all cross-references.
+- Validate schemas, dependencies, content API ranges, duplicates, explicit overrides, localization ownership, declared asset roots, and all cross-references at both authoring and runtime boundaries.
 - Resolve load order deterministically and report file plus JSON path for errors.
 - Keep save writes separate from pack directories and never permit pack data to select arbitrary output paths.
-- Preserve missing-content data and require explicit migrations; no silent save overwrite.
+- Preserve missing-content data and require explicit migrations; content snapshot changes are visible, primary-source reconciliation metadata is persisted, and recovered saves are never silently written over a malformed primary.
 - Record source, author/owner, and intended license metadata; metadata is not proof of rights.
 - Do not log secrets or arbitrary private filesystem paths in user-facing mod diagnostics.
 

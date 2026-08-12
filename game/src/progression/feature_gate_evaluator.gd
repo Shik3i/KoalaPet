@@ -16,7 +16,11 @@ func _evaluate_node(condition: Dictionary, facts: ProgressionFacts, path: String
 		var passed := true
 		for index in condition.all.size():
 			var child: Variant = condition.all[index]
-			if not child is Dictionary or not _evaluate_node(child, facts, "%s.all[%d]" % [path, index], failures):
+			if not child is Dictionary:
+				failures.append(_failure("%s.all[%d]" % [path, index], "INVALID_CONDITION", "all contains a non-object condition"))
+				passed = false
+				continue
+			if not _evaluate_node(child, facts, "%s.all[%d]" % [path, index], failures):
 				passed = false
 		return passed
 	if condition.has("any"):
@@ -24,12 +28,23 @@ func _evaluate_node(condition: Dictionary, facts: ProgressionFacts, path: String
 			failures.append(_failure(path + ".any", "INVALID_ANY", "any requires at least one condition"))
 			return false
 		var branch_failures: Array[Dictionary] = []
+		var branch_passed := false
+		var invalid_branch := false
 		for index in condition.any.size():
 			var local_failures: Array[Dictionary] = []
 			var child: Variant = condition.any[index]
-			if child is Dictionary and _evaluate_node(child, facts, "%s.any[%d]" % [path, index], local_failures):
-				return true
+			if not child is Dictionary:
+				local_failures.append(_failure("%s.any[%d]" % [path, index], "INVALID_CONDITION", "any contains a non-object condition"))
+			else:
+				branch_passed = _evaluate_node(child, facts, "%s.any[%d]" % [path, index], local_failures) or branch_passed
+			if _has_invalid_failure(local_failures):
+				invalid_branch = true
 			branch_failures.append_array(local_failures)
+		if invalid_branch:
+			failures.append(_failure(path + ".any", "INVALID_ANY_BRANCH", "any contains an invalid condition", {"branch_failures": branch_failures}))
+			return false
+		if branch_passed:
+			return true
 		failures.append(_failure(path + ".any", "NO_ANY_BRANCH_PASSED", "No any branch passed", {"branch_failures": branch_failures}))
 		return false
 	if condition.has("not"):
@@ -38,6 +53,9 @@ func _evaluate_node(condition: Dictionary, facts: ProgressionFacts, path: String
 			return false
 		var nested_failures: Array[Dictionary] = []
 		var nested_passed := _evaluate_node(condition.not, facts, path + ".not", nested_failures)
+		if _has_invalid_failure(nested_failures):
+			failures.append(_failure(path + ".not", "INVALID_NOT_OPERAND", "Negated condition is invalid"))
+			return false
 		if nested_passed:
 			failures.append(_failure(path + ".not", "NOT_CONDITION_PASSED", "Negated condition passed"))
 			return false
@@ -92,6 +110,23 @@ func _contains(container: Variant, expected: Variant) -> bool:
 
 func _is_number(value: Variant) -> bool:
 	return value is int or value is float
+
+
+func _has_invalid_failure(failures: Array[Dictionary]) -> bool:
+	for failure in failures:
+		var code := str(failure.get("code", ""))
+		if code.begins_with("INVALID_") or code == "UNKNOWN_OPERATOR":
+			return true
+		var details: Variant = failure.get("details", {})
+		if details is Dictionary:
+			var nested: Variant = details.get("branch_failures", [])
+			if nested is Array:
+				for item in nested:
+					if item is Dictionary:
+						var nested_failures: Array[Dictionary] = [item]
+						if _has_invalid_failure(nested_failures):
+							return true
+	return false
 
 
 func _failure(path: String, code: String, reason: String, details: Dictionary = {}) -> Dictionary:

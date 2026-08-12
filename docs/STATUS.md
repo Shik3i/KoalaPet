@@ -22,11 +22,11 @@
 - Three supplied UI-mode concept PNGs preserved byte-for-byte outside `res://`
 - Runtime discovery for bundled, external `user://mods`, and injected fixture roots through one `ContentPackRegistry`
 - Deterministic dependency/priority resolution, conflict and override policy, rejected-pack diagnostics, localization index, safe asset paths, and reproducible content snapshots
-- Experimental Content API `0.1` runtime trust-boundary validation aligned with the Python authoring validator
+- Experimental Content API `0.1` runtime trust-boundary validation aligned with the Python authoring validator, including schema/additional-property checks, local localization keys, declared asset roots, and cross-reference resolution
 - Injectable system/fake clocks and explicit capped offline-time anomaly policy
 - Save envelope version `2`, validated temporary replacement, previous-valid backup, fallback recovery, sequential migration fixture, and lossless missing-content quarantine/restoration
 - Declarative recursive feature-gate evaluation, failed-condition explanations, unlock ledger, and idempotent rewards
-- Platform-neutral application bootstrap wiring configuration, registry, snapshot, clock, save repository, migrations, and gates
+- Platform-neutral application bootstrap wiring configuration, registry, snapshot, clock, save repository, migrations, gates, explicit snapshot mismatch reporting, and source-safe reconciliation persistence
 
 ## Documented only
 
@@ -38,10 +38,11 @@ All actual pet simulation, care effects, starter selection, hatching, production
 - Godot `4.7.1.stable.official.a13da4feb` completed a headless editor import of `game/`.
 - Repository-relative Markdown link validation passed for 63 local targets.
 - Platform-neutral overlay tests passed with 41 assertions, including rejection of headless runs as native-window evidence.
-- Milestone 2 foundation tests passed with 87 deterministic assertions across content, time, saves, quarantine, gates, and bootstrap.
+- Milestone 2 foundation tests passed with 99 deterministic assertions across content, time, saves, quarantine, gates, and bootstrap; the Windows symlink fixture was explicitly skipped because the host returned `Failed` creating the link.
 - Godot headless import and three-frame spike-scene smoke start passed on macOS.
 - macOS matrix: 15 `PASS`, 10 `PASS_WITH_LIMITATION`, 4 `FAIL`, 8 `BLOCKED_NOT_RUN`, 5 `NOT_AVAILABLE`.
 - Windows matrix remains unchanged: 6 `PASS`, 4 `PASS_WITH_LIMITATION`, 39 `BLOCKED_NOT_RUN`, 0 `FAIL`.
+- Current hardening is covered by the fresh Godot 4.7.1 run above. No native-window evidence is implied by the headless run.
 
 ## Known blockers
 

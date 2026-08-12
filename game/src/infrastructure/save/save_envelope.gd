@@ -33,12 +33,23 @@ static func validate(data: Variant) -> Dictionary:
 			return _invalid("MISSING_SAVE_FIELD", "Required save field is missing", "$.%s" % field)
 	if (not data.save_format_version is float and not data.save_format_version is int) or float(data.save_format_version) != floorf(float(data.save_format_version)):
 		return _invalid("INVALID_SAVE_VERSION", "save_format_version must be an integer", "$.save_format_version")
+	for field in ["created_at_utc", "updated_at_utc"]:
+		if not data[field] is String or str(data[field]).is_empty():
+			return _invalid("INVALID_SAVE_TIMESTAMP", "%s must be a non-empty string" % field, "$.%s" % field)
 	if not data.content_snapshot is Dictionary:
 		return _invalid("INVALID_CONTENT_SNAPSHOT", "content_snapshot must be an object", "$.content_snapshot")
 	if not data.simulation_state is Dictionary or not data.simulation_state.get("records") is Array:
 		return _invalid("INVALID_SIMULATION_STATE", "simulation_state.records must be an array", "$.simulation_state.records")
+	if not data.progression_state is Dictionary or not data.progression_state.get("facts", {}) is Dictionary:
+		return _invalid("INVALID_PROGRESSION_STATE", "progression_state.facts must be an object", "$.progression_state.facts")
+	if not data.feature_gate_state is Dictionary or not data.feature_gate_state.get("unlock_ledger", {}) is Dictionary:
+		return _invalid("INVALID_FEATURE_GATE_STATE", "feature_gate_state.unlock_ledger must be an object", "$.feature_gate_state.unlock_ledger")
 	if not data.quarantined_records is Array:
 		return _invalid("INVALID_QUARANTINE", "quarantined_records must be an array", "$.quarantined_records")
+	if not data.migration_metadata is Dictionary or not data.migration_metadata.get("history", []) is Array:
+		return _invalid("INVALID_MIGRATION_METADATA", "migration_metadata.history must be an array", "$.migration_metadata.history")
+	if not data.recovery_metadata is Dictionary:
+		return _invalid("INVALID_RECOVERY_METADATA", "recovery_metadata must be an object", "$.recovery_metadata")
 	return {"ok": true, "error_code": "", "reason": "Save envelope is valid", "json_path": "$"}
 
 

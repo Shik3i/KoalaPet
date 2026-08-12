@@ -12,7 +12,7 @@ Dependencies: Godot version pin and Windows test environment. Acceptance: measur
 
 ## 2. Content and simulation foundation
 
-Dependencies: platform-neutral architecture boundaries established by milestone 1; native topology acceptance is not required. Acceptance: content registry and validation, explicit experimental schema status, save envelope and migrations, clock abstraction, offline policy, feature gates, base-pack loading, missing-content quarantine, deterministic tests. **Complete: runtime registry/snapshot, Content API `0.1` trust boundary, clocks/offline policy, save v2/migration/backup/quarantine, gates/unlock ledger, bootstrap, and 87 headless assertions.**
+Dependencies: platform-neutral architecture boundaries established by milestone 1; native topology acceptance is not required. Acceptance: content registry and validation, explicit experimental schema status, save envelope and migrations, clock abstraction, offline policy, feature gates, base-pack loading, missing-content quarantine, deterministic tests. **Foundation implemented: runtime registry/snapshot with schema/reference trust checks, Content API `0.1` boundary, clocks/offline policy, save v2/migration/backup/quarantine with explicit snapshot reconciliation, gates/unlock ledger, bootstrap, and 99 fresh headless foundation assertions. The Windows symlink fixture remains capability-limited; native-window acceptance remains separate.**
 
 ## 3. Single-pet classic V-pet vertical slice
 

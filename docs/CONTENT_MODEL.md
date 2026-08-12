@@ -18,7 +18,7 @@ Same-ID collisions are errors unless the later pack lists the exact ID in `overr
 
 Schemas cover manifest, localization, starter pools, eggs, species/families, forms, animations, evolution graphs, moves, items, enemies/encounters, dungeons, habitat themes, furniture/props, farm jobs/stations, and feature gates. Prompt 0 fields are deliberately small `0.x` contracts, not final balance.
 
-All references resolve through the registry. Asset paths are relative to declared pack roots after normalization. The official base pack remains intentionally content-empty until original designs are accepted.
+All references and required local display-name keys resolve through the registry before a pack is applied. Runtime schema checks mirror the authoring contracts, including required fields and additional-property rejection. Asset paths are relative to declared pack roots after normalization. The official base pack remains intentionally content-empty until original designs are accepted.
 
 Runtime queries list resolved packs/documents, resolve IDs and owners, explain missing or wrong-kind references, inspect applied overrides, retrieve localization values with deterministic locale fallback, and list rejected packs/diagnostics. Diagnostics contain a logical source label and JSON path.
 

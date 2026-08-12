@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/animation-profile.schema.json",
+  "id": "koalapet.base:ember_animation",
+  "preview": "assets/vertical_slice/ember/preview.png",
+  "portrait": "assets/vertical_slice/ember/portrait.png",
+  "world_animations": {
+    "idle": {"asset": "assets/vertical_slice/ember/idle.png", "frames": 1, "fps": 2},
+    "walk": {"asset": "assets/vertical_slice/ember/walk.png", "frames": 1, "fps": 4},
+    "sleep": {"asset": "assets/vertical_slice/ember/sleep.png", "frames": 1, "fps": 1},
+    "eat": {"asset": "assets/vertical_slice/ember/eat.png", "frames": 1, "fps": 4},
+    "happy": {"asset": "assets/vertical_slice/ember/happy.png", "frames": 1, "fps": 4},
+    "sick": {"asset": "assets/vertical_slice/ember/sick.png", "frames": 1, "fps": 2},
+    "training": {"asset": "assets/vertical_slice/ember/training.png", "frames": 1, "fps": 4},
+    "call": {"asset": "assets/vertical_slice/ember/call.png", "frames": 1, "fps": 2}
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:moss_hatchling",
+  "family_id": "koalapet.base:starter_triad_family",
+  "display_name_key": "form.moss.name",
+  "stage": "hatchling",
+  "animation_profile_id": "koalapet.base:moss_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 5, "effort": 2},
+  "traits": ["curious", "steady"]
+}

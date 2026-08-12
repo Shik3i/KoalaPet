@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/animation-profile.schema.json",
+  "id": "koalapet.base:tide_animation",
+  "preview": "assets/vertical_slice/tide/preview.png",
+  "portrait": "assets/vertical_slice/tide/portrait.png",
+  "world_animations": {
+    "idle": {"asset": "assets/vertical_slice/tide/idle.png", "frames": 1, "fps": 2},
+    "walk": {"asset": "assets/vertical_slice/tide/walk.png", "frames": 1, "fps": 4},
+    "sleep": {"asset": "assets/vertical_slice/tide/sleep.png", "frames": 1, "fps": 1},
+    "eat": {"asset": "assets/vertical_slice/tide/eat.png", "frames": 1, "fps": 4},
+    "happy": {"asset": "assets/vertical_slice/tide/happy.png", "frames": 1, "fps": 4},
+    "sick": {"asset": "assets/vertical_slice/tide/sick.png", "frames": 1, "fps": 2},
+    "training": {"asset": "assets/vertical_slice/tide/training.png", "frames": 1, "fps": 4},
+    "call": {"asset": "assets/vertical_slice/tide/call.png", "frames": 1, "fps": 2}
+  }
+}

@@ -7,11 +7,11 @@ const MAX_PACK_FILES := 512
 const MAX_PACK_BYTES := 64 * 1024 * 1024
 const MAX_JSON_BYTES := 2 * 1024 * 1024
 const SUPPORTED_SCHEMAS := [
-	"animation-profile.schema.json", "dungeon.schema.json", "egg.schema.json",
+	"ailment.schema.json", "animation-profile.schema.json", "care-profile.schema.json", "dungeon.schema.json", "egg.schema.json",
 	"enemy-encounter.schema.json", "evolution-graph.schema.json", "farm-job.schema.json",
 	"feature-gate.schema.json", "form.schema.json", "furniture-prop.schema.json",
 	"habitat-theme.schema.json", "item.schema.json", "localization-bundle.schema.json",
-	"move.schema.json", "species-family.schema.json", "starter-pool.schema.json",
+	"move.schema.json", "species-family.schema.json", "starter-pool.schema.json", "training-activity.schema.json",
 ]
 const SKIN_OVERRIDE_SCHEMAS := [
 	"animation-profile.schema.json", "furniture-prop.schema.json", "habitat-theme.schema.json",
@@ -75,6 +75,14 @@ func list_documents_by_kind(kind: String) -> Array[Dictionary]:
 		if record.kind == kind or record.schema_name == kind:
 			documents.append(record.duplicate(true))
 	documents.sort_custom(func(left: Dictionary, right: Dictionary) -> bool: return left.id < right.id)
+	return documents
+
+
+func list_documents() -> Array[Dictionary]:
+	var documents: Array[Dictionary] = []
+	for content_id in _definitions:
+		documents.append(_definitions[content_id].duplicate(true))
+	documents.sort_custom(func(left: Dictionary, right: Dictionary) -> bool: return str(left.get("id", "")) < str(right.get("id", "")))
 	return documents
 
 
@@ -407,6 +415,8 @@ func _validate_record_references(record: Dictionary, definitions: Dictionary, pa
 		"form.schema.json":
 			_validate_reference(data.family_id, "$.family_id", ["species-family.schema.json"], record, definitions, pack_id)
 			_validate_reference(data.animation_profile_id, "$.animation_profile_id", ["animation-profile.schema.json"], record, definitions, pack_id)
+			if data.has("care_profile_id"):
+				_validate_reference(data.care_profile_id, "$.care_profile_id", ["care-profile.schema.json"], record, definitions, pack_id)
 		"evolution-graph.schema.json":
 			for index in data.rules.size():
 				var rule: Dictionary = data.rules[index]
@@ -427,6 +437,8 @@ func _validate_record_references(record: Dictionary, definitions: Dictionary, pa
 		"farm-job.schema.json":
 			_validate_reference(data.station_id, "$.station_id", ["furniture-prop.schema.json"], record, definitions, pack_id)
 			_validate_reference(data.output_item_id, "$.output_item_id", ["item.schema.json"], record, definitions, pack_id)
+		"ailment.schema.json":
+			_validate_reference(data.treatment_item_id, "$.treatment_item_id", ["item.schema.json"], record, definitions, pack_id)
 
 
 func _validate_reference_array(values: Array, json_path: String, expected_schemas: Array, record: Dictionary, definitions: Dictionary, pack_id: String) -> void:
@@ -684,7 +696,7 @@ func _apply_ordered_packs(ordered: Array[Dictionary]) -> void:
 				if _definitions.has(content_id):
 					_applied_overrides.append({"content_id": content_id, "previous_owner": _owners[content_id], "replacement_owner": candidate.pack_id})
 				var public_record: Dictionary = record.duplicate(true)
-				public_record.erase("relative_path")
+				public_record["pack_root"] = candidate.pack_root
 				public_record["owner_pack_id"] = candidate.pack_id
 				_definitions[content_id] = public_record
 				_owners[content_id] = candidate.pack_id

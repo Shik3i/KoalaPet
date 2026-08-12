@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../schemas/animation-profile.schema.json",
+  "id": "koalapet.base:egg_ember_animation",
+  "preview": "assets/vertical_slice/eggs/ember/preview.png",
+  "portrait": "assets/vertical_slice/eggs/ember/preview.png",
+  "world_animations": {
+    "idle": {"asset": "assets/vertical_slice/eggs/ember/idle.png", "frames": 1, "fps": 1},
+    "hatch": {"asset": "assets/vertical_slice/eggs/ember/hatch.png", "frames": 1, "fps": 8, "loop": false}
+  }
+}

@@ -9,6 +9,8 @@
 5. Take short battles that affect experience, history, win ratio, injuries, and possible evolution inputs.
 6. Reach a branching lifecycle transition based on declarative history.
 
+The current Milestone 3 slice implements steps 1–4 for one pet, plus deterministic save/reload, bounded offline progress, illness/treatment, and a training activity. Battles, evolution, dungeons, and expansion systems remain future milestones.
+
 Basic food, cleaning, sleep, and basic treatment remain available without currency. Premium consumables and convenience may use progression resources.
 
 ## Expansion loop

@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../schemas/starter-pool.schema.json",
+  "id": "koalapet.base:starter_pool",
+  "display_name_key": "pool.starter.name",
+  "egg_ids": ["koalapet.base:moss_egg", "koalapet.base:ember_egg", "koalapet.base:tide_egg"]
+}

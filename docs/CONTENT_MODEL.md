@@ -16,9 +16,9 @@ Same-ID collisions are errors unless the later pack lists the exact ID in `overr
 
 ## Draft definitions
 
-Schemas cover manifest, localization, starter pools, eggs, species/families, forms, animations, evolution graphs, moves, items, enemies/encounters, dungeons, habitat themes, furniture/props, farm jobs/stations, and feature gates. Prompt 0 fields are deliberately small `0.x` contracts, not final balance.
+Schemas cover manifest, localization, starter pools, eggs, species/families, forms, animations, evolution graphs, moves, items, enemies/encounters, dungeons, habitat themes, furniture/props, farm jobs/stations, feature gates, care profiles, ailments, and training activities. Prompt 0 fields are deliberately small `0.x` contracts, not final balance.
 
-All references and required local display-name keys resolve through the registry before a pack is applied. Runtime schema checks mirror the authoring contracts, including required fields and additional-property rejection. Asset paths are relative to declared pack roots after normalization. The official base pack remains intentionally content-empty until original designs are accepted.
+All references and required local display-name keys resolve through the registry before a pack is applied. Runtime schema checks mirror the authoring contracts, including required fields and additional-property rejection. Asset paths are relative to declared pack roots after normalization. The base pack now contains the accepted development vertical slice under `game/content_packs/koalapet.base/data/`; its three starter eggs and care definitions remain provisional product content until art, rights, balance, and product review are accepted.
 
 Runtime queries list resolved packs/documents, resolve IDs and owners, explain missing or wrong-kind references, inspect applied overrides, retrieve localization values with deterministic locale fallback, and list rejected packs/diagnostics. Diagnostics contain a logical source label and JSON path.
 
@@ -32,3 +32,11 @@ Each resolved pack contributes pack ID, semantic version, content API version, o
 - Feature gates: stable namespaced `feature` and `reward_ids`; recursive `condition` supporting leaf comparisons plus `all`, `any`, and `not`.
 
 No executable payload field or runtime code hook was added.
+
+## Vertical-slice content contract
+
+- `care-profile` owns hatch/offline durations, decay/recovery, weight bands, food effects, digestion, waste, attention windows, illness thresholds, and training tuning.
+- `ailment` owns treatment binding and health/recovery values; the application does not hard-code a medicine ID.
+- `training-activity` owns duration, energy cost, grade target, and input windows.
+- `form.care_profile_id` is optional for compatibility; the vertical slice provides it on all three starter forms.
+- `item.use` is optional and data-defines meal, treat, and medicine effects.

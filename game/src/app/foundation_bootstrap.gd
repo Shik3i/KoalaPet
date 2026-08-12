@@ -17,7 +17,10 @@ func _init(config: Dictionary = {}, injected_clock: SimulationClock = null) -> v
 
 
 func initialize() -> Dictionary:
-	var roots: Array[Dictionary] = configuration.content_roots
+	var roots: Array[Dictionary] = []
+	for root_config in configuration.get("content_roots", []):
+		if root_config is Dictionary:
+			roots.append(root_config)
 	content_registry = ContentPackRegistry.new(roots, configuration.disabled_pack_ids)
 	var content_result := content_registry.discover_and_resolve()
 	if not content_result.success:

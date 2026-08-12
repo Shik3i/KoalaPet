@@ -2,7 +2,7 @@
 
 ## Implemented envelope v2
 
-The Milestone 2 envelope records `save_format_version`, UTC creation/update timestamps, the deterministic content snapshot, neutral `simulation_state.records`, progression facts, feature-gate unlock ledger, complete quarantined records, migration history, and recovery metadata. It intentionally contains no production pet state yet.
+The v2 envelope records `save_format_version`, UTC creation/update timestamps, the deterministic content snapshot, pet `simulation_state.records`, progression facts, feature-gate unlock ledger, complete quarantined records, migration history, and recovery metadata. The first record shape is the single-pet vertical slice; future lifecycle systems require versioned migration decisions.
 
 ## Safety invariants
 
@@ -19,6 +19,6 @@ If required content is missing, retain the complete raw instance in a quarantine
 
 `foundation.v1_to_v2` is the first real migration fixture. It adds gate/quarantine/recovery fields while preserving unknown raw values. Migration registration is sequential and current-version re-evaluation is idempotent.
 
-`ContentBindingReconciler` currently binds neutral records by `definition_id` and `required_pack_id`. Missing requirements move the entire raw record into quarantine and prevent activation. Re-enabling the pack restores the exact record deterministically.
+`ContentBindingReconciler` binds records by `definition_id`, `required_pack_id`, and optional `required_content_ids`. The vertical-slice pet records the egg, form, family, animation profile, care profile, and later ailment/item IDs it requires. Missing requirements move the entire raw record into quarantine and prevent activation. Re-enabling the pack restores the exact record deterministically.
 
 `FoundationBootstrap.save_current()` is the explicit acknowledgement boundary for a recovered or content-mismatched save. It updates the persisted content snapshot to the active snapshot only at that boundary.

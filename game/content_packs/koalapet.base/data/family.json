@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../schemas/species-family.schema.json",
+  "id": "koalapet.base:starter_triad_family",
+  "display_name_key": "family.starter_triad.name",
+  "form_ids": ["koalapet.base:moss_hatchling", "koalapet.base:ember_hatchling", "koalapet.base:tide_hatchling"],
+  "evolution_graph_id": "koalapet.base:starter_future_paths"
+}

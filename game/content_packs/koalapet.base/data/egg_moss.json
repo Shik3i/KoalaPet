@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../schemas/egg.schema.json",
+  "id": "koalapet.base:moss_egg",
+  "display_name_key": "egg.moss.name",
+  "family_id": "koalapet.base:starter_triad_family",
+  "hatch_form_id": "koalapet.base:moss_hatchling",
+  "animation_profile_id": "koalapet.base:egg_moss_animation"
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/animation-profile.schema.json",
+  "id": "koalapet.base:moss_animation",
+  "preview": "assets/vertical_slice/moss/preview.png",
+  "portrait": "assets/vertical_slice/moss/portrait.png",
+  "world_animations": {
+    "idle": {"asset": "assets/vertical_slice/moss/idle.png", "frames": 1, "fps": 2},
+    "walk": {"asset": "assets/vertical_slice/moss/walk.png", "frames": 1, "fps": 4},
+    "sleep": {"asset": "assets/vertical_slice/moss/sleep.png", "frames": 1, "fps": 1},
+    "eat": {"asset": "assets/vertical_slice/moss/eat.png", "frames": 1, "fps": 4},
+    "happy": {"asset": "assets/vertical_slice/moss/happy.png", "frames": 1, "fps": 4},
+    "sick": {"asset": "assets/vertical_slice/moss/sick.png", "frames": 1, "fps": 2},
+    "training": {"asset": "assets/vertical_slice/moss/training.png", "frames": 1, "fps": 4},
+    "call": {"asset": "assets/vertical_slice/moss/call.png", "frames": 1, "fps": 2}
+  }
+}

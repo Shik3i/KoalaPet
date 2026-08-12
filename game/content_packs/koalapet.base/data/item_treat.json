@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../schemas/item.schema.json",
+  "id": "koalapet.base:bright_treat",
+  "display_name_key": "item.bright_treat.name",
+  "category": "food",
+  "baseline_available": true,
+  "effects": {},
+  "use": {"kind": "treat", "satiety_bps": 1700, "mood_bps": 800, "weight_grams": 3}
+}

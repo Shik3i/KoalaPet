@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../../schemas/evolution-graph.schema.json",
+  "id": "koalapet.base:starter_future_paths",
+  "rules": [
+    {
+      "id": "koalapet.base:future_moss_path",
+      "from_form_id": "koalapet.base:moss_hatchling",
+      "to_form_id": "koalapet.base:ember_hatchling",
+      "priority": 10,
+      "all": [{"metric": "stage_hours", "operator": "gte", "value": 999999}]
+    }
+  ]
+}

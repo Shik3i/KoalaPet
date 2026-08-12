@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/ailment.schema.json",
+  "title": "Ailment 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "treatment_item_id", "health_loss_per_hour", "recovery_health_per_hour", "critical_health_threshold_bps", "probability_basis_points"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"},
+    "display_name_key": {"type": "string", "minLength": 1},
+    "treatment_item_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"},
+    "health_loss_per_hour": {"type": "integer", "minimum": 0},
+    "recovery_health_per_hour": {"type": "integer", "minimum": 0},
+    "critical_health_threshold_bps": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "probability_basis_points": {"type": "integer", "minimum": 0, "maximum": 10000}
+  },
+  "additionalProperties": false
+}

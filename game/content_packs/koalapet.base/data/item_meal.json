@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../schemas/item.schema.json",
+  "id": "koalapet.base:plain_meal",
+  "display_name_key": "item.plain_meal.name",
+  "category": "food",
+  "baseline_available": true,
+  "effects": {},
+  "use": {"kind": "meal", "satiety_bps": 3500, "mood_bps": 450, "weight_grams": 8}
+}

@@ -18,6 +18,8 @@ Dependencies: platform-neutral architecture boundaries established by milestone 
 
 Dependencies: milestone 2. Acceptance: data-defined egg choice/hatching and a coherent care lifecycle covering baseline needs, sleep, waste, attention, illness/treatment, training, save/reload, offline progress, and all three presentations. Baseline care never requires currency.
 
+**Implemented and locally validated on 2026-08-12:** three starter eggs, deterministic pure simulation, care profiles, hatching, waste/attention/illness/treatment/training, bounded history and aggregates, save/reload/quarantine bindings, Minimal/Small/Expanded UI, 42 provisional generated assets, and 28 dedicated assertions. Interactive visual/accessibility acceptance remains open.
+
 ## 4. Branching evolution, normal battles, and first dungeon
 
 Dependencies: stable lifecycle and content registry. Acceptance: at least meaningful good-care and poor-care branches, short encounters, injuries/recovery, experience/history inputs, one multi-stage dungeon, boss and cross-system rewards.

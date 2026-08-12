@@ -12,8 +12,12 @@ static func validate(schema_name: String, data: Dictionary) -> Array[Dictionary]
 	if data.has("$schema") and not data["$schema"] is String:
 		_add_error(errors, "SCHEMA_TYPE", "$.$schema", "$schema must be a string")
 	match schema_name:
+		"ailment.schema.json":
+			_validate_ailment(data, errors)
 		"animation-profile.schema.json":
 			_validate_animation_profile(data, errors)
+		"care-profile.schema.json":
+			_validate_care_profile(data, errors)
 		"dungeon.schema.json":
 			_validate_dungeon(data, errors)
 		"egg.schema.json":
@@ -42,6 +46,8 @@ static func validate(schema_name: String, data: Dictionary) -> Array[Dictionary]
 			_validate_species_family(data, errors)
 		"starter-pool.schema.json":
 			_validate_starter_pool(data, errors)
+		"training-activity.schema.json":
+			_validate_training_activity(data, errors)
 		_:
 			_add_error(errors, "UNSUPPORTED_SCHEMA", "$.$schema", "Unsupported content schema")
 	return errors
@@ -69,6 +75,34 @@ static func _validate_animation_profile(data: Dictionary, errors: Array[Dictiona
 		_validate_number(animation_data.get("fps"), path + ".fps", errors, 0.0, true)
 		if animation_data.has("loop"):
 			_validate_bool(animation_data.loop, path + ".loop", errors)
+
+
+static func _validate_ailment(data: Dictionary, errors: Array[Dictionary]) -> void:
+	_object_shape(data, ["id", "display_name_key", "treatment_item_id", "health_loss_per_hour", "recovery_health_per_hour", "critical_health_threshold_bps", "probability_basis_points"], ["$schema", "id", "display_name_key", "treatment_item_id", "health_loss_per_hour", "recovery_health_per_hour", "critical_health_threshold_bps", "probability_basis_points"], errors)
+	_validate_id(data.get("id"), "$.id", errors)
+	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
+	_validate_id(data.get("treatment_item_id"), "$.treatment_item_id", errors)
+	for field in ["health_loss_per_hour", "recovery_health_per_hour"]:
+		_validate_integer(data.get(field), "$.%s" % field, errors, 0)
+	for field in ["critical_health_threshold_bps", "probability_basis_points"]:
+		_validate_integer(data.get(field), "$.%s" % field, errors, 0)
+		if data.get(field) is int and int(data.get(field)) > 10000:
+			_add_error(errors, "SCHEMA_CONSTRAINT", "$.%s" % field, "Basis points must be at most 10000")
+
+
+static func _validate_care_profile(data: Dictionary, errors: Array[Dictionary]) -> void:
+	var fields := ["id", "display_name_key", "profile_kind", "hatch_duration_seconds", "offline_cap_seconds", "satiety_decay_per_hour", "energy_use_per_hour", "sleep_recovery_per_hour", "hygiene_decay_per_hour", "weight_min_grams", "weight_max_grams", "meal_satiety_bps", "treat_satiety_bps", "meal_mood_bps", "treat_mood_bps", "meal_weight_grams", "treat_weight_grams", "fullness_cap_bps", "digestion_seconds", "max_waste_units", "waste_hygiene_loss_per_hour", "hunger_call_threshold_bps", "tired_call_threshold_bps", "hygiene_call_threshold_bps", "sickness_call_threshold_bps", "call_response_seconds", "severe_hunger_threshold_bps", "illness_dirt_seconds", "illness_hunger_seconds", "illness_probability_bps", "sleep_energy_threshold_bps", "wake_energy_threshold_bps", "sleep_disturbance_bps", "training_energy_cost_bps", "training_effort_gain_bps", "training_mood_gain_bps"]
+	_object_shape(data, fields, ["$schema"] + fields, errors)
+	_validate_id(data.get("id"), "$.id", errors)
+	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
+	_validate_enum(data.get("profile_kind"), ["standard", "fast_test"], "$.profile_kind", errors)
+	for field in fields.slice(3):
+		_validate_integer(data.get(field), "$.%s" % field, errors, 0)
+	for field in ["fullness_cap_bps", "hunger_call_threshold_bps", "tired_call_threshold_bps", "hygiene_call_threshold_bps", "sickness_call_threshold_bps", "severe_hunger_threshold_bps", "illness_probability_bps", "sleep_energy_threshold_bps", "wake_energy_threshold_bps", "sleep_disturbance_bps"]:
+		if data.get(field) is int and int(data.get(field)) > 10000:
+			_add_error(errors, "SCHEMA_CONSTRAINT", "$.%s" % field, "Basis points must be at most 10000")
+	if data.get("weight_max_grams") is int and data.get("weight_min_grams") is int and int(data.weight_max_grams) < int(data.weight_min_grams):
+		_add_error(errors, "SCHEMA_CONSTRAINT", "$.weight_max_grams", "Maximum weight must not be below minimum weight")
 
 
 static func _validate_dungeon(data: Dictionary, errors: Array[Dictionary]) -> void:
@@ -193,12 +227,14 @@ static func _validate_feature_condition(condition: Variant, path: String, errors
 
 
 static func _validate_form(data: Dictionary, errors: Array[Dictionary]) -> void:
-	_object_shape(data, ["id", "family_id", "display_name_key", "stage", "animation_profile_id", "base_stats", "traits"], ["$schema", "id", "family_id", "display_name_key", "stage", "animation_profile_id", "base_stats", "traits"], errors)
+	_object_shape(data, ["id", "family_id", "display_name_key", "stage", "animation_profile_id", "base_stats", "traits"], ["$schema", "id", "family_id", "display_name_key", "stage", "animation_profile_id", "care_profile_id", "base_stats", "traits"], errors)
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_id(data.get("family_id"), "$.family_id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
 	_validate_enum(data.get("stage"), ["hatchling", "juvenile", "mature", "legacy"], "$.stage", errors)
 	_validate_id(data.get("animation_profile_id"), "$.animation_profile_id", errors)
+	if data.has("care_profile_id"):
+		_validate_id(data.get("care_profile_id"), "$.care_profile_id", errors)
 	_validate_number_dictionary(data.get("base_stats"), "$.base_stats", errors, 0.0, 1)
 	_validate_string_array(data.get("traits"), "$.traits", errors, true, FACT_PATTERN)
 
@@ -228,12 +264,20 @@ static func _validate_habitat_theme(data: Dictionary, errors: Array[Dictionary])
 
 
 static func _validate_item(data: Dictionary, errors: Array[Dictionary]) -> void:
-	_object_shape(data, ["id", "display_name_key", "category", "baseline_available", "effects"], ["$schema", "id", "display_name_key", "category", "baseline_available", "effects"], errors)
+	_object_shape(data, ["id", "display_name_key", "category", "baseline_available", "effects"], ["$schema", "id", "display_name_key", "category", "baseline_available", "effects", "use"], errors)
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
 	_validate_enum(data.get("category"), ["food", "medicine", "training", "material", "key"], "$.category", errors)
 	_validate_bool(data.get("baseline_available"), "$.baseline_available", errors)
 	_validate_number_dictionary(data.get("effects"), "$.effects", errors)
+	if data.has("use"):
+		if not _validate_dictionary(data.use, "$.use", errors):
+			return
+		_object_shape(data.use, ["kind"], ["kind", "satiety_bps", "mood_bps", "energy_bps", "weight_grams", "health_bps", "hygiene_bps"], errors, "$.use")
+		_validate_enum(data.use.get("kind"), ["meal", "treat", "medicine"], "$.use.kind", errors)
+		for field in ["satiety_bps", "mood_bps", "energy_bps", "weight_grams", "health_bps", "hygiene_bps"]:
+			if data.use.has(field):
+				_validate_integer(data.use[field], "$.use.%s" % field, errors)
 
 
 static func _validate_localization(data: Dictionary, errors: Array[Dictionary]) -> void:
@@ -270,6 +314,18 @@ static func _validate_starter_pool(data: Dictionary, errors: Array[Dictionary]) 
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors, true)
 	_validate_id_array(data.get("egg_ids"), "$.egg_ids", errors, 1, true)
+
+
+static func _validate_training_activity(data: Dictionary, errors: Array[Dictionary]) -> void:
+	var fields := ["id", "display_name_key", "duration_seconds", "energy_cost_bps", "effort_gain_bps", "mood_gain_bps", "target_bps", "excellent_window_bps", "good_window_bps"]
+	_object_shape(data, fields, ["$schema"] + fields, errors)
+	_validate_id(data.get("id"), "$.id", errors)
+	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
+	for field in fields.slice(2):
+		_validate_integer(data.get(field), "$.%s" % field, errors, 0)
+	for field in ["target_bps", "excellent_window_bps", "good_window_bps"]:
+		if data.get(field) is int and int(data.get(field)) > 10000:
+			_add_error(errors, "SCHEMA_CONSTRAINT", "$.%s" % field, "Basis points must be at most 10000")
 
 
 static func _object_shape(data: Dictionary, required: Array, allowed: Array, errors: Array[Dictionary], path := "$") -> void:

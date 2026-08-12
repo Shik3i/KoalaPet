@@ -295,6 +295,8 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
         elif schema == "form.schema.json":
             require_reference(document, "$.family_id", data.get("family_id"), {"species-family.schema.json"}, by_id, report)
             require_reference(document, "$.animation_profile_id", data.get("animation_profile_id"), {"animation-profile.schema.json"}, by_id, report)
+            if "care_profile_id" in data:
+                require_reference(document, "$.care_profile_id", data.get("care_profile_id"), {"care-profile.schema.json"}, by_id, report)
         elif schema == "evolution-graph.schema.json":
             for index, rule in enumerate(data.get("rules", [])):
                 rule_id = rule.get("id")
@@ -320,6 +322,8 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
         elif schema == "farm-job.schema.json":
             require_reference(document, "$.station_id", data.get("station_id"), {"furniture-prop.schema.json"}, by_id, report)
             require_reference(document, "$.output_item_id", data.get("output_item_id"), {"item.schema.json"}, by_id, report)
+        elif schema == "ailment.schema.json":
+            require_reference(document, "$.treatment_item_id", data.get("treatment_item_id"), {"item.schema.json"}, by_id, report)
 
         manifest = manifests[document.pack_root]
         if schema == "animation-profile.schema.json":

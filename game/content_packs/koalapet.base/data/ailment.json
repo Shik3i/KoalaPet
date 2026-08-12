@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../schemas/ailment.schema.json",
+  "id": "koalapet.base:cloudy_mood",
+  "display_name_key": "ailment.cloudy_mood.name",
+  "treatment_item_id": "koalapet.base:gentle_medicine",
+  "health_loss_per_hour": 400,
+  "recovery_health_per_hour": 1000,
+  "critical_health_threshold_bps": 2500,
+  "probability_basis_points": 800
+}

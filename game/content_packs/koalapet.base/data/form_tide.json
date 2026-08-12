@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:tide_hatchling",
+  "family_id": "koalapet.base:starter_triad_family",
+  "display_name_key": "form.tide.name",
+  "stage": "hatchling",
+  "animation_profile_id": "koalapet.base:tide_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 6, "effort": 1},
+  "traits": ["gentle", "observant"]
+}

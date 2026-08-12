@@ -26,9 +26,17 @@ Headless, macOS, API presence, synthetic geometry, and unit tests must never be 
 
 Headless tests prove only platform-neutral foundation behavior. They preserve the existing rule that native Windows validation remains pending.
 
+## Milestone 3 vertical-slice evidence
+
+- `game/tests/pet/run_all.gd`: 28 deterministic assertions covering three starters, egg state, timed hatching, required bindings, nickname, meal/digestion/waste/cleaning, training, sleep/wake, ailment/treatment, bounded simulated time, all three view models, save/reload, and missing-content quarantine.
+- `tools/art_pipeline/validate_vertical_slice_assets.py`: validates every animation-referenced PNG as a readable RGBA asset with minimum 48×48 dimensions; latest result is 39 referenced assets.
+- `game/src/domain/pet_simulation.gd`: pure domain transition boundary; test inputs use fixed fake time and explicit simulated seconds.
+- `game/src/app/pet_application.gd`: application/save/catalog boundary; test fixture uses a disposable local save path.
+- `game/scenes/pet_game.tscn`: headless startup smoke target. No screenshot or interactive accessibility claim is made without direct evidence.
+
 Future quality layers:
 
-- Pure pet-domain unit tests with fake clock and fixed seeds
+- Additional pure pet-domain boundary tests with fixed seeds and property-style invariants
 - Atomic-write failure injection beyond the successful replacement/recovery paths
 - Long offline intervals, clock rollback, cap, and version-transition tests
 - Scene/UI interaction tests across Minimal, Small, and Expanded modes

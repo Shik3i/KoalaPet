@@ -56,6 +56,10 @@ func _missing_requirements(record: Dictionary, registry: ContentPackRegistry) ->
 	var definition_id := str(record.get("definition_id", ""))
 	if not definition_id.is_empty() and not registry.explain_reference(definition_id).resolved:
 		missing_content_ids.append(definition_id)
+	for content_id in record.get("required_content_ids", []):
+		var required_id := str(content_id)
+		if not required_id.is_empty() and not registry.explain_reference(required_id).resolved and required_id not in missing_content_ids:
+			missing_content_ids.append(required_id)
 	var required_pack_id := str(record.get("required_pack_id", ""))
 	if not required_pack_id.is_empty():
 		var found := false

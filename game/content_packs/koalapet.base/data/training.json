@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../schemas/training-activity.schema.json",
+  "id": "koalapet.base:focus_ribbon_training",
+  "display_name_key": "training.focus_ribbon.name",
+  "duration_seconds": 12,
+  "energy_cost_bps": 900,
+  "effort_gain_bps": 450,
+  "mood_gain_bps": 300,
+  "target_bps": 5000,
+  "excellent_window_bps": 350,
+  "good_window_bps": 1500
+}

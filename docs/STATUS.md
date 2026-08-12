@@ -2,169 +2,125 @@
 
 **As of:** 2026-08-12
 
-**Phase:** Milestone 2 — Content and Simulation Foundation complete
-**Readiness:** Foundation-ready; not a playable product, release build, or accepted Windows overlay
+**Phase:** Milestone 3 — Single-pet classic V-pet vertical slice implemented
+**Readiness:** Locally validated vertical slice; no release build, signing, deployment, or accepted native Windows overlay
 
 ## Executive status
 
-KoalaPet is a Windows-first, local-first desktop virtual-pet project. The repository currently contains a coherent technical foundation and a presentation/overlay spike. It does not yet contain the actual pet-care game loop.
+KoalaPet is a Windows-first, local-first Godot virtual-pet project. The repository now contains a playable single-pet vertical slice on top of the completed content/save foundation.
 
-Implemented and verified:
+Implemented and validated:
 
-- deterministic content-pack loading and runtime trust-boundary validation
-- versioned content snapshots and safe override policy
-- injectable clocks and bounded offline-time policy
-- local save envelopes, atomic replacement, backups, migrations, recovery, and missing-content quarantine
-- recursive feature gates and idempotent unlock grants
-- platform-neutral application bootstrap
-- Minimal/Small/Expanded presentation contracts and a technical overlay spike
-- Python authoring validation, Godot headless checks, platform-neutral tests, and evidence matrices
+- one versioned bundled content registry for base and external/fixture packs
+- three data-defined starter eggs: moss, ember, and tide
+- deterministic egg selection, timed hatching, nickname, one active pet, and save/reload
+- data-driven care profiles with satiety, mood, energy, hygiene, weight, sleep, waste, attention calls, health, illness, treatment, and training
+- bounded deterministic offline progression through `SimulationClock` and `OfflineProgressPolicy`
+- event history and aggregate care metrics with bounded save size
+- missing-content quarantine for the pet's complete `required_content_ids` binding set
+- Minimal, Small, and Expanded UI modes over one authoritative pet state
+- deterministic provisional RGBA assets and provenance/brief records
+- headless Godot runtime smoke and dedicated pet test suite
 
-Not yet product-ready:
+Not product-ready:
 
-- no playable pet, care loop, starter selection, hatching, or production UI
-- no official bundled pet content; `koalapet.base` is intentionally content-empty
-- no accepted native Windows overlay behavior
+- native Windows overlay acceptance remains open; ADR 0010 is still proposed
 - no export, packaging, signing, release, or deployment pipeline
+- no final product name, final art-rights approval, production art package, or accessibility acceptance
+- evolution, battle, dungeon, habitat, farm/residents, economy, and trading systems remain data/contracts/roadmap scope
+- no interactive visual QA evidence was captured in this run; headless startup is not a native-window or accessibility proof
 
 ## Repository and Git state
 
 - Working branch: `main`
-- Working tree: clean after the status-document commit
-- Latest implementation commit: `330618f fix: harden content and save foundation`
-- `origin/main`: `773edfa5921112e69e7077a2b549388517043f04`
-- Local branch contains unpushed commits relative to `origin/main`; no push was performed
-- `git pull --ff-only`: already up to date before implementation
+- Remote baseline: `origin/main` at `773edfa5921112e69e7077a2b549388517043f04` before the local milestone commits
+- Local history contains the foundation/status commits plus the current vertical-slice implementation; no force-push or history rewrite
+- The requested repository pull was completed before implementation; unrelated changes were not discarded
 - Project identity remains the replaceable codename `KoalaPet`
-- No final product name, license, release version, or distribution channel is established
+- No final license, semantic release version, distribution channel, or production asset approval is established
 
 ## Implemented areas
 
-### Product shell and presentation
+### Foundation, content, and mod boundary
 
-- Godot 4.x project metadata and bootstrap scene
-- Shared presentation contract for Minimal, Small, and Expanded modes
-- One-window technical overlay spike with code-drawn placeholder presentation
-- Mode-specific placement persistence, sanitation, recovery, hit regions, and status diagnostics
-- Presentation remains separate from simulation truth
+- Experimental Content API `0.1` with deterministic dependency/priority/conflict/override policy
+- Runtime schema, localization, reference, asset-root, safe-path, safe-media, size, file-count, and executable-payload checks
+- JSON schemas for care profiles, ailments, training activities, items with use effects, forms with care-profile binding, and existing future systems
+- `koalapet.base` now contains the vertical-slice content: 41 accepted documents across starter, family/form, animation, care, item, ailment, training, evolution, and localization records
+- Initial mod contract remains JSON plus safe media only; no executable mod payloads
 
-### Desktop and platform adapters
+### Pet simulation and application
 
-- Stable desktop-window adapter contract
-- Shared Godot-native adapter
-- Thin Windows and macOS adapter boundaries
-- Windows PowerShell launcher and diagnostics
-- macOS probe tooling and evidence capture support
-- Native behavior is not accepted yet; headless tests only prove platform-neutral logic
+- `PetSimulation` is a pure `RefCounted` domain service with integer basis-point values, fixed-seed PRNG state, explicit commands, event history, aggregates, and bounded collections
+- Hatching uses the profile's `hatch_duration_seconds`; offline simulation uses the profile's `offline_cap_seconds`
+- Baseline actions: meal, treat, clean, sleep, wake, medicine, training, call resolution, and development-only forced ailment
+- Waste is generated by data-defined digestion; attention calls use data-defined thresholds/windows; illness is deterministic from care stress and persisted random state
+- `PetApplication` binds registry, clock, offline policy, save repository, catalog, commands, starter selection, asset paths, and presentation view models
+- One active pet record is persisted; no currency is required for baseline care
 
-### Content and modding
+### Persistence and recovery
 
-- Experimental Content API `0.1`
-- JSON schemas for packs, localization, starter pools, eggs, families, forms, animations, evolution, moves, items, encounters, dungeons, habitats, furniture, farm jobs, and feature gates
-- One `ContentPackRegistry` path for bundled, external, and fixture roots
-- Deterministic dependency, priority, conflict, disable, total-conversion, and override handling
-- Runtime schema validation with required-field and additional-property checks
-- Runtime localization-key and cross-reference validation before pack application
-- Safe relative paths, declared asset-root enforcement, safe-media allowlist, file-count/size limits, and executable payload rejection
-- Skin overrides restricted to presentation definitions
-- Stable namespaced IDs and logical diagnostics
-- Deterministic content snapshots with pack/file fingerprints
-- Bundled base pack exists but has no entry points or official gameplay definitions
-- `mods/examples/example.neutral` is a neutral architecture fixture with 17 content documents, not official product content
+- Save envelope v2 with validated temporary writes, flush, atomic replacement, `.bak` and `.swap` recovery, migrations, snapshot mismatch metadata, and quarantine
+- Pet records persist stable definition IDs, pack ownership, complete required content IDs, simulation timestamps, care state, history, aggregate metrics, and deterministic random state
+- `ContentBindingReconciler` checks `definition_id`, `required_pack_id`, and every `required_content_ids` entry; missing bindings move the full raw record to quarantine and do not activate it
+- Save/reload, missing-content quarantine, and recovery behavior are covered by the pet suite and foundation suite
 
-### Time, persistence, and recovery
+### Presentation and assets
 
-- `SimulationClock`, system clock, fake clock, and deterministic offline-progress policy
-- Save envelope version `2`
-- Validated temporary writes, flush, atomic replacement, `.bak` preservation, and `.swap` recovery
-- Sequential `foundation.v1_to_v2` migration fixture with idempotence coverage
-- Complete raw-record preservation when required content is missing
-- Deterministic quarantine and restoration through `ContentBindingReconciler`
-- Persisted content snapshots compared against the active registry snapshot during bootstrap
-- Snapshot mismatch remains explicit in recovery metadata
-- Primary-source migration/reconciliation changes are persisted automatically
-- Backup/swap recovery is never silently written over the malformed primary; `FoundationBootstrap.save_current()` is the explicit acknowledgement boundary
+- `game/scenes/pet_game.tscn` is the current main scene
+- Starter view presents the three eggs; egg view presents the hatch state; pet view exposes the same state through Minimal, Small, and Expanded modes
+- Minimal: pet identity/state and visual; Small: compact care values and baseline actions; Expanded: history, aggregates, and development controls
+- Generated provisional assets: 42 PNGs, 39 referenced by animation definitions, RGBA, minimum 48×48; the generator and source brief are tracked, while the generated provenance JSON remains an ignored local record
+- Asset source brief: `art_source/prompts/vertical-slice-assets.md`
+- Asset approval is development-only; provenance license remains `UNDECIDED`
 
-### Progression
+### Future systems still outside the slice
 
-- Read-only `ProgressionFacts`
-- Recursive `all`, `any`, and `not` gate evaluation
-- Failed-condition paths and deterministic repeated evaluation
-- Invalid gate operands fail closed, including nested negation and `any` branches
-- Idempotent `UnlockLedger` grants with duplicate-grant prevention
-- No onboarding UI or production progression content
-
-### Architecture boundaries
-
-- Domain layer is reserved for future pure pet/lifecycle/care/evolution/battle/dungeon/resident logic
-- Infrastructure owns persistence, migrations, recovery, and quarantine
-- Content loading is isolated from application coordination
-- Presentation and platform code do not own simulation state
-- Art source remains outside `res://`; generated/runtime assets have a controlled boundary
-- Initial mod model is JSON plus safe media only; no scripts, DLLs, native code, or executable payloads
-
-## Current product/content state
-
-| Area | State |
+| Area | Current state |
 |---|---|
-| Pet domain simulation | Not implemented |
-| Care loop | Not implemented |
-| Starter choice and hatching | Not implemented |
-| Evolution execution | Documented/data contract only |
-| Battles and dungeon runtime | Documented/data contract only |
-| Habitat customization runtime | Documented/data contract only |
-| Farm, residents, and idle jobs | Documented/data contract only |
+| Branching evolution | Schema/data fixture only; runtime resolver not implemented |
+| Battles and dungeon | Architecture/data contracts only |
+| Habitat and furniture | Architecture/data contracts only |
+| Farm, residents, idle jobs | Roadmap/data contracts only |
 | Trading Post/economy | Roadmap only |
-| Production UI/art | Not implemented; technical placeholder only |
-| Official base content | Intentionally empty |
-| Neutral example content | Present for registry/validator coverage |
-| Local saves | Foundation implementation complete |
-| Mod scripts/network/accounts/telemetry | Out of current core scope |
-| Playable build/export | Not present |
-| Release/signing/deployment | Not present |
+| Native overlay | Platform spike and evidence matrices; interactive Windows acceptance pending |
+| Export/release/deployment | Not implemented |
 
 ## Validation evidence
 
-Latest full foundation gate with Godot `4.7.1.stable.official.a13da4feb`:
+Latest full local gate with Godot `4.7.1.stable.official.a13da4feb` and Python `3.13`:
 
-- Content validator: `2` packs, `17` content documents — PASS
-- JSON parse: `43` files — PASS
-- Python in-memory compile: `3` source files — PASS
-- Repository-relative Markdown links: `63` targets — PASS
+- Content validator: `2` packs, `41` content documents — PASS
+- JSON parse: `71` files — PASS
+- Python in-memory compile: `5` source files — PASS
+- Markdown links: `63` local targets — PASS
+- Vertical-slice assets: `39` referenced PNGs, RGBA, minimum 48×48 — PASS
 - Godot headless editor import — PASS
+- Godot project headless startup — PASS
+- Pet vertical-slice suite: `28` assertions — PASS
 - Foundation suite: `99` assertions — PASS
-- Platform-neutral overlay suite: `41` assertions — PASS
-- Mod payload, neutral-terminology, repository-artifact, and whitespace checks — PASS
-- Symlink fixture: explicitly skipped because this Windows host returned `Failed` while creating the test link; production symlink rejection remains implemented and documented
-- Headless results are not native-window evidence
+- Platform-neutral suite: `41` assertions — PASS
+- Mod payload, neutral-terminology, repository-artifact, and `git diff --check` — PASS
+- Symlink fixture: explicitly skipped because this Windows host could not create the test link; production rejection remains implemented
 
-Recorded platform evidence remains separate:
+Evidence boundary:
 
-- Windows matrix: `6 PASS`, `4 PASS_WITH_LIMITATION`, `39 BLOCKED_NOT_RUN`, `0 FAIL`
-- macOS matrix: `15 PASS`, `10 PASS_WITH_LIMITATION`, `4 FAIL`, `8 BLOCKED_NOT_RUN`, `5 NOT_AVAILABLE`
-- macOS headless import and three-frame spike smoke start: recorded PASS
-- Existing macOS native gaps remain open; they do not establish Windows behavior
+- Headless Godot proves parsing/import/startup and platform-neutral behavior only
+- It does not prove native Windows transparency, input passthrough, focus, taskbar/Alt+Tab, tray, DPI, multi-monitor, performance, accessibility, or release behavior
+- No interactive screenshot or manual UI acceptance result is claimed here
 
 ## Known blockers and risks
 
-- 39 interactive Windows rows remain blocked: compositor transparency, input passthrough, focus, taskbar/Alt+Tab, tray/status recovery, DPI, multi-monitor placement, mode transitions, recovery, and performance
-- macOS native gaps: focused Small → Minimal activation release, root-window hide, visible status-item recovery, and shell lifecycle coverage
-- No playable vertical slice exists yet, so domain balance, save semantics for real pets, onboarding, and product usability are unvalidated
-- No final licensing decision or production asset-rights package exists
-- Final branding, care profile, lifecycle endpoint, combat input, evolution disclosure, habitat placement, and MVP content counts remain open
-- Godot headless validation cannot replace interactive Windows acceptance
+- Interactive Windows overlay rows remain blocked: compositor transparency, passthrough, focus, taskbar/Alt+Tab, tray/status recovery, DPI, multi-monitor placement, mode transitions, recovery, and performance
+- Provisional generated art has no final rights/approval decision
+- Domain balance is a coherent deterministic slice, not final product tuning
+- Save schema is v2; future pet/evolution/battle systems require explicit migrations and accepted ADRs
+- The current UI is a functional vertical-slice shell, not final visual design or accessibility-reviewed production UI
 
 ## Next work
 
-Milestone 3: build a data-defined single-pet classic V-pet vertical slice over the completed foundation.
-
-Required scope:
-
-- starter-pool selection and hatching
-- one active pet with save/reload identity
-- baseline food, cleaning, sleep, attention, waste, health, illness, treatment, and training
-- deterministic offline progress through the injectable clock
-- one authoritative simulation rendered through Minimal, Small, and Expanded modes
-- migration/recovery tests against real pet records
-
-Keep Windows overlay validation running in parallel. Do not accept ADR 0010 or make production window-topology assumptions until the blocked Windows rows are executed on an interactive Windows 10/11 desktop.
+1. Capture interactive Windows 10/11 evidence for the existing overlay matrix without accepting ADR 0010 prematurely.
+2. Review/replace provisional assets with approved original art and decide license/provenance.
+3. Add accepted evolution/runtime progression only after the single-pet lifecycle is product-reviewed.
+4. Add battles/dungeon, habitat rewards, and later farm/resident/economy milestones in roadmap order.
+5. Add interactive UI screenshots, accessibility checks, long-offline/rollback cases, and release packaging before any product-release claim.

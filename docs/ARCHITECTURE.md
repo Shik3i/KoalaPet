@@ -16,6 +16,14 @@ Conceptual boundaries include `ContentPackRegistry`, `ContentValidator`, `Simula
 
 Prompt 1 implements only the platform/presentation spike boundary: `WindowModeController`, platform-neutral `DesktopWindowAdapter`, shared `GodotNativeWindowAdapter`, thin host adapters, placement sanitation, and spike-owned persistence/diagnostics. It does not define gameplay or production saves.
 
+Milestone 3 adds the first gameplay path without changing the dependency direction:
+
+- `PetSimulation` is pure state transition logic. It receives explicit seconds, timestamps, commands, resolved content data, and persisted random state; it does not read nodes, input, OS time, or window state.
+- `PetApplication` is the use-case boundary. It composes the foundation, resolves the starter pool and content records, applies `OfflineProgressPolicy`, persists one active pet, exposes commands, and builds presentation view models.
+- `PetGame` owns only controls and routing. Minimal, Small, and Expanded are projections of the same application state; no mode owns separate care truth.
+- Pet saves retain `required_content_ids` in addition to `definition_id` and `required_pack_id`. `ContentBindingReconciler` quarantines the complete raw record if any binding is unavailable.
+- Care values use integer basis points and profile-defined rates/thresholds. The simulation records bounded event history and aggregates instead of depending on frame frequency.
+
 Milestone 2 implements the platform-neutral foundation:
 
 - `ContentPackRegistry` validates schemas, localization, cross-references, declared asset roots, and untrusted payloads before resolving injected bundled/external/fixture roots into immutable dictionary records and a deterministic snapshot.

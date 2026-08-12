@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../schemas/item.schema.json",
+  "id": "koalapet.base:gentle_medicine",
+  "display_name_key": "item.gentle_medicine.name",
+  "category": "medicine",
+  "baseline_available": true,
+  "effects": {},
+  "use": {"kind": "medicine", "health_bps": 2500}
+}

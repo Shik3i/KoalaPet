@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/training-activity.schema.json",
+  "title": "Training activity 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "duration_seconds", "energy_cost_bps", "effort_gain_bps", "mood_gain_bps", "target_bps", "excellent_window_bps", "good_window_bps"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"},
+    "display_name_key": {"type": "string", "minLength": 1},
+    "duration_seconds": {"type": "integer", "minimum": 1},
+    "energy_cost_bps": {"type": "integer", "minimum": 0},
+    "effort_gain_bps": {"type": "integer", "minimum": 0},
+    "mood_gain_bps": {"type": "integer"},
+    "target_bps": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "excellent_window_bps": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "good_window_bps": {"type": "integer", "minimum": 0, "maximum": 10000}
+  },
+  "additionalProperties": false
+}

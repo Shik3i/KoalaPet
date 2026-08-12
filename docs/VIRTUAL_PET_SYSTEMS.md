@@ -18,4 +18,6 @@ Prompt 0 defines boundaries, not final numbers.
 
 Services consume a clock abstraction and explicit commands. Presentation subscribes to state/results but does not own simulation. Values, thresholds, decay, call windows, offline caps, and profile differences belong to validated data or versioned balance configuration.
 
+The current vertical slice realizes the baseline records through `care-profile`, `ailment`, `training-activity`, and `item.use` data. `PetSimulation` keeps current care values, bounded event history, and aggregate counters in the pet record; it does not own presentation or platform state. Evolution, battle injury, and mature lifecycle behavior remain reserved for later services.
+
 Essential actions must have free baseline variants. Sickness and injuries require readable diagnosis/treatment and cannot be disguised random punishment. Minigames should be short, repeatable, accessible, and swappable without changing core state contracts.

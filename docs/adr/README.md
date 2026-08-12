@@ -14,5 +14,7 @@ Accepted ADRs are authoritative below `PROJECT_CANON.md`. New decisions use the 
 - [0011 — Deterministic runtime content registry](0011-deterministic-runtime-content-registry.md)
 - [0012 — Clock and offline-time semantics](0012-clock-and-offline-time-semantics.md)
 - [0013 — Save envelope, backup, migration, and quarantine](0013-save-envelope-backup-migration-quarantine.md)
+- [0014 — Single-pet deterministic simulation](0014-single-pet-deterministic-simulation.md)
+- [0015 — Pet content binding and quarantine](0015-pet-content-binding-quarantine.md)
 
 Proposal 0010 remains under [`proposals/`](proposals/0010-windows-desktop-overlay-adapter.md) and is not accepted.

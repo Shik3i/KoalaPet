@@ -1,11 +1,11 @@
 ; Engine configuration file.
-; Milestone 2 platform-neutral foundation: no pet gameplay or native-window dependency.
+; Milestone 3 single-pet classic V-Pet vertical slice.
 config_version=5
 
 [application]
 
 config/name="KoalaPet"
-run/main_scene="res://scenes/bootstrap.tscn"
+run/main_scene="res://scenes/pet_game.tscn"
 
 [display]
 

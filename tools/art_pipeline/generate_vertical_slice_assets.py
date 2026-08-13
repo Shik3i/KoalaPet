@@ -8,7 +8,6 @@ import struct
 import zlib
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "game" / "content_packs" / "koalapet.base" / "assets" / "vertical_slice"
 

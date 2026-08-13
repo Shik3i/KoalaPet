@@ -1,0 +1,53 @@
+{
+    "schema_version":  1,
+    "fps":  8,
+    "duration_seconds":  23,
+    "frame_size":  [
+                       1600,
+                       1000
+                   ],
+    "events":  [
+                   {
+                       "event":  "mode_small",
+                       "seconds":  0.02,
+                       "window_size":  [
+                                           818,
+                                           647
+                                       ]
+                   },
+                   {
+                       "event":  "mode_expanded",
+                       "seconds":  17.88,
+                       "window_size":  [
+                                           1120,
+                                           720
+                                       ]
+                   },
+                   {
+                       "event":  "mode_small",
+                       "seconds":  19.88,
+                       "window_size":  [
+                                           896,
+                                           576
+                                       ]
+                   },
+                   {
+                       "event":  "mode_minimal",
+                       "seconds":  20,
+                       "window_size":  [
+                                           192,
+                                           128
+                                       ]
+                   }
+               ],
+    "scenarios":  [
+                      "ambient_roaming_and_turn",
+                      "walk_to_feed_and_eat",
+                      "walk_to_training",
+                      "walk_to_bed_and_sleep",
+                      "small_to_expanded",
+                      "live_ui_scale_125",
+                      "expanded_to_minimal"
+                  ],
+    "koalapet_process_id":  22676
+}

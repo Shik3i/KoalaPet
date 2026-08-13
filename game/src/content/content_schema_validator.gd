@@ -73,12 +73,45 @@ static func _validate_animation_profile(data: Dictionary, errors: Array[Dictiona
 		if not _validate_dictionary(animation, path, errors):
 			continue
 		var animation_data: Dictionary = animation
-		_object_shape(animation_data, ["asset", "frames", "fps"], ["asset", "frames", "fps", "loop"], errors, path)
+		var required := ["asset", "frames", "fps"]
+		var allowed := required + ["loop", "frame_size", "pivot", "ground_anchor", "visual_center", "interaction_bounds", "mirroring_allowed", "event_markers", "source_brief", "provenance", "review_status", "effect_bounds"]
+		_object_shape(animation_data, required, allowed, errors, path)
 		_validate_string(animation_data.get("asset"), path + ".asset", errors)
 		_validate_integer(animation_data.get("frames"), path + ".frames", errors, 1)
 		_validate_number(animation_data.get("fps"), path + ".fps", errors, 0.0, true)
 		if animation_data.has("loop"):
 			_validate_bool(animation_data.loop, path + ".loop", errors)
+		if animation_data.has("frame_size"):
+			_validate_number_array(animation_data.frame_size, path + ".frame_size", errors, 2, true)
+		if animation_data.has("pivot"):
+			_validate_number_array(animation_data.pivot, path + ".pivot", errors, 2)
+		if animation_data.has("ground_anchor"):
+			_validate_number_array(animation_data.ground_anchor, path + ".ground_anchor", errors, 2)
+		if animation_data.has("visual_center"):
+			_validate_number_array(animation_data.visual_center, path + ".visual_center", errors, 2)
+		if animation_data.has("interaction_bounds"):
+			_validate_number_array(animation_data.interaction_bounds, path + ".interaction_bounds", errors, 4)
+		if animation_data.has("effect_bounds"):
+			_validate_number_array(animation_data.effect_bounds, path + ".effect_bounds", errors, 4)
+		if animation_data.has("mirroring_allowed"):
+			_validate_bool(animation_data.mirroring_allowed, path + ".mirroring_allowed", errors)
+		if animation_data.has("source_brief"):
+			_validate_string(animation_data.source_brief, path + ".source_brief", errors, true)
+		if animation_data.has("provenance"):
+			_validate_string(animation_data.provenance, path + ".provenance", errors, true)
+		if animation_data.has("review_status"):
+			_validate_enum(animation_data.review_status, ["PROVISIONAL_REVIEWED", "APPROVED", "REJECTED"], path + ".review_status", errors)
+		if animation_data.has("event_markers") and _validate_array(animation_data.event_markers, path + ".event_markers", errors):
+			for index in animation_data.event_markers.size():
+				var marker_path := "%s.event_markers[%d]" % [path, index]
+				if not _validate_dictionary(animation_data.event_markers[index], marker_path, errors):
+					continue
+				var marker: Dictionary = animation_data.event_markers[index]
+				_object_shape(marker, ["frame", "event"], ["frame", "event"], errors, marker_path)
+				_validate_integer(marker.get("frame"), marker_path + ".frame", errors, 0)
+				_validate_string(marker.get("event"), marker_path + ".event", errors, true)
+				if marker.get("frame") is int and int(marker.frame) >= int(animation_data.get("frames", 0)):
+					_add_error(errors, "SCHEMA_CONSTRAINT", marker_path + ".frame", "Event marker frame exceeds animation frame count")
 
 
 static func _validate_ailment(data: Dictionary, errors: Array[Dictionary]) -> void:
@@ -446,6 +479,18 @@ static func _validate_integer_array(value: Variant, path: String, errors: Array[
 		return
 	for index in value.size():
 		_validate_integer(value[index], "%s[%d]" % [path, index], errors, 0)
+
+
+static func _validate_number_array(value: Variant, path: String, errors: Array[Dictionary], exact_items: int, integer_only := false) -> void:
+	if not _validate_array(value, path, errors, exact_items):
+		return
+	if value.size() != exact_items:
+		_add_error(errors, "SCHEMA_CONSTRAINT", path, "Array requires exactly %d items" % exact_items)
+	for index in value.size():
+		if integer_only:
+			_validate_integer(value[index], "%s[%d]" % [path, index], errors, 1)
+		else:
+			_validate_number(value[index], "%s[%d]" % [path, index], errors)
 
 
 static func _validate_string_array(value: Variant, path: String, errors: Array[Dictionary], unique := false, pattern := "") -> void:

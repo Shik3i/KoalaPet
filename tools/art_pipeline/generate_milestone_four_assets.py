@@ -7,8 +7,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from generate_vertical_slice_assets import canvas, polygon, px, rect, scale, write_png  # noqa: E402
-
+from generate_vertical_slice_assets import (
+    canvas,
+    polygon,
+    rect,
+    scale,
+    write_png,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "game" / "content_packs" / "koalapet.base" / "assets" / "vertical_slice"

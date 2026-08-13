@@ -1,0 +1,9 @@
+disable:
+- class-definitions-order
+- max-file-lines
+- max-line-length
+- max-public-methods
+- max-returns
+excluded_directories: !!set
+  .git: null
+  .godot: null

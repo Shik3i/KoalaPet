@@ -24,8 +24,13 @@ func initialize() -> Dictionary:
 	_refresh_catalog()
 	var records: Array = foundation.current_save.simulation_state.get("records", [])
 	if not records.is_empty() and records[0] is Dictionary:
+		var shape_error := _pet_record_shape_error(records[0])
+		if not shape_error.is_empty():
+			return _failure("INVALID_PET_RECORD", "Active pet record has invalid field: %s" % shape_error).merged({"stage": "pet_record_validation"})
 		pet_state = _normalize_pet_state(records[0])
-		_sync_now()
+		var sync_result := _sync_now()
+		if not sync_result.get("ok", false):
+			return sync_result.merged({"stage": "offline_sync"})
 	else:
 		pet_state = {}
 	initialized = true
@@ -64,10 +69,11 @@ func choose_starter(egg_id: String) -> Dictionary:
 		return _failure("STARTER_BINDING_MISSING", "Starter references are unavailable")
 	var now_unix := foundation.clock.utc_now_unix_seconds()
 	var now_text := foundation.clock.utc_now_text()
+	var transaction := _snapshot_transaction()
 	pet_state = simulation.create_new(egg, form, profile, str(egg.owner_pack_id), now_unix, now_text, _stable_seed(egg_id))
 	var save_result := _write_save()
 	if not save_result.ok:
-		pet_state = {}
+		_restore_transaction(transaction)
 		return save_result
 	return {"ok": true, "state": pet_state.duplicate(true), "summary": {"event": "egg_selected"}}
 
@@ -79,7 +85,10 @@ func complete_hatch() -> Dictionary:
 func command(command_data: Dictionary) -> Dictionary:
 	if pet_state.is_empty():
 		return _failure("NO_PET", "Select a starter egg first")
-	_sync_now()
+	var sync_result := _sync_now()
+	if not sync_result.get("ok", false):
+		return sync_result
+	var transaction := _snapshot_transaction()
 	var now_unix := foundation.clock.utc_now_unix_seconds()
 	var now_text := foundation.clock.utc_now_text()
 	var command_type := str(command_data.get("type", ""))
@@ -87,9 +96,12 @@ func command(command_data: Dictionary) -> Dictionary:
 		return _failure("FEATURE_LOCKED", "Battle is not unlocked yet")
 	if command_type in ["start_dungeon", "dungeon_next", "dungeon_choice", "dungeon_abandon"] and not is_feature_unlocked("koalapet.base:dungeon"):
 		return _failure("FEATURE_LOCKED", "The dungeon is not unlocked yet")
-	var adventure_time := int(command_data.get("adventure_seconds", 0))
+	var adventure_time := _safe_nonnegative_int(command_data.get("adventure_seconds", 0))
 	if adventure_time > 0:
-		_advance_internal(adventure_time, false)
+		var adventure_result := _advance_internal(adventure_time, false)
+		if not adventure_result.get("ok", false):
+			_restore_transaction(transaction)
+			return adventure_result
 	match command_type:
 		"start_battle":
 			last_command_result = battle_service.start(pet_state, str(command_data.get("encounter_id", "")), catalog, now_unix, now_text, str(command_data.get("stance", "balanced")))
@@ -116,7 +128,9 @@ func command(command_data: Dictionary) -> Dictionary:
 		_:
 			last_command_result = simulation.apply_command(pet_state, command_data, now_unix, now_text, catalog)
 	if not last_command_result.ok:
-		return last_command_result
+		var failed_result := last_command_result.duplicate(true)
+		_restore_transaction(transaction)
+		return failed_result
 	pet_state = last_command_result.state
 	var dungeon_post := dungeon_service.after_battle(pet_state, catalog, now_unix, now_text)
 	if dungeon_post.ok and bool(dungeon_post.get("changed", true)) and not dungeon_post.get("state", {}).is_empty():
@@ -130,6 +144,7 @@ func command(command_data: Dictionary) -> Dictionary:
 	_refresh_progression()
 	var save_result := _write_save()
 	if not save_result.ok:
+		_restore_transaction(transaction)
 		return save_result
 	return last_command_result
 
@@ -137,6 +152,7 @@ func command(command_data: Dictionary) -> Dictionary:
 func advance_simulated(seconds: int) -> Dictionary:
 	if pet_state.is_empty():
 		return _failure("NO_PET", "Select a starter egg first")
+	var transaction := _snapshot_transaction()
 	var result := _advance_internal(maxi(0, seconds), true)
 	if result.ok:
 		var evolution := _apply_evolution(int(pet_state.get("current_simulation_unix", 0)), str(pet_state.get("current_simulation_utc", "")))
@@ -147,6 +163,7 @@ func advance_simulated(seconds: int) -> Dictionary:
 		_refresh_progression()
 		var save_result := _write_save()
 		if not save_result.ok:
+			_restore_transaction(transaction)
 			return save_result
 	return result
 
@@ -223,32 +240,73 @@ func get_dungeons() -> Array[Dictionary]:
 
 
 func get_asset_path_for_content(content_id: String, animation_name := "idle") -> String:
-	var record := _record(content_id)
-	if record.is_empty():
-		return ""
-	var data: Dictionary = record.data
-	var animation_id := str(data.get("animation_profile_id", ""))
-	if animation_id.is_empty():
-		return ""
+	return str(get_animation_descriptor(animation_name, content_id).get("path", ""))
+
+
+func get_animation_descriptor(animation_name := "idle", content_id := "", egg := false) -> Dictionary:
+	var animation_id := ""
+	if not content_id.is_empty():
+		var content_record := _record(content_id)
+		animation_id = str(content_record.get("data", {}).get("animation_profile_id", ""))
+	else:
+		animation_id = str(pet_state.get("animation_profile_id", ""))
+		if egg and not pet_state.is_empty():
+			var egg_record := _record(str(pet_state.get("egg_definition_id", "")))
+			animation_id = str(egg_record.get("data", {}).get("animation_profile_id", animation_id))
 	var animation := _record(animation_id)
-	var entry: Dictionary = animation.get("data", {}).get("world_animations", {}).get(animation_name, animation.get("data", {}).get("world_animations", {}).get("idle", {}))
-	return str(animation.get("pack_root", "")).path_join(str(entry.get("asset", "")).trim_prefix("res://"))
+	if animation.is_empty():
+		return {}
+	var animations: Dictionary = animation.get("data", {}).get("world_animations", {})
+	var entry: Dictionary = animations.get(animation_name, animations.get("idle", {})).duplicate(true)
+	var relative_asset := str(entry.get("asset", ""))
+	if relative_asset.is_empty():
+		return {}
+	entry["path"] = str(animation.get("pack_root", "")).path_join(relative_asset.trim_prefix("res://"))
+	entry["animation_name"] = animation_name if animations.has(animation_name) else "idle"
+	entry["profile_id"] = animation_id
+	return entry
+
+
+func get_encounter_presentation(encounter_id: String, locale := "de") -> Dictionary:
+	var record := _record(encounter_id)
+	if record.is_empty():
+		return {}
+	var data: Dictionary = record.get("data", {})
+	return {
+		"id": encounter_id,
+		"name": get_display_name(encounter_id, locale),
+		"description": text(str(data.get("description_key", "")), "", locale),
+		"level": int(data.get("level", 1)),
+		"animation": get_animation_descriptor("idle", encounter_id),
+	}
+
+
+func get_dungeon_presentation(dungeon_id: String, locale := "de") -> Dictionary:
+	var record := _record(dungeon_id)
+	if record.is_empty():
+		return {}
+	var data: Dictionary = record.get("data", {})
+	var nodes: Array[Dictionary] = []
+	for source_node in data.get("nodes", []):
+		var node: Dictionary = source_node.duplicate(true)
+		var choices: Array[Dictionary] = []
+		for source_choice in node.get("choices", []):
+			var choice: Dictionary = source_choice.duplicate(true)
+			choice["name"] = text(str(choice.get("display_name_key", "")), str(choice.get("id", "")), locale)
+			choices.append(choice)
+		node["choices"] = choices
+		nodes.append(node)
+	return {
+		"id": dungeon_id,
+		"name": get_display_name(dungeon_id, locale),
+		"description": text(str(data.get("description_key", "")), "", locale),
+		"nodes": nodes,
+		"boss_encounter_id": str(data.get("boss_encounter_id", "")),
+	}
 
 
 func get_asset_path(animation_name := "idle", egg := false) -> String:
-	var animation_id := str(pet_state.get("animation_profile_id", ""))
-	if egg and not pet_state.is_empty():
-		var egg_record := _record(str(pet_state.get("egg_definition_id", "")))
-		animation_id = str(egg_record.data.get("animation_profile_id", animation_id))
-	var animation := _record(animation_id)
-	if animation.is_empty():
-		return ""
-	var animation_data: Dictionary = animation.data
-	var entry: Dictionary = animation_data.get("world_animations", {}).get(animation_name, animation_data.get("world_animations", {}).get("idle", {}))
-	var relative_asset := str(entry.get("asset", ""))
-	if relative_asset.is_empty():
-		return ""
-	return str(animation.get("pack_root", "")).path_join(relative_asset.trim_prefix("res://"))
+	return str(get_animation_descriptor(animation_name, "", egg).get("path", ""))
 
 
 func get_preview_asset_path(content_id: String) -> String:
@@ -289,6 +347,8 @@ func get_view_model(mode := "small", locale := "de") -> Dictionary:
 		"history": pet_state.get("history", []).duplicate(true),
 		"offline": last_offline_result.duplicate(true),
 		"form_id": form_id,
+		"egg_id": str(pet_state.get("egg_definition_id", "")),
+		"state_revision": int(pet_state.get("revision", 0)),
 		"stage": str(pet_state.get("stage", "hatchling")),
 		"level": int(pet_state.get("level", 1)),
 		"experience": int(pet_state.get("experience", 0)),
@@ -309,9 +369,9 @@ func get_view_model(mode := "small", locale := "de") -> Dictionary:
 		"dungeon_unlocked": is_feature_unlocked("koalapet.base:dungeon"),
 	}
 	if mode == "minimal":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result, "state_revision": model.state_revision, "form_id": model.form_id, "egg_id": model.egg_id}
 	if mode == "small":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "stage": model.stage, "level": model.level, "experience": model.experience, "experience_next": model.experience_next, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0)}, "battle_unlocked": model.battle_unlocked, "dungeon_unlocked": model.dungeon_unlocked, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "stage": model.stage, "level": model.level, "experience": model.experience, "experience_next": model.experience_next, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0), "health_bps": care.get("health_bps", 0), "discipline_bps": care.get("discipline_bps", 0), "effort_bps": care.get("effort_bps", 0), "weight_grams": care.get("weight_grams", 0), "waste_count": pet_state.get("waste", []).size()}, "battle_unlocked": model.battle_unlocked, "dungeon_unlocked": model.dungeon_unlocked, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result, "state_revision": model.state_revision, "form_id": model.form_id, "egg_id": model.egg_id}
 	return model
 
 
@@ -327,9 +387,10 @@ func _hatch_progress_bps() -> int:
 	return clampi(int(float(elapsed) * 10000.0 / float(duration)), 0, 10000)
 
 
-func _sync_now() -> void:
+func _sync_now() -> Dictionary:
 	if pet_state.is_empty():
-		return
+		return {"ok": true, "changed": false}
+	var transaction := _snapshot_transaction()
 	var now_unix := foundation.clock.utc_now_unix_seconds()
 	var now_text := foundation.clock.utc_now_text()
 	var profile := _record(str(pet_state.get("care_profile_id", "")))
@@ -337,19 +398,26 @@ func _sync_now() -> void:
 	var policy := OfflineProgressPolicy.new(cap)
 	last_offline_result = policy.evaluate(str(pet_state.get("current_simulation_utc", "")), now_text)
 	var accepted := int(last_offline_result.get("accepted_simulation_seconds", 0))
-	if accepted == 0 and str(pet_state.get("current_simulation_utc", "")) == now_text:
-		return
+	if accepted == 0:
+		return {"ok": true, "changed": false}
 	var result := simulation.advance(pet_state, accepted, now_unix, now_text, catalog)
-	if result.ok:
-		pet_state = result.state
-		pet_state.aggregate.offline_stage_seconds = int(pet_state.aggregate.get("offline_stage_seconds", 0)) + accepted
-		var recovery := battle_service.recover_injury(pet_state, accepted, now_unix, now_text)
-		if recovery.ok:
-			pet_state = recovery.state
-		var evolution := _apply_evolution(now_unix, now_text)
-		if evolution.ok:
-			pet_state = evolution.state
-		_write_save()
+	if not result.get("ok", false):
+		_restore_transaction(transaction)
+		return result
+	pet_state = result.state
+	pet_state.aggregate.offline_stage_seconds = int(pet_state.aggregate.get("offline_stage_seconds", 0)) + accepted
+	var recovery := battle_service.recover_injury(pet_state, accepted, now_unix, now_text)
+	if recovery.ok:
+		pet_state = recovery.state
+	var evolution := _apply_evolution(now_unix, now_text)
+	if evolution.ok:
+		pet_state = evolution.state
+	_refresh_progression()
+	var save_result := _write_save()
+	if not save_result.get("ok", false):
+		_restore_transaction(transaction)
+		return save_result
+	return {"ok": true, "changed": true, "accepted_seconds": accepted}
 
 
 func _advance_internal(seconds: int, offline: bool) -> Dictionary:
@@ -465,9 +533,50 @@ func _normalize_pet_state(raw: Dictionary) -> Dictionary:
 func _write_save() -> Dictionary:
 	if foundation.current_save.is_empty():
 		return _failure("APP_NOT_READY", "Foundation save is not initialized")
+	var previous_save := foundation.current_save.duplicate(true)
 	foundation.current_save.simulation_state.records = [] if pet_state.is_empty() else [pet_state.duplicate(true)]
 	foundation.current_save.recovery_metadata["last_offline_progress"] = last_offline_result.duplicate(true)
-	return foundation.save_current()
+	var result := foundation.save_current()
+	if not result.get("ok", false):
+		foundation.current_save = previous_save
+	return result
+
+
+func _snapshot_transaction() -> Dictionary:
+	return {
+		"pet_state": pet_state.duplicate(true),
+		"current_save": foundation.current_save.duplicate(true),
+		"last_offline_result": last_offline_result.duplicate(true),
+		"last_command_result": last_command_result.duplicate(true),
+	}
+
+
+func _restore_transaction(snapshot: Dictionary) -> void:
+	pet_state = snapshot.get("pet_state", {}).duplicate(true)
+	foundation.current_save = snapshot.get("current_save", {}).duplicate(true)
+	last_offline_result = snapshot.get("last_offline_result", {}).duplicate(true)
+	last_command_result = snapshot.get("last_command_result", {}).duplicate(true)
+
+
+func _safe_nonnegative_int(value: Variant) -> int:
+	return maxi(0, int(value)) if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) else 0
+
+
+func _pet_record_shape_error(record: Dictionary) -> String:
+	for field in ["current_form_id", "care_profile_id", "animation_profile_id", "current_simulation_utc"]:
+		if not record.get(field) is String or str(record.get(field, "")).is_empty():
+			return field
+	for field in ["current_simulation_unix", "revision"]:
+		var value: Variant = record.get(field)
+		if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
+			return field
+	for field in ["care", "aggregate", "sickness"]:
+		if not record.get(field) is Dictionary:
+			return field
+	for field in ["waste", "pending_digestion", "attention_calls", "history"]:
+		if not record.get(field) is Array:
+			return field
+	return ""
 
 
 func _refresh_catalog() -> void:

@@ -32,12 +32,16 @@ func _run() -> void:
 	_assert_true(app.command({"type": "start_battle", "encounter_id": encounter_id, "stance": "balanced"}).ok, "M4-012 normal battle starts with a stance")
 	_assert_true(not app.get_current_state().active_battle.is_empty(), "M4-013 battle session is persisted while active")
 	var mid_battle := PetApplication.new(config, clock)
-	_assert_true(mid_battle.initialize().ok and not mid_battle.get_current_state().active_battle.is_empty(), "M4-014 save/reload preserves an active battle")
+	var mid_battle_result := mid_battle.initialize()
+	_assert_true(mid_battle_result.ok and not mid_battle.get_current_state().active_battle.is_empty(), "M4-014 save/reload preserves an active battle (%s: %s)" % [mid_battle_result.get("error_code", ""), mid_battle_result.get("reason", "")])
 	var rounds := 0
 	while not app.get_current_state().active_battle.is_empty() and rounds < 8:
-		_assert_true(app.command({"type": "battle_round"}).ok, "M4-015 deterministic battle round executes")
+		var round_result := app.command({"type": "battle_round"})
+		_assert_true(round_result.ok, "M4-015 deterministic battle round executes (%s: %s)" % [round_result.get("error_code", ""), round_result.get("reason", "")])
+		if not round_result.ok:
+			break
 		rounds += 1
-	_assert_true(app.get_current_state().last_battle_result.status == "win", "M4-016 normal battle resolves as a win")
+	_assert_true(app.get_current_state().get("last_battle_result", {}).get("status", "") == "win", "M4-016 normal battle resolves as a win")
 	_assert_true(int(app.get_current_state().experience) > 0 and int(app.get_current_state().battle_history_summary.wins) == 1, "M4-017 win grants experience and history")
 	_assert_true(app.command({"type": "start_battle", "encounter_id": "koalapet.base:thornlet_encounter", "stance": "aggressive"}).ok, "M4-018 second encounter starts")
 	_assert_true(app.command({"type": "battle_resolve", "outcome": "win"}).ok, "M4-019 deterministic development resolution uses battle service")

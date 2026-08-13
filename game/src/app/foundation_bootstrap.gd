@@ -96,7 +96,9 @@ func save_current() -> Dictionary:
 
 
 func _snapshots_equal(left: Dictionary, right: Dictionary) -> bool:
-	return JSON.stringify(left, "", true, true) == JSON.stringify(right, "", true, true)
+	var left_fingerprint := str(left.get("snapshot_fingerprint", ""))
+	var right_fingerprint := str(right.get("snapshot_fingerprint", ""))
+	return not left_fingerprint.is_empty() and left_fingerprint == right_fingerprint
 
 
 func _reconciliation_summary(result: Dictionary) -> Dictionary:

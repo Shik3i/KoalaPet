@@ -11,4 +11,8 @@ Asset families: full/layered habitat backgrounds, ground strips/edges, modular f
 
 The three supplied mode references are indexed with dimensions and checksums in `references/ui-modes/README.md`. They remain directional concepts outside `res://`, not runtime or production assets.
 
-Milestone 4 adds original provisional silhouettes for six juvenile forms plus a small enemy/boss roster, dungeon layers, effects, injury, and reward icons. They are intentionally distinct by family and role rather than palette swaps, but remain subject to visual review, accessibility contrast review, provenance, licensing, and final production replacement. The habitat theme/trophy can be unlocked and stored now; habitat editing remains a later milestone.
+Prompt 4.5 rejects the previous visible programmer-art/debug shell. The accepted implementation rules are defined in [`ART_STYLE_BIBLE.md`](ART_STYLE_BIBLE.md): warm readable pixel clusters, clean silhouette hierarchy, consistent 128-pixel creature canvases, restrained dark UI chrome, parchment text, green/gold selection accents, habitat depth without action-obscuring clutter, and no geometric creature placeholders.
+
+The current 19-source visual batch supplies all three eggs, three hatchlings, six juvenile forms, three normal enemies, the boss, the fixed `Quiet Canopy` habitat, effects, props, and UI icons. It is visually reviewed and accepted only as `PROVISIONAL_PRODUCT_REVIEW`. Rights/license remain `UNDECIDED`; it is not final licensed production art. Habitat editing remains Milestone 5 and was not implemented.
+
+Prompt 4.6 adds three family walk atlases without changing the accepted visual language. All nine playable forms now have genuine eight-frame locomotion at 10 fps, stable feet/ground anchors and generated GIF/contact-sheet review. Existing idle and action sheets remain provisional two-frame pose animations and are the main remaining animation-art limitation.

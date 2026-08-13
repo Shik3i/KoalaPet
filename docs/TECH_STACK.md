@@ -8,7 +8,7 @@
 | Python | `3.9.6` at `/usr/bin/python3` | Content/schema and deterministic asset tooling |
 | FFmpeg | `/opt/homebrew/bin/ffmpeg` | Optional future animation previews |
 
-ImageMagick and LibreSprite were not found in the initial command-path inspection and are optional. Pillow is a future deterministic image-processing dependency, not required for Prompt 0. Blender, Aseprite, Krita, and manual cleanup are not required standard-workflow tools.
+ImageMagick and LibreSprite were not found in the initial command-path inspection and are optional. Pillow `12.3.0` is pinned for deterministic asset processing and visual-evidence tooling. Blender, Aseprite, Krita, and manual cleanup are not required standard-workflow tools.
 
 ## Baseline
 

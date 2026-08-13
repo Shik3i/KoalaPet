@@ -1,134 +1,87 @@
 # Project Status / Ist-Stand
 
-**As of:** 2026-08-13
+**Stand:** 2026-08-13
+**Phase:** Milestone 4 implementiert; Prompt 4.5 Präsentations-Rebuild und Prompt 4.6 Animations-/UI-Polish implementiert und lokal validiert
+**Freigabe:** Spielbarer Windows-Vertical-Slice; keine Release-, Packaging- oder Milestone-5-Freigabe
 
-**Phase:** Milestone 4 — Branching evolution, normal battles, and first dungeon implemented
-**Readiness:** Playable Godot vertical slice validated headlessly and through isolated Windows gameplay captures; no release build, signing, deployment, or accepted native Windows overlay
+## Gesamtstand
 
-## Executive status
+KoalaPet ist ein Windows-first, local-first Godot-V-Pet. Der aktuelle Vertical Slice umfasst ein aktives Pet, drei Starter-Eier, die klassische Pflege, sechs verzweigte Juvenile-Formen, normale Kämpfe und einen fünfstufigen ersten Dungeon. Minimal, Small und Expanded sind ausschließlich Präsentationen derselben `PetApplication` und derselben versionierten Simulation.
 
-KoalaPet is a Windows-first, local-first Godot virtual-pet project. The repository now contains a playable single-pet raising/adventure slice on top of the content/save foundation.
+Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. Der normale Spielerpfad verwendet ein kohärentes dunkles Pixel-UI, einen geschichteten `Quiet Canopy`-Lebensraum, originale provisorische Bildassets und echte achtstufige Lokomotion. Entwicklungssteuerungen sind nur mit `--dev-tools` in einem separaten Fenster verfügbar.
 
-Implemented and validated:
+## Implementiert
 
-- one versioned bundled content registry for base and external/fixture packs
-- three data-defined starter eggs: moss, ember, and tide
-- deterministic egg selection, timed hatching, nickname, one active pet, and save/reload
-- data-driven care profiles with satiety, mood, energy, hygiene, weight, sleep, waste, attention calls, health, illness, treatment, and training
-- bounded deterministic offline progression through `SimulationClock` and `OfflineProgressPolicy`
-- event history and aggregate care metrics with bounded save size
-- missing-content quarantine for the pet's complete `required_content_ids` binding set
-- Minimal, Small, and Expanded UI modes over one authoritative pet state
-- automatic data-driven good-care and poor-care evolution routes for all three starter families
-- deterministic normal battles with stances, rounds, experience, levels, history, drops, injuries, and treatment
-- one five-node dungeon with event choice, rest node, boss, first-clear/repeat rewards, theme/trophy unlock storage, and codex records
-- save/reload for active battles and dungeon runs, sequential save migration, and pending evolution at safe points
-- deterministic provisional RGBA assets and provenance/brief records for the new forms, enemies, dungeon, effects, and rewards
-- headless Godot runtime smoke, foundation/pet/platform suites, and 62-assertion Milestone 4 suite
-- isolated Windows gameplay review with direct `PrintWindow` captures for evolved pet UI and adventure states
-- direct gameplay evidence includes good/poor evolution, Small/Expanded UI, battle, dungeon event/boss, injury/treatment, and first-clear rewards; Minimal transparency capture remains limited by `PrintWindow`
+### Foundation, Content und Saves
 
-Not product-ready:
+- ein versioniertes Registry-/Validator-System für gebündelte und externe JSON-/Safe-Media-Packs
+- stabile namespaced IDs, DE/EN-Lokalisierung und datengetriebene Eier, Formen, Animationen, Evolutionen, Gegner, Belohnungen und Dungeon-Knoten
+- deterministische Zeit, Offline-Cap, Save v3, sequentielle Migrationen, Backup/Recovery und Missing-Content-Quarantäne
+- transaktionale Commands und Offline-Synchronisation mit Rollback bei Save-Fehlern; Save-Lock plus Fingerprint-Konfliktprüfung gegen konkurrierende Writer
+- sichere Ablehnung von Null-/Falschtyp-Pet-Records, Save-Versionen und Command-Werten; 16-MiB-Save-Limit und strukturelle Quarantäne
+- kein Account, Netzwerk, Tracking, Cloud-SDK oder ausführbarer Mod-Payload
 
-- native Windows overlay acceptance remains open; ADR 0010 is still proposed
-- no export, packaging, signing, release, or deployment pipeline
-- no final product name, final art-rights approval, production art package, or accessibility acceptance
-- habitat editing, farm/residents, economy, and trading remain outside the slice
-- native Windows shell acceptance remains incomplete; the active lock screen prevented direct mouse, Alt+Tab, taskbar, tray callback, and restore observation
-- accessibility acceptance remains incomplete; screen-reader, contrast, and reduced-motion review are still open
+### Aktueller Gameplay-Vertical-Slice
 
-## Repository and Git state
+- drei Starter-Eier mit zeitbasiertem Schlüpfen und einem aktiven Pet
+- Sättigung, Stimmung, Energie, Hygiene, Gesundheit, Disziplin, Gewicht, Schlaf, Abfall, Calls, Krankheit, Medizin und Training
+- gute und schlechte Pflegepfade für Moss, Ember und Tide; sechs Juvenile-Formen
+- deterministische Kämpfe mit Haltungen, Runden, Erfahrung, Drops, Verletzung und Behandlung
+- erster Dungeon mit fünf Knoten, Event, Ruhepunkt, Boss, First-clear-/Repeat-Rewards, Codex und gespeicherten Theme-/Trophy-Unlocks
 
-- Working branch: `main`
-- Remote baseline: `origin/main` at `773edfa5921112e69e7077a2b549388517043f04` before the local milestone commits
-- Local history contains the foundation/status commits plus the current vertical-slice implementation; no force-push or history rewrite
-- The requested repository pull was completed before implementation; unrelated changes were not discarded
-- Project identity remains the replaceable codename `KoalaPet`
-- No final license, semantic release version, distribution channel, or production asset approval is established
+### Rebuild der Präsentation
 
-## Implemented areas
+- **Minimal `240×160`:** nur animiertes Ei/Pet und temporäre Statusblase; vollständig transparenter Viewport; wanderndes Pet; polygonale native Hit-Region; Klick öffnet Small
+- **Small `640×360`:** kompakter Habitat-Desktopmodus mit sechs segmentierten Statuswerten, Care-/Adventure-/More-Kontexten und jeweils drei direkt erreichbaren Hauptaktionen
+- **Expanded `1120×720`:** optionale Managementansicht mit Pflegeprotokoll, Habitat, Ereignissen, Battle, Dungeon, Inventar, Codex und Evolution; keine rohe Debug-Form und kein permanenter Vollbildanspruch
+- ein gemeinsames Pixel-Theme und wiederverwendbare Komponenten für Panel, Titel, Tabs, Buttons, Status, Call-Bubble, Modal, Starterkarte, Inventar/Kodex, Kampfhaltung, Dungeon-Knoten, Eventlog und Reward-Toast
+- Text-Wrapping, Ellipsis, vergrößerte lokalisierbare Inventarkarten, Tastaturfokus, Tooltips und Reduced-Motion-Umschaltung
+- versionierte Präsentationsoptionen getrennt vom Spielstand: UI-/Text-/Pet-Skalierung, Dichte, Sprache, Kontrast, Tooltips, Roaming, Animations-/Laufgeschwindigkeit, Effekte, Startmodus und Desktopverhalten
+- feste Habitat-Anker für Futter, Leckerli, Bad, Training, Bett, Medizin und Aufbruch; Aktionen laufen zur Station, spielen einmal und kehren in den autoritativen Zustand zurück
+- Battle und Dungeon bleiben hinter den vorhandenen datengetriebenen Gates
 
-### Foundation, content, and mod boundary
+### Visuelle Assets
 
-- Experimental Content API `0.1` with deterministic dependency/priority/conflict/override policy
-- Runtime schema, localization, reference, asset-root, safe-path, safe-media, size, file-count, and executable-payload checks
-- JSON schemas for care profiles, ailments, training activities, items with use effects, forms with care-profile binding, and existing future systems
-- `koalapet.base` now contains 69 accepted documents across starter, family/form, animation, care, item, ailment, training, evolution, battle, dungeon, gate, reward, and localization records
-- Initial mod contract remains JSON plus safe media only; no executable mod payloads
+- 19 erhaltene Bildquellen für drei Eier, drei Hatchlings, sechs Juveniles, drei normale Gegner, einen Boss, Habitat und UI-Icons
+- 128×128 transparente Charakterframes, 64×64 Previews, 96×96 Portraits und 24×24 UI-Icons
+- `Quiet Canopy` mit 512×192 Hintergrund, Ground, Schlafplatz, Bad, Futterplatz, Training, Pflanzen, Trophy-Shelf, Laterne, Truhe, Vordergrund und Effekten
+- Animationen für Idle/Walk/Eat/Happy/Sleep/Sick/Injured/Training/Attack/Hit/Victory/Call sowie Ei- und Gegnerzustände; alle neun spielbaren Walk-Zyklen besitzen acht sequenzielle Frames bei 10 fps
+- Quellen, Prompt, Hashes und Verarbeitung sind erfasst; Art- und Lizenzstatus bleiben ausdrücklich `PROVISIONAL_PRODUCT_REVIEW` / `UNDECIDED`
 
-### Pet simulation and application
+## Direkte Windows-Evidenz
 
-- `PetSimulation` is a pure `RefCounted` domain service with integer basis-point values, fixed-seed PRNG state, explicit commands, event history, aggregates, and bounded collections
-- Hatching uses the profile's `hatch_duration_seconds`; offline simulation uses the profile's `offline_cap_seconds`
-- Baseline actions: meal, treat, clean, sleep, wake, medicine, training, call resolution, and development-only forced ailment
-- Waste is generated by data-defined digestion; attention calls use data-defined thresholds/windows; illness is deterministic from care stress and persisted random state
-- `PetApplication` binds registry, clock, offline policy, save repository, catalog, commands, starter selection, asset paths, and presentation view models
-- One active pet record is persisted; no currency is required for baseline care
+- privatsichere native Screenshots für Starter, alle Eier/Hatchlings, gute/schlechte Juvenile, Minimal/Small/Expanded, Care-Zustände, Evolution, Battle, Dungeon, Boss und Rewards
+- echte Desktopaufnahme bestätigt Minimal ohne opakes Rechteck; native Diagnostik bestätigt transparentes Window/Viewport, Borderless, Always-on-top, No-focus und Hit-Region
+- 14-Sekunden-MJPEG-Film mit `84` Frames bei `1040×640`/`6 fps`: Pet läuft transparent, Pet-Klick öffnet Small, Care-Klick, F3 öffnet Expanded, F1 kehrt zu Minimal zurück, Klick außerhalb trifft das darunterliegende Testfenster während KoalaPet weiterläuft
+- Reproduktion, Dateihashes und Evidenzgrenzen: [`evidence/visual-rebuild/README.md`](evidence/visual-rebuild/README.md)
+- Prompt-4.6-Evidenz: Small/Expanded/Settings/Minimal-/Stationsaufnahmen, neun Walk-GIFs, 23-Sekunden-Polish-Film und sieben Performance-Szenarien unter [`evidence/animation-polish/README.md`](evidence/animation-polish/README.md)
 
-### Persistence and recovery
+## Validierung
 
-- Save envelope v3 with validated temporary writes, flush, atomic replacement, `.bak` and `.swap` recovery, sequential migrations, snapshot mismatch metadata, and quarantine
-- Pet records persist stable definition IDs, pack ownership, complete required content IDs, simulation timestamps, care state, history, aggregate metrics, and deterministic random state
-- `ContentBindingReconciler` checks `definition_id`, `required_pack_id`, and every `required_content_ids` entry; missing bindings move the full raw record to quarantine and do not activate it
-- Save/reload, missing-content quarantine, and recovery behavior are covered by the pet suite and foundation suite
+Aktueller vollständiger Lauf mit Godot `4.7.1.stable.official.a13da4feb`:
 
-### Presentation and assets
+- Content-, JSON-, Python-Compile-, Markdown-Link-, Mod-Payload-, Neutral-Term-, Repository-Artefakt- und Whitespace-Gates
+- Godot Headless Import
+- Foundation-Suite
+- Pet-Suite einschließlich idempotentem Hatch
+- Milestone-4 Evolution/Battle/Dungeon-Suite
+- platformneutrale Window-/Placement-Suite
+- Präsentations-Suite mit `312` Assertions für Transparenz, UI-Komponenten, State-Revision, achtstufige Lokomotion/Metadaten, Animationspriorität einschließlich veralteter Timer, Preferences-Recovery/Persistenz, Habitat-Anker/Reduced Motion, DE/EN, 100–200%-Bounds, Aktionszugang, Gates und Dev-UI-Isolation
+- Asset-Validator für `212` PNGs, Animationsgeometrie und Alpha
+- Ruff- und GDLint-Läufe ohne Befund; Python-Abhängigkeiten ohne bekannte Advisories; kein Node-/npm-Abhängigkeitsbaum vorhanden, daher `npm audit` nicht anwendbar
 
-- `game/scenes/pet_game.tscn` is the current main scene
-- Starter view presents the three eggs; egg view presents the hatch state; pet view exposes the same state through Minimal, Small, and Expanded modes
-- Minimal: pet identity/state and visual; Small: compact care values and baseline actions; Expanded: history, aggregates, and development controls
-- Generated provisional assets: 109 referenced PNGs, RGBA, minimum 48×48; the deterministic Milestone 4 generator and source brief are tracked, while generated provenance JSON remains an ignored local record
-- Asset source brief: `art_source/prompts/vertical-slice-assets.md`
-- Asset approval is development-only; provenance license remains `UNDECIDED`
+Exakte aktuelle Zählwerte stehen nach dem finalen Gesamtlauf in [`TESTING_AND_QUALITY.md`](TESTING_AND_QUALITY.md) und der Evidenz-README.
 
-### Future systems still outside the slice
+## Nicht produktionsreif / Grenzen
 
-| Area | Current state |
-|---|---|
-| Branching evolution | Implemented: automatic prioritized routes, evidence diagnostics, pending safe-point transition, discovery journal |
-| Battles and dungeon | Implemented: deterministic normal battle service, injuries/recovery, five-node dungeon, boss, rewards, codex |
-| Habitat and furniture | Architecture/data contracts only |
-| Farm, residents, idle jobs | Roadmap/data contracts only |
-| Trading Post/economy | Roadmap only |
-| Native overlay | Windows interactive spike reached `READY` for native creation/transparency/hit-region/status-indicator diagnostics; shell/DPI acceptance remains open |
-| Export/release/deployment | Not implemented |
+- finale Bildrechte und finale Art-Abnahme sind offen; das Generationsmodell meldete keine auslesbare Versionskennung
+- Nicht-Lokomotions-Aktionen und Idle bleiben provisorische Zweiframe-Posen; sequentielle Reaktionszyklen und Idle-Varianten sind nicht fertig
+- Screenreader- und vollständige manuelle Kontrastabnahme fehlen; Reduced Motion, Fokus und Layout-Gates sind implementiert, aber keine vollständige Accessibility-Zertifizierung
+- Taskbar-/Alt+Tab-Sichtbarkeit ist über Godot 4.7 nicht steuerbar; Tray-Menü, Minimize/Restore, Drag, Monitorwechsel und vollständige Mixed-DPI-Matrix sind weiterhin nicht als Produktplattform abgenommen
+- ADR 0010 bleibt `proposed`; der erfolgreiche Präsentations-Rebuild akzeptiert die Plattformarchitektur nicht automatisch
+- keine Exporte, Signierung, Distribution oder Deployment
+- Habitat-Editor, Furniture Placement, Farm, Residents, zweites aktives Pet, Idle Jobs, Trading Post, Economy und Milestone 5 wurden nicht begonnen
 
-## Validation evidence
+## Exakte Empfehlung vor Milestone 5
 
-Latest full local gate with Godot `4.7.1.stable.official.a13da4feb` and Python `3.13`:
-
-- Content validator: `2` packs, `86` content documents — PASS
-- JSON parse: `123` files — PASS
-- Python in-memory compile: `6` source files — PASS
-- Markdown links: `97` local targets — PASS
-- Vertical-slice assets: `109` referenced PNGs, RGBA, minimum 48×48 — PASS
-- Godot headless editor import — PASS
-- Godot project headless startup — PASS
-- Foundation suite: `101` assertions — PASS
-- Pet vertical-slice suite: `32` assertions — PASS
-- Milestone 4 evolution/battle/dungeon suite: `62` assertions — PASS
-- Platform-neutral suite: `41` assertions — PASS
-- Mod payload, neutral-terminology, repository-artifact, and `git diff --check` — PASS
-- Symlink fixture: explicitly skipped because this Windows host could not create the test link; production rejection remains implemented
-
-Evidence boundary:
-
-- Headless Godot proves parsing/import/startup and platform-neutral behavior only
-- It does not prove native Windows transparency, input passthrough, focus, taskbar/Alt+Tab, tray, DPI, multi-monitor, performance, accessibility, or release behavior
-- Interactive Windows product evidence is recorded in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md); native shell and accessibility limits remain explicit
-
-## Known blockers and risks
-
-- Interactive Windows overlay rows remain partially blocked: foreground mouse/shell routing, taskbar/Alt+Tab policy, tray callbacks/cleanup, restore paths, and mixed-DPI adapter parity
-- Provisional generated art has no final rights/approval decision
-- Domain balance is a coherent deterministic slice, not final product tuning
-- Battle interaction and evolution disclosure remain provisional prototypes; future changes require explicit ADRs/migrations
-- The current UI is a functional vertical-slice shell, not final visual design or accessibility-reviewed production UI
-
-## Next work
-
-1. Capture interactive Windows 10/11 evidence for the existing overlay matrix without accepting ADR 0010 prematurely.
-2. Review/replace provisional assets with approved original art and decide license/provenance.
-3. Product-review and tune the provisional evolution disclosure and semi-automatic battle interaction.
-4. Implement Milestone 5 habitat customization consuming the stored dungeon theme/trophy unlock.
-5. Add accessibility checks, long-offline/rollback cases, approved production art, and release packaging before any product-release claim.
+Milestone 5 noch nicht starten. Zuerst Product-Owner-Abnahme der neuen Bildsprache und aller drei Modi, Entscheidung über Rechte/Lizenz der provisorischen Quellen sowie ein separater Windows-10/11-DPI-/Shell-/Accessibility-Pass. Erst wenn diese drei Gates dokumentiert akzeptiert sind, Milestone 5 `Habitat customization and unlock rewards` freigeben.

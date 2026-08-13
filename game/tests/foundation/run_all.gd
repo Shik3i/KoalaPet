@@ -32,6 +32,7 @@ func _run() -> void:
 	_test_save_corruption_recovery()
 	_test_save_migration_fixture()
 	_test_missing_content_quarantine_and_restore()
+	_test_invalid_record_quarantine()
 	_test_feature_gate_evaluation_and_grants()
 	_test_application_bootstrap()
 	_remove_tree(ProjectSettings.globalize_path(TEST_ROOT))
@@ -317,8 +318,12 @@ func _test_save_round_trip_and_backup() -> void:
 	envelope.simulation_state.records.append({"instance_id": "neutral-1", "definition_id": "example.neutral:meadow_hatchling", "required_pack_id": "example.neutral", "raw_marker": "first"})
 	var first_save := repository.save(envelope)
 	_assert_equal(first_save.ok, true, "SAVE-001 save write succeeds")
+	var invalid_version := envelope.duplicate(true)
+	invalid_version.save_format_version = {"invalid": true}
+	_assert_equal(repository.save(invalid_version).error_code, "UNSUPPORTED_WRITE_VERSION", "SAVE-001A malformed write version fails safely")
 	var first_load := repository.load()
 	_assert_equal(first_load.data.content_snapshot.snapshot_fingerprint, envelope.content_snapshot.snapshot_fingerprint, "SAVE-002 content snapshot persists")
+	_assert_true(FoundationBootstrap.new()._snapshots_equal(envelope.content_snapshot, first_load.data.content_snapshot), "SAVE-002A JSON numeric representation does not create a false content mismatch")
 	_assert_equal(first_load.data.simulation_state.records[0].raw_marker, "first", "SAVE-003 round trip preserves record")
 	clock.advance(60)
 	envelope.simulation_state.records[0].raw_marker = "second"
@@ -328,6 +333,13 @@ func _test_save_round_trip_and_backup() -> void:
 	_assert_true(not FileAccess.file_exists(absolute_path + ".tmp") and not FileAccess.file_exists(absolute_path + ".swap") and not FileAccess.file_exists(absolute_path + ".bak.tmp") and not FileAccess.file_exists(absolute_path + ".bak.swap"), "SAVE-005 temporary replacement artifacts cleaned")
 	var backup := _parse_file(path + ".bak")
 	_assert_equal(backup.simulation_state.records[0].raw_marker, "first", "SAVE-006 previous valid save preserved as backup")
+	var conflict_path := TEST_ROOT + "/saves/concurrent.json"
+	var first_writer := SaveRepository.new(conflict_path, clock, FoundationSaveMigrations.create_registry())
+	var stale_writer := SaveRepository.new(conflict_path, clock, FoundationSaveMigrations.create_registry())
+	_assert_equal(first_writer.load().error_code, "NOT_FOUND", "SAVE-006A first writer observes empty save")
+	_assert_equal(stale_writer.load().error_code, "NOT_FOUND", "SAVE-006B second writer observes same empty save")
+	_assert_true(first_writer.save(envelope).ok, "SAVE-006C first writer commits")
+	_assert_equal(stale_writer.save(envelope).error_code, "CONCURRENT_SAVE_CONFLICT", "SAVE-006D stale writer cannot overwrite newer save")
 
 
 func _test_save_corruption_recovery() -> void:
@@ -349,6 +361,11 @@ func _test_save_corruption_recovery() -> void:
 	_write_text(path + ".bak", "{broken-backup")
 	var failed := repository.load()
 	_assert_equal(failed.error_code, "NO_VALID_SAVE", "SAVE-010 both malformed files return explicit failure")
+	var invalid_version_path := TEST_ROOT + "/saves/invalid-version.json"
+	_write_text(invalid_version_path, '{"save_format_version":{"invalid":true}}')
+	var invalid_version_repository := SaveRepository.new(invalid_version_path, clock, FoundationSaveMigrations.create_registry())
+	var invalid_version_result := invalid_version_repository.load()
+	_assert_equal(invalid_version_result.primary_error.error_code, "INVALID_SAVE_VERSION", "SAVE-010A malformed loaded version fails safely")
 
 
 func _test_save_migration_fixture() -> void:
@@ -383,6 +400,17 @@ func _test_missing_content_quarantine_and_restore() -> void:
 	_assert_equal(restored.restored_count, 1, "SAVE-018 returning pack restores record")
 	_assert_equal(restored.data.simulation_state.records[0], raw_record, "SAVE-019 restoration is lossless")
 	_assert_equal(restored.data.quarantined_records.size(), 0, "SAVE-020 restored quarantine entry removed only after successful binding")
+
+
+func _test_invalid_record_quarantine() -> void:
+	var clock := FakeSimulationClock.new(1_767_225_600)
+	var envelope := SaveEnvelope.create(clock, _example_registry.deterministic_snapshot())
+	envelope.simulation_state.records = [null, {"instance_id": "bad-shape", "definition_id": "example.neutral:meadow_hatchling", "required_pack_id": "example.neutral", "required_content_ids": {"wrong": true}}]
+	var reconciled := ContentBindingReconciler.new(clock).reconcile(envelope, _example_registry)
+	_assert_equal(reconciled.quarantined_count, 2, "SAVE-021 invalid active records are quarantined")
+	_assert_equal(reconciled.data.simulation_state.records.size(), 0, "SAVE-022 invalid active records never activate")
+	_assert_equal(reconciled.data.quarantined_records[0].reason, "INVALID_RECORD_TYPE", "SAVE-023 null record reason is explicit")
+	_assert_equal(reconciled.data.quarantined_records[1].reason, "INVALID_REQUIRED_CONTENT_IDS", "SAVE-024 malformed binding reason is explicit")
 
 
 func _test_feature_gate_evaluation_and_grants() -> void:

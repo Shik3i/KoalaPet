@@ -1,0 +1,63 @@
+{
+    "schema_version":  1,
+    "fps":  6,
+    "duration_seconds":  14,
+    "frame_size":  [
+                       1040,
+                       640
+                   ],
+    "window_dpi":  120,
+    "events":  [
+                   {
+                       "event":  "pet_clicked_small_opened",
+                       "seconds":  2.21,
+                       "window_size":  [
+                                           448,
+                                           243
+                                       ]
+                   },
+                   {
+                       "event":  "feed_clicked",
+                       "seconds":  4.61,
+                       "window_size":  [
+                                           448,
+                                           243
+                                       ]
+                   },
+                   {
+                       "event":  "expanded_opened_f3",
+                       "seconds":  6.61,
+                       "window_size":  [
+                                           832,
+                                           512
+                                       ]
+                   },
+                   {
+                       "event":  "minimal_restored_f1",
+                       "seconds":  10.01,
+                       "window_size":  [
+                                           192,
+                                           128
+                                       ]
+                   },
+                   {
+                       "event":  "outside_pet_clicked",
+                       "seconds":  12.01,
+                       "window_size":  [
+                                           192,
+                                           128
+                                       ]
+                   }
+               ],
+    "click_through_target_received_click":  true,
+    "outside_pet_native_hit_target_is_underlay":  true,
+    "outside_pet_raw_hit_handle":  1246040,
+    "outside_pet_root_hit_handle":  788564,
+    "outside_pet_hit_process_id":  32220,
+    "outside_pet_hit_window_class":  "WindowsForms10.Window.8.app.0.1efdab8_r8_ad1",
+    "underlay_process_id":  32220,
+    "koalapet_process_id":  6024,
+    "outside_pet_native_hit_bypassed_running_koalapet":  true,
+    "underlay_root_handle":  788564,
+    "koalapet_root_handle":  10488202
+}

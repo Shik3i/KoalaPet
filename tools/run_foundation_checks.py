@@ -9,9 +9,8 @@ import os
 import shutil
 import subprocess
 import sys
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Iterable, Optional, Sequence, Set
-
 
 ROOT = Path(__file__).resolve().parents[1]
 SKIP_PARTS = {".git", ".godot", ".venv", "__pycache__"}
@@ -30,7 +29,7 @@ def run(command: Sequence[str], label: str) -> None:
     subprocess.run(command, cwd=ROOT, check=True)
 
 
-def iter_files(roots: Iterable[Path], suffixes: Optional[Set[str]] = None) -> Iterable[Path]:
+def iter_files(roots: Iterable[Path], suffixes: set[str] | None = None) -> Iterable[Path]:
     for root in roots:
         if not root.exists():
             continue
@@ -131,6 +130,7 @@ def main() -> int:
     run([godot, "--headless", "--path", "game", "--script", "res://tests/pet/run_all.gd"], "Milestone 3 pet vertical-slice tests")
     run([godot, "--headless", "--path", "game", "--script", "res://tests/milestone_four/run_all.gd"], "Milestone 4 evolution/battle/dungeon tests")
     run([godot, "--headless", "--path", "game", "--script", "res://tests/platform/run_all.gd"], "Platform-neutral regression tests")
+    run([godot, "--headless", "--path", "game", "--script", "res://tests/presentation/run_all.gd"], "Visual presentation tests")
     run(["git", "diff", "--check"], "Git whitespace check")
     print("RESULT: PASS — foundation checks complete")
     return 0

@@ -5,12 +5,13 @@ from __future__ import annotations
 
 import json
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any
 
 from jsonschema import Draft202012Validator
-
+from jsonschema.exceptions import SchemaError
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK_ROOTS = (ROOT / "game" / "content_packs", ROOT / "mods" / "examples")
@@ -30,14 +31,14 @@ SKIN_OVERRIDE_SCHEMAS = {
 class Document:
     path: Path
     pack_root: Path
-    data: Dict[str, Any]
+    data: dict[str, Any]
     schema_name: str
 
 
 class ValidationReport:
     def __init__(self) -> None:
-        self.errors: List[str] = []
-        self.documents: List[Document] = []
+        self.errors: list[str] = []
+        self.documents: list[Document] = []
         self.pack_count = 0
 
     def error(self, path: Path, json_path: str, message: str) -> None:
@@ -48,7 +49,7 @@ class ValidationReport:
         self.errors.append(f"{display}:{json_path}: {message}")
 
 
-def load_json(path: Path, report: ValidationReport, json_path: str = "$") -> Optional[Dict[str, Any]]:
+def load_json(path: Path, report: ValidationReport, json_path: str = "$") -> dict[str, Any] | None:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -60,7 +61,7 @@ def load_json(path: Path, report: ValidationReport, json_path: str = "$") -> Opt
     return value
 
 
-def contained_path(root: Path, relative: str) -> Optional[Path]:
+def contained_path(root: Path, relative: str) -> Path | None:
     candidate = (root / relative).resolve()
     try:
         candidate.relative_to(root.resolve())
@@ -76,7 +77,7 @@ def json_path(parts: Iterable[Any]) -> str:
     return result
 
 
-def validate_schema(document_path: Path, pack_root: Path, data: Dict[str, Any], report: ValidationReport) -> Optional[str]:
+def validate_schema(document_path: Path, pack_root: Path, data: dict[str, Any], report: ValidationReport) -> str | None:
     schema_ref = data.get("$schema")
     if not isinstance(schema_ref, str):
         report.error(document_path, "$.$schema", "missing repository-relative schema reference")
@@ -95,7 +96,7 @@ def validate_schema(document_path: Path, pack_root: Path, data: Dict[str, Any], 
     try:
         Draft202012Validator.check_schema(schema)
         validator = Draft202012Validator(schema)
-    except Exception as exc:  # jsonschema reports detailed schema diagnostics here.
+    except SchemaError as exc:
         report.error(schema_path, "$", f"invalid schema: {exc}")
         return None
     for error in sorted(validator.iter_errors(data), key=lambda item: list(item.absolute_path)):
@@ -103,7 +104,7 @@ def validate_schema(document_path: Path, pack_root: Path, data: Dict[str, Any], 
     return schema_path.name
 
 
-def validate_asset_path(document: Document, manifest: Dict[str, Any], location: Any, pointer: str, report: ValidationReport) -> None:
+def validate_asset_path(document: Document, manifest: dict[str, Any], location: Any, pointer: str, report: ValidationReport) -> None:
     if not isinstance(location, str) or not location:
         report.error(document.path, pointer, "asset path must be a non-empty string")
         return
@@ -121,8 +122,8 @@ def validate_asset_path(document: Document, manifest: Dict[str, Any], location: 
         report.error(document.path, pointer, f"asset file does not exist: {location}")
 
 
-def load_packs(report: ValidationReport) -> List[Tuple[Path, Dict[str, Any]]]:
-    packs: List[Tuple[Path, Dict[str, Any]]] = []
+def load_packs(report: ValidationReport) -> list[tuple[Path, dict[str, Any]]]:
+    packs: list[tuple[Path, dict[str, Any]]] = []
     for root in PACK_ROOTS:
         if not root.is_dir():
             continue
@@ -144,7 +145,6 @@ def validate_pack_payloads(pack_root: Path, manifest_path: Path, report: Validat
         report.error(manifest_path, "$", "pack exceeds 512 files")
     total_size = 0
     for path in files:
-        relative = path.relative_to(pack_root)
         if path.is_symlink():
             report.error(path, "$", "symbolic links and reparse points are forbidden in packs")
             continue
@@ -180,9 +180,9 @@ def version_matches(actual: str, requirement: str) -> bool:
     return actual == requirement
 
 
-def validate_pack_relationships(packs: List[Tuple[Path, Dict[str, Any]]], report: ValidationReport) -> None:
-    by_id: Dict[str, Tuple[Path, Dict[str, Any]]] = {}
-    duplicate_ids: Set[str] = set()
+def validate_pack_relationships(packs: list[tuple[Path, dict[str, Any]]], report: ValidationReport) -> None:
+    by_id: dict[str, tuple[Path, dict[str, Any]]] = {}
+    duplicate_ids: set[str] = set()
     for pack_root, manifest in packs:
         pack_id = manifest.get("pack_id")
         if not isinstance(pack_id, str):
@@ -211,7 +211,7 @@ def validate_pack_relationships(packs: List[Tuple[Path, Dict[str, Any]]], report
                 report.error(pack_root / "manifest.json", f"$.incompatibilities[{index}]", f"enabled pack conflicts with {conflict_id}")
 
 
-def load_entries(pack_root: Path, manifest: Dict[str, Any], report: ValidationReport) -> None:
+def load_entries(pack_root: Path, manifest: dict[str, Any], report: ValidationReport) -> None:
     pack_id = manifest.get("pack_id")
     for index, entry in enumerate(manifest.get("entry_points", [])):
         if not isinstance(entry, str):
@@ -239,7 +239,7 @@ def load_entries(pack_root: Path, manifest: Dict[str, Any], report: ValidationRe
         report.documents.append(Document(path, pack_root, data, schema_name))
 
 
-def require_reference(document: Document, pointer: str, value: Any, expected: Set[str], by_id: Dict[str, Document], report: ValidationReport) -> None:
+def require_reference(document: Document, pointer: str, value: Any, expected: set[str], by_id: dict[str, Document], report: ValidationReport) -> None:
     if not isinstance(value, str):
         return
     target = by_id.get(value)
@@ -249,16 +249,16 @@ def require_reference(document: Document, pointer: str, value: Any, expected: Se
         report.error(document.path, pointer, f"{value} resolves to {target.schema_name}, expected {sorted(expected)}")
 
 
-def require_many(document: Document, pointer: str, values: Any, expected: Set[str], by_id: Dict[str, Document], report: ValidationReport) -> None:
+def require_many(document: Document, pointer: str, values: Any, expected: set[str], by_id: dict[str, Document], report: ValidationReport) -> None:
     if isinstance(values, list):
         for index, value in enumerate(values):
             require_reference(document, f"{pointer}[{index}]", value, expected, by_id, report)
 
 
-def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: ValidationReport) -> None:
-    by_id: Dict[str, Document] = {}
-    localized: Dict[Path, Set[str]] = {}
-    manifests: Dict[Path, Dict[str, Any]] = {pack_root: manifest for pack_root, manifest in packs}
+def validate_cross_references(packs: list[tuple[Path, dict[str, Any]]], report: ValidationReport) -> None:
+    by_id: dict[str, Document] = {}
+    localized: dict[Path, set[str]] = {}
+    manifests: dict[Path, dict[str, Any]] = {pack_root: manifest for pack_root, manifest in packs}
     for document in report.documents:
         if document.schema_name == "localization-bundle.schema.json":
             localized.setdefault(document.pack_root, set()).update(document.data.get("strings", {}).keys())
@@ -275,7 +275,7 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
         if isinstance(display_key, str) and display_key not in localized.get(pack_root, set()) and manifest.get("entry_points"):
             report.error(pack_root / "manifest.json", "$.display_name_key", f"missing localization key: {display_key}")
 
-    rule_ids: Dict[str, Path] = {}
+    rule_ids: dict[str, Path] = {}
     for document in report.documents:
         data = document.data
         display_key = data.get("display_name_key")
@@ -332,9 +332,7 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
         elif schema == "farm-job.schema.json":
             require_reference(document, "$.station_id", data.get("station_id"), {"furniture-prop.schema.json"}, by_id, report)
             require_reference(document, "$.output_item_id", data.get("output_item_id"), {"item.schema.json"}, by_id, report)
-        elif schema == "ailment.schema.json":
-            require_reference(document, "$.treatment_item_id", data.get("treatment_item_id"), {"item.schema.json"}, by_id, report)
-        elif schema == "injury.schema.json":
+        elif schema == "ailment.schema.json" or schema == "injury.schema.json":
             require_reference(document, "$.treatment_item_id", data.get("treatment_item_id"), {"item.schema.json"}, by_id, report)
         elif schema == "progression-balance.schema.json":
             require_reference(document, "$.battle_gate_id", data.get("battle_gate_id"), {"feature-gate.schema.json"}, by_id, report)

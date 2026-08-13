@@ -1,1 +1,257 @@
-{"$schema":"../../../../schemas/animation-profile.schema.json","id":"koalapet.base:creekling_animation","preview":"assets/vertical_slice/enemies/creekling/preview.png","portrait":"assets/vertical_slice/enemies/creekling/portrait.png","world_animations":{"idle":{"asset":"assets/vertical_slice/enemies/creekling/idle.png","frames":1,"fps":2},"attack":{"asset":"assets/vertical_slice/enemies/creekling/attack.png","frames":1,"fps":5},"hit":{"asset":"assets/vertical_slice/enemies/creekling/hit.png","frames":1,"fps":5},"victory":{"asset":"assets/vertical_slice/enemies/creekling/victory.png","frames":1,"fps":4},"injured":{"asset":"assets/vertical_slice/enemies/creekling/injured.png","frames":1,"fps":2}}}
+{
+  "$schema": "../../../../schemas/animation-profile.schema.json",
+  "id": "koalapet.base:creekling_animation",
+  "preview": "assets/vertical_slice/enemies/creekling/preview.png",
+  "portrait": "assets/vertical_slice/enemies/creekling/portrait.png",
+  "world_animations": {
+    "idle": {
+      "asset": "assets/vertical_slice/enemies/creekling/idle.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        108
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Provisional idle presentation pose",
+      "provenance": "art_source/provenance/visual-rebuild.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "attack": {
+      "asset": "assets/vertical_slice/enemies/creekling/attack.png",
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        108
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "attack"
+        }
+      ],
+      "source_brief": "Provisional attack presentation pose",
+      "provenance": "art_source/provenance/visual-rebuild.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "hit": {
+      "asset": "assets/vertical_slice/enemies/creekling/hit.png",
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        108
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "hit"
+        }
+      ],
+      "source_brief": "Provisional hit presentation pose",
+      "provenance": "art_source/provenance/visual-rebuild.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "defeat": {
+      "asset": "assets/vertical_slice/enemies/creekling/defeat.png",
+      "frames": 2,
+      "fps": 8,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        108
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "defeat"
+        }
+      ],
+      "source_brief": "Provisional defeat presentation pose",
+      "provenance": "art_source/provenance/visual-rebuild.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "victory": {
+      "asset": "assets/vertical_slice/enemies/creekling/victory.png",
+      "frames": 2,
+      "fps": 6,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        108
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Provisional victory presentation pose",
+      "provenance": "art_source/provenance/visual-rebuild.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "injured": {
+      "asset": "assets/vertical_slice/enemies/creekling/injured.png",
+      "frames": 2,
+      "fps": 2,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        108
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Provisional injured presentation pose",
+      "provenance": "art_source/provenance/visual-rebuild.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    }
+  }
+}

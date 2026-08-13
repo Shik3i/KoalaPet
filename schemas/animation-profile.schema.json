@@ -4,6 +4,37 @@
   "title": "Animation profile 0.1",
   "type": "object",
   "required": ["id", "preview", "portrait", "world_animations"],
-  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "preview": {"type": "string"}, "portrait": {"type": "string"}, "world_animations": {"type": "object", "required": ["idle"], "additionalProperties": {"type": "object", "required": ["asset", "frames", "fps"], "properties": {"asset": {"type": "string"}, "frames": {"type": "integer", "minimum": 1}, "fps": {"type": "number", "exclusiveMinimum": 0}, "loop": {"type": "boolean"}}, "additionalProperties": false}}},
+  "properties": {
+    "$schema": {"type": "string"},
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"},
+    "preview": {"type": "string"},
+    "portrait": {"type": "string"},
+    "world_animations": {
+      "type": "object",
+      "required": ["idle"],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["asset", "frames", "fps"],
+        "properties": {
+          "asset": {"type": "string"},
+          "frames": {"type": "integer", "minimum": 1},
+          "fps": {"type": "number", "exclusiveMinimum": 0},
+          "loop": {"type": "boolean"},
+          "frame_size": {"type": "array", "items": {"type": "integer", "minimum": 1}, "minItems": 2, "maxItems": 2},
+          "pivot": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+          "ground_anchor": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+          "visual_center": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+          "interaction_bounds": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4},
+          "effect_bounds": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4},
+          "mirroring_allowed": {"type": "boolean"},
+          "event_markers": {"type": "array", "items": {"type": "object", "required": ["frame", "event"], "properties": {"frame": {"type": "integer", "minimum": 0}, "event": {"type": "string"}}, "additionalProperties": false}},
+          "source_brief": {"type": "string", "minLength": 1},
+          "provenance": {"type": "string", "minLength": 1},
+          "review_status": {"type": "string", "enum": ["PROVISIONAL_REVIEWED", "APPROVED", "REJECTED"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
   "additionalProperties": false
 }

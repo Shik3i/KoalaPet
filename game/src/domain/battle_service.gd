@@ -69,8 +69,8 @@ func advance_round(state: Dictionary, catalog: Dictionary, now_unix: int, now_te
 	var round := int(session.get("current_round", 0)) + 1
 	var events: Array = []
 	var stance := str(session.get("selected_stance", "balanced"))
-	var pet_move := _select_move(result, catalog, stance, false)
-	var enemy_move := _select_move_from_ids(encounter.get("move_ids", []), catalog, session, true)
+	var pet_move := _select_move(result, catalog, stance)
+	var enemy_move := _select_move_from_ids(encounter.get("move_ids", []), catalog, session)
 	var pet_hit := _attack(session, pet_stats, enemy_stats, pet_move, stance, false, events, round)
 	if int(session.get("opponent_transient_hp", 0)) <= 0:
 		_finish(result, catalog, "win", now_unix, now_text, events)
@@ -258,7 +258,7 @@ func _attack(session: Dictionary, attacker: Dictionary, defender: Dictionary, mo
 	return true
 
 
-func _select_move(state: Dictionary, catalog: Dictionary, stance: String, enemy: bool) -> Dictionary:
+func _select_move(state: Dictionary, catalog: Dictionary, stance: String) -> Dictionary:
 	var form := _data(catalog, str(state.get("current_form_id", "")))
 	var ids: Array = form.get("move_ids", [])
 	if ids.is_empty():
@@ -267,7 +267,7 @@ func _select_move(state: Dictionary, catalog: Dictionary, stance: String, enemy:
 	return _data(catalog, str(ids[index]))
 
 
-func _select_move_from_ids(ids: Array, catalog: Dictionary, session: Dictionary, enemy: bool) -> Dictionary:
+func _select_move_from_ids(ids: Array, catalog: Dictionary, session: Dictionary) -> Dictionary:
 	if ids.is_empty():
 		return {"id": "fallback", "power": 1, "accuracy_bps": 8000, "effect": {"kind": "damage"}}
 	var index := _next_random(session) % ids.size()

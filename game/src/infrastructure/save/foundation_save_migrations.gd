@@ -25,7 +25,9 @@ static func _migrate_v1_to_v2(old: Dictionary) -> Dictionary:
 
 static func _migrate_v2_to_v3(old: Dictionary) -> Dictionary:
 	var migrated := old.duplicate(true)
-	for record in migrated.get("simulation_state", {}).get("records", []):
+	var simulation_state: Dictionary = migrated.get("simulation_state", {}) if migrated.get("simulation_state", {}) is Dictionary else {}
+	var records: Array = simulation_state.get("records", []) if simulation_state.get("records", []) is Array else []
+	for record in records:
 		if not record is Dictionary:
 			continue
 		var current_form := str(record.get("current_form_id", record.get("definition_id", "")))

@@ -532,6 +532,7 @@ func _validate_pack_file_inventory(pack_root: String, source: String, pack_id: S
 		var file := FileAccess.open(absolute_path, FileAccess.READ)
 		if file != null:
 			var length := file.get_length()
+			file.close()
 			total_bytes += length
 			if relative_path.get_extension().to_lower() == "json" and length > MAX_JSON_BYTES:
 				_add_error("JSON_SIZE_LIMIT", "JSON file exceeds %d bytes" % MAX_JSON_BYTES, "%s/%s" % [source, relative_path], "$", pack_id)
@@ -786,10 +787,13 @@ func _read_json(path: String, source_file: String, json_path: String, pack_id: S
 		_add_error("FILE_READ_ERROR", "Unable to open JSON file", source_file, json_path, pack_id)
 		return {"ok": false}
 	if file.get_length() > MAX_JSON_BYTES:
+		file.close()
 		_add_error("JSON_SIZE_LIMIT", "JSON file exceeds %d bytes" % MAX_JSON_BYTES, source_file, json_path, pack_id)
 		return {"ok": false}
 	var parser := JSON.new()
-	var parse_error := parser.parse(file.get_as_text())
+	var text := file.get_as_text()
+	file.close()
+	var parse_error := parser.parse(text)
 	if parse_error != OK or not parser.data is Dictionary:
 		_add_error("MALFORMED_JSON", "Expected a valid JSON object", source_file, json_path, pack_id)
 		return {"ok": false}

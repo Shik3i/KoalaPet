@@ -1,9 +1,14 @@
 class_name SaveRepository
 extends RefCounted
 
+const MAX_SAVE_BYTES := 16 * 1024 * 1024
+const STALE_LOCK_SECONDS := 300
+
 var save_path: String
 var clock: SimulationClock
 var migrations: SaveMigrationRegistry
+var _primary_observed := false
+var _expected_primary_fingerprint := ""
 
 
 func _init(path: String, simulation_clock: SimulationClock, migration_registry: SaveMigrationRegistry) -> void:
@@ -14,7 +19,8 @@ func _init(path: String, simulation_clock: SimulationClock, migration_registry: 
 
 func save(envelope: Dictionary) -> Dictionary:
 	var payload := envelope.duplicate(true)
-	if int(payload.get("save_format_version", -1)) != SaveEnvelope.CURRENT_VERSION:
+	var version_value: Variant = payload.get("save_format_version", -1)
+	if not _is_integer_number(version_value) or int(version_value) != SaveEnvelope.CURRENT_VERSION:
 		return _failure("UNSUPPORTED_WRITE_VERSION", "Migrate the save envelope before writing")
 	if str(payload.get("created_at_utc", "")).is_empty():
 		payload["created_at_utc"] = clock.utc_now_text()
@@ -26,6 +32,19 @@ func save(envelope: Dictionary) -> Dictionary:
 	var directory_error := DirAccess.make_dir_recursive_absolute(absolute.get_base_dir())
 	if directory_error != OK:
 		return _failure("DIRECTORY_CREATE_FAILED", error_string(directory_error))
+	var lock_result := _acquire_lock(absolute)
+	if not lock_result.ok:
+		return lock_result
+	var result := _save_locked(payload, absolute)
+	_release_lock(absolute)
+	return result
+
+
+func _save_locked(payload: Dictionary, absolute: String) -> Dictionary:
+	if _primary_observed:
+		var current_fingerprint := FileAccess.get_sha256(absolute) if FileAccess.file_exists(absolute) else ""
+		if current_fingerprint != _expected_primary_fingerprint:
+			return _failure("CONCURRENT_SAVE_CONFLICT", "Primary save changed after it was loaded")
 	var temporary := absolute + ".tmp"
 	var backup := absolute + ".bak"
 	var backup_temporary := absolute + ".bak.tmp"
@@ -76,12 +95,28 @@ func save(envelope: Dictionary) -> Dictionary:
 		_cleanup_file(temporary)
 		return _failure("PRIMARY_REPLACE_FAILED", error_string(replace_error))
 	_cleanup_file(swap)
+	_primary_observed = true
+	_expected_primary_fingerprint = str(written.get("fingerprint", ""))
 	return {"ok": true, "error_code": "", "reason": "Save written through validated temporary replacement", "data": payload, "backup_path": save_path + ".bak"}
 
 
 func load() -> Dictionary:
 	var absolute := ProjectSettings.globalize_path(save_path)
+	var directory_error := DirAccess.make_dir_recursive_absolute(absolute.get_base_dir())
+	if directory_error != OK:
+		return _failure("DIRECTORY_CREATE_FAILED", error_string(directory_error))
+	var lock_result := _acquire_lock(absolute)
+	if not lock_result.ok:
+		return lock_result
+	var result := _load_locked(absolute)
+	_release_lock(absolute)
+	return result
+
+
+func _load_locked(absolute: String) -> Dictionary:
 	var primary := _decode_path(absolute)
+	_primary_observed = true
+	_expected_primary_fingerprint = str(primary.get("fingerprint", ""))
 	if primary.ok:
 		return _migrate_loaded(primary.data, "primary", false)
 	var backup := _decode_path(absolute + ".bak")
@@ -118,19 +153,60 @@ func _decode_path(path: String) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return _failure("READ_FAILED", "Could not open save file")
+	var fingerprint := FileAccess.get_sha256(path)
+	if file.get_length() > MAX_SAVE_BYTES:
+		file.close()
+		return _failure("SAVE_SIZE_LIMIT", "Save file exceeds %d bytes" % MAX_SAVE_BYTES).merged({"fingerprint": fingerprint})
 	var parser := JSON.new()
-	var parse_error := parser.parse(file.get_as_text())
+	var text := file.get_as_text()
+	file.close()
+	var parse_error := parser.parse(text)
 	if parse_error != OK or not parser.data is Dictionary:
-		return _failure("MALFORMED_JSON", "JSON parse error at line %d: %s" % [parser.get_error_line(), parser.get_error_message()])
-	var version := int(parser.data.get("save_format_version", -1))
+		return _failure("MALFORMED_JSON", "JSON parse error at line %d: %s" % [parser.get_error_line(), parser.get_error_message()]).merged({"fingerprint": fingerprint})
+	var version_value: Variant = parser.data.get("save_format_version", -1)
+	if not _is_integer_number(version_value):
+		return _failure("INVALID_SAVE_VERSION", "Save format version must be an integer").merged({"fingerprint": fingerprint})
+	var version := int(version_value)
 	if version < 1:
-		return _failure("INVALID_SAVE_VERSION", "Save format version is missing or invalid")
-	return {"ok": true, "error_code": "", "reason": "Decoded", "data": parser.data}
+		return _failure("INVALID_SAVE_VERSION", "Save format version is missing or invalid").merged({"fingerprint": fingerprint})
+	return {"ok": true, "error_code": "", "reason": "Decoded", "data": parser.data, "fingerprint": fingerprint}
 
 
 func _cleanup_file(path: String) -> void:
 	if FileAccess.file_exists(path):
 		DirAccess.remove_absolute(path)
+
+
+func _is_integer_number(value: Variant) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and float(value) == floorf(float(value))
+
+
+func _acquire_lock(absolute: String) -> Dictionary:
+	var lock_path := absolute + ".lock"
+	var marker_path := lock_path.path_join("owner.json")
+	if DirAccess.dir_exists_absolute(lock_path):
+		var modified_path := marker_path if FileAccess.file_exists(marker_path) else lock_path
+		var modified_time := FileAccess.get_modified_time(modified_path)
+		var age := Time.get_unix_time_from_system() - modified_time
+		if modified_time > 0 and (age > STALE_LOCK_SECONDS or age < -STALE_LOCK_SECONDS):
+			_cleanup_file(marker_path)
+			DirAccess.remove_absolute(lock_path)
+	var lock_error := DirAccess.make_dir_absolute(lock_path)
+	if lock_error != OK:
+		return _failure("SAVE_LOCKED", "Another save operation owns the lock")
+	var marker := FileAccess.open(marker_path, FileAccess.WRITE)
+	if marker == null:
+		DirAccess.remove_absolute(lock_path)
+		return _failure("SAVE_LOCK_FAILED", "Could not write save lock marker")
+	marker.store_string(JSON.stringify({"created_at_utc": clock.utc_now_text()}))
+	marker.close()
+	return {"ok": true}
+
+
+func _release_lock(absolute: String) -> void:
+	var lock_path := absolute + ".lock"
+	_cleanup_file(lock_path.path_join("owner.json"))
+	DirAccess.remove_absolute(lock_path)
 
 
 func _failure(code: String, reason: String) -> Dictionary:

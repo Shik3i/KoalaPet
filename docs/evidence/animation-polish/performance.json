@@ -1,0 +1,69 @@
+{
+    "schema_version":  1,
+    "measured_at_utc":  "2026-08-13T12:17:46.5578348Z",
+    "host":  {
+                 "os":  "Microsoft Windows NT 10.0.26200.0",
+                 "logical_processors":  16,
+                 "godot":  "4.7.1 stable",
+                 "rendering_method":  "gl_compatibility",
+                 "gpu_counter":  "not available through this deterministic harness"
+             },
+    "results":  [
+                    {
+                        "scenario":  "minimal_roaming",
+                        "sample_seconds":  4.18,
+                        "cpu_percent_total_capacity":  0.654,
+                        "working_set_mb_average":  180.76,
+                        "working_set_mb_peak":  183.55,
+                        "samples":  20
+                    },
+                    {
+                        "scenario":  "minimal_stationary",
+                        "sample_seconds":  4.05,
+                        "cpu_percent_total_capacity":  0.94,
+                        "working_set_mb_average":  180.63,
+                        "working_set_mb_peak":  183.1,
+                        "samples":  19
+                    },
+                    {
+                        "scenario":  "small_idle",
+                        "sample_seconds":  4.2,
+                        "cpu_percent_total_capacity":  0.861,
+                        "working_set_mb_average":  180.28,
+                        "working_set_mb_peak":  182.42,
+                        "samples":  20
+                    },
+                    {
+                        "scenario":  "small_ambient_walk",
+                        "sample_seconds":  4.2,
+                        "cpu_percent_total_capacity":  0.744,
+                        "working_set_mb_average":  180.11,
+                        "working_set_mb_peak":  182.18,
+                        "samples":  20
+                    },
+                    {
+                        "scenario":  "small_action_animation",
+                        "sample_seconds":  4.01,
+                        "cpu_percent_total_capacity":  0.803,
+                        "working_set_mb_average":  179.59,
+                        "working_set_mb_peak":  182.82,
+                        "samples":  19
+                    },
+                    {
+                        "scenario":  "expanded_idle",
+                        "sample_seconds":  4.01,
+                        "cpu_percent_total_capacity":  1.071,
+                        "working_set_mb_average":  188.38,
+                        "working_set_mb_peak":  193.07,
+                        "samples":  19
+                    },
+                    {
+                        "scenario":  "minimal_moving_hit_region",
+                        "sample_seconds":  4.18,
+                        "cpu_percent_total_capacity":  1.169,
+                        "working_set_mb_average":  177.95,
+                        "working_set_mb_peak":  181.29,
+                        "samples":  20
+                    }
+                ]
+}

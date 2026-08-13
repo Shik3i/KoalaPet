@@ -8,6 +8,12 @@ param(
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
+$resolvedOutput = [IO.Path]::GetFullPath($OutputPath)
+$repositoryRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "../.."))
+$evidenceRoot = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "docs/evidence")).TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+if (-not $resolvedOutput.StartsWith($evidenceRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "OUTPUT_PATH_MUST_BE_UNDER_DOCS_EVIDENCE: $resolvedOutput"
+}
 
 if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
     throw "BLOCKED_NOT_WINDOWS: collect_environment.ps1 requires Windows PowerShell or PowerShell on Windows."
@@ -116,7 +122,6 @@ $environment = [ordered]@{
     }
 }
 
-$resolvedOutput = [IO.Path]::GetFullPath($OutputPath)
 $outputDirectory = Split-Path -Parent $resolvedOutput
 New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
 [IO.File]::WriteAllText($resolvedOutput, ($environment | ConvertTo-Json -Depth 8), [Text.UTF8Encoding]::new($false))

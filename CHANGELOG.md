@@ -14,6 +14,8 @@ All notable changes will be documented here. The format follows Keep a Changelog
 - Supplied Expanded, Small, and Minimal concept PNGs preserved byte-for-byte under `references/ui-modes/`.
 - Prompt 3.5 interactive Windows product review: isolated-save walkthrough for all three starters, hatch/care/sickness/sleep/relaunch evidence, native overlay diagnostics, DPI/taskbar inventory, and idle performance measurements.
 - Milestone 4 branching evolution, normal battles, and first dungeon: six juvenile routes across three families, deterministic evolution evidence/pending transitions, stance-based battles, levels/history/drops/injuries, a five-node dungeon with boss, idempotent rewards/unlocks/codex records, save v3 migration, 62 dedicated assertions, 109 validated provisional assets, and isolated gameplay review.
+- Prompt 4.5 complete player-presentation rebuild: coherent Minimal/Small/Expanded modes, transparent walking desktop pet, layered Quiet Canopy habitat, shared pixel UI/component library, 19-source provisional art batch covering all current creatures/enemies/boss/eggs/icons, deterministic processing/provenance, 121 presentation assertions, and privacy-safe native screenshots plus interaction video.
+- Prompt 4.6 product polish: genuine eight-frame locomotion for all nine playable forms, animation-state/one-shot controller, anchored habitat actions and bounded roaming, versioned presentation preferences, larger Small/Expanded layouts, independent UI/text/pet scaling, stricter alpha/geometry validation, native Windows screenshots/GIFs/video and seven-scenario performance evidence; no Milestone 5 gameplay.
 
 ### Fixed
 
@@ -23,3 +25,6 @@ All notable changes will be documented here. The format follows Keep a Changelog
 - Fixed application content-root typing for injected test/runtime configurations and expanded quarantine checks to every persisted pet content binding.
 - Fixed starter-card clipping/import visibility, German localization fallbacks, hatch-progress visibility, mode-refresh resizing, Expanded/status clipping, and Small sickness-action clipping in the Godot product shell.
 - Fixed stale feature-gate test expectations after adding adventure gates, Python/runtime evolution-schema parity for stage-age fields, and application-layer loss of pending evolution states at unsafe transition points.
+- Fixed non-idempotent repeated hatch completion, stale native HWND capture after transparent-window reconfiguration, missing DE/EN inventory localization, unreadably narrow localized reward slots, and invalid review-fixture adventure commands leaking player-facing errors into care captures.
+- Hardened saves and commands against stale concurrent writers, false numeric snapshot mismatches, malformed versions/records/command values, oversized input, failed persistence, partial transactions, stale action timers, and silent no-op actions.
+- Bounded visual-review paths, rates, durations, image dimensions and memory use; closed content/image handles; added Ruff/GDLint policy, pinned Pillow, dependency audit evidence, and cache-complete `.gitignore` coverage.

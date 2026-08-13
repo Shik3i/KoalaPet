@@ -18,6 +18,25 @@ Optional inspection/customization/management for detailed values, history, inven
 
 The current Godot shell keeps one authoritative `PetApplication` state across all three modes. Minimal exposes only pet-local activity/injury/battle/dungeon/evolution status; Small adds context-sensitive Battle/Dungeon access, level/experience, injury, pending evolution, and current adventure state; Expanded adds route/discovery, battle history, inventory, unlocks, and dungeon context. Battle and Dungeon controls are absent until their data-defined gates pass. The evolution effect and exact disclosure policy remain provisional and are not a native overlay decision.
 
+## Prompt 4.5 player presentation
+
+- Minimal is fixed at logical `240×160`. It contains no persistent panel/background, uses alpha-clear rendering, shows only the 128×128 animated pet/egg plus a temporary call bubble, applies no-focus and a pet-following polygonal hit region, and opens Small when the pet is clicked.
+- Small is fixed at logical `560×304`. It is the compact daily habitat with title controls, six segmented status indicators, a 512×192 layered habitat and Care/Adventure/More action sets.
+- Expanded defaults to `1040×640` and remains resizable. It provides a three-column management layout and tabs for Overview, Battle, Dungeon, Inventory, Codex and Evolution.
+- All modes remain transparent/borderless and always-on-top in the current Windows adapter. Only Expanded is resizable. Sizes are logical Godot coordinates; the native evidence host observed `192×128`, `448×243`, and `832×512` through a non-DPI-aware window-query process at Windows 125%, while Godot diagnostics retained the canonical logical sizes.
+- Mode changes use one `PetApplication`, preserve `state_revision` and pet identity, and store per-mode placement. Debug tools require `--dev-tools` and open separately.
+
+Direct Prompt 4.5 evidence confirms Minimal transparency and outside-pet click-through. It does not accept ADR 0010 or prove taskbar/Alt+Tab control, tray lifecycle, all monitor transitions, or a full Windows 10/11 DPI matrix.
+
+## Prompt 4.6 presentation preferences and readability
+
+- Minimal remains `240×160` at 100% pet scale and grows only when the independent Minimal pet scale requires it. Roaming uses sprite-dependent bounds, pauses, a turn delay and metadata-controlled mirroring.
+- Small is now `640×360`; Expanded is `1120×720`. Normal text starts at 16 px, titles at 18 px, comfortable primary controls at 48×44 px.
+- UI scale supports Auto/100/125/150/175/200%; text supports 100/125/150/175%; standard and Minimal pet scales support 75/100/125/150/200%. These are independent.
+- Versioned `user://preferences.json` is separate from simulation saves, sanitized/migrated on load and atomically replaced with backup rotation.
+- Small exposes three readable context actions. Expanded keeps three columns and allocates full reflow room for enlarged German text. Settings is scrollable and keeps each label/control pair together.
+- Quiet Canopy has explicit bowl, treat, bath, training, bed, medicine and departure anchors. Domain actions move only presentation state; reduced motion uses instant routing and still completes the visual action timer.
+
 ## Prompt 3.5 Windows evidence
 
 The first direct Windows run was completed on 2026-08-12 with Windows 11 Pro `10.0.26200`, Godot `4.7.1.stable.official.a13da4feb`, three monitors, per-monitor-aware PowerShell capture, primary 125% scaling, a bottom non-auto-hidden taskbar, and an NVIDIA RTX 4080 SUPER. The native spike reached `READY` for native window creation, borderless/transparency flags, transparent viewport, polygonal hit regions, focus policies, monitor enumeration, status indicator creation, and 60 FPS at the configured cap. Evidence is in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md).

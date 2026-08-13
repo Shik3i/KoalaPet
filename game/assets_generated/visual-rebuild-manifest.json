@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "character_frame_size": [
+    128,
+    128
+  ],
+  "preview_size": [
+    64,
+    64
+  ],
+  "portrait_size": [
+    96,
+    96
+  ],
+  "icon_size": [
+    24,
+    24
+  ],
+  "habitat": {
+    "size": [
+      512,
+      192
+    ],
+    "layer_order": [
+      "background",
+      "ground",
+      "rear_structures",
+      "large_furniture",
+      "small_props",
+      "functional_stations",
+      "pet",
+      "foreground",
+      "lighting",
+      "ambient_effects"
+    ],
+    "background": "game/assets_generated/habitat/quiet_canopy/background_day.png",
+    "ground": "game/assets_generated/habitat/quiet_canopy/ground.png",
+    "props": {
+      "sleeping_den": "game/assets_generated/habitat/quiet_canopy/props/sleeping_den.png",
+      "bath_basin": "game/assets_generated/habitat/quiet_canopy/props/bath_basin.png",
+      "feed_table": "game/assets_generated/habitat/quiet_canopy/props/feed_table.png",
+      "training_log": "game/assets_generated/habitat/quiet_canopy/props/training_log.png",
+      "plants": "game/assets_generated/habitat/quiet_canopy/props/plants.png",
+      "trophy_shelf": "game/assets_generated/habitat/quiet_canopy/props/trophy_shelf.png",
+      "lantern": "game/assets_generated/habitat/quiet_canopy/props/lantern.png",
+      "storage_chest": "game/assets_generated/habitat/quiet_canopy/props/storage_chest.png"
+    },
+    "effects": {
+      "foreground_grass": "game/assets_generated/habitat/quiet_canopy/effects/foreground_grass.png",
+      "wildflowers": "game/assets_generated/habitat/quiet_canopy/effects/wildflowers.png",
+      "hanging_leaves": "game/assets_generated/habitat/quiet_canopy/effects/hanging_leaves.png",
+      "warm_light": "game/assets_generated/habitat/quiet_canopy/effects/warm_light.png",
+      "night_wash": "game/assets_generated/habitat/quiet_canopy/effects/night_wash.png",
+      "dust_motes": "game/assets_generated/habitat/quiet_canopy/effects/dust_motes.png",
+      "heart": "game/assets_generated/habitat/quiet_canopy/effects/heart.png",
+      "urgent_call": "game/assets_generated/habitat/quiet_canopy/effects/urgent_call.png"
+    }
+  },
+  "icons": {
+    "satiety": "game/assets_generated/ui/icons/satiety.png",
+    "mood": "game/assets_generated/ui/icons/mood.png",
+    "energy": "game/assets_generated/ui/icons/energy.png",
+    "hygiene": "game/assets_generated/ui/icons/hygiene.png",
+    "sleep": "game/assets_generated/ui/icons/sleep.png",
+    "health": "game/assets_generated/ui/icons/health.png",
+    "feed": "game/assets_generated/ui/icons/feed.png",
+    "treat": "game/assets_generated/ui/icons/treat.png",
+    "clean": "game/assets_generated/ui/icons/clean.png",
+    "train": "game/assets_generated/ui/icons/train.png",
+    "medicine": "game/assets_generated/ui/icons/medicine.png",
+    "injury": "game/assets_generated/ui/icons/injury.png",
+    "battle": "game/assets_generated/ui/icons/battle.png",
+    "dungeon": "game/assets_generated/ui/icons/dungeon.png",
+    "rewards": "game/assets_generated/ui/icons/rewards.png",
+    "expand": "game/assets_generated/ui/icons/expand.png",
+    "minimal": "game/assets_generated/ui/icons/minimal.png",
+    "settings": "game/assets_generated/ui/icons/settings.png",
+    "inventory": "game/assets_generated/ui/icons/inventory.png",
+    "codex": "game/assets_generated/ui/icons/codex.png",
+    "evolution": "game/assets_generated/ui/icons/evolution.png",
+    "aggressive": "game/assets_generated/ui/icons/aggressive.png",
+    "balanced": "game/assets_generated/ui/icons/balanced.png",
+    "defensive": "game/assets_generated/ui/icons/defensive.png"
+  }
+}

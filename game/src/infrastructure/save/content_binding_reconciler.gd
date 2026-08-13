@@ -17,6 +17,27 @@ func reconcile(envelope: Dictionary, registry: ContentPackRegistry) -> Dictionar
 	var quarantined_count := 0
 	var restored_count := 0
 	for record in active_records:
+		if not record is Dictionary:
+			quarantine.append({
+				"raw_record": record,
+				"missing_content_ids": [],
+				"required_pack_ids": [],
+				"quarantined_at_utc": clock.utc_now_text(),
+				"reason": "INVALID_RECORD_TYPE",
+			})
+			quarantined_count += 1
+			continue
+		var shape_error := _record_shape_error(record)
+		if not shape_error.is_empty():
+			quarantine.append({
+				"raw_record": record.duplicate(true),
+				"missing_content_ids": [],
+				"required_pack_ids": [],
+				"quarantined_at_utc": clock.utc_now_text(),
+				"reason": shape_error,
+			})
+			quarantined_count += 1
+			continue
 		var missing := _missing_requirements(record, registry)
 		if missing.content_ids.is_empty() and missing.pack_ids.is_empty():
 			remaining_active.append(record)
@@ -31,6 +52,12 @@ func reconcile(envelope: Dictionary, registry: ContentPackRegistry) -> Dictionar
 	for entry in existing_quarantine:
 		if not entry is Dictionary or not entry.get("raw_record") is Dictionary:
 			quarantine.append(entry)
+			continue
+		var shape_error := _record_shape_error(entry.raw_record)
+		if not shape_error.is_empty():
+			var invalid: Dictionary = entry.duplicate(true)
+			invalid["reason"] = shape_error
+			quarantine.append(invalid)
 			continue
 		var missing := _missing_requirements(entry.raw_record, registry)
 		if missing.content_ids.is_empty() and missing.pack_ids.is_empty():
@@ -70,6 +97,20 @@ func _missing_requirements(record: Dictionary, registry: ContentPackRegistry) ->
 		if not found:
 			missing_pack_ids.append(required_pack_id)
 	return {"content_ids": missing_content_ids, "pack_ids": missing_pack_ids}
+
+
+func _record_shape_error(record: Dictionary) -> String:
+	if not record.get("instance_id") is String or str(record.get("instance_id", "")).is_empty():
+		return "INVALID_INSTANCE_ID"
+	if not record.get("definition_id") is String or str(record.get("definition_id", "")).is_empty():
+		return "INVALID_DEFINITION_ID"
+	if not record.get("required_pack_id") is String:
+		return "INVALID_REQUIRED_PACK_ID"
+	if record.has("required_content_ids") and not record.required_content_ids is Array:
+		return "INVALID_REQUIRED_CONTENT_IDS"
+	if record.get("required_content_ids", []).any(func(value: Variant) -> bool: return not value is String):
+		return "INVALID_REQUIRED_CONTENT_ID"
+	return ""
 
 
 func _record_less(left: Variant, right: Variant) -> bool:

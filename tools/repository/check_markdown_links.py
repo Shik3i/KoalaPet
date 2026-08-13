@@ -8,7 +8,6 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote
 
-
 ROOT = Path(__file__).resolve().parents[2]
 LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 

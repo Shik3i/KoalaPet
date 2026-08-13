@@ -142,7 +142,7 @@ func _test_per_mode_persistence() -> void:
 	var restored := WindowModeController.new(fake)
 	restored.restore_placements(serialized)
 	_assert_equal(restored.serialize_placements().size(), 3, "PST-003 all per-mode placements restored")
-	_assert_equal(restored.serialize_placements()["EXPANDED"].size, [960, 540], "PST-004 expanded size restored")
+	_assert_equal(restored.serialize_placements()["EXPANDED"].size, [1120, 720], "PST-004 expanded size restored")
 
 
 func _test_mode_transition_invariants() -> void:

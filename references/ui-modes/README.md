@@ -1,12 +1,12 @@
 # UI-Mode Concepts
 
-**Status: available since Prompt 1.**
+**Status: refreshed from the Prompt 4.5 handoff.**
 
 Imported unmodified source files:
 
-- `koalapet-expanded-mode-concept.png` — 1672×941 — SHA-256 `45d5be185a125a2469dc2bea766f969bdc12d64dd1d61bf2f71f0a598ff7d48b`
-- `koalapet-small-mode-concept.png` — 1672×941 — SHA-256 `3dea25f463d20b2313fa7845ec409ee1d211ef53d859264217225b41e2f6c40c`
-- `koalapet-minimal-mode-concept.png` — 1672×941 — SHA-256 `330b8e4be2931d78d54845385573e82fd813bb4339b2af3ea04558048250b839`
+- `koalapet-expanded-mode-concept.png` — 1672×941 — SHA-256 `1c4fe4fdd3e0b636ec36a7b8d452c4990052a912d2506cfa738250da11b434cf`
+- `koalapet-small-mode-concept.png` — 353×176 — SHA-256 `f8983e7fe82b07668e851c92a427cab1f01f36b3697029da4c21b4a7c0c21d14`
+- `koalapet-minimal-mode-concept.png` — 241×151 — SHA-256 `4836f42c9103e77f52e8fc514f4b025b602e8d2904d93c4eb311aaab6e94e4e7`
 
 The supplied PNGs were copied byte-for-byte and remain concept references outside Godot's `res://` import root. They are not runtime or production assets.
 

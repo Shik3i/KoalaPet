@@ -3,6 +3,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$OutputPath,
     [string]$WindowTitle = "KoalaPet (DEBUG)",
+    [int]$ProcessId = -1,
     [string]$Key = "",
     [int]$VirtualKey = -1,
     [int]$ClickX = -1,
@@ -14,6 +15,13 @@ param(
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
+$repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
+$evidenceRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot "docs\evidence")).TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+$resolved = [IO.Path]::GetFullPath($OutputPath)
+if (-not $resolved.StartsWith($evidenceRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "OUTPUT_PATH_MUST_BE_UNDER_DOCS_EVIDENCE: $resolved"
+}
+if ($WaitMilliseconds -lt 0 -or $WaitMilliseconds -gt 30000) { throw "WAIT_MILLISECONDS_OUT_OF_RANGE: $WaitMilliseconds" }
 
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.Windows.Forms
@@ -25,11 +33,15 @@ public static class KoalaInteractiveWin32 {
     [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
     [StructLayout(LayoutKind.Sequential)] public struct POINT { public int X; public int Y; }
     [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
+    [DllImport("user32.dll")] public static extern bool IsWindow(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern bool ClientToScreen(IntPtr hWnd, ref POINT point);
     [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr hWnd, uint message, UIntPtr wParam, IntPtr lParam);
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, uint nFlags);
+    [DllImport("user32.dll")] public static extern uint GetDpiForWindow(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
+    [DllImport("user32.dll")] public static extern bool SetProcessDpiAwarenessContext(IntPtr value);
     [DllImport("user32.dll")] public static extern void mouse_event(uint flags, uint dx, uint dy, uint data, UIntPtr extraInfo);
     public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
     [DllImport("user32.dll")] public static extern bool EnumWindows(EnumWindowsProc callback, IntPtr extraInfo);
@@ -40,7 +52,7 @@ public static class KoalaInteractiveWin32 {
         EnumWindows((hWnd, lParam) => {
             uint owner;
             GetWindowThreadProcessId(hWnd, out owner);
-            if (owner == processId && found == IntPtr.Zero) found = hWnd;
+            if (owner == processId && found == IntPtr.Zero && IsWindow(hWnd) && IsWindowVisible(hWnd)) found = hWnd;
             return true;
         }, IntPtr.Zero);
         return found;
@@ -55,7 +67,14 @@ public static class KoalaInteractiveWin32 {
 }
 "@
 
-$process = Get-Process | Where-Object { $_.MainWindowTitle -eq $WindowTitle } | Select-Object -First 1
+# Keep GetWindowRect, input coordinates, and PrintWindow bitmap dimensions in the
+# same physical-pixel coordinate space on mixed-DPI desktops.
+[KoalaInteractiveWin32]::SetProcessDpiAwarenessContext([IntPtr]::new(-4)) | Out-Null
+
+$process = Get-Process -Id $ProcessId -ErrorAction SilentlyContinue | Select-Object -First 1
+if ($null -eq $process -or $process.MainWindowHandle -eq [IntPtr]::Zero) {
+	$process = Get-Process | Where-Object { $_.MainWindowTitle -eq $WindowTitle } | Select-Object -First 1
+}
 if ($null -eq $process) {
 	$process = Get-Process -Name 'Godot_v4.7.1-stable_win64' -ErrorAction SilentlyContinue | Sort-Object StartTime -Descending | Select-Object -First 1
 }
@@ -107,10 +126,23 @@ Start-Sleep -Milliseconds $WaitMilliseconds
 
 $windowRect = New-Object KoalaInteractiveWin32+RECT
 if (-not [KoalaInteractiveWin32]::GetWindowRect($windowHandle, [ref]$windowRect)) {
-    throw "WINDOW_RECT_FAILED"
+    # Godot may replace the native HWND while switching transparent presentation
+    # properties. Resolve the current visible top-level window before failing.
+    $windowHandle = [KoalaInteractiveWin32]::FindWindowForProcess([uint32]$process.Id)
+    if ($windowHandle -eq [IntPtr]::Zero -or -not [KoalaInteractiveWin32]::GetWindowRect($windowHandle, [ref]$windowRect)) {
+        throw "WINDOW_RECT_FAILED"
+    }
 }
 $width = $windowRect.Right - $windowRect.Left
 $height = $windowRect.Bottom - $windowRect.Top
+$windowDpi = [KoalaInteractiveWin32]::GetDpiForWindow($windowHandle)
+# The review PowerShell host returns virtualized window bounds while
+# PrintWindow renders device pixels, so expand by the window DPI.
+if ($windowDpi -gt 96) {
+    $dpiScale = [double]$windowDpi / 96.0
+    $width = [int][Math]::Round($width * $dpiScale)
+    $height = [int][Math]::Round($height * $dpiScale)
+}
 if ($width -le 0 -or $height -le 0) {
     throw "WINDOW_SIZE_INVALID: ${width}x${height}"
 }
@@ -131,7 +163,6 @@ try {
     else {
         $graphics.CopyFromScreen($windowRect.Left, $windowRect.Top, 0, 0, $bitmap.Size, [System.Drawing.CopyPixelOperation]::SourceCopy)
     }
-    $resolved = [IO.Path]::GetFullPath($OutputPath)
     New-Item -ItemType Directory -Path (Split-Path -Parent $resolved) -Force | Out-Null
     $bitmap.Save($resolved, [System.Drawing.Imaging.ImageFormat]::Png)
     $captureMode = if ($PrintWindow) { "PrintWindow" } else { "CopyFromScreen" }

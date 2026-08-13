@@ -57,7 +57,9 @@ func apply_mode(mode: int, requested_placement: OverlayPlacement) -> OverlayAppl
 		return guard
 	var placement := requested_placement.duplicate_value()
 	placement.mode = mode
-	if placement.size.x <= 0 or placement.size.y <= 0:
+	if mode != WindowPresentationMode.Value.EXPANDED:
+		placement.size = WindowPresentationMode.default_size(mode)
+	elif placement.size.x <= 0 or placement.size.y <= 0:
 		placement.size = WindowPresentationMode.default_size(mode)
 	placement = sanitize_placement(placement)
 

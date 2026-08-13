@@ -109,7 +109,7 @@ func advance(state: Dictionary, accepted_seconds: int, observed_unix: int, obser
 		events.append("egg_hatched")
 		summary.hatched = true
 	if bool(result.get("hatched", false)) and accepted > 0:
-		_advance_care(result, accepted, start_unix, logical_end, catalog, events, summary)
+		_advance_care(result, accepted, logical_end, catalog, events, summary)
 	var previous_unix := int(result.get("current_simulation_unix", observed_unix))
 	var next_unix := maxi(previous_unix, observed_unix)
 	result.current_simulation_unix = next_unix
@@ -132,6 +132,7 @@ func apply_command(state: Dictionary, command: Dictionary, now_unix: int, now_te
 			result.hatch_due_unix = now_unix
 			var completed := advance(result, 0, now_unix, now_text, catalog)
 			return completed
+		return _command_success(result, [])
 	if command_name == "set_nickname":
 		var nickname_result := validate_nickname(command.get("nickname", ""))
 		if not nickname_result.ok:
@@ -141,6 +142,8 @@ func apply_command(state: Dictionary, command: Dictionary, now_unix: int, now_te
 		return _command_success(result, ["nickname_changed"])
 	if not bool(result.get("hatched", false)):
 		return _failure("EGG_NOT_HATCHED", "This action is available after hatching")
+	if command_name == "train" and command.has("input_bps") and not _is_finite_number(command.input_bps):
+		return _failure("INVALID_COMMAND_VALUE", "input_bps must be a finite number")
 	match command_name:
 		"feed":
 			_apply_food(result, command, now_unix, now_text, catalog, events, summary)
@@ -160,6 +163,8 @@ func apply_command(state: Dictionary, command: Dictionary, now_unix: int, now_te
 			_force_sickness(result, now_unix, now_text, catalog, events)
 		_:
 			return _failure("UNKNOWN_COMMAND", "Unknown pet command: %s" % command_name)
+	if events.is_empty():
+		return _failure("COMMAND_NOT_APPLICABLE", "Pet command cannot change the current state: %s" % command_name)
 	result.revision = int(result.get("revision", 0)) + 1
 	var previous_unix := int(result.get("current_simulation_unix", now_unix))
 	var next_unix := maxi(previous_unix, now_unix)
@@ -183,7 +188,7 @@ func validate_nickname(value: Variant) -> Dictionary:
 	return {"ok": true, "nickname": nickname}
 
 
-func _advance_care(state: Dictionary, seconds: int, start_unix: int, end_unix: int, catalog: Dictionary, events: Array, summary: Dictionary) -> void:
+func _advance_care(state: Dictionary, seconds: int, end_unix: int, catalog: Dictionary, events: Array, summary: Dictionary) -> void:
 	var profile: Dictionary = _definition(catalog, state.care_profile_id)
 	if profile.is_empty():
 		return
@@ -414,6 +419,10 @@ func _apply_training(state: Dictionary, command: Dictionary, now_unix: int, now_
 	state.aggregate.training_outcomes[grade] = int(state.aggregate.training_outcomes.get(grade, 0)) + 1
 	_record_event(state, "training", now_unix, now_text, {"activity_id": activity_id, "grade": grade, "input_bps": input_bps})
 	events.append("training")
+
+
+func _is_finite_number(value: Variant) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value))
 
 
 func _apply_call_resolution(state: Dictionary, command: Dictionary, now_unix: int, now_text: String, events: Array) -> void:

@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/move.schema.json","id":"koalapet.base:water_screen","display_name_key":"move.water_screen.name","power":2,"energy_cost":1,"accuracy_bps":9600,"tags":["guard"],"effect":{"kind":"guard","amount":3}}

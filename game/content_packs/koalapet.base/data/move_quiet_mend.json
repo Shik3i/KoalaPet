@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/move.schema.json","id":"koalapet.base:quiet_mend","display_name_key":"move.quiet_mend.name","power":4,"energy_cost":2,"accuracy_bps":9000,"tags":["recovery"],"effect":{"kind":"heal"}}

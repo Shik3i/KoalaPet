@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/item.schema.json","id":"koalapet.base:restorative_wrap","display_name_key":"item.restorative_wrap.name","category":"medicine","baseline_available":true,"effects":{},"max_stack":99,"use":{"kind":"injury_treatment"}}

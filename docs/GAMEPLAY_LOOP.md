@@ -6,10 +6,11 @@
 2. Hatch and name one pet instance.
 3. Observe attention calls and rhythms rather than manage every value constantly.
 4. Feed, clean, rest, treat, train, play, and respond to behavior.
-5. Take short battles that affect experience, history, win ratio, injuries, and possible evolution inputs.
-6. Reach a branching lifecycle transition based on declarative history.
+5. Reach an automatic branching lifecycle transition based on declarative care/training history.
+6. Take short stance-based battles that affect experience, history, win ratio, drops, injuries, and possible evolution inputs.
+7. Enter the first dungeon, make one event choice, survive the boss, and earn future habitat rewards.
 
-The current Milestone 3 slice implements steps 1–4 for one pet, plus deterministic save/reload, bounded offline progress, illness/treatment, and a training activity. Battles, evolution, dungeons, and expansion systems remain future milestones.
+The current Milestone 4 slice implements steps 1–7 for one pet, plus deterministic save/reload, bounded offline progress, pending safe-point evolution, injury treatment/recovery, and codex/reward records. Habitat editing, farm/residents, economy, and trading remain future milestones.
 
 Basic food, cleaning, sleep, and basic treatment remain available without currency. Premium consumables and convenience may use progression resources.
 

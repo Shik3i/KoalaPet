@@ -297,6 +297,7 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
             require_reference(document, "$.animation_profile_id", data.get("animation_profile_id"), {"animation-profile.schema.json"}, by_id, report)
             if "care_profile_id" in data:
                 require_reference(document, "$.care_profile_id", data.get("care_profile_id"), {"care-profile.schema.json"}, by_id, report)
+            require_many(document, "$.move_ids", data.get("move_ids"), {"move.schema.json"}, by_id, report)
         elif schema == "evolution-graph.schema.json":
             for index, rule in enumerate(data.get("rules", [])):
                 rule_id = rule.get("id")
@@ -309,6 +310,8 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
                 require_reference(document, f"$.rules[{index}].to_form_id", rule.get("to_form_id"), {"form.schema.json"}, by_id, report)
         elif schema == "enemy-encounter.schema.json":
             require_many(document, "$.move_ids", data.get("move_ids"), {"move.schema.json"}, by_id, report)
+            if "animation_profile_id" in data:
+                require_reference(document, "$.animation_profile_id", data.get("animation_profile_id"), {"animation-profile.schema.json"}, by_id, report)
             for index, drop in enumerate(data.get("drops", [])):
                 require_reference(document, f"$.drops[{index}].item_id", drop.get("item_id"), {"item.schema.json"}, by_id, report)
         elif schema == "dungeon.schema.json":
@@ -316,6 +319,13 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
             require_reference(document, "$.boss_encounter_id", data.get("boss_encounter_id"), {"enemy-encounter.schema.json"}, by_id, report)
             require_many(document, "$.reward_item_ids", data.get("reward_item_ids"), {"item.schema.json"}, by_id, report)
             require_many(document, "$.unlock_ids", data.get("unlock_ids"), {"habitat-theme.schema.json", "feature-gate.schema.json"}, by_id, report)
+            if "prerequisite_gate_id" in data:
+                require_reference(document, "$.prerequisite_gate_id", data.get("prerequisite_gate_id"), {"feature-gate.schema.json"}, by_id, report)
+            if "boss_flag_id" in data:
+                require_reference(document, "$.boss_flag_id", data.get("boss_flag_id"), {"feature-gate.schema.json"}, by_id, report)
+            for index, node in enumerate(data.get("nodes", [])):
+                if isinstance(node, dict) and "encounter_id" in node:
+                    require_reference(document, f"$.nodes[{index}].encounter_id", node.get("encounter_id"), {"enemy-encounter.schema.json"}, by_id, report)
         elif schema == "habitat-theme.schema.json":
             require_many(document, "$.furniture_ids", data.get("furniture_ids"), {"furniture-prop.schema.json"}, by_id, report)
             require_reference(document, "$.unlock_gate_id", data.get("unlock_gate_id"), {"feature-gate.schema.json"}, by_id, report)
@@ -324,6 +334,12 @@ def validate_cross_references(packs: List[Tuple[Path, Dict[str, Any]]], report: 
             require_reference(document, "$.output_item_id", data.get("output_item_id"), {"item.schema.json"}, by_id, report)
         elif schema == "ailment.schema.json":
             require_reference(document, "$.treatment_item_id", data.get("treatment_item_id"), {"item.schema.json"}, by_id, report)
+        elif schema == "injury.schema.json":
+            require_reference(document, "$.treatment_item_id", data.get("treatment_item_id"), {"item.schema.json"}, by_id, report)
+        elif schema == "progression-balance.schema.json":
+            require_reference(document, "$.battle_gate_id", data.get("battle_gate_id"), {"feature-gate.schema.json"}, by_id, report)
+            require_reference(document, "$.dungeon_gate_id", data.get("dungeon_gate_id"), {"feature-gate.schema.json"}, by_id, report)
+            require_many(document, "$.injury_ids", data.get("injury_ids"), {"injury.schema.json"}, by_id, report)
 
         manifest = manifests[document.pack_root]
         if schema == "animation-profile.schema.json":

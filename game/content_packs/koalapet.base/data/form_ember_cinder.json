@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:ember_cinder_juvenile",
+  "family_id": "koalapet.base:ember_family",
+  "display_name_key": "form.ember_cinder.name",
+  "stage": "juvenile",
+  "animation_profile_id": "koalapet.base:ember_cinder_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 10, "effort": 5, "power": 9, "defense": 3, "speed": 4, "focus": 3},
+  "traits": ["cinder_core", "risk_taker", "boss_breaker"],
+  "move_ids": ["koalapet.base:ember_flicker", "koalapet.base:flare_step", "koalapet.base:bramble_crash"]
+}

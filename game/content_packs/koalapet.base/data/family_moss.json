@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../schemas/species-family.schema.json",
+  "id": "koalapet.base:moss_family",
+  "display_name_key": "family.moss.name",
+  "form_ids": ["koalapet.base:moss_hatchling", "koalapet.base:moss_bloom_juvenile", "koalapet.base:moss_bracken_juvenile"],
+  "evolution_graph_id": "koalapet.base:starter_future_paths"
+}

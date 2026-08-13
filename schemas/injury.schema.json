@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koalapet.invalid/schemas/0.1/injury.schema.json",
+  "title": "Injury 0.1",
+  "type": "object",
+  "required": ["id", "display_name_key", "treatment_item_id", "recovery_seconds", "blocks_combat"],
+  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "display_name_key": {"type": "string"}, "treatment_item_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "recovery_seconds": {"type": "integer", "minimum": 1}, "blocks_combat": {"type": "boolean"}},
+  "additionalProperties": false
+}

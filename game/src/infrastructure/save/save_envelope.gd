@@ -1,7 +1,7 @@
 class_name SaveEnvelope
 extends RefCounted
 
-const CURRENT_VERSION := 2
+const CURRENT_VERSION := 3
 
 
 static func create(clock: SimulationClock, content_snapshot: Dictionary) -> Dictionary:

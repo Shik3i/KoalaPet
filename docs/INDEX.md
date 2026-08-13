@@ -38,6 +38,8 @@
 - [Windows overlay spike report](spikes/WINDOWS_OVERLAY_SPIKE.md)
 - [Windows overlay evidence](evidence/windows-overlay/README.md)
 - [Prompt 3.5 interactive product review](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md)
+- [Prompt 4 execution record](prompts/PROMPT_004_BRANCHING_EVOLUTION_BATTLES_DUNGEON.md)
+- [Milestone 4 gameplay evidence](evidence/milestone4/README.md)
 - [macOS overlay validation report](spikes/MACOS_OVERLAY_SPIKE.md)
 - [macOS overlay evidence](evidence/macos-overlay/README.md)
 
@@ -46,6 +48,7 @@
 - [Accepted ADRs](adr/README.md)
 - [Proposed Windows adapter ADR](adr/proposals/0010-windows-desktop-overlay-adapter.md) — not accepted; gated on Windows evidence
 - [Accepted runtime foundation ADRs](adr/README.md) — deterministic content, time semantics, save/migration/quarantine
+- [Accepted Milestone 4 ADRs](adr/README.md) — deterministic evolution, battle sessions, dungeon runs, and reward idempotency
 - [Historical prompts](prompts/README.md)
 
 Authority: `PROJECT_CANON.md` → accepted ADRs → detailed system documents → `ROADMAP.md` → historical prompts and temporary notes.

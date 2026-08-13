@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/feature-gate.schema.json","id":"koalapet.base:dungeon_gate","feature":"koalapet.base:dungeon","presentation_before_unlock":"hidden","reward_ids":["koalapet.base:dungeon"],"condition":{"fact":"battle_wins","operator":"gte","value":2}}

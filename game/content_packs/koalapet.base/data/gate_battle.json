@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/feature-gate.schema.json","id":"koalapet.base:battle_gate","feature":"koalapet.base:battle","presentation_before_unlock":"hidden","reward_ids":["koalapet.base:battle"],"condition":{"fact":"hatched","operator":"eq","value":true}}

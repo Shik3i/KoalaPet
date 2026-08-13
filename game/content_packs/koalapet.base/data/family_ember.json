@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../schemas/species-family.schema.json",
+  "id": "koalapet.base:ember_family",
+  "display_name_key": "family.ember.name",
+  "form_ids": ["koalapet.base:ember_hatchling", "koalapet.base:ember_dawn_juvenile", "koalapet.base:ember_cinder_juvenile"],
+  "evolution_graph_id": "koalapet.base:starter_future_paths"
+}

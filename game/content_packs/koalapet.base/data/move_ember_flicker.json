@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/move.schema.json","id":"koalapet.base:ember_flicker","display_name_key":"move.ember_flicker.name","power":6,"energy_cost":1,"accuracy_bps":8800,"tags":["aggressive"],"effect":{"kind":"damage"}}

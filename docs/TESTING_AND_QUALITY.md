@@ -17,22 +17,29 @@ Headless, macOS, API presence, synthetic geometry, and unit tests must never be 
 
 ## Milestone 2 foundation evidence
 
-- `game/tests/foundation/run_all.gd`: 99 deterministic assertions; the symlink fixture is explicitly skipped when the host cannot create links.
+- `game/tests/foundation/run_all.gd`: 101 deterministic assertions; the symlink fixture is explicitly skipped when the host cannot create links.
 - Content coverage: bundled/external common loader, stable snapshot, topology/priority, required/optional dependencies, conflicts, disabled/total-conversion policy, explicit and unauthorized overrides, skin restrictions, duplicate packs/IDs, invalid IDs/API/manifests/documents, logical diagnostics, traversal, absolute paths, unsupported media, executable payloads, symlinks, localization, and reference explanations.
 - Time coverage: normal/zero elapsed, rollback, negative drift, forward jump, cap, missing/invalid UTC, and fake wall/monotonic clocks.
-- Save coverage: v2 round trip, validated replacement, backup, malformed-primary recovery, both-invalid failure, v1 migration/idempotence, content snapshot, quarantine, raw preservation, and restoration.
+- Save coverage: v3 round trip, validated replacement, backup, malformed-primary recovery, both-invalid failure, sequential v1/v2 migration/idempotence, content snapshot, quarantine, raw preservation, and restoration.
 - Gate/bootstrap coverage: pass/fail, `all`/`any`/`not`, explanations, repeat determinism, idempotent grants, duplicate prevention, and injected platform-neutral service composition.
-- `tools/run_foundation_checks.py`: JSON parse, in-memory Python compile, Python content validation, Markdown links, mod payload/symlink scan, terminology scan, repository artifact/cache scan, Godot import, foundation tests, platform-neutral regressions, and `git diff --check`.
+- `tools/run_foundation_checks.py`: JSON parse, in-memory Python compile, Python content validation, vertical-slice asset validation, Markdown links, mod payload/symlink scan, terminology scan, repository artifact/cache scan, Godot import, foundation/pet/Milestone 4/platform tests, and `git diff --check`.
 
 Headless tests prove only platform-neutral foundation behavior. Direct Windows diagnostics now supplement them; native shell acceptance remains pending.
 
 ## Milestone 3 vertical-slice evidence
 
 - `game/tests/pet/run_all.gd`: 32 deterministic assertions covering three starters, egg state, hatch progress and timed hatching, required bindings, nickname, meal/digestion/waste/cleaning, training, sleep/wake, ailment/treatment, attention calls and missed care mistakes, bounded simulated time, all three view models, save/reload, and missing-content quarantine.
-- `tools/art_pipeline/validate_vertical_slice_assets.py`: validates every animation-referenced PNG as a readable RGBA asset with minimum 48×48 dimensions; latest result is 39 referenced assets.
+- `tools/art_pipeline/validate_vertical_slice_assets.py`: validates every animation-referenced PNG as a readable RGBA asset with minimum 48×48 dimensions; latest result is 109 referenced assets.
 - `game/src/domain/pet_simulation.gd`: pure domain transition boundary; test inputs use fixed fake time and explicit simulated seconds.
 - `game/src/app/pet_application.gd`: application/save/catalog boundary; test fixture uses a disposable local save path.
 - `game/scenes/pet_game.tscn`: headless startup smoke target. Prompt 3.5 direct Windows product evidence is catalogued in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md); screen-reader, contrast, and reduced-motion acceptance remain open.
+
+## Milestone 4 evidence
+
+- `game/tests/milestone_four/run_all.gd`: 62 deterministic assertions covering all six good/poor family routes, evidence and identity preservation, pending safe-point evolution, identical battle seeds, stance/session persistence, rounds/win/experience/history, injury/treatment, dungeon event/rest/boss flow, first-clear rewards, theme/trophy/unlock persistence, and save/reload.
+- `tools/content_validation/validate_content.py`: latest run passed with 2 packs and 86 content documents after Python schema/runtime parity checks.
+- `tools/art_pipeline/validate_vertical_slice_assets.py`: latest run passed with 109 referenced PNGs, RGBA, minimum 48×48.
+- Isolated Windows Godot gameplay review used the normal GUI client and the existing `PrintWindow` crop helper. Automatic Mossblüte evolution in Expanded mode was directly captured; native overlay, shell, tray, Alt+Tab, mixed-DPI, and accessibility acceptance were not claimed.
 
 Future quality layers:
 

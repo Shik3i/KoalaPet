@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/move.schema.json","id":"koalapet.base:steady_nudge","display_name_key":"move.steady_nudge.name","power":4,"energy_cost":1,"accuracy_bps":9400,"tags":["balanced"],"effect":{"kind":"damage"}}

@@ -2,6 +2,6 @@
   "$schema": "../../../../schemas/species-family.schema.json",
   "id": "koalapet.base:starter_triad_family",
   "display_name_key": "family.starter_triad.name",
-  "form_ids": ["koalapet.base:moss_hatchling", "koalapet.base:ember_hatchling", "koalapet.base:tide_hatchling"],
+  "form_ids": ["koalapet.base:moss_hatchling", "koalapet.base:ember_hatchling", "koalapet.base:tide_hatchling", "koalapet.base:moss_bloom_juvenile", "koalapet.base:moss_bracken_juvenile", "koalapet.base:ember_dawn_juvenile", "koalapet.base:ember_cinder_juvenile", "koalapet.base:tide_glass_juvenile", "koalapet.base:tide_reed_juvenile"],
   "evolution_graph_id": "koalapet.base:starter_future_paths"
 }

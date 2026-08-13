@@ -261,12 +261,18 @@ func _show_pet(model: Dictionary) -> void:
 	state_line.text = _state_line(model)
 	state_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(state_line)
+	if mode == MODE_EXPANDED:
+		_show_expanded(model)
 	if mode != MODE_MINIMAL:
 		_show_care(model)
 		_show_actions(model)
 		_show_nickname()
-	if mode == MODE_EXPANDED:
-		_show_expanded(model)
+	else:
+		var local_notice := Label.new()
+		local_notice.text = _minimal_notice(model)
+		local_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		local_notice.add_theme_color_override("font_color", Color("#ffe5a1"))
+		content.add_child(local_notice)
 
 
 func _show_care(model: Dictionary) -> void:
@@ -295,9 +301,15 @@ func _show_actions(model: Dictionary) -> void:
 	_add_action(actions, application.text("ui.train", "Train", locale), _train)
 	_add_action(actions, application.text("ui.medicine", "Medicine", locale), _medicine)
 	_add_action(actions, application.text("ui.sleep" if not model.sleeping else "ui.wake", "Sleep" if not model.sleeping else "Wake", locale), _sleep_or_wake.bind(bool(model.get("sleeping", false))))
+	if not model.get("injury", {}).is_empty():
+		_add_action(actions, application.text("ui.treat_injury", "Treat injury", locale), _treat_injury)
 	var calls: Array = model.get("open_calls", [])
 	if not calls.is_empty():
 		_add_action(actions, application.text("ui.resolve", "Resolve", locale), _resolve_call.bind(str(calls[0].get("call_id", ""))))
+	if bool(model.get("battle_unlocked", false)):
+		_add_action(actions, application.text("ui.next_round", "Run round", locale) if not model.get("active_battle", {}).is_empty() else application.text("ui.start_battle", "Start battle", locale), _battle_round if not model.get("active_battle", {}).is_empty() else _start_battle)
+	if bool(model.get("dungeon_unlocked", false)):
+		_add_action(actions, application.text("ui.next_node", "Next stage", locale) if not model.get("active_dungeon_run", {}).is_empty() else application.text("ui.start_dungeon", "Start dungeon", locale), _dungeon_next if not model.get("active_dungeon_run", {}).is_empty() else _start_dungeon)
 
 
 func _show_nickname() -> void:
@@ -317,6 +329,30 @@ func _show_nickname() -> void:
 
 
 func _show_expanded(model: Dictionary) -> void:
+	var progress := Label.new()
+	progress.text = "%s %d  ·  %s %d/%d" % [application.text("ui.level", "Level", locale), int(model.get("level", 1)), application.text("ui.experience", "Experience", locale), int(model.get("experience", 0)), int(model.get("experience_next", 0))]
+	content.add_child(progress)
+	var adventure := Label.new()
+	adventure.text = _adventure_summary(model)
+	adventure.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(adventure)
+	if not model.get("pending_evolution", {}).is_empty():
+		var pending := Label.new()
+		pending.text = application.text("ui.pending_evolution", "Evolution is waiting for a safe moment", locale)
+		pending.add_theme_color_override("font_color", Color("#ffe5a1"))
+		content.add_child(pending)
+	var route := Label.new()
+	var discovered: Array = model.get("discovered_forms", [])
+	var route_names: Array[String] = []
+	for form_id in discovered:
+		route_names.append(application.get_display_name(str(form_id), locale))
+	route.text = application.text("ui.discovered_route", "Discovered route", locale) + ": " + ", ".join(route_names)
+	route.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(route)
+	var inventory := Label.new()
+	inventory.text = "%s: %s" % [application.text("ui.reward", "Reward", locale), _inventory_text(model.get("inventory", {}))]
+	inventory.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(inventory)
 	var aggregate: Dictionary = model.get("aggregate", {})
 	var summary := Label.new()
 	summary.text = "%s: %d   %s: %d   %s: %d   %s: %d   %s: %d" % [application.text("ui.feed", "Feed", locale), int(aggregate.get("feed_count", 0)), application.text("ui.treat", "Treat", locale), int(aggregate.get("treat_count", 0)), application.text("ui.train", "Train", locale), int(aggregate.get("training_count", 0)), application.text("ui.waste", "Waste cleaned", locale), int(aggregate.get("waste_cleaned", 0)), application.text("ui.care_mistakes", "Care mistakes", locale), int(aggregate.get("care_mistakes", 0))]
@@ -348,9 +384,49 @@ func _state_line(model: Dictionary) -> String:
 		result.append(application.text("ui.state.sleeping", "Sleeping", locale))
 	if bool(model.get("sickness", false)):
 		result.append(application.text("ui.state.sick", "Needs medicine", locale))
+	if not model.get("injury", {}).is_empty():
+		result.append(application.text("ui.injury", "Injury", locale).replace("{name}", application.get_display_name(str(model.injury.get("injury_id", "")), locale)))
+	if not model.get("active_battle", {}).is_empty():
+		var battle: Dictionary = model.get("active_battle", {})
+		result.append("%s · R%d · HP %d/%d" % [application.text("ui.battle", "Battle", locale), int(battle.get("current_round", 0)) + 1, int(battle.get("pet_transient_hp", 0)), int(battle.get("opponent_transient_hp", 0))])
+	if not model.get("active_dungeon_run", {}).is_empty():
+		var dungeon: Dictionary = model.get("active_dungeon_run", {})
+		result.append("%s · %d" % [application.text("ui.dungeon", "Dungeon", locale), int(dungeon.get("current_node", 0)) + 1])
 	if result.is_empty():
 		result.append(application.text("ui.state.ready", "Ready for care", locale))
 	return " · ".join(result)
+
+
+func _minimal_notice(model: Dictionary) -> String:
+	if not model.get("injury", {}).is_empty():
+		return "! " + application.text("ui.injury", "Injury", locale).replace("{name}", application.get_display_name(str(model.injury.get("injury_id", "")), locale))
+	if not model.get("pending_evolution", {}).is_empty():
+		return "✦ " + application.text("ui.evolution", "Evolution", locale)
+	if not model.get("active_battle", {}).is_empty():
+		return "◆ " + application.text("ui.battle", "Battle", locale)
+	if not model.get("active_dungeon_run", {}).is_empty():
+		return "◇ " + application.text("ui.dungeon", "Dungeon", locale)
+	return ""
+
+
+func _adventure_summary(model: Dictionary) -> String:
+	var lines: Array[String] = []
+	var battle: Dictionary = model.get("battle_history", {})
+	lines.append("%s: %d  ·  %s %d/%d" % [application.text("ui.battle", "Battle", locale), int(battle.get("battle_count", 0)), application.text("ui.battle_win", "Wins", locale), int(battle.get("wins", 0)), int(battle.get("losses", 0))])
+	var result: Dictionary = model.get("last_battle_result", {})
+	if not result.is_empty():
+		lines.append("%s: %s  ·  XP +%d" % [application.text("ui.battle", "Battle", locale), str(result.get("status", "")), int(result.get("experience", 0))])
+	var run: Dictionary = model.get("active_dungeon_run", {})
+	if not run.is_empty():
+		lines.append("%s: %d  ·  HP %d%%" % [application.text("ui.dungeon", "Dungeon", locale), int(run.get("current_node", 0)) + 1, int(run.get("pet_transient_hp", 0))])
+	return "\n".join(lines)
+
+
+func _inventory_text(inventory: Dictionary) -> String:
+	var values: Array[String] = []
+	for item_id in inventory:
+		values.append("%s x%d" % [application.get_display_name(str(item_id), locale), int(inventory[item_id])])
+	return ", ".join(values) if not values.is_empty() else application.text("ui.offline_none", "None", locale)
 
 
 func _history_text(history: Array) -> String:
@@ -404,6 +480,57 @@ func _train() -> void:
 
 func _medicine() -> void:
 	var result := application.command({"type": "medicine", "item_id": application.find_item_by_kind("medicine")})
+	_refresh(_command_status(result))
+
+
+func _treat_injury() -> void:
+	var result := application.command({"type": "treat_injury", "item_id": application.find_item_by_kind("injury_treatment")})
+	_refresh(_command_status(result))
+
+
+func _start_battle() -> void:
+	var encounters := application.get_encounters()
+	if encounters.is_empty():
+		return
+	var result := application.command({"type": "start_battle", "encounter_id": str(encounters[0].get("id", "")), "stance": "balanced"})
+	_refresh(_command_status(result))
+
+
+func _battle_round() -> void:
+	var result := application.command({"type": "battle_round"})
+	_refresh(_command_status(result))
+
+
+func _battle_resolve(outcome: String) -> void:
+	var result := application.command({"type": "battle_resolve", "outcome": outcome})
+	_refresh(_command_status(result))
+
+
+func _start_dungeon() -> void:
+	var dungeons := application.get_dungeons()
+	if dungeons.is_empty():
+		return
+	var result := application.command({"type": "start_dungeon", "dungeon_id": str(dungeons[0].get("id", ""))})
+	_refresh(_command_status(result))
+
+
+func _dungeon_next() -> void:
+	var model := application.get_view_model(MODE_SMALL, locale)
+	var result: Dictionary
+	if not model.get("active_battle", {}).is_empty():
+		result = application.command({"type": "battle_round"})
+	else:
+		result = application.command({"type": "dungeon_next"})
+	_refresh(_command_status(result))
+
+
+func _run_poor_route_review() -> void:
+	for cycle in range(2):
+		application.command({"type": "force_sickness"})
+		application.advance_simulated(1)
+		application.advance_simulated(7200)
+		application.command({"type": "medicine", "item_id": application.find_item_by_kind("medicine")})
+	var result := application.advance_simulated(60)
 	_refresh(_command_status(result))
 
 
@@ -499,6 +626,18 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_F12:
 			if show_dev_tools and not application.is_hatched() and application.has_pet():
 				_complete_hatch()
+		KEY_B:
+			if show_dev_tools and application.is_hatched():
+				_start_battle()
+		KEY_N:
+			if show_dev_tools and application.is_hatched():
+				_battle_round()
+		KEY_D:
+			if show_dev_tools and application.is_hatched():
+				_start_dungeon()
+		KEY_J:
+			if show_dev_tools and application.is_hatched():
+				_dungeon_next()
 
 
 func _argument_value(args: PackedStringArray, prefix: String, fallback: String) -> String:
@@ -537,8 +676,29 @@ func _run_review_actions(actions: PackedStringArray) -> void:
 				_force_sickness()
 			"medicine":
 				_medicine()
+			"injury_treatment":
+				_treat_injury()
 			"hour":
 				_advance_hour()
+			"battle":
+				_start_battle()
+			"round":
+				_battle_round()
+			"win":
+				_battle_resolve("win")
+			"loss":
+				_battle_resolve("loss")
+			"dungeon":
+				_start_dungeon()
+			"dungeon_event":
+				var run: Dictionary = application.get_view_model(MODE_SMALL, locale).get("active_dungeon_run", {})
+				if not run.is_empty():
+					application.command({"type": "dungeon_choice", "choice_id": "quiet_pool"})
+					_refresh()
+			"poor:tide":
+				_run_poor_route_review()
+			"node":
+				_dungeon_next()
 			"resolve":
 				var calls: Array = application.get_view_model(MODE_SMALL, locale).get("open_calls", [])
 				if not calls.is_empty():

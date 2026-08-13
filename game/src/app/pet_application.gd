@@ -8,6 +8,9 @@ var pet_state: Dictionary = {}
 var last_offline_result: Dictionary = {}
 var last_command_result: Dictionary = {}
 var initialized := false
+var evolution_resolver := EvolutionResolver.new()
+var battle_service := BattleService.new()
+var dungeon_service := DungeonService.new()
 
 
 func _init(config: Dictionary = {}, injected_clock: SimulationClock = null) -> void:
@@ -21,11 +24,12 @@ func initialize() -> Dictionary:
 	_refresh_catalog()
 	var records: Array = foundation.current_save.simulation_state.get("records", [])
 	if not records.is_empty() and records[0] is Dictionary:
-		pet_state = records[0].duplicate(true)
+		pet_state = _normalize_pet_state(records[0])
 		_sync_now()
 	else:
 		pet_state = {}
 	initialized = true
+	_refresh_progression()
 	return result.merged({"pet_ready": not pet_state.is_empty(), "starter_count": get_starter_eggs().size()})
 
 
@@ -78,10 +82,52 @@ func command(command_data: Dictionary) -> Dictionary:
 	_sync_now()
 	var now_unix := foundation.clock.utc_now_unix_seconds()
 	var now_text := foundation.clock.utc_now_text()
-	last_command_result = simulation.apply_command(pet_state, command_data, now_unix, now_text, catalog)
+	var command_type := str(command_data.get("type", ""))
+	if command_type in ["start_battle", "battle_stance", "battle_round", "battle_resolve", "treat_injury"] and not is_feature_unlocked("koalapet.base:battle"):
+		return _failure("FEATURE_LOCKED", "Battle is not unlocked yet")
+	if command_type in ["start_dungeon", "dungeon_next", "dungeon_choice", "dungeon_abandon"] and not is_feature_unlocked("koalapet.base:dungeon"):
+		return _failure("FEATURE_LOCKED", "The dungeon is not unlocked yet")
+	var adventure_time := int(command_data.get("adventure_seconds", 0))
+	if adventure_time > 0:
+		_advance_internal(adventure_time, false)
+	match command_type:
+		"start_battle":
+			last_command_result = battle_service.start(pet_state, str(command_data.get("encounter_id", "")), catalog, now_unix, now_text, str(command_data.get("stance", "balanced")))
+		"battle_stance":
+			last_command_result = battle_service.set_stance(pet_state, str(command_data.get("stance", "balanced")))
+		"battle_round":
+			last_command_result = battle_service.advance_round(pet_state, catalog, now_unix, now_text)
+		"battle_resolve":
+			last_command_result = battle_service.resolve(pet_state, catalog, str(command_data.get("outcome", "draw")), now_unix, now_text)
+		"treat_injury":
+			last_command_result = battle_service.treat_injury(pet_state, catalog, now_unix, now_text, str(command_data.get("item_id", find_item_by_kind("injury_treatment"))))
+		"start_dungeon":
+			last_command_result = dungeon_service.start(pet_state, str(command_data.get("dungeon_id", "")), catalog, now_unix, now_text)
+		"dungeon_next":
+			last_command_result = dungeon_service.resolve_current_node(pet_state, catalog, now_unix, now_text)
+		"dungeon_choice":
+			last_command_result = dungeon_service.choose_event(pet_state, catalog, str(command_data.get("choice_id", "")), now_unix, now_text)
+		"dungeon_abandon":
+			last_command_result = dungeon_service.abandon(pet_state, now_unix, now_text)
+		"force_evolution":
+			last_command_result = _force_evolution(str(command_data.get("rule_id", "")), now_unix, now_text)
+		"resolve_pending_evolution":
+			last_command_result = _apply_evolution(now_unix, now_text)
+		_:
+			last_command_result = simulation.apply_command(pet_state, command_data, now_unix, now_text, catalog)
 	if not last_command_result.ok:
 		return last_command_result
 	pet_state = last_command_result.state
+	var dungeon_post := dungeon_service.after_battle(pet_state, catalog, now_unix, now_text)
+	if dungeon_post.ok and bool(dungeon_post.get("changed", true)) and not dungeon_post.get("state", {}).is_empty():
+		pet_state = dungeon_post.state
+		last_command_result.summary["dungeon_follow_up"] = dungeon_post.summary
+	var evolution := _apply_evolution(now_unix, now_text)
+	if evolution.ok:
+		pet_state = evolution.state
+		if evolution.get("changed", false):
+			last_command_result.summary["evolution"] = evolution.record
+	_refresh_progression()
 	var save_result := _write_save()
 	if not save_result.ok:
 		return save_result
@@ -91,12 +137,14 @@ func command(command_data: Dictionary) -> Dictionary:
 func advance_simulated(seconds: int) -> Dictionary:
 	if pet_state.is_empty():
 		return _failure("NO_PET", "Select a starter egg first")
-	var accepted := maxi(0, seconds)
-	var start_unix := int(pet_state.get("current_simulation_unix", foundation.clock.utc_now_unix_seconds()))
-	var end_unix := start_unix + accepted
-	var result := simulation.advance(pet_state, accepted, end_unix, Time.get_datetime_string_from_unix_time(end_unix, false) + "Z", catalog)
+	var result := _advance_internal(maxi(0, seconds), true)
 	if result.ok:
-		pet_state = result.state
+		var evolution := _apply_evolution(int(pet_state.get("current_simulation_unix", 0)), str(pet_state.get("current_simulation_utc", "")))
+		if evolution.ok:
+			pet_state = evolution.state
+			if evolution.get("changed", false):
+				result.summary["evolution"] = evolution.record
+		_refresh_progression()
 		var save_result := _write_save()
 		if not save_result.ok:
 			return save_result
@@ -148,6 +196,43 @@ func find_item_by_kind(kind: String) -> String:
 
 func get_training_activity_id() -> String:
 	return str(_first_document("training-activity").get("id", ""))
+
+
+func is_feature_unlocked(feature_id: String) -> bool:
+	if foundation == null or foundation.feature_gate_service == null:
+		return false
+	var gate_id := _gate_for_feature(feature_id)
+	if gate_id.is_empty():
+		return false
+	var ledger := UnlockLedger.new(foundation.current_save.get("feature_gate_state", {}).get("unlock_ledger", {}))
+	if ledger.has_reward(feature_id):
+		return true
+	return bool(foundation.feature_gate_service.evaluate_gate(gate_id, ProgressionFacts.new(_progression_facts())).get("passed", false))
+
+
+func get_evolution_evaluation() -> Dictionary:
+	return evolution_resolver.evaluate(pet_state, catalog) if not pet_state.is_empty() else {}
+
+
+func get_encounters() -> Array[Dictionary]:
+	return _documents_of_kind("enemy-encounter")
+
+
+func get_dungeons() -> Array[Dictionary]:
+	return _documents_of_kind("dungeon")
+
+
+func get_asset_path_for_content(content_id: String, animation_name := "idle") -> String:
+	var record := _record(content_id)
+	if record.is_empty():
+		return ""
+	var data: Dictionary = record.data
+	var animation_id := str(data.get("animation_profile_id", ""))
+	if animation_id.is_empty():
+		return ""
+	var animation := _record(animation_id)
+	var entry: Dictionary = animation.get("data", {}).get("world_animations", {}).get(animation_name, animation.get("data", {}).get("world_animations", {}).get("idle", {}))
+	return str(animation.get("pack_root", "")).path_join(str(entry.get("asset", "")).trim_prefix("res://"))
 
 
 func get_asset_path(animation_name := "idle", egg := false) -> String:
@@ -203,11 +288,30 @@ func get_view_model(mode := "small", locale := "de") -> Dictionary:
 		"aggregate": pet_state.get("aggregate", {}).duplicate(true),
 		"history": pet_state.get("history", []).duplicate(true),
 		"offline": last_offline_result.duplicate(true),
+		"form_id": form_id,
+		"stage": str(pet_state.get("stage", "hatchling")),
+		"level": int(pet_state.get("level", 1)),
+		"experience": int(pet_state.get("experience", 0)),
+		"experience_next": _next_level_experience(),
+		"pending_evolution": pet_state.get("pending_evolution", {}).duplicate(true),
+		"evolution": get_evolution_evaluation(),
+		"active_battle": pet_state.get("active_battle", {}).duplicate(true),
+		"last_battle_result": pet_state.get("last_battle_result", {}).duplicate(true),
+		"battle_history": pet_state.get("battle_history_summary", {}).duplicate(true),
+		"injury": pet_state.get("injury", {}).duplicate(true),
+		"active_dungeon_run": pet_state.get("active_dungeon_run", {}).duplicate(true),
+		"dungeon_history": pet_state.get("dungeon_history", []).duplicate(true),
+		"inventory": pet_state.get("inventory", {}).duplicate(true),
+		"unlock_ids": pet_state.get("unlock_ids", []).duplicate(true),
+		"discovered_forms": pet_state.get("discovered_forms", []).duplicate(true),
+		"codex": pet_state.get("codex", {}).duplicate(true),
+		"battle_unlocked": is_feature_unlocked("koalapet.base:battle"),
+		"dungeon_unlocked": is_feature_unlocked("koalapet.base:dungeon"),
 	}
 	if mode == "minimal":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result}
 	if mode == "small":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0)}}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "stage": model.stage, "level": model.level, "experience": model.experience, "experience_next": model.experience_next, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0)}, "battle_unlocked": model.battle_unlocked, "dungeon_unlocked": model.dungeon_unlocked, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result}
 	return model
 
 
@@ -238,7 +342,124 @@ func _sync_now() -> void:
 	var result := simulation.advance(pet_state, accepted, now_unix, now_text, catalog)
 	if result.ok:
 		pet_state = result.state
+		pet_state.aggregate.offline_stage_seconds = int(pet_state.aggregate.get("offline_stage_seconds", 0)) + accepted
+		var recovery := battle_service.recover_injury(pet_state, accepted, now_unix, now_text)
+		if recovery.ok:
+			pet_state = recovery.state
+		var evolution := _apply_evolution(now_unix, now_text)
+		if evolution.ok:
+			pet_state = evolution.state
 		_write_save()
+
+
+func _advance_internal(seconds: int, offline: bool) -> Dictionary:
+	var accepted := maxi(0, seconds)
+	var start_unix := int(pet_state.get("current_simulation_unix", foundation.clock.utc_now_unix_seconds()))
+	var end_unix := start_unix + accepted
+	var end_text := Time.get_datetime_string_from_unix_time(end_unix, false) + "Z"
+	var result := simulation.advance(pet_state, accepted, end_unix, end_text, catalog)
+	if not result.ok:
+		return result
+	pet_state = result.state
+	if offline:
+		pet_state.aggregate.offline_stage_seconds = int(pet_state.aggregate.get("offline_stage_seconds", 0)) + accepted
+	var recovery := battle_service.recover_injury(pet_state, accepted, end_unix, end_text)
+	if recovery.ok:
+		pet_state = recovery.state
+	result.state = pet_state
+	return result
+
+
+func _apply_evolution(now_unix: int, now_text: String) -> Dictionary:
+	if pet_state.is_empty() or not bool(pet_state.get("hatched", false)):
+		return {"ok": true, "changed": false, "state": pet_state}
+	var result := evolution_resolver.apply_at_safe_point(pet_state, catalog, now_unix, now_text, str(foundation.content_snapshot.get("snapshot_fingerprint", "")))
+	return result
+
+
+func _force_evolution(rule_id: String, now_unix: int, now_text: String) -> Dictionary:
+	var evaluation := evolution_resolver.evaluate(pet_state, catalog)
+	if not bool(evaluation.get("eligible", false)):
+		return {"ok": false, "error_code": "EVOLUTION_NOT_ELIGIBLE", "reason": "No evolution rule is currently eligible", "evaluation": evaluation}
+	if not rule_id.is_empty() and str(evaluation.get("selected", {}).get("rule_id", "")) != rule_id:
+		for candidate in evaluation.get("candidates", []):
+			if str(candidate.get("rule_id", "")) == rule_id:
+				evaluation.selected = candidate
+				break
+	var result := evolution_resolver.apply_at_safe_point(pet_state, catalog, now_unix, now_text, str(foundation.content_snapshot.get("snapshot_fingerprint", "")), rule_id)
+	return result
+
+
+func _refresh_progression() -> void:
+	if foundation == null or foundation.feature_gate_service == null or foundation.current_save.is_empty():
+		return
+	var facts := ProgressionFacts.new(_progression_facts())
+	var ledger := UnlockLedger.new(foundation.current_save.get("feature_gate_state", {}).get("unlock_ledger", {}))
+	for gate in catalog.values():
+		if str(gate.get("schema_name", "")) != "feature-gate.schema.json":
+			continue
+		foundation.feature_gate_service.evaluate_and_grant(str(gate.id), facts, ledger)
+	foundation.current_save.feature_gate_state.unlock_ledger = ledger.snapshot()
+	foundation.current_save.progression_state.facts = facts.snapshot()
+
+
+func _progression_facts() -> Dictionary:
+	var battle: Dictionary = pet_state.get("battle_history_summary", {})
+	return {
+		"hatched": bool(pet_state.get("hatched", false)),
+		"training_count": int(pet_state.get("aggregate", {}).get("training_count", 0)),
+		"battle_count": int(battle.get("battle_count", 0)),
+		"battle_wins": int(battle.get("wins", 0)),
+		"battle_losses": int(battle.get("losses", 0)),
+		"dungeon_clears": pet_state.get("dungeon_flags", []).duplicate(true),
+		"boss_flags": pet_state.get("boss_flags", []).duplicate(true),
+		"milestone_count": 1 if bool(pet_state.get("hatched", false)) else 0,
+		"unlocked_ids": pet_state.get("unlock_ids", []).duplicate(true),
+	}
+
+
+func _gate_for_feature(feature_id: String) -> String:
+	for record in catalog.values():
+		if str(record.get("schema_name", "")) == "feature-gate.schema.json" and str(record.data.get("feature", "")) == feature_id:
+			return str(record.id)
+	return ""
+
+
+func _next_level_experience() -> int:
+	var balance := _first_document("progression-balance")
+	var thresholds: Array = balance.get("data", {}).get("level_thresholds", [0, 30, 75, 140, 230, 360])
+	var level := int(pet_state.get("level", 1))
+	return int(thresholds[level]) if level >= 0 and level < thresholds.size() else int(pet_state.get("experience", 0))
+
+
+func _documents_of_kind(kind: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for record in catalog.values():
+		if str(record.get("schema_name", "")).trim_suffix(".schema.json") == kind:
+			result.append(record.duplicate(true))
+	result.sort_custom(func(left: Dictionary, right: Dictionary) -> bool: return str(left.get("id", "")) < str(right.get("id", "")))
+	return result
+
+
+func _normalize_pet_state(raw: Dictionary) -> Dictionary:
+	var result := raw.duplicate(true)
+	var defaults := {"pet_state_version": 2, "stage": "hatchling", "traits": [], "stage_started_at_unix": int(raw.get("hatched_at_unix", raw.get("selected_at_unix", 0))), "stage_started_at_utc": str(raw.get("hatched_at_utc", raw.get("selected_at_utc", ""))), "evolution_history": [], "pending_evolution": {}, "discovered_forms": [str(raw.get("current_form_id", raw.get("definition_id", "")))], "discovered_routes": [], "battle_history_summary": {"battle_count": 0, "wins": 0, "losses": 0, "draws": 0, "current_win_streak": 0, "longest_win_streak": 0, "defeated_encounters": [], "opponent_history": []}, "experience": 0, "level": 1, "active_battle": {}, "last_battle_result": {}, "injury": {}, "inventory": {}, "used_item_ids": [], "reward_grants": {}, "unlock_ids": [], "dungeon_flags": [], "boss_flags": [], "dungeon_history": [], "active_dungeon_run": {}, "codex": {"forms": [str(raw.get("current_form_id", raw.get("definition_id", "")))], "encounters": [], "defeated_encounters": [], "dungeons": [], "bosses": []}}
+	for key in defaults:
+		if not result.has(key):
+			result[key] = defaults[key]
+	var aggregate_defaults := {"training_outcomes": {"miss": 0, "good": 0, "excellent": 0}, "event_sequence": 0, "active_stage_seconds": 0, "offline_stage_seconds": 0, "stage_seconds": 0}
+	var aggregate: Dictionary = result.get("aggregate", {})
+	aggregate.merge(aggregate_defaults, false)
+	result.aggregate = aggregate
+	var empty_defaults := {"evolution_history": [], "pending_evolution": {}, "discovered_forms": [str(result.get("current_form_id", ""))], "discovered_routes": [], "battle_history_summary": {"battle_count": 0, "wins": 0, "losses": 0, "draws": 0, "current_win_streak": 0, "longest_win_streak": 0, "defeated_encounters": [], "opponent_history": []}, "experience": 0, "level": 1, "active_battle": {}, "last_battle_result": {}, "injury": {}, "inventory": {}, "used_item_ids": [], "reward_grants": {}, "unlock_ids": [], "dungeon_flags": [], "boss_flags": [], "dungeon_history": [], "active_dungeon_run": {}, "codex": {"forms": result.get("discovered_forms", []), "encounters": [], "defeated_encounters": [], "dungeons": [], "bosses": []}}
+	for key in empty_defaults:
+		if not result.has(key):
+			result[key] = empty_defaults[key]
+	var form := _record(str(result.get("current_form_id", "")))
+	if not form.is_empty():
+		result.stage = str(form.data.get("stage", result.get("stage", "hatchling")))
+		result.traits = form.data.get("traits", result.get("traits", [])).duplicate(true)
+	return result
 
 
 func _write_save() -> Dictionary:

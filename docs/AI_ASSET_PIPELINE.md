@@ -12,3 +12,7 @@
 Each generated asset gets a provenance record containing asset ID, generation tool/model/version when known, UTC date, prompt or prompt-file reference, source files/checksums, deterministic transformation command/version, author/owner metadata, intended license, approval state, and target game paths. Secrets and private credentials never enter prompts or records.
 
 Source/mockups stay outside `game/`. Approved game-ready output enters `game/assets_generated/` through reproducible tooling. Reference mockups are not production assets without explicit rights approval.
+
+## Milestone 4 provisional batch
+
+`tools/art_pipeline/generate_milestone_four_assets.py` deterministically creates the six juvenile silhouettes/animations, three normal enemies, one boss, dungeon background/ground/node icons, battle/evolution/status/reward visuals, and trophy/icon assets under the bundled pack boundary. `tools/art_pipeline/validate_vertical_slice_assets.py` checks all 109 referenced PNGs for readable RGBA data and a minimum 48×48 size. These are development-only provisional assets; no production art-rights or final visual approval is claimed.

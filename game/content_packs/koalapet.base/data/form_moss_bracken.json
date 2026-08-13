@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:moss_bracken_juvenile",
+  "family_id": "koalapet.base:moss_family",
+  "display_name_key": "form.moss_bracken.name",
+  "stage": "juvenile",
+  "animation_profile_id": "koalapet.base:moss_bracken_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 11, "effort": 4, "power": 6, "defense": 4, "speed": 4, "focus": 3},
+  "traits": ["bramble_hide", "stubborn", "rare_forager"],
+  "move_ids": ["koalapet.base:bramble_crash", "koalapet.base:steady_nudge", "koalapet.base:leaf_guard"]
+}

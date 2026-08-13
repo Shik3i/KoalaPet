@@ -1,6 +1,6 @@
 # Modding
 
-Initial mods are versioned JSON plus safe PNG, WebP, OGG, and WAV assets. They can localize or replace display content; add/replace eggs, pets, forms, animations, evolution, moves, items, enemies, dungeons, jobs, themes, furniture, sounds, and starter pools; provide skin-only replacements; or disable the base roster as a total conversion.
+Initial mods are versioned JSON plus safe PNG, WebP, OGG, and WAV assets. They can localize or replace display content; add/replace eggs, pets, forms, animations, evolution, moves, items, enemies, encounters, injuries, progression balance, dungeons/events, rewards, jobs, themes, furniture, sounds, and starter pools; provide skin-only replacements; or disable the base roster as a total conversion.
 
 No GDScript, DLL, shared library, native binary, executable archive, macro, or arbitrary code payload is loaded. Mods do not require the Godot editor.
 
@@ -11,3 +11,5 @@ Runtime discovery uses injected roots: bundled `res://content_packs/`, external 
 Replacement policy is explicit: content packs list every replaced ID, skins can replace presentation definitions only, and total conversions alone may disable the base pack. Duplicate or unauthorized definitions never win by filesystem order.
 
 `mods/examples/example.neutral/` is a fictitious architecture fixture, not official product content or balance. The bundled `koalapet.base` pack uses the same manifest/registry rules.
+
+Milestone 4 keeps evolution predicates, battle stats/moves, encounter drops, injury treatment, progression thresholds, dungeon nodes/events/rewards, and visual assets data-defined. The Python authoring validator and Godot runtime validator both reject unsupported effects, malformed nodes, missing references, unsafe paths/media, and executable payloads. The first battle/evolution disclosure balance remains provisional; no mod code path is introduced.

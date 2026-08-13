@@ -24,6 +24,8 @@ Dependencies: milestone 2. Acceptance: data-defined egg choice/hatching and a co
 
 Dependencies: stable lifecycle and content registry. Acceptance: at least meaningful good-care and poor-care branches, short encounters, injuries/recovery, experience/history inputs, one multi-stage dungeon, boss and cross-system rewards.
 
+**Implemented and validated on 2026-08-13:** automatic data-defined good/poor routes for all three starter families, deterministic stanced battles with level/experience/history/injury/recovery, one five-node dungeon with event/rest/boss flow, idempotent first-clear/repeat rewards, future habitat theme/trophy unlock storage, save v3 migration, codex/discovery records, and isolated Windows gameplay evidence. Combat interaction and evolution disclosure remain provisional. Native overlay work remains parallel and ADR 0010 remains proposed.
+
 ## 5. Habitat customization and unlock rewards
 
 Dependencies: first dungeon rewards. Acceptance: layered mixable habitat components, persistent placement, functional stations, accessible editing, and rewards from progression.

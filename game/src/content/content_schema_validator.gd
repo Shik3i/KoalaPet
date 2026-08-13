@@ -14,6 +14,8 @@ static func validate(schema_name: String, data: Dictionary) -> Array[Dictionary]
 	match schema_name:
 		"ailment.schema.json":
 			_validate_ailment(data, errors)
+		"injury.schema.json":
+			_validate_injury(data, errors)
 		"animation-profile.schema.json":
 			_validate_animation_profile(data, errors)
 		"care-profile.schema.json":
@@ -30,6 +32,8 @@ static func validate(schema_name: String, data: Dictionary) -> Array[Dictionary]
 			_validate_farm_job(data, errors)
 		"feature-gate.schema.json":
 			_validate_feature_gate(data, errors)
+		"progression-balance.schema.json":
+			_validate_progression_balance(data, errors)
 		"form.schema.json":
 			_validate_form(data, errors)
 		"furniture-prop.schema.json":
@@ -90,6 +94,26 @@ static func _validate_ailment(data: Dictionary, errors: Array[Dictionary]) -> vo
 			_add_error(errors, "SCHEMA_CONSTRAINT", "$.%s" % field, "Basis points must be at most 10000")
 
 
+static func _validate_injury(data: Dictionary, errors: Array[Dictionary]) -> void:
+	_object_shape(data, ["id", "display_name_key", "treatment_item_id", "recovery_seconds", "blocks_combat"], ["$schema", "id", "display_name_key", "treatment_item_id", "recovery_seconds", "blocks_combat"], errors)
+	_validate_id(data.get("id"), "$.id", errors)
+	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
+	_validate_id(data.get("treatment_item_id"), "$.treatment_item_id", errors)
+	_validate_integer(data.get("recovery_seconds"), "$.recovery_seconds", errors, 1)
+	_validate_bool(data.get("blocks_combat"), "$.blocks_combat", errors)
+
+
+static func _validate_progression_balance(data: Dictionary, errors: Array[Dictionary]) -> void:
+	_object_shape(data, ["id", "display_name_key", "level_cap", "level_thresholds", "battle_gate_id", "dungeon_gate_id", "injury_ids"], ["$schema", "id", "display_name_key", "level_cap", "level_thresholds", "battle_gate_id", "dungeon_gate_id", "injury_ids"], errors)
+	_validate_id(data.get("id"), "$.id", errors)
+	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
+	_validate_integer(data.get("level_cap"), "$.level_cap", errors, 1)
+	_validate_integer_array(data.get("level_thresholds"), "$.level_thresholds", errors, 1)
+	_validate_id(data.get("battle_gate_id"), "$.battle_gate_id", errors)
+	_validate_id(data.get("dungeon_gate_id"), "$.dungeon_gate_id", errors)
+	_validate_id_array(data.get("injury_ids"), "$.injury_ids", errors, 1, true)
+
+
 static func _validate_care_profile(data: Dictionary, errors: Array[Dictionary]) -> void:
 	var fields := ["id", "display_name_key", "profile_kind", "hatch_duration_seconds", "offline_cap_seconds", "satiety_decay_per_hour", "energy_use_per_hour", "sleep_recovery_per_hour", "hygiene_decay_per_hour", "weight_min_grams", "weight_max_grams", "meal_satiety_bps", "treat_satiety_bps", "meal_mood_bps", "treat_mood_bps", "meal_weight_grams", "treat_weight_grams", "fullness_cap_bps", "digestion_seconds", "max_waste_units", "waste_hygiene_loss_per_hour", "hunger_call_threshold_bps", "tired_call_threshold_bps", "hygiene_call_threshold_bps", "sickness_call_threshold_bps", "call_response_seconds", "severe_hunger_threshold_bps", "illness_dirt_seconds", "illness_hunger_seconds", "illness_probability_bps", "sleep_energy_threshold_bps", "wake_energy_threshold_bps", "sleep_disturbance_bps", "training_energy_cost_bps", "training_effort_gain_bps", "training_mood_gain_bps"]
 	_object_shape(data, fields, ["$schema"] + fields, errors)
@@ -106,13 +130,36 @@ static func _validate_care_profile(data: Dictionary, errors: Array[Dictionary]) 
 
 
 static func _validate_dungeon(data: Dictionary, errors: Array[Dictionary]) -> void:
-	_object_shape(data, ["id", "display_name_key", "encounter_ids", "boss_encounter_id", "reward_item_ids", "unlock_ids"], ["$schema", "id", "display_name_key", "encounter_ids", "boss_encounter_id", "reward_item_ids", "unlock_ids"], errors)
+	_object_shape(data, ["id", "display_name_key", "encounter_ids", "boss_encounter_id", "reward_item_ids", "unlock_ids"], ["$schema", "id", "display_name_key", "description_key", "prerequisite_gate_id", "background_asset", "node_icons", "encounter_ids", "boss_encounter_id", "nodes", "reward_item_ids", "repeat_reward_item_ids", "unlock_ids", "boss_flag_id", "completion_experience"], errors)
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
 	_validate_id_array(data.get("encounter_ids"), "$.encounter_ids", errors, 1, false)
 	_validate_id(data.get("boss_encounter_id"), "$.boss_encounter_id", errors)
 	_validate_id_array(data.get("reward_item_ids"), "$.reward_item_ids", errors)
 	_validate_id_array(data.get("unlock_ids"), "$.unlock_ids", errors)
+	if data.has("prerequisite_gate_id"):
+		_validate_id(data.prerequisite_gate_id, "$.prerequisite_gate_id", errors)
+	if data.has("boss_flag_id"):
+		_validate_id(data.boss_flag_id, "$.boss_flag_id", errors)
+	if data.has("nodes") and _validate_array(data.nodes, "$.nodes", errors, 1):
+		for index in data.nodes.size():
+			var path := "$.nodes[%d]" % index
+			if not _validate_dictionary(data.nodes[index], path, errors):
+				continue
+			var node: Dictionary = data.nodes[index]
+			_object_shape(node, ["id", "kind"], ["id", "kind", "encounter_id", "heal_percent", "damage_percent", "choices"], errors, path)
+			_validate_string(node.get("id"), path + ".id", errors)
+			_validate_enum(node.get("kind"), ["encounter", "event", "rest", "hazard", "boss"], path + ".kind", errors)
+			if node.has("encounter_id"):
+				_validate_id(node.encounter_id, path + ".encounter_id", errors)
+			if node.has("choices") and _validate_array(node.choices, path + ".choices", errors, 1):
+				for choice_index in node.choices.size():
+					var choice_path := "%s.choices[%d]" % [path, choice_index]
+					var choice: Dictionary = node.choices[choice_index]
+					_object_shape(choice, ["id", "display_name_key", "effect"], ["id", "display_name_key", "effect"], errors, choice_path)
+					_validate_string(choice.get("id"), choice_path + ".id", errors)
+					_validate_string(choice.get("display_name_key"), choice_path + ".display_name_key", errors)
+					_validate_number_dictionary(choice.get("effect"), choice_path + ".effect", errors)
 
 
 static func _validate_egg(data: Dictionary, errors: Array[Dictionary]) -> void:
@@ -125,11 +172,15 @@ static func _validate_egg(data: Dictionary, errors: Array[Dictionary]) -> void:
 
 
 static func _validate_enemy_encounter(data: Dictionary, errors: Array[Dictionary]) -> void:
-	_object_shape(data, ["id", "display_name_key", "level", "move_ids", "drops"], ["$schema", "id", "display_name_key", "level", "move_ids", "drops"], errors)
+	_object_shape(data, ["id", "display_name_key", "level", "move_ids", "drops"], ["$schema", "id", "display_name_key", "description_key", "animation_profile_id", "level", "stats", "move_ids", "drops"], errors)
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
 	_validate_integer(data.get("level"), "$.level", errors, 1)
 	_validate_id_array(data.get("move_ids"), "$.move_ids", errors, 1, true)
+	if data.has("animation_profile_id"):
+		_validate_id(data.animation_profile_id, "$.animation_profile_id", errors)
+	if data.has("stats"):
+		_validate_number_dictionary(data.stats, "$.stats", errors, 0.0)
 	if not _validate_array(data.get("drops"), "$.drops", errors):
 		return
 	for index in data.drops.size():
@@ -138,9 +189,11 @@ static func _validate_enemy_encounter(data: Dictionary, errors: Array[Dictionary
 		if not _validate_dictionary(drop, path, errors):
 			continue
 		var drop_data: Dictionary = drop
-		_object_shape(drop_data, ["item_id", "weight"], ["item_id", "weight"], errors, path)
+		_object_shape(drop_data, ["item_id", "weight"], ["item_id", "weight", "quantity"], errors, path)
 		_validate_id(drop_data.get("item_id"), path + ".item_id", errors)
 		_validate_integer(drop_data.get("weight"), path + ".weight", errors, 1)
+		if drop_data.has("quantity"):
+			_validate_integer(drop_data.quantity, path + ".quantity", errors, 1)
 
 
 static func _validate_evolution_graph(data: Dictionary, errors: Array[Dictionary]) -> void:
@@ -154,11 +207,15 @@ static func _validate_evolution_graph(data: Dictionary, errors: Array[Dictionary
 		if not _validate_dictionary(rule, path, errors):
 			continue
 		var rule_data: Dictionary = rule
-		_object_shape(rule_data, ["id", "from_form_id", "to_form_id", "priority", "all"], ["id", "from_form_id", "to_form_id", "priority", "all"], errors, path)
+		_object_shape(rule_data, ["id", "from_form_id", "to_form_id", "priority", "all"], ["id", "from_form_id", "to_form_id", "priority", "minimum_stage_seconds", "maximum_stage_seconds", "all"], errors, path)
 		_validate_id(rule_data.get("id"), path + ".id", errors)
 		_validate_id(rule_data.get("from_form_id"), path + ".from_form_id", errors)
 		_validate_id(rule_data.get("to_form_id"), path + ".to_form_id", errors)
 		_validate_integer(rule_data.get("priority"), path + ".priority", errors)
+		if rule_data.has("minimum_stage_seconds"):
+			_validate_integer(rule_data.minimum_stage_seconds, path + ".minimum_stage_seconds", errors, 0)
+		if rule_data.has("maximum_stage_seconds"):
+			_validate_integer(rule_data.maximum_stage_seconds, path + ".maximum_stage_seconds", errors, 0)
 		if not _validate_array(rule_data.get("all"), path + ".all", errors, 1):
 			continue
 		for condition_index in rule_data.all.size():
@@ -227,7 +284,7 @@ static func _validate_feature_condition(condition: Variant, path: String, errors
 
 
 static func _validate_form(data: Dictionary, errors: Array[Dictionary]) -> void:
-	_object_shape(data, ["id", "family_id", "display_name_key", "stage", "animation_profile_id", "base_stats", "traits"], ["$schema", "id", "family_id", "display_name_key", "stage", "animation_profile_id", "care_profile_id", "base_stats", "traits"], errors)
+	_object_shape(data, ["id", "family_id", "display_name_key", "stage", "animation_profile_id", "base_stats", "traits"], ["$schema", "id", "family_id", "display_name_key", "stage", "animation_profile_id", "care_profile_id", "base_stats", "traits", "move_ids"], errors)
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_id(data.get("family_id"), "$.family_id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
@@ -237,6 +294,8 @@ static func _validate_form(data: Dictionary, errors: Array[Dictionary]) -> void:
 		_validate_id(data.get("care_profile_id"), "$.care_profile_id", errors)
 	_validate_number_dictionary(data.get("base_stats"), "$.base_stats", errors, 0.0, 1)
 	_validate_string_array(data.get("traits"), "$.traits", errors, true, FACT_PATTERN)
+	if data.has("move_ids"):
+		_validate_id_array(data.move_ids, "$.move_ids", errors, 1, true)
 
 
 static func _validate_furniture(data: Dictionary, errors: Array[Dictionary]) -> void:
@@ -264,17 +323,21 @@ static func _validate_habitat_theme(data: Dictionary, errors: Array[Dictionary])
 
 
 static func _validate_item(data: Dictionary, errors: Array[Dictionary]) -> void:
-	_object_shape(data, ["id", "display_name_key", "category", "baseline_available", "effects"], ["$schema", "id", "display_name_key", "category", "baseline_available", "effects", "use"], errors)
+	_object_shape(data, ["id", "display_name_key", "category", "baseline_available", "effects"], ["$schema", "id", "display_name_key", "category", "baseline_available", "effects", "max_stack", "unique_grant", "use"], errors)
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
 	_validate_enum(data.get("category"), ["food", "medicine", "training", "material", "key"], "$.category", errors)
 	_validate_bool(data.get("baseline_available"), "$.baseline_available", errors)
 	_validate_number_dictionary(data.get("effects"), "$.effects", errors)
+	if data.has("max_stack"):
+		_validate_integer(data.max_stack, "$.max_stack", errors, 1)
+	if data.has("unique_grant"):
+		_validate_bool(data.unique_grant, "$.unique_grant", errors)
 	if data.has("use"):
 		if not _validate_dictionary(data.use, "$.use", errors):
 			return
 		_object_shape(data.use, ["kind"], ["kind", "satiety_bps", "mood_bps", "energy_bps", "weight_grams", "health_bps", "hygiene_bps"], errors, "$.use")
-		_validate_enum(data.use.get("kind"), ["meal", "treat", "medicine"], "$.use.kind", errors)
+		_validate_enum(data.use.get("kind"), ["meal", "treat", "medicine", "injury_treatment"], "$.use.kind", errors)
 		for field in ["satiety_bps", "mood_bps", "energy_bps", "weight_grams", "health_bps", "hygiene_bps"]:
 			if data.use.has(field):
 				_validate_integer(data.use[field], "$.use.%s" % field, errors)
@@ -293,12 +356,17 @@ static func _validate_localization(data: Dictionary, errors: Array[Dictionary]) 
 
 
 static func _validate_move(data: Dictionary, errors: Array[Dictionary]) -> void:
-	_object_shape(data, ["id", "display_name_key", "power", "energy_cost", "tags"], ["$schema", "id", "display_name_key", "power", "energy_cost", "tags"], errors)
+	_object_shape(data, ["id", "display_name_key", "power", "energy_cost", "tags"], ["$schema", "id", "display_name_key", "power", "energy_cost", "accuracy_bps", "tags", "effect"], errors)
 	_validate_id(data.get("id"), "$.id", errors)
 	_validate_string(data.get("display_name_key"), "$.display_name_key", errors)
 	_validate_integer(data.get("power"), "$.power", errors, 0)
 	_validate_integer(data.get("energy_cost"), "$.energy_cost", errors, 0)
 	_validate_string_array(data.get("tags"), "$.tags", errors, true)
+	if data.has("accuracy_bps"):
+		_validate_integer(data.accuracy_bps, "$.accuracy_bps", errors, 0)
+	if data.has("effect") and _validate_dictionary(data.effect, "$.effect", errors):
+		_object_shape(data.effect, ["kind"], ["kind", "amount"], errors, "$.effect")
+		_validate_enum(data.effect.kind, ["damage", "guard", "heal", "power", "defense"], "$.effect.kind", errors)
 
 
 static func _validate_species_family(data: Dictionary, errors: Array[Dictionary]) -> void:
@@ -371,6 +439,13 @@ static func _validate_id_array(value: Variant, path: String, errors: Array[Dicti
 		return
 	for index in value.size():
 		_validate_id(value[index], "%s[%d]" % [path, index], errors)
+
+
+static func _validate_integer_array(value: Variant, path: String, errors: Array[Dictionary], min_items := -1) -> void:
+	if not _validate_array(value, path, errors, min_items):
+		return
+	for index in value.size():
+		_validate_integer(value[index], "%s[%d]" % [path, index], errors, 0)
 
 
 static func _validate_string_array(value: Variant, path: String, errors: Array[Dictionary], unique := false, pattern := "") -> void:

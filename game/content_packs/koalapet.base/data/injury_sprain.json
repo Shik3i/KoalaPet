@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/injury.schema.json","id":"koalapet.base:canopy_sprain","display_name_key":"injury.canopy_sprain.name","treatment_item_id":"koalapet.base:restorative_wrap","recovery_seconds":1800,"blocks_combat":true}

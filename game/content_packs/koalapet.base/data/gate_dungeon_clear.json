@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/feature-gate.schema.json","id":"koalapet.base:canopy_theme_gate","feature":"koalapet.base:canopy_theme","presentation_before_unlock":"hidden","reward_ids":["koalapet.base:canopy_theme","koalapet.base:canopy_trophy"],"condition":{"fact":"dungeon_clears","operator":"contains","value":"koalapet.base:quiet_canopy"}}

@@ -14,6 +14,10 @@ Default everyday compact, movable window, initially near bottom-right but freely
 
 Optional inspection/customization/management for detailed values, history, inventory, evolution, battle/dungeon, habitat, and later farm. It remains practical and leaves desktop context visible. One resizable window versus several compact panels is provisional.
 
+## Milestone 4 product shell
+
+The current Godot shell keeps one authoritative `PetApplication` state across all three modes. Minimal exposes only pet-local activity/injury/battle/dungeon/evolution status; Small adds context-sensitive Battle/Dungeon access, level/experience, injury, pending evolution, and current adventure state; Expanded adds route/discovery, battle history, inventory, unlocks, and dungeon context. Battle and Dungeon controls are absent until their data-defined gates pass. The evolution effect and exact disclosure policy remain provisional and are not a native overlay decision.
+
 ## Prompt 3.5 Windows evidence
 
 The first direct Windows run was completed on 2026-08-12 with Windows 11 Pro `10.0.26200`, Godot `4.7.1.stable.official.a13da4feb`, three monitors, per-monitor-aware PowerShell capture, primary 125% scaling, a bottom non-auto-hidden taskbar, and an NVIDIA RTX 4080 SUPER. The native spike reached `READY` for native window creation, borderless/transparency flags, transparent viewport, polygonal hit regions, focus policies, monitor enumeration, status indicator creation, and 60 FPS at the configured cap. Evidence is in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md).

@@ -2,12 +2,11 @@
   "$schema": "../../../../schemas/evolution-graph.schema.json",
   "id": "koalapet.base:starter_future_paths",
   "rules": [
-    {
-      "id": "koalapet.base:future_moss_path",
-      "from_form_id": "koalapet.base:moss_hatchling",
-      "to_form_id": "koalapet.base:ember_hatchling",
-      "priority": 10,
-      "all": [{"metric": "stage_hours", "operator": "gte", "value": 999999}]
-    }
+    {"id": "koalapet.base:moss_bloom_route", "from_form_id": "koalapet.base:moss_hatchling", "to_form_id": "koalapet.base:moss_bloom_juvenile", "priority": 100, "minimum_stage_seconds": 60, "all": [{"metric": "stage_seconds", "operator": "gte", "value": 60}, {"metric": "care_mistakes", "operator": "lte", "value": 1}, {"metric": "training_count", "operator": "gte", "value": 1}]},
+    {"id": "koalapet.base:moss_bracken_route", "from_form_id": "koalapet.base:moss_hatchling", "to_form_id": "koalapet.base:moss_bracken_juvenile", "priority": 90, "minimum_stage_seconds": 60, "all": [{"metric": "stage_seconds", "operator": "gte", "value": 60}, {"metric": "care_mistakes", "operator": "gte", "value": 2}]},
+    {"id": "koalapet.base:ember_dawn_route", "from_form_id": "koalapet.base:ember_hatchling", "to_form_id": "koalapet.base:ember_dawn_juvenile", "priority": 100, "minimum_stage_seconds": 60, "all": [{"metric": "stage_seconds", "operator": "gte", "value": 60}, {"metric": "care_mistakes", "operator": "lte", "value": 1}, {"metric": "training_count", "operator": "gte", "value": 1}]},
+    {"id": "koalapet.base:ember_cinder_route", "from_form_id": "koalapet.base:ember_hatchling", "to_form_id": "koalapet.base:ember_cinder_juvenile", "priority": 90, "minimum_stage_seconds": 60, "all": [{"metric": "stage_seconds", "operator": "gte", "value": 60}, {"metric": "care_mistakes", "operator": "gte", "value": 2}]},
+    {"id": "koalapet.base:tide_glass_route", "from_form_id": "koalapet.base:tide_hatchling", "to_form_id": "koalapet.base:tide_glass_juvenile", "priority": 100, "minimum_stage_seconds": 60, "all": [{"metric": "stage_seconds", "operator": "gte", "value": 60}, {"metric": "care_mistakes", "operator": "lte", "value": 1}, {"metric": "training_count", "operator": "gte", "value": 1}]},
+    {"id": "koalapet.base:tide_reed_route", "from_form_id": "koalapet.base:tide_hatchling", "to_form_id": "koalapet.base:tide_reed_juvenile", "priority": 90, "minimum_stage_seconds": 60, "all": [{"metric": "stage_seconds", "operator": "gte", "value": 60}, {"metric": "care_mistakes", "operator": "gte", "value": 2}]}
   ]
 }

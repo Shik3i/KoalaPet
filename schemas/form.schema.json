@@ -4,7 +4,7 @@
   "title": "Form 0.1",
   "type": "object",
   "required": ["id", "family_id", "display_name_key", "stage", "animation_profile_id", "base_stats", "traits"],
-  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "family_id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "stage": {"enum": ["hatchling", "juvenile", "mature", "legacy"]}, "animation_profile_id": {"$ref": "#/$defs/id"}, "care_profile_id": {"$ref": "#/$defs/id"}, "base_stats": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "number", "minimum": 0}}, "traits": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}}},
+  "properties": {"$schema": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "family_id": {"$ref": "#/$defs/id"}, "display_name_key": {"type": "string"}, "stage": {"enum": ["hatchling", "juvenile", "mature", "legacy"]}, "animation_profile_id": {"$ref": "#/$defs/id"}, "care_profile_id": {"$ref": "#/$defs/id"}, "base_stats": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "number", "minimum": 0}}, "traits": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}}, "move_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}},
   "$defs": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}},
   "additionalProperties": false
 }

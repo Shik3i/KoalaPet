@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/furniture-prop.schema.json","id":"koalapet.base:canopy_trophy","display_name_key":"furniture.canopy_trophy.name","asset":"assets/vertical_slice/rewards/canopy_trophy.png","kind":"trophy","footprint":{"width":1,"height":1}}

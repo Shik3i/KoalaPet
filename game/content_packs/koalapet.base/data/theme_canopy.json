@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/habitat-theme.schema.json","id":"koalapet.base:canopy_theme","display_name_key":"theme.canopy.name","background_asset":"assets/vertical_slice/dungeon/canopy_background.png","ground_asset":"assets/vertical_slice/dungeon/canopy_ground.png","furniture_ids":["koalapet.base:canopy_trophy"],"unlock_gate_id":"koalapet.base:canopy_theme_gate"}

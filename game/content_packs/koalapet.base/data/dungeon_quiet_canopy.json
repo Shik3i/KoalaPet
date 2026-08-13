@@ -1,0 +1,23 @@
+{
+  "$schema":"../../../../schemas/dungeon.schema.json",
+  "id":"koalapet.base:quiet_canopy",
+  "display_name_key":"dungeon.quiet_canopy.name",
+  "description_key":"dungeon.quiet_canopy.description",
+  "prerequisite_gate_id":"koalapet.base:dungeon_gate",
+  "background_asset":"assets/vertical_slice/dungeon/canopy_background.png",
+  "node_icons":{"encounter":"assets/vertical_slice/dungeon/icon_encounter.png","event":"assets/vertical_slice/dungeon/icon_event.png","rest":"assets/vertical_slice/dungeon/icon_rest.png","boss":"assets/vertical_slice/dungeon/icon_boss.png"},
+  "encounter_ids":["koalapet.base:creekling_encounter","koalapet.base:thornlet_encounter","koalapet.base:cinder_moth_encounter"],
+  "boss_encounter_id":"koalapet.base:canopy_guardian",
+  "nodes":[
+    {"id":"koalapet.base:canopy_node_one","kind":"encounter","encounter_id":"koalapet.base:creekling_encounter"},
+    {"id":"koalapet.base:canopy_node_two","kind":"event","choices":[{"id":"quiet_pool","display_name_key":"dungeon.choice.quiet_pool","effect":{"heal_percent":18}},{"id":"thorn_path","display_name_key":"dungeon.choice.thorn_path","effect":{"damage_percent":8}}]},
+    {"id":"koalapet.base:canopy_node_three","kind":"encounter","encounter_id":"koalapet.base:thornlet_encounter"},
+    {"id":"koalapet.base:canopy_node_four","kind":"rest","heal_percent":25},
+    {"id":"koalapet.base:canopy_node_five","kind":"boss","encounter_id":"koalapet.base:canopy_guardian"}
+  ],
+  "reward_item_ids":["koalapet.base:canopy_token","koalapet.base:thorn_fiber"],
+  "repeat_reward_item_ids":["koalapet.base:thorn_fiber"],
+  "unlock_ids":["koalapet.base:canopy_theme","koalapet.base:canopy_theme_gate","koalapet.base:boss_memory_gate"],
+  "boss_flag_id":"koalapet.base:boss_memory_gate",
+  "completion_experience":40
+}

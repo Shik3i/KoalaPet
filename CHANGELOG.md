@@ -13,6 +13,7 @@ All notable changes will be documented here. The format follows Keep a Changelog
 - Milestone 3 single-pet classic V-pet vertical slice: three data-defined starter eggs, pure deterministic hatching/care simulation, offline cap, waste/attention/illness/treatment/training, bounded history and aggregates, pet save/reload/quarantine bindings, Minimal/Small/Expanded presentation, 42 provisional generated assets, and 28 dedicated assertions.
 - Supplied Expanded, Small, and Minimal concept PNGs preserved byte-for-byte under `references/ui-modes/`.
 - Prompt 3.5 interactive Windows product review: isolated-save walkthrough for all three starters, hatch/care/sickness/sleep/relaunch evidence, native overlay diagnostics, DPI/taskbar inventory, and idle performance measurements.
+- Milestone 4 branching evolution, normal battles, and first dungeon: six juvenile routes across three families, deterministic evolution evidence/pending transitions, stance-based battles, levels/history/drops/injuries, a five-node dungeon with boss, idempotent rewards/unlocks/codex records, save v3 migration, 62 dedicated assertions, 109 validated provisional assets, and isolated gameplay review.
 
 ### Fixed
 
@@ -21,3 +22,4 @@ All notable changes will be documented here. The format follows Keep a Changelog
 - Added explicit content-snapshot mismatch reporting and source-safe bootstrap reconciliation persistence; recovered saves require an explicit save before replacing their snapshot.
 - Fixed application content-root typing for injected test/runtime configurations and expanded quarantine checks to every persisted pet content binding.
 - Fixed starter-card clipping/import visibility, German localization fallbacks, hatch-progress visibility, mode-refresh resizing, Expanded/status clipping, and Small sickness-action clipping in the Godot product shell.
+- Fixed stale feature-gate test expectations after adding adventure gates, Python/runtime evolution-schema parity for stage-age fields, and application-layer loss of pending evolution states at unsafe transition points.

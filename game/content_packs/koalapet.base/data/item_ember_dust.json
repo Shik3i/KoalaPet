@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/item.schema.json","id":"koalapet.base:ember_dust","display_name_key":"item.ember_dust.name","category":"material","baseline_available":false,"effects":{},"max_stack":99}

@@ -1,11 +1,12 @@
 {
   "$schema": "../../../../schemas/form.schema.json",
   "id": "koalapet.base:ember_hatchling",
-  "family_id": "koalapet.base:starter_triad_family",
+  "family_id": "koalapet.base:ember_family",
   "display_name_key": "form.ember.name",
   "stage": "hatchling",
   "animation_profile_id": "koalapet.base:ember_animation",
   "care_profile_id": "koalapet.base:standard_care",
-  "base_stats": {"vitality": 4, "effort": 3},
-  "traits": ["bright", "bold"]
+  "base_stats": {"vitality": 4, "effort": 3, "power": 4, "defense": 2, "speed": 4, "focus": 4},
+  "traits": ["bright", "bold"],
+  "move_ids": ["koalapet.base:ember_flicker", "koalapet.base:steady_nudge"]
 }

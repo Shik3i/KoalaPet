@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/item.schema.json","id":"koalapet.base:thorn_fiber","display_name_key":"item.thorn_fiber.name","category":"material","baseline_available":false,"effects":{},"max_stack":99}

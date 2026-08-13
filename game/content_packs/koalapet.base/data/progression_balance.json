@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/progression-balance.schema.json","id":"koalapet.base:milestone_four_balance","display_name_key":"balance.milestone_four.name","level_cap":5,"level_thresholds":[0,30,75,140,230,360],"battle_gate_id":"koalapet.base:battle_gate","dungeon_gate_id":"koalapet.base:dungeon_gate","injury_ids":["koalapet.base:canopy_sprain"]}

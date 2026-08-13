@@ -1,13 +1,13 @@
 # Project Status / Ist-Stand
 
-**As of:** 2026-08-12
+**As of:** 2026-08-13
 
-**Phase:** Milestone 3 — Single-pet classic V-pet vertical slice implemented
-**Readiness:** Interactive Windows product review completed with partial native overlay evidence; no release build, signing, deployment, or accepted native Windows overlay
+**Phase:** Milestone 4 — Branching evolution, normal battles, and first dungeon implemented
+**Readiness:** Playable Godot vertical slice validated headlessly and through isolated Windows gameplay captures; no release build, signing, deployment, or accepted native Windows overlay
 
 ## Executive status
 
-KoalaPet is a Windows-first, local-first Godot virtual-pet project. The repository now contains a playable single-pet vertical slice on top of the completed content/save foundation.
+KoalaPet is a Windows-first, local-first Godot virtual-pet project. The repository now contains a playable single-pet raising/adventure slice on top of the content/save foundation.
 
 Implemented and validated:
 
@@ -19,16 +19,21 @@ Implemented and validated:
 - event history and aggregate care metrics with bounded save size
 - missing-content quarantine for the pet's complete `required_content_ids` binding set
 - Minimal, Small, and Expanded UI modes over one authoritative pet state
-- deterministic provisional RGBA assets and provenance/brief records
-- headless Godot runtime smoke and dedicated pet test suite
-- interactive Windows product walkthrough with isolated saves, three starter runs, care lifecycle, mode screenshots, native overlay diagnostics, and performance samples
+- automatic data-driven good-care and poor-care evolution routes for all three starter families
+- deterministic normal battles with stances, rounds, experience, levels, history, drops, injuries, and treatment
+- one five-node dungeon with event choice, rest node, boss, first-clear/repeat rewards, theme/trophy unlock storage, and codex records
+- save/reload for active battles and dungeon runs, sequential save migration, and pending evolution at safe points
+- deterministic provisional RGBA assets and provenance/brief records for the new forms, enemies, dungeon, effects, and rewards
+- headless Godot runtime smoke, foundation/pet/platform suites, and 62-assertion Milestone 4 suite
+- isolated Windows gameplay review with direct `PrintWindow` captures for evolved pet UI and adventure states
+- direct gameplay evidence includes good/poor evolution, Small/Expanded UI, battle, dungeon event/boss, injury/treatment, and first-clear rewards; Minimal transparency capture remains limited by `PrintWindow`
 
 Not product-ready:
 
 - native Windows overlay acceptance remains open; ADR 0010 is still proposed
 - no export, packaging, signing, release, or deployment pipeline
 - no final product name, final art-rights approval, production art package, or accessibility acceptance
-- evolution, battle, dungeon, habitat, farm/residents, economy, and trading systems remain data/contracts/roadmap scope
+- habitat editing, farm/residents, economy, and trading remain outside the slice
 - native Windows shell acceptance remains incomplete; the active lock screen prevented direct mouse, Alt+Tab, taskbar, tray callback, and restore observation
 - accessibility acceptance remains incomplete; screen-reader, contrast, and reduced-motion review are still open
 
@@ -48,7 +53,7 @@ Not product-ready:
 - Experimental Content API `0.1` with deterministic dependency/priority/conflict/override policy
 - Runtime schema, localization, reference, asset-root, safe-path, safe-media, size, file-count, and executable-payload checks
 - JSON schemas for care profiles, ailments, training activities, items with use effects, forms with care-profile binding, and existing future systems
-- `koalapet.base` now contains the vertical-slice content: 41 accepted documents across starter, family/form, animation, care, item, ailment, training, evolution, and localization records
+- `koalapet.base` now contains 69 accepted documents across starter, family/form, animation, care, item, ailment, training, evolution, battle, dungeon, gate, reward, and localization records
 - Initial mod contract remains JSON plus safe media only; no executable mod payloads
 
 ### Pet simulation and application
@@ -62,7 +67,7 @@ Not product-ready:
 
 ### Persistence and recovery
 
-- Save envelope v2 with validated temporary writes, flush, atomic replacement, `.bak` and `.swap` recovery, migrations, snapshot mismatch metadata, and quarantine
+- Save envelope v3 with validated temporary writes, flush, atomic replacement, `.bak` and `.swap` recovery, sequential migrations, snapshot mismatch metadata, and quarantine
 - Pet records persist stable definition IDs, pack ownership, complete required content IDs, simulation timestamps, care state, history, aggregate metrics, and deterministic random state
 - `ContentBindingReconciler` checks `definition_id`, `required_pack_id`, and every `required_content_ids` entry; missing bindings move the full raw record to quarantine and do not activate it
 - Save/reload, missing-content quarantine, and recovery behavior are covered by the pet suite and foundation suite
@@ -72,7 +77,7 @@ Not product-ready:
 - `game/scenes/pet_game.tscn` is the current main scene
 - Starter view presents the three eggs; egg view presents the hatch state; pet view exposes the same state through Minimal, Small, and Expanded modes
 - Minimal: pet identity/state and visual; Small: compact care values and baseline actions; Expanded: history, aggregates, and development controls
-- Generated provisional assets: 42 PNGs, 39 referenced by animation definitions, RGBA, minimum 48×48; the generator and source brief are tracked, while the generated provenance JSON remains an ignored local record
+- Generated provisional assets: 109 referenced PNGs, RGBA, minimum 48×48; the deterministic Milestone 4 generator and source brief are tracked, while generated provenance JSON remains an ignored local record
 - Asset source brief: `art_source/prompts/vertical-slice-assets.md`
 - Asset approval is development-only; provenance license remains `UNDECIDED`
 
@@ -80,8 +85,8 @@ Not product-ready:
 
 | Area | Current state |
 |---|---|
-| Branching evolution | Schema/data fixture only; runtime resolver not implemented |
-| Battles and dungeon | Architecture/data contracts only |
+| Branching evolution | Implemented: automatic prioritized routes, evidence diagnostics, pending safe-point transition, discovery journal |
+| Battles and dungeon | Implemented: deterministic normal battle service, injuries/recovery, five-node dungeon, boss, rewards, codex |
 | Habitat and furniture | Architecture/data contracts only |
 | Farm, residents, idle jobs | Roadmap/data contracts only |
 | Trading Post/economy | Roadmap only |
@@ -92,15 +97,16 @@ Not product-ready:
 
 Latest full local gate with Godot `4.7.1.stable.official.a13da4feb` and Python `3.13`:
 
-- Content validator: `2` packs, `41` content documents — PASS
-- JSON parse: `75` files — PASS
-- Python in-memory compile: `5` source files — PASS
-- Markdown links: `88` local targets — PASS
-- Vertical-slice assets: `39` referenced PNGs, RGBA, minimum 48×48 — PASS
+- Content validator: `2` packs, `86` content documents — PASS
+- JSON parse: `123` files — PASS
+- Python in-memory compile: `6` source files — PASS
+- Markdown links: `97` local targets — PASS
+- Vertical-slice assets: `109` referenced PNGs, RGBA, minimum 48×48 — PASS
 - Godot headless editor import — PASS
 - Godot project headless startup — PASS
+- Foundation suite: `101` assertions — PASS
 - Pet vertical-slice suite: `32` assertions — PASS
-- Foundation suite: `99` assertions — PASS
+- Milestone 4 evolution/battle/dungeon suite: `62` assertions — PASS
 - Platform-neutral suite: `41` assertions — PASS
 - Mod payload, neutral-terminology, repository-artifact, and `git diff --check` — PASS
 - Symlink fixture: explicitly skipped because this Windows host could not create the test link; production rejection remains implemented
@@ -116,13 +122,13 @@ Evidence boundary:
 - Interactive Windows overlay rows remain partially blocked: foreground mouse/shell routing, taskbar/Alt+Tab policy, tray callbacks/cleanup, restore paths, and mixed-DPI adapter parity
 - Provisional generated art has no final rights/approval decision
 - Domain balance is a coherent deterministic slice, not final product tuning
-- Save schema is v2; future pet/evolution/battle systems require explicit migrations and accepted ADRs
+- Battle interaction and evolution disclosure remain provisional prototypes; future changes require explicit ADRs/migrations
 - The current UI is a functional vertical-slice shell, not final visual design or accessibility-reviewed production UI
 
 ## Next work
 
 1. Capture interactive Windows 10/11 evidence for the existing overlay matrix without accepting ADR 0010 prematurely.
 2. Review/replace provisional assets with approved original art and decide license/provenance.
-3. Add accepted evolution/runtime progression only after the single-pet lifecycle is product-reviewed.
-4. Add battles/dungeon, habitat rewards, and later farm/resident/economy milestones in roadmap order.
-5. Add interactive UI screenshots, accessibility checks, long-offline/rollback cases, and release packaging before any product-release claim.
+3. Product-review and tune the provisional evolution disclosure and semi-automatic battle interaction.
+4. Implement Milestone 5 habitat customization consuming the stored dungeon theme/trophy unlock.
+5. Add accessibility checks, long-offline/rollback cases, approved production art, and release packaging before any product-release claim.

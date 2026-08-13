@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/move.schema.json","id":"koalapet.base:bramble_crash","display_name_key":"move.bramble_crash.name","power":8,"energy_cost":2,"accuracy_bps":8200,"tags":["rough","power"],"effect":{"kind":"damage"}}

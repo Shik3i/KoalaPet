@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/move.schema.json","id":"koalapet.base:tide_pulse","display_name_key":"move.tide_pulse.name","power":5,"energy_cost":1,"accuracy_bps":9500,"tags":["focus"],"effect":{"kind":"damage"}}

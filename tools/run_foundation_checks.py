@@ -112,6 +112,7 @@ def check_tracked_artifacts() -> None:
 
 
 def main() -> int:
+    os.environ.setdefault("PYTHONDONTWRITEBYTECODE", "1")
     parser = argparse.ArgumentParser()
     parser.add_argument("--godot", help="Path to the pinned Godot executable")
     args = parser.parse_args()
@@ -120,6 +121,7 @@ def main() -> int:
     check_json()
     check_python_compile()
     run([sys.executable, "tools/content_validation/validate_content.py"], "Python content validation")
+    run([sys.executable, "tools/art_pipeline/validate_vertical_slice_assets.py", "--repo-root", str(ROOT)], "Vertical-slice asset validation")
     run([sys.executable, "tools/repository/check_markdown_links.py"], "Markdown links")
     check_mod_payloads()
     check_franchise_terms()
@@ -127,6 +129,7 @@ def main() -> int:
     run([godot, "--headless", "--editor", "--path", "game", "--quit-after", "8"], "Godot headless import")
     run([godot, "--headless", "--path", "game", "--script", "res://tests/foundation/run_all.gd"], "Milestone 2 foundation tests")
     run([godot, "--headless", "--path", "game", "--script", "res://tests/pet/run_all.gd"], "Milestone 3 pet vertical-slice tests")
+    run([godot, "--headless", "--path", "game", "--script", "res://tests/milestone_four/run_all.gd"], "Milestone 4 evolution/battle/dungeon tests")
     run([godot, "--headless", "--path", "game", "--script", "res://tests/platform/run_all.gd"], "Platform-neutral regression tests")
     run(["git", "diff", "--check"], "Git whitespace check")
     print("RESULT: PASS — foundation checks complete")

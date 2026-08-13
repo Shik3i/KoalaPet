@@ -7,11 +7,11 @@ const MAX_PACK_FILES := 512
 const MAX_PACK_BYTES := 64 * 1024 * 1024
 const MAX_JSON_BYTES := 2 * 1024 * 1024
 const SUPPORTED_SCHEMAS := [
-	"ailment.schema.json", "animation-profile.schema.json", "care-profile.schema.json", "dungeon.schema.json", "egg.schema.json",
+	"ailment.schema.json", "animation-profile.schema.json", "care-profile.schema.json", "dungeon.schema.json", "egg.schema.json", "injury.schema.json",
 	"enemy-encounter.schema.json", "evolution-graph.schema.json", "farm-job.schema.json",
 	"feature-gate.schema.json", "form.schema.json", "furniture-prop.schema.json",
 	"habitat-theme.schema.json", "item.schema.json", "localization-bundle.schema.json",
-	"move.schema.json", "species-family.schema.json", "starter-pool.schema.json", "training-activity.schema.json",
+	"move.schema.json", "progression-balance.schema.json", "species-family.schema.json", "starter-pool.schema.json", "training-activity.schema.json",
 ]
 const SKIN_OVERRIDE_SCHEMAS := [
 	"animation-profile.schema.json", "furniture-prop.schema.json", "habitat-theme.schema.json",
@@ -417,6 +417,8 @@ func _validate_record_references(record: Dictionary, definitions: Dictionary, pa
 			_validate_reference(data.animation_profile_id, "$.animation_profile_id", ["animation-profile.schema.json"], record, definitions, pack_id)
 			if data.has("care_profile_id"):
 				_validate_reference(data.care_profile_id, "$.care_profile_id", ["care-profile.schema.json"], record, definitions, pack_id)
+			if data.has("move_ids"):
+				_validate_reference_array(data.move_ids, "$.move_ids", ["move.schema.json"], record, definitions, pack_id)
 		"evolution-graph.schema.json":
 			for index in data.rules.size():
 				var rule: Dictionary = data.rules[index]
@@ -424,6 +426,8 @@ func _validate_record_references(record: Dictionary, definitions: Dictionary, pa
 				_validate_reference(rule.to_form_id, "$.rules[%d].to_form_id" % index, ["form.schema.json"], record, definitions, pack_id)
 		"enemy-encounter.schema.json":
 			_validate_reference_array(data.move_ids, "$.move_ids", ["move.schema.json"], record, definitions, pack_id)
+			if data.has("animation_profile_id"):
+				_validate_reference(data.animation_profile_id, "$.animation_profile_id", ["animation-profile.schema.json"], record, definitions, pack_id)
 			for index in data.drops.size():
 				_validate_reference(data.drops[index].item_id, "$.drops[%d].item_id" % index, ["item.schema.json"], record, definitions, pack_id)
 		"dungeon.schema.json":
@@ -431,6 +435,13 @@ func _validate_record_references(record: Dictionary, definitions: Dictionary, pa
 			_validate_reference(data.boss_encounter_id, "$.boss_encounter_id", ["enemy-encounter.schema.json"], record, definitions, pack_id)
 			_validate_reference_array(data.reward_item_ids, "$.reward_item_ids", ["item.schema.json"], record, definitions, pack_id)
 			_validate_reference_array(data.unlock_ids, "$.unlock_ids", ["habitat-theme.schema.json", "feature-gate.schema.json"], record, definitions, pack_id)
+			if data.has("prerequisite_gate_id"):
+				_validate_reference(data.prerequisite_gate_id, "$.prerequisite_gate_id", ["feature-gate.schema.json"], record, definitions, pack_id)
+			if data.has("boss_flag_id"):
+				_validate_reference(data.boss_flag_id, "$.boss_flag_id", ["feature-gate.schema.json"], record, definitions, pack_id)
+			for node in data.get("nodes", []):
+				if node is Dictionary and node.has("encounter_id"):
+					_validate_reference(node.encounter_id, "$.nodes.encounter_id", ["enemy-encounter.schema.json"], record, definitions, pack_id)
 		"habitat-theme.schema.json":
 			_validate_reference_array(data.furniture_ids, "$.furniture_ids", ["furniture-prop.schema.json"], record, definitions, pack_id)
 			_validate_reference(data.unlock_gate_id, "$.unlock_gate_id", ["feature-gate.schema.json"], record, definitions, pack_id)
@@ -439,6 +450,12 @@ func _validate_record_references(record: Dictionary, definitions: Dictionary, pa
 			_validate_reference(data.output_item_id, "$.output_item_id", ["item.schema.json"], record, definitions, pack_id)
 		"ailment.schema.json":
 			_validate_reference(data.treatment_item_id, "$.treatment_item_id", ["item.schema.json"], record, definitions, pack_id)
+		"injury.schema.json":
+			_validate_reference(data.treatment_item_id, "$.treatment_item_id", ["item.schema.json"], record, definitions, pack_id)
+		"progression-balance.schema.json":
+			_validate_reference(data.battle_gate_id, "$.battle_gate_id", ["feature-gate.schema.json"], record, definitions, pack_id)
+			_validate_reference(data.dungeon_gate_id, "$.dungeon_gate_id", ["feature-gate.schema.json"], record, definitions, pack_id)
+			_validate_reference_array(data.injury_ids, "$.injury_ids", ["injury.schema.json"], record, definitions, pack_id)
 
 
 func _validate_reference_array(values: Array, json_path: String, expected_schemas: Array, record: Dictionary, definitions: Dictionary, pack_id: String) -> void:

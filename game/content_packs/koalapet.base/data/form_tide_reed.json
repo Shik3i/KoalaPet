@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:tide_reed_juvenile",
+  "family_id": "koalapet.base:tide_family",
+  "display_name_key": "form.tide_reed.name",
+  "stage": "juvenile",
+  "animation_profile_id": "koalapet.base:tide_reed_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 12, "effort": 4, "power": 5, "defense": 6, "speed": 5, "focus": 5},
+  "traits": ["reed_armor", "adaptable", "deep_runner"],
+  "move_ids": ["koalapet.base:tide_pulse", "koalapet.base:water_screen", "koalapet.base:bramble_crash"]
+}

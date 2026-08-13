@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:ember_dawn_juvenile",
+  "family_id": "koalapet.base:ember_family",
+  "display_name_key": "form.ember_dawn.name",
+  "stage": "juvenile",
+  "animation_profile_id": "koalapet.base:ember_dawn_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 8, "effort": 6, "power": 7, "defense": 3, "speed": 6, "focus": 5},
+  "traits": ["dawn_spark", "bright_focus", "steady_heat"],
+  "move_ids": ["koalapet.base:ember_flicker", "koalapet.base:flare_step", "koalapet.base:quiet_mend"]
+}

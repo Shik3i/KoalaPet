@@ -16,5 +16,9 @@ Accepted ADRs are authoritative below `PROJECT_CANON.md`. New decisions use the 
 - [0013 — Save envelope, backup, migration, and quarantine](0013-save-envelope-backup-migration-quarantine.md)
 - [0014 — Single-pet deterministic simulation](0014-single-pet-deterministic-simulation.md)
 - [0015 — Pet content binding and quarantine](0015-pet-content-binding-quarantine.md)
+- [0016 — Deterministic evolution rule resolution](0016-deterministic-evolution-rule-resolution.md)
+- [0017 — Deterministic battle sessions](0017-deterministic-battle-sessions.md)
+- [0018 — Persisted dungeon runs](0018-persisted-dungeon-runs.md)
+- [0019 — Idempotent inventory and reward grants](0019-idempotent-inventory-rewards.md)
 
 Proposal 0010 remains under [`proposals/`](proposals/0010-windows-desktop-overlay-adapter.md) and is not accepted.

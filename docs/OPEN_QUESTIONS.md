@@ -10,6 +10,8 @@ Each item requires product-owner acceptance or spike evidence. Do not treat defa
 | Time | What is the real-time evolution cadence? | Play-session expectations and offline simulations. |
 | Combat | What exact automatic/semi-automatic interaction is fun and accessible? | Small prototypes, not speculation. |
 | Evolution | How much condition information is hidden, hinted, or fully revealed? | Discovery vs. intentional pursuit user testing. |
+| Combat | Should the Milestone 4 Aggressive/Balanced/Defensive/Auto model remain the final interaction? | Product playtest on session length, interruption, accessibility, stance clarity, and meaningful choice. |
+| Evolution | Should the provisional silhouette/broad-hint/exact-evidence disclosure become the final journal policy? | Product playtest with route discovery and player comprehension. |
 | Habitat | Free placement or invisible-grid placement? | Input, collision, save stability, and small-window usability prototype. |
 | Content | What are final first-MVP counts for families, forms, moves, items, encounters, dungeons, and themes? | Production-cost and replayability estimates after vertical slice. |
 | Windows | Should a status-indicator icon be baseline, and which recovery/actions should it expose? | Prepared generated-icon/menu harness; verify visibility, callbacks, restore, and cleanup on Windows, then obtain product acceptance. |

@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:moss_bloom_juvenile",
+  "family_id": "koalapet.base:moss_family",
+  "display_name_key": "form.moss_bloom.name",
+  "stage": "juvenile",
+  "animation_profile_id": "koalapet.base:moss_bloom_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 8, "effort": 5, "power": 4, "defense": 5, "speed": 3, "focus": 6},
+  "traits": ["bloom_guardian", "patient", "dungeon_scout"],
+  "move_ids": ["koalapet.base:steady_nudge", "koalapet.base:leaf_guard", "koalapet.base:quiet_mend"]
+}

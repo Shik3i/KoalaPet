@@ -4,6 +4,6 @@
   "title": "Move 0.1",
   "type": "object",
   "required": ["id", "display_name_key", "power", "energy_cost", "tags"],
-  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "display_name_key": {"type": "string"}, "power": {"type": "integer", "minimum": 0}, "energy_cost": {"type": "integer", "minimum": 0}, "tags": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}},
+  "properties": {"$schema": {"type": "string"}, "id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*:[a-z][a-z0-9_.-]*$"}, "display_name_key": {"type": "string"}, "power": {"type": "integer", "minimum": 0}, "energy_cost": {"type": "integer", "minimum": 0}, "accuracy_bps": {"type": "integer", "minimum": 0, "maximum": 10000}, "tags": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "effect": {"type": "object", "required": ["kind"], "properties": {"kind": {"enum": ["damage", "guard", "heal", "power", "defense"]}, "amount": {"type": "integer"}}, "additionalProperties": false}},
   "additionalProperties": false
 }

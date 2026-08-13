@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../schemas/species-family.schema.json",
+  "id": "koalapet.base:tide_family",
+  "display_name_key": "family.tide.name",
+  "form_ids": ["koalapet.base:tide_hatchling", "koalapet.base:tide_glass_juvenile", "koalapet.base:tide_reed_juvenile"],
+  "evolution_graph_id": "koalapet.base:starter_future_paths"
+}

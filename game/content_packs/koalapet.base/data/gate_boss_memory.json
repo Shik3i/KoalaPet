@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/feature-gate.schema.json","id":"koalapet.base:boss_memory_gate","feature":"koalapet.base:boss_memory","presentation_before_unlock":"hidden","reward_ids":["koalapet.base:boss_memory"],"condition":{"fact":"boss_flags","operator":"contains","value":"koalapet.base:boss_memory_gate"}}

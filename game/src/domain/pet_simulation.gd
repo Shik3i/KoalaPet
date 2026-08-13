@@ -1,7 +1,7 @@
 class_name PetSimulation
 extends RefCounted
 
-const STATE_VERSION := 1
+const STATE_VERSION := 2
 const BASIS_POINTS := 10000
 const MAX_HISTORY := 128
 const MAX_CALLS := 32
@@ -23,6 +23,8 @@ func create_new(egg: Dictionary, form: Dictionary, profile: Dictionary, owner_pa
 		"egg_definition_id": str(egg_data.id),
 		"family_id": str(form_data.family_id),
 		"current_form_id": str(form_data.id),
+		"stage": str(form_data.get("stage", "hatchling")),
+		"traits": form_data.get("traits", []).duplicate(true),
 		"care_profile_id": str(profile_data.id),
 		"animation_profile_id": str(form_data.animation_profile_id),
 		"nickname": "",
@@ -30,6 +32,9 @@ func create_new(egg: Dictionary, form: Dictionary, profile: Dictionary, owner_pa
 		"selected_at_utc": now_text,
 		"selected_at_unix": now_unix,
 		"hatched_at_utc": "",
+		"hatched_at_unix": 0,
+		"stage_started_at_utc": now_text,
+		"stage_started_at_unix": now_unix,
 		"hatch_due_unix": now_unix + int(profile_data.hatch_duration_seconds),
 		"hatched": false,
 		"sleeping": false,
@@ -59,6 +64,28 @@ func create_new(egg: Dictionary, form: Dictionary, profile: Dictionary, owner_pa
 		"current_simulation_utc": now_text,
 		"revision": 0
 	}
+	state.merge({
+		"evolution_history": [],
+		"pending_evolution": {},
+		"discovered_forms": [str(form_data.id)],
+		"discovered_routes": [],
+		"battle_history_summary": {"battle_count": 0, "wins": 0, "losses": 0, "draws": 0, "current_win_streak": 0, "longest_win_streak": 0, "defeated_encounters": [], "opponent_history": []},
+		"experience": 0,
+		"level": 1,
+		"level_cap": 5,
+		"active_battle": {},
+		"last_battle_result": {},
+		"injury": {},
+		"inventory": {},
+		"used_item_ids": [],
+		"reward_grants": {},
+		"unlock_ids": [],
+		"dungeon_flags": [],
+		"boss_flags": [],
+		"dungeon_history": [],
+		"active_dungeon_run": {},
+		"codex": {"forms": [str(form_data.id)], "encounters": [], "defeated_encounters": [], "dungeons": [], "bosses": []},
+	}, true)
 	_record_event(state, "egg_selected", now_unix, now_text, {"egg_id": egg_data.id})
 	return state
 
@@ -73,6 +100,9 @@ func advance(state: Dictionary, accepted_seconds: int, observed_unix: int, obser
 	if not bool(result.get("hatched", false)) and logical_end >= int(result.get("hatch_due_unix", logical_end + 1)):
 		result.hatched = true
 		result.hatched_at_utc = _utc_text(int(result.hatch_due_unix))
+		result.hatched_at_unix = int(result.hatch_due_unix)
+		result.stage_started_at_utc = result.hatched_at_utc
+		result.stage_started_at_unix = int(result.hatch_due_unix)
 		if str(result.current_form_id) not in result.required_content_ids:
 			result.required_content_ids.append(str(result.current_form_id))
 		_record_event(result, "egg_hatched", int(result.hatch_due_unix), result.hatched_at_utc, {"form_id": result.current_form_id})
@@ -86,6 +116,8 @@ func advance(state: Dictionary, accepted_seconds: int, observed_unix: int, obser
 	result.current_simulation_utc = observed_text if observed_unix >= previous_unix else _utc_text(next_unix)
 	result.revision = int(result.get("revision", 0)) + 1
 	result.aggregate.last_accepted_simulation_seconds = int(result.aggregate.get("last_accepted_simulation_seconds", 0)) + accepted
+	result.aggregate.active_stage_seconds = int(result.aggregate.get("active_stage_seconds", 0)) + accepted
+	result.aggregate.stage_seconds = int(result.aggregate.get("stage_seconds", 0)) + accepted
 	summary.events = events
 	return {"ok": true, "state": result, "summary": summary}
 
@@ -411,7 +443,7 @@ func _force_sickness(state: Dictionary, now_unix: int, now_text: String, catalog
 
 
 func _initial_aggregate() -> Dictionary:
-	return {"feed_count": 0, "treat_count": 0, "overfeed_count": 0, "training_count": 0, "training_outcomes": {"miss": 0, "good": 0, "excellent": 0}, "waste_generated": 0, "waste_cleaned": 0, "clean_count": 0, "sleep_seconds": 0, "awake_seconds": 0, "sleep_disturbances": 0, "sickness_count": 0, "treatment_count": 0, "care_mistakes": 0, "resolved_calls": 0, "call_count": 0, "call_sequence": 1, "dirty_seconds": 0, "severe_hunger_seconds": 0, "last_accepted_simulation_seconds": 0}
+	return {"feed_count": 0, "treat_count": 0, "overfeed_count": 0, "training_count": 0, "training_outcomes": {"miss": 0, "good": 0, "excellent": 0}, "waste_generated": 0, "waste_cleaned": 0, "clean_count": 0, "sleep_seconds": 0, "awake_seconds": 0, "sleep_disturbances": 0, "sickness_count": 0, "treatment_count": 0, "care_mistakes": 0, "resolved_calls": 0, "call_count": 0, "call_sequence": 1, "dirty_seconds": 0, "severe_hunger_seconds": 0, "last_accepted_simulation_seconds": 0, "active_stage_seconds": 0, "offline_stage_seconds": 0, "stage_seconds": 0, "event_sequence": 0}
 
 
 func _record_event(state: Dictionary, event_type: String, timestamp_unix: int, timestamp_text: String, payload: Dictionary) -> void:

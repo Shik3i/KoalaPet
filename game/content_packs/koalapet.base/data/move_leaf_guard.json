@@ -1,0 +1,1 @@
+{"$schema":"../../../../schemas/move.schema.json","id":"koalapet.base:leaf_guard","display_name_key":"move.leaf_guard.name","power":2,"energy_cost":1,"accuracy_bps":9200,"tags":["guard"],"effect":{"kind":"guard","amount":2}}

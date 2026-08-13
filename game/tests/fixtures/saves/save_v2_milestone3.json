@@ -1,0 +1,12 @@
+{
+  "save_format_version": 2,
+  "created_at_utc": "2026-01-01T00:00:00Z",
+  "updated_at_utc": "2026-01-01T00:00:00Z",
+  "content_snapshot": {"content_api_version": "0.1", "packs": [], "content_ids": [], "snapshot_fingerprint": "fixture-v2"},
+  "simulation_state": {"records": [{"pet_state_version": 1, "instance_id": "fixture-pet-1", "definition_id": "example.neutral:meadow_hatchling", "current_form_id": "example.neutral:meadow_hatchling", "required_pack_id": "example.neutral", "required_content_ids": ["example.neutral:meadow_hatchling"], "aggregate": {"care_mistakes": 2}, "unknown_future_field": {"preserve": true}}]},
+  "progression_state": {"facts": {}},
+  "feature_gate_state": {"unlock_ledger": {}},
+  "quarantined_records": [],
+  "migration_metadata": {"history": []},
+  "recovery_metadata": {}
+}

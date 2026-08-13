@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../schemas/form.schema.json",
+  "id": "koalapet.base:tide_glass_juvenile",
+  "family_id": "koalapet.base:tide_family",
+  "display_name_key": "form.tide_glass.name",
+  "stage": "juvenile",
+  "animation_profile_id": "koalapet.base:tide_glass_animation",
+  "care_profile_id": "koalapet.base:standard_care",
+  "base_stats": {"vitality": 9, "effort": 5, "power": 4, "defense": 7, "speed": 4, "focus": 8},
+  "traits": ["glass_memory", "calm_current", "healer"],
+  "move_ids": ["koalapet.base:tide_pulse", "koalapet.base:quiet_mend", "koalapet.base:water_screen"]
+}

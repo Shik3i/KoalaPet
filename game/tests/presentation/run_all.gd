@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PET_GAME_SCENE := preload("res://scenes/pet_game.tscn")
+
 var _failures: Array[String] = []
 var _assertions := 0
 
@@ -26,6 +28,7 @@ func _run() -> void:
 	await _test_habitat_runtime()
 	_test_localized_bounds_and_windows_scales()
 	_test_action_reachability_and_debug_isolation()
+	await _test_player_ui_signal_lifecycle()
 	await _test_minimal_scene_hierarchy()
 	if _failures.is_empty():
 		print("RESULT: PASS (%d assertions)" % _assertions)
@@ -433,11 +436,124 @@ func _test_action_reachability_and_debug_isolation() -> void:
 	_assert_equal("not bool(model.get(\"battle_unlocked\", false))" in source, true, "VIS-GATE battle hidden behind progression gate")
 	_assert_equal("not bool(model.get(\"dungeon_unlocked\", false))" in source, true, "VIS-GATE dungeon hidden behind progression gate")
 	_assert_equal("if show_dev_tools:" in source, true, "VIS-DEV developer control construction is gated")
+	_assert_equal("child.free()" in source, false, "VIS-SIGNAL presentation refresh never frees live signal emitters immediately")
+	_assert_equal("child.queue_free()" in source and "CONNECT_DEFERRED" in source, true, "VIS-SIGNAL presentation teardown and callbacks are deferred")
+
+
+func _test_player_ui_signal_lifecycle() -> void:
+	var save_path := "user://tests/presentation/ui-signals.json"
+	var preferences_path := "user://tests/presentation/ui-signals-preferences.json"
+	var placement_path := "user://tests/presentation/ui-signals-placement.json"
+	_remove_save(save_path)
+	_remove_save(preferences_path)
+	_remove_save(placement_path)
+	var game := PET_GAME_SCENE.instantiate()
+	game.requested_save_path = save_path
+	game.preferences_path = preferences_path
+	game.placement_path = placement_path
+	root.add_child(game)
+	await process_frame
+	await process_frame
+	_assert_deferred_player_controls(game.root_layer, "starter")
+	var choose := _find_button(game.root_layer, "Wählen")
+	await _emit_button_and_settle(choose, "VIS-SIGNAL starter selection opens confirmation")
+	var cancel := _find_button(game.root_layer, "Abbrechen")
+	await _emit_button_and_settle(cancel, "VIS-SIGNAL starter confirmation cancellation")
+	choose = _find_button(game.root_layer, "Wählen")
+	await _emit_button_and_settle(choose, "VIS-SIGNAL starter selection reopens confirmation")
+	var confirm := _find_button(game.root_layer, "Bestätigen")
+	await _emit_button_and_settle(confirm, "VIS-SIGNAL starter confirmation rebuilds safely")
+	_assert_equal(game.application.has_pet(), true, "VIS-SIGNAL starter confirmation reaches egg state")
+	_assert_deferred_player_controls(game.root_layer, "egg")
+	_assert_equal(game.application.complete_hatch().get("ok", false), true, "VIS-SIGNAL hatch fixture reaches playable state")
+	game.call("_refresh")
+	await process_frame
+	await process_frame
+	_assert_deferred_player_controls(game.root_layer, "small care")
+	var revision_before := int(game.application.get_view_model("small", "de").get("state_revision", 0))
+	await _emit_button_and_settle(_find_button(game.root_layer, "Füttern"), "VIS-SIGNAL feed uses the real pressed signal")
+	_assert_equal(int(game.application.get_view_model("small", "de").get("state_revision", 0)) > revision_before, true, "VIS-SIGNAL feed completes without terminating the scene")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Reinigen"), "VIS-SIGNAL clean rebuilds safely")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Schlafen"), "VIS-SIGNAL sleep rebuilds safely")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Aufwecken"), "VIS-SIGNAL wake rebuilds safely")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Mehr"), "VIS-SIGNAL More tab rebuilds safely")
+	_assert_deferred_player_controls(game.root_layer, "small more")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Leckerli"), "VIS-SIGNAL treat rebuilds safely")
+	var train_label: String = game.application.text("ui.train", "Training", game.locale)
+	await _emit_button_and_settle(_find_button(game.root_layer, train_label), "VIS-SIGNAL training rebuilds safely")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Pflege"), "VIS-SIGNAL Care tab rebuilds safely")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Abenteuer"), "VIS-SIGNAL Adventure tab rebuilds safely")
+	_assert_deferred_player_controls(game.root_layer, "small adventure")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Kampf"), "VIS-SIGNAL battle start rebuilds safely")
+	if not game.application.get_current_state().get("active_battle", {}).is_empty():
+		var round_label: String = game.application.text("ui.next_round", "Runde", game.locale)
+		await _emit_button_and_settle(_find_button(game.root_layer, round_label), "VIS-SIGNAL battle round rebuilds safely")
+	if not game.application.get_current_state().get("active_battle", {}).is_empty():
+		game.application.command({"type": "battle_resolve", "outcome": "win"})
+		game.call("_refresh")
+		await process_frame
+	await _emit_button_and_settle(_find_button(game.root_layer, "Erweitert"), "VIS-SIGNAL mode switch rebuilds safely")
+	_assert_equal(game.mode, "expanded", "VIS-SIGNAL mode switch reaches Expanded")
+	for tab_label in ["Kampf", "Dungeon", "Inventar", "Kodex", "Entwicklung", "Übersicht"]:
+		var center: Node = game.root_layer.find_child("ExpandedCenter", true, false)
+		await _emit_button_and_settle(_find_button(center, tab_label), "VIS-SIGNAL Expanded tab %s" % tab_label)
+		_assert_deferred_player_controls(game.root_layer, "expanded %s" % tab_label)
+	var actions: Node = game.root_layer.find_child("ExpandedActions", true, false)
+	for action_label in ["Füttern", "Leckerli", "Reinigen", "Trainieren", "Schlafen", "Medizin"]:
+		await _emit_button_and_settle(_find_button(actions, action_label), "VIS-SIGNAL Expanded action %s" % action_label)
+		actions = game.root_layer.find_child("ExpandedActions", true, false)
+	var settings_label: String = game.application.text("ui.settings", "Einstellungen", game.locale)
+	await _emit_button_and_settle(_find_button(game.root_layer, settings_label), "VIS-SIGNAL Settings opens from its real button")
+	var settings: Node = game.root_layer.find_child("PresentationSettings", true, false)
+	_assert_equal(settings != null, true, "VIS-SIGNAL settings modal exists")
+	if settings != null:
+		_assert_deferred_player_controls(settings, "settings")
+		var options := _collect_controls(settings, "OptionButton")
+		var toggles := _collect_controls(settings, "CheckButton")
+		_assert_equal(options.size(), 12, "VIS-SIGNAL every settings selector is constructed")
+		_assert_equal(toggles.size(), 10, "VIS-SIGNAL every settings toggle is constructed")
+		if not options.is_empty():
+			var option := options[0] as OptionButton
+			option.emit_signal("item_selected", (option.selected + 1) % option.item_count)
+			await process_frame
+			await process_frame
+			_assert_equal(is_instance_valid(game), true, "VIS-SIGNAL selector callback rebuilds safely")
+	game.call("_open_settings")
+	await process_frame
+	settings = game.root_layer.find_child("PresentationSettings", true, false)
+	if settings != null:
+		var toggles_after := _collect_controls(settings, "CheckButton")
+		if not toggles_after.is_empty():
+			var toggle := toggles_after[0] as CheckButton
+			toggle.emit_signal("toggled", not toggle.button_pressed)
+			await process_frame
+			await process_frame
+			_assert_equal(is_instance_valid(game), true, "VIS-SIGNAL toggle callback rebuilds safely")
+	var conditional_model: Dictionary = game.application.get_view_model("expanded", game.locale)
+	conditional_model["injury"] = {"injury_id": "koalapet.base:sprain"}
+	conditional_model["open_calls"] = [{"call_id": "signal-fixture"}]
+	var conditional_actions := game.call("_expanded_actions", conditional_model) as Control
+	root.add_child(conditional_actions)
+	_assert_deferred_player_controls(conditional_actions, "conditional injury and call actions")
+	conditional_actions.free()
+	_assert_equal(is_instance_valid(game), true, "VIS-SIGNAL exhaustive player control construction keeps scene alive")
+	game.free()
+	_remove_save(save_path)
+	_remove_save(preferences_path)
+	_remove_save(placement_path)
 
 
 func _test_minimal_scene_hierarchy() -> void:
-	var scene := load("res://scenes/pet_game.tscn") as PackedScene
-	var game := scene.instantiate()
+	var save_path := "user://tests/presentation/minimal-scene.json"
+	var preferences_path := "user://tests/presentation/minimal-scene-preferences.json"
+	var placement_path := "user://tests/presentation/minimal-scene-placement.json"
+	_remove_save(save_path)
+	_remove_save(preferences_path)
+	_remove_save(placement_path)
+	var game := PET_GAME_SCENE.instantiate()
+	game.requested_save_path = save_path
+	game.preferences_path = preferences_path
+	game.placement_path = placement_path
 	root.add_child(game)
 	await process_frame
 	await process_frame
@@ -455,6 +571,65 @@ func _test_minimal_scene_hierarchy() -> void:
 		_assert_equal(persistent_backgrounds, 0, "VIS-021 Minimal has no persistent ColorRect background")
 	_assert_equal(game.dev_window == null, true, "VIS-022 developer window absent without --dev-tools")
 	game.free()
+	_remove_save(save_path)
+	_remove_save(preferences_path)
+	_remove_save(placement_path)
+
+
+func _assert_deferred_player_controls(node: Node, label: String) -> void:
+	var controls := _collect_controls(node, "BaseButton")
+	_assert_equal(not controls.is_empty(), true, "VIS-SIGNAL %s exposes controls" % label)
+	for control in controls:
+		var button := control as BaseButton
+		var connections := button.get_signal_connection_list("pressed")
+		for connection in connections:
+			_assert_equal((int(connection.get("flags", 0)) & CONNECT_DEFERRED) != 0, true, "VIS-SIGNAL %s defers %s" % [label, _button_name(button)])
+	for control in _collect_controls(node, "OptionButton"):
+		for connection in control.get_signal_connection_list("item_selected"):
+			_assert_equal((int(connection.get("flags", 0)) & CONNECT_DEFERRED) != 0, true, "VIS-SIGNAL %s defers selector" % label)
+	for control in _collect_controls(node, "CheckButton"):
+		for connection in control.get_signal_connection_list("toggled"):
+			_assert_equal((int(connection.get("flags", 0)) & CONNECT_DEFERRED) != 0, true, "VIS-SIGNAL %s defers toggle" % label)
+
+
+func _collect_controls(node: Node, class_name_value: String) -> Array[Node]:
+	var result: Array[Node] = []
+	if node == null:
+		return result
+	if node.is_class(class_name_value):
+		result.append(node)
+	for child in node.get_children():
+		result.append_array(_collect_controls(child, class_name_value))
+	return result
+
+
+func _find_button(node: Node, label: String) -> BaseButton:
+	for control in _collect_controls(node, "BaseButton"):
+		var button := control as BaseButton
+		if button.text == label or button.tooltip_text == label:
+			return button
+	return null
+
+
+func _emit_button_and_settle(button: BaseButton, label: String) -> void:
+	_assert_equal(button != null, true, "%s exists" % label)
+	if button == null:
+		return
+	_assert_equal(not button.disabled, true, "%s is enabled" % label)
+	if button.disabled:
+		return
+	button.emit_signal("pressed")
+	_assert_equal(is_instance_valid(button), true, "%s emitter survives signal dispatch" % label)
+	await process_frame
+	await process_frame
+
+
+func _button_name(button: BaseButton) -> String:
+	if not button.text.is_empty():
+		return button.text
+	if not button.tooltip_text.is_empty():
+		return button.tooltip_text
+	return button.name
 
 
 func _remove_save(path: String) -> void:

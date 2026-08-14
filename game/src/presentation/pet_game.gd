@@ -53,10 +53,10 @@ var minimal_hit_region_updates := 0
 func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
 	var development_actions_enabled := OS.is_debug_build()
-	requested_save_path = _argument_value(args, "--save-path=", "user://saves/koalapet.json")
+	requested_save_path = _argument_value(args, "--save-path=", requested_save_path if not requested_save_path.is_empty() else "user://saves/koalapet.json")
 	diagnostics_path = _argument_value(args, "--diagnostics-path=", "")
-	placement_path = _argument_value(args, "--placement-path=", PLACEMENT_PATH)
-	preferences_path = _argument_value(args, "--preferences-path=", PREFERENCES_PATH)
+	placement_path = _argument_value(args, "--placement-path=", placement_path)
+	preferences_path = _argument_value(args, "--preferences-path=", preferences_path)
 	preferences = PresentationPreferences.load_file(preferences_path).get("data", PresentationPreferences.defaults())
 	var interface_preferences: Dictionary = preferences.get("interface", {})
 	var pet_preferences: Dictionary = preferences.get("pet_presentation", {})
@@ -257,7 +257,7 @@ func _starter_card(egg: Dictionary) -> PanelContainer:
 	affinity.add_theme_color_override("font_color", PixelTheme.SILVER)
 	column.add_child(affinity)
 	var choose := PixelUi.button(application.text("ui.select", "Wählen", locale), "egg", application.text("ui.select", "Wählen", locale))
-	choose.pressed.connect(_show_starter_confirmation.bind(egg_id))
+	_connect_pressed(choose, _show_starter_confirmation.bind(egg_id))
 	column.add_child(choose)
 	return card
 
@@ -280,10 +280,10 @@ func _show_starter_confirmation(egg_id: String) -> void:
 	row.alignment = BoxContainer.ALIGNMENT_END
 	column.add_child(row)
 	var cancel := PixelUi.button(application.text("ui.cancel", "Abbrechen", locale))
-	cancel.pressed.connect(shade.queue_free)
+	_connect_pressed(cancel, shade.queue_free)
 	row.add_child(cancel)
 	var confirm := PixelUi.button(application.text("ui.confirm", "Bestätigen", locale), "egg")
-	confirm.pressed.connect(_choose_starter.bind(egg_id))
+	_connect_pressed(confirm, _choose_starter.bind(egg_id))
 	row.add_child(confirm)
 
 
@@ -308,7 +308,7 @@ func _open_settings() -> void:
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_child(title)
 	var close := PixelUi.icon_button("close", application.text("ui.close", "Schließen", locale))
-	close.pressed.connect(shade.queue_free)
+	_connect_pressed(close, shade.queue_free)
 	heading.add_child(close)
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(0, clampf(root_layer.size.y - 140.0, 180.0, 520.0))
@@ -344,7 +344,7 @@ func _open_settings() -> void:
 	_add_setting_toggle(grid, application.text("ui.click_through", "Klicks außerhalb durchlassen", locale), bool(preferences["desktop"]["minimal_click_through"]), _set_preference.bind("desktop", "minimal_click_through"))
 	_add_setting_toggle(grid, application.text("ui.remember_positions", "Fensterpositionen merken", locale), bool(preferences["desktop"]["remember_window_positions"]), _set_preference.bind("desktop", "remember_window_positions"))
 	var reset := PixelUi.button(application.text("ui.reset_windows", "Fenster sichtbar zurücksetzen", locale), "settings")
-	reset.pressed.connect(_reset_windows)
+	_connect_pressed(reset, _reset_windows)
 	column.add_child(reset)
 
 
@@ -366,7 +366,7 @@ func _add_setting_options(parent: GridContainer, label_text: String, labels: Arr
 		var comparable_number := typeof(values[index]) in [TYPE_FLOAT, TYPE_INT] and typeof(current) in [TYPE_FLOAT, TYPE_INT]
 		if (typeof(values[index]) == typeof(current) and values[index] == current) or (comparable_number and is_equal_approx(float(values[index]), float(current))):
 			options.select(index)
-	options.item_selected.connect(func(index: int) -> void: callback.call(options.get_item_metadata(index)))
+	options.item_selected.connect(func(index: int) -> void: callback.call(options.get_item_metadata(index)), CONNECT_DEFERRED)
 	row.add_child(options)
 
 
@@ -380,7 +380,7 @@ func _add_setting_toggle(parent: GridContainer, label_text: String, current: boo
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(label)
 	var toggle := PixelUi.toggle(application.text("ui.on", "An", locale) if current else application.text("ui.off", "Aus", locale), current)
-	toggle.toggled.connect(func(enabled: bool) -> void: callback.call(enabled))
+	toggle.toggled.connect(func(enabled: bool) -> void: callback.call(enabled), CONNECT_DEFERRED)
 	row.add_child(toggle)
 
 
@@ -449,7 +449,7 @@ func _build_egg(model: Dictionary) -> void:
 	var hatch := PixelUi.button(application.text("ui.hatch_ready", "Bereit zum Schlüpfen", locale) if ready else application.text("ui.hatching", "Dein Ei wird warm", locale), "egg")
 	hatch.disabled = not ready
 	hatch.tooltip_text = application.text("ui.hatching", "Dein Ei wird warm", locale) if not ready else application.text("ui.hatch_ready", "Bereit zum Schlüpfen", locale)
-	hatch.pressed.connect(_complete_hatch)
+	_connect_pressed(hatch, _complete_hatch)
 	column.add_child(hatch)
 
 
@@ -602,31 +602,31 @@ func _title_bar(title_text: String, icon_name: String) -> HBoxContainer:
 	if mode == MODE_SMALL and application.is_hatched():
 		var care_tab := PixelUi.icon_button("health", application.text("ui.care", "Pflege", locale))
 		care_tab.button_pressed = small_page == "care"
-		care_tab.pressed.connect(_set_small_page.bind("care"))
+		_connect_pressed(care_tab, _set_small_page.bind("care"))
 		row.add_child(care_tab)
 		var adventure_tab := PixelUi.icon_button("battle", application.text("ui.adventure", "Abenteuer", locale))
 		adventure_tab.button_pressed = small_page == "adventure"
-		adventure_tab.pressed.connect(_set_small_page.bind("adventure"))
+		_connect_pressed(adventure_tab, _set_small_page.bind("adventure"))
 		row.add_child(adventure_tab)
 		var more_tab := PixelUi.icon_button("settings", application.text("ui.more", "Mehr", locale))
 		more_tab.button_pressed = small_page == "more"
-		more_tab.pressed.connect(_set_small_page.bind("more"))
+		_connect_pressed(more_tab, _set_small_page.bind("more"))
 		row.add_child(more_tab)
 	var settings_button := PixelUi.icon_button("settings", application.text("ui.settings", "Einstellungen", locale))
-	settings_button.pressed.connect(_open_settings)
+	_connect_pressed(settings_button, _open_settings)
 	row.add_child(settings_button)
 	if show_dev_tools:
 		var dev := PixelUi.icon_button("settings", application.text("ui.dev", "Entwicklungswerkzeuge", locale))
-		dev.pressed.connect(_open_dev_window)
+		_connect_pressed(dev, _open_dev_window)
 		row.add_child(dev)
 	var switch_mode := PixelUi.icon_button("expand", application.text("ui.expanded", "Erweitert", locale) if mode == MODE_SMALL else application.text("ui.small", "Klein", locale))
-	switch_mode.pressed.connect(_set_mode.bind(MODE_EXPANDED if mode == MODE_SMALL else MODE_SMALL))
+	_connect_pressed(switch_mode, _set_mode.bind(MODE_EXPANDED if mode == MODE_SMALL else MODE_SMALL))
 	row.add_child(switch_mode)
 	var minimize := PixelUi.icon_button("minimize", application.text("ui.minimize", "Minimieren", locale))
-	minimize.pressed.connect(_minimize)
+	_connect_pressed(minimize, _minimize)
 	row.add_child(minimize)
 	var close := PixelUi.icon_button("close", application.text("ui.close", "Schließen", locale))
-	close.pressed.connect(get_tree().quit)
+	_connect_pressed(close, get_tree().quit)
 	row.add_child(close)
 	return row
 
@@ -680,7 +680,7 @@ func _add_small_action(parent: Container, text_value: String, icon_name: String,
 	var value := PixelUi.button("" if icon_only else text_value, icon_name, text_value)
 	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	value.disabled = disabled
-	value.pressed.connect(action)
+	_connect_pressed(value, action)
 	parent.add_child(value)
 
 
@@ -732,7 +732,7 @@ func _expanded_center(model: Dictionary) -> VBoxContainer:
 	for entry in [["home", "ui.home", "Übersicht"], ["battle", "ui.battle", "Kampf"], ["dungeon", "ui.dungeon", "Dungeon"], ["inventory", "ui.inventory", "Inventar"], ["codex", "ui.codex", "Kodex"], ["evolution", "ui.evolution", "Entwicklung"]]:
 		var tab := PixelUi.tab(application.text(str(entry[1]), str(entry[2]), locale), expanded_tab == str(entry[0]))
 		tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		tab.pressed.connect(_set_expanded_tab.bind(str(entry[0])))
+		_connect_pressed(tab, _set_expanded_tab.bind(str(entry[0])))
 		tabs.add_child(tab)
 	column.add_child(tabs)
 	var detail := PixelUi.panel(true)
@@ -771,16 +771,16 @@ func _expanded_actions(model: Dictionary) -> PanelContainer:
 		["ui.medicine", "Medizin", "medicine", _medicine],
 	]:
 		var action := PixelUi.button(application.text(str(entry[0]), str(entry[1]), locale), str(entry[2]))
-		action.pressed.connect(entry[3])
+		_connect_pressed(action, entry[3])
 		grid.add_child(action)
 	if not model.get("injury", {}).is_empty():
 		var injury := PixelUi.button(application.text("ui.treat_injury", "Bandagieren", locale), "medicine")
-		injury.pressed.connect(_treat_injury)
+		_connect_pressed(injury, _treat_injury)
 		column.add_child(injury)
 	var calls: Array = model.get("open_calls", [])
 	if not calls.is_empty():
 		var resolve := PixelUi.button(application.text("ui.resolve", "Erledigen", locale), "call")
-		resolve.pressed.connect(_resolve_first_call)
+		_connect_pressed(resolve, _resolve_first_call)
 		column.add_child(resolve)
 	column.add_child(HSeparator.new())
 	column.add_child(PixelUi.title(application.text("ui.history", "Letzte Ereignisse", locale), 14))
@@ -832,7 +832,7 @@ func _battle_panel(model: Dictionary) -> VBoxContainer:
 		row.add_child(copy)
 		var start := PixelUi.button(application.text("ui.start_battle", "Kampf beginnen", locale), "battle")
 		start.disabled = not bool(model.get("battle_unlocked", false))
-		start.pressed.connect(_start_battle)
+		_connect_pressed(start, _start_battle)
 		column.add_child(start)
 		return column
 	var encounter := application.get_encounter_presentation(str(battle.get("encounter_id", "")), locale)
@@ -845,10 +845,10 @@ func _battle_panel(model: Dictionary) -> VBoxContainer:
 	for stance in ["aggressive", "balanced", "defensive"]:
 		var stance_button := PixelUi.battle_stance_control(application.text("ui." + stance, stance.capitalize(), locale), "attack" if stance == "aggressive" else "shield" if stance == "defensive" else "health")
 		stance_button.button_pressed = str(battle.get("selected_stance", "balanced")) == stance
-		stance_button.pressed.connect(_set_battle_stance.bind(stance))
+		_connect_pressed(stance_button, _set_battle_stance.bind(stance))
 		stances.add_child(stance_button)
 	var round_button := PixelUi.button(application.text("ui.next_round", "Runde ausführen", locale), "attack")
-	round_button.pressed.connect(_battle_round)
+	_connect_pressed(round_button, _battle_round)
 	column.add_child(round_button)
 	return column
 
@@ -878,7 +878,7 @@ func _dungeon_panel(model: Dictionary) -> VBoxContainer:
 	if run.is_empty():
 		var start := PixelUi.button(application.text("ui.start_dungeon", "Dungeon beginnen", locale), "dungeon")
 		start.disabled = not bool(model.get("dungeon_unlocked", false))
-		start.pressed.connect(_start_dungeon)
+		_connect_pressed(start, _start_dungeon)
 		column.add_child(start)
 		return column
 	if not model.get("active_battle", {}).is_empty():
@@ -886,18 +886,18 @@ func _dungeon_panel(model: Dictionary) -> VBoxContainer:
 		battle_notice.text = application.text("ui.dungeon_battle_active", "Diese Etappe wird im Kampf entschieden.", locale)
 		column.add_child(battle_notice)
 		var round_button := PixelUi.button(application.text("ui.next_round", "Runde ausführen", locale), "attack")
-		round_button.pressed.connect(_battle_round)
+		_connect_pressed(round_button, _battle_round)
 		column.add_child(round_button)
 		return column
 	var nodes: Array = dungeon.get("nodes", [])
 	if current >= 0 and current < nodes.size() and str(nodes[current].get("kind", "")) == "event":
 		for choice in nodes[current].get("choices", []):
 			var choice_button := PixelUi.button(str(choice.get("name", choice.get("id", ""))), "mood")
-			choice_button.pressed.connect(_dungeon_choice.bind(str(choice.get("id", ""))))
+			_connect_pressed(choice_button, _dungeon_choice.bind(str(choice.get("id", ""))))
 			column.add_child(choice_button)
 	else:
 		var next := PixelUi.button(application.text("ui.next_node", "Nächste Etappe", locale), "map")
-		next.pressed.connect(_dungeon_next)
+		_connect_pressed(next, _dungeon_next)
 		column.add_child(next)
 	return column
 
@@ -1362,7 +1362,7 @@ func _open_nickname_modal() -> void:
 	input.placeholder_text = application.text("ui.nickname_hint", "Optionaler Spitzname", locale)
 	column.add_child(input)
 	var save := PixelUi.button(application.text("ui.save", "Speichern", locale))
-	save.pressed.connect(_save_nickname.bind(input))
+	_connect_pressed(save, _save_nickname.bind(input))
 	column.add_child(save)
 
 
@@ -1391,9 +1391,9 @@ func _open_dev_window() -> void:
 	column.add_child(PixelUi.title(application.text("ui.dev", "Entwicklungswerkzeuge", locale), 16))
 	for entry in [[application.text("ui.dev_advance_hour", "1 Stunde vor", locale), _advance_hour], [application.text("ui.dev_force_sick", "Krankheit erzwingen", locale), _force_sickness], ["Animation Showroom", _open_animation_showroom]]:
 		var button := PixelUi.button(str(entry[0]))
-		button.pressed.connect(entry[1])
+		_connect_pressed(button, entry[1])
 		column.add_child(button)
-	dev_window.close_requested.connect(dev_window.hide)
+	dev_window.close_requested.connect(dev_window.hide, CONNECT_DEFERRED)
 	dev_window.show()
 
 
@@ -1414,7 +1414,7 @@ func _open_animation_showroom() -> void:
 	showroom.setup(application, locale)
 	animation_showroom_window.add_child(showroom)
 	add_child(animation_showroom_window)
-	animation_showroom_window.close_requested.connect(animation_showroom_window.hide)
+	animation_showroom_window.close_requested.connect(animation_showroom_window.hide, CONNECT_DEFERRED)
 	animation_showroom_window.show()
 
 
@@ -1473,9 +1473,14 @@ func _set_margins(value: MarginContainer, amount: int) -> void:
 	value.add_theme_constant_override("margin_bottom", amount)
 
 
+func _connect_pressed(button: BaseButton, callback: Callable) -> void:
+	button.pressed.connect(callback, CONNECT_DEFERRED)
+
+
 func _clear(node: Node) -> void:
 	for child in node.get_children():
-		child.free()
+		node.remove_child(child)
+		child.queue_free()
 
 
 func _argument_value(args: PackedStringArray, prefix: String, fallback: String) -> String:

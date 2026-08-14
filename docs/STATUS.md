@@ -71,7 +71,7 @@ Aktueller vollständiger Lauf mit Godot `4.7.1.stable.official.a13da4feb`:
 - Pet-Suite mit `44` Assertions einschließlich idempotentem Hatch
 - Milestone-4 Evolution/Battle/Dungeon-Suite mit `62` Assertions
 - platformneutrale Window-/Placement-Suite mit `41` Assertions
-- Präsentations-Suite mit `3237` Assertions einschließlich `16` Showroom-Entities, `290` Runtime-Sequenzen, vollständigem Playback, Markerreihenfolge, No-Fallback, Refresh-Stabilität, Reduced Motion, UI-Komponenten, Preferences, Habitat/Minimal, DE/EN und 100–200%-Layoutgrenzen
+- Präsentations-Suite mit `3517` Assertions einschließlich `16` Showroom-Entities, `290` Runtime-Sequenzen, vollständigem Playback, Markerreihenfolge, No-Fallback, Refresh-Stabilität, Reduced Motion, UI-Komponenten, echten Player-UI-Signalpfaden für Füttern/Pflege/Tabs/Modus/Kampf/Einstellungen, vollständiger Deferred-Connection-Prüfung, Preferences, Habitat/Minimal, DE/EN und 100–200%-Layoutgrenzen
 - Asset-Validator für `373` PNGs (`372` mit Transparenz), vollständige Animationsabdeckung, Geometrie, Alpha, Chronologie, VFX und Evidenz
 - Content-Validator für zwei Packs und `86` JSON-Dokumente
 - Ruff- und GDLint-Läufe ohne Befund; Python-Abhängigkeiten ohne bekannte Advisories; kein Node-/npm-Abhängigkeitsbaum vorhanden, daher `npm audit` nicht anwendbar

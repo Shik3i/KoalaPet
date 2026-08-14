@@ -96,7 +96,7 @@ The native video directly proves the requested Minimal → Small → care → Ex
 
 ## Prompt 4.8 visual-acceptance gate
 
-- `game/tests/presentation/run_all.gd`: `3237` assertions including `16` Showroom entities, all `290` runtime sequences, no unintended fallback, completion of every sequence, marker bounds/order, loop override caching, refresh stability, manual frame stepping and Reduced-Motion routing.
+- `game/tests/presentation/run_all.gd`: `3517` assertions including `16` Showroom entities, all `290` runtime sequences, no unintended fallback, completion of every sequence, marker bounds/order, loop override caching, refresh stability, manual frame stepping, Reduced-Motion routing and signal-faithful player-UI lifecycle coverage. The suite emits real `pressed` signals for starter, feed/care, page, mode, battle and Expanded controls; it also verifies deferred connections for every constructed player button, settings selector and toggle, including conditional injury/call actions.
 - `tools/visual_review/audit_animation_sequences.py --check`: `281 ACCEPTED_PROVISIONAL`, `9 NOT_PLAYER_FACING`, no broken/regeneration rows; exact distributed-asset register coverage; no evidence/reference import; explicit reason for every unreferenced runtime PNG.
 - `tools/content_validation/validate_content.py`: event markers must be in range and monotonically ordered.
 - `tools/run_foundation_checks.py` and Windows spike tooling automatically resolve the sibling `_console.exe` for version, import, test, script and check operations. The GUI executable is never used as a headless CLI runner.

@@ -7,6 +7,7 @@
 - Priority is evolution `800`, battle `700`, care `600`, condition `500`, sleep `400`, locomotion `300`, attention `200`, ambient `100`. One-shots use stable IDs, are consumed once, cap pending events at `32`, retain `64` recent IDs and return to an authoritative loop.
 - Attack, hit, dodge, sleep, wake and care markers drive only visual effects. Gameplay outcomes and command completion remain domain-authoritative.
 - Reduced Motion disables continuous roaming/playful travel and uses reduced feedback while still advancing every chronological frame. Marker frames cannot be skipped. Care commands route instantly to the correct anchor and complete their presentation timers.
+- Player controls dispatch state-changing callbacks deferred from their Godot signal emission. Presentation refresh removes the old tree immediately but releases it with `queue_free()`, so a button, selector or toggle is never destroyed while emitting its own signal.
 
 ## Habitat anchors
 

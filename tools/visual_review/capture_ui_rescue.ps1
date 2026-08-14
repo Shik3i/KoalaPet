@@ -62,7 +62,13 @@ $scenarios = @(
     @{ name = "21-expanded-evolution";    mode = "expanded"; setup = "choose:moss,hour,hatch,good,good,good";     extra = @(); actions = "tab:evolution" },
     @{ name = "22-expanded-large-size";   mode = "expanded"; setup = "choose:moss,hour,hatch";                    extra = @(); actions = "size:1900x1180" },
     @{ name = "23-settings";              mode = "small";    setup = "choose:moss,hour,hatch";                    extra = @(); actions = "settings" },
-    @{ name = "24-blocked-action";        mode = "small";    setup = "choose:moss,hour,hatch,sleep";              extra = @(); actions = "train" }
+    @{ name = "24-blocked-action";        mode = "small";    setup = "choose:moss,hour,hatch,sleep";              extra = @(); actions = "train" },
+    @{ name = "25-small-injured";         mode = "small";    setup = "choose:moss,hour,hatch,good,good,good,battle,loss"; extra = @() },
+    @{ name = "26-expanded-codex";        mode = "expanded"; setup = "choose:moss,hour,hatch,good,good,good,dungeon_unlock,dungeon_run"; extra = @(); actions = "tab:codex" },
+    @{ name = "27-small-first-care-hint"; mode = "small";    setup = "choose:tide,hour,hatch";                    extra = @() },
+    @{ name = "28-small-text-175";        mode = "small";    setup = "choose:moss,hour,hatch";                    extra = @(); actions = "text:175" },
+    @{ name = "29-small-high-contrast";   mode = "small";    setup = "choose:moss,hour,hatch";                    extra = @(); actions = "contrast:on" },
+    @{ name = "30-small-compact-density"; mode = "small";    setup = "choose:moss,hour,hatch";                    extra = @(); actions = "density:compact" }
 )
 
 $records = New-Object System.Collections.Generic.List[object]

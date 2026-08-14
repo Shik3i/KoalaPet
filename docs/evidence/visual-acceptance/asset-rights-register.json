@@ -640,6 +640,28 @@
     },
     {
       "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/egg",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/egg.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "1b998ebfeb8b511bf12a2e54c13ad33cf0bc3008bc82ed1501db208aba62c3c2",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
       "asset_id": "koalapet.base:visual/assets_generated/ui/icons/energy",
       "classification": "REPLACE_BEFORE_RELEASE",
       "file_paths": [
@@ -1358,6 +1380,28 @@
       "owning_content_pack": "koalapet.base",
       "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
       "sha256": "62a2d2c0f5c0b7e043b4d9151c26ae94d161a9adea2723dca751d658fcdad007",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/egg",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/egg.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "5ae84327f9575642a327300083c6e18dd0f1c083a596cba0751ab2be28f97838",
       "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
       "third_party_source_usage": "NONE_DOCUMENTED",
       "transformation_pipeline": [
@@ -9527,7 +9571,7 @@
       ]
     }
   ],
-  "distributed_visual_count": 430,
+  "distributed_visual_count": 432,
   "inventory_date": "2026-08-14",
   "legal_decision": "NOT_MADE",
   "schema_version": 1

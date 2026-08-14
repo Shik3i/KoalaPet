@@ -16,6 +16,15 @@ const COMMAND_DEBOUNCE_MSEC := 450
 ## beside its percentage; the meter then shows icon and value only.
 const NARROW_METER_WIDTH := 168.0
 
+## Which pictogram represents each declared item use kind.
+const ITEM_KIND_ICONS := {
+	"meal": "feed",
+	"treat": "treat",
+	"medicine": "medicine",
+	"injury_treatment": "treatment",
+	"material": "inventory",
+}
+
 ## Localization key, German fallback and icon for every care meter.
 const STATUS_KEYS := {
 	"satiety_bps": ["ui.satiety", "Sättigung", "satiety"],
@@ -1537,30 +1546,44 @@ func _inventory_panel(model: Dictionary) -> VBoxContainer:
 	var column := VBoxContainer.new()
 	column.add_child(PixelUi.title(application.text("ui.inventory", "Inventar", locale), 15))
 	var grid := GridContainer.new()
-	grid.columns = 6
+	grid.name = "InventoryGrid"
+	grid.columns = 2
+	UiMetrics.apply_grid_separation(grid, UiMetrics.SPACE_COMPACT)
 	column.add_child(grid)
 	var inventory: Dictionary = model.get("inventory", {})
 	for item_id in inventory:
-		var slot := PixelUi.inventory_slot()
-		var label := Label.new()
-		label.text = "%s\nx%d" % [application.get_display_name(str(item_id), locale), int(inventory[item_id])]
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		slot.add_child(label)
-		grid.add_child(slot)
+		grid.add_child(_inventory_slot(str(item_id), int(inventory[item_id])))
 	if inventory.is_empty():
-		column.add_child(Label.new())
+		column.add_child(PixelUi.caption(application.text("ui.inventory_empty", "Noch keine Gegenstände gesammelt.", locale), true))
 	return column
+
+
+## An item slot pairs its localized name with the pictogram for its use kind, so
+## the grid can be scanned by shape instead of read word by word.
+func _inventory_slot(item_id: String, count: int) -> PanelContainer:
+	var slot := PixelUi.inventory_slot()
+	var row := HBoxContainer.new()
+	UiMetrics.apply_separation(row, UiMetrics.SPACE_COMPACT)
+	slot.add_child(row)
+	row.add_child(PixelUi.icon_rect(str(ITEM_KIND_ICONS.get(application.get_item_kind(item_id), "inventory")), UiMetrics.ICON_STATUS))
+	var label := Label.new()
+	label.text = "%s\nx%d" % [application.get_display_name(item_id, locale), count]
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", UiMetrics.font_size(UiMetrics.TEXT_CAPTION))
+	row.add_child(label)
+	slot.tooltip_text = "%s x%d" % [application.get_display_name(item_id, locale), count]
+	return slot
 
 
 func _codex_panel(model: Dictionary) -> VBoxContainer:
 	var column := VBoxContainer.new()
 	column.add_child(PixelUi.title(application.text("ui.codex", "Kodex", locale), 15))
 	var grid := GridContainer.new()
-	grid.columns = 6
+	grid.name = "CodexGrid"
+	grid.columns = 2
+	UiMetrics.apply_grid_separation(grid, UiMetrics.SPACE_COMPACT)
 	column.add_child(grid)
 	var codex: Dictionary = model.get("codex", {})
 	var ids: Array = []
@@ -1568,15 +1591,25 @@ func _codex_panel(model: Dictionary) -> VBoxContainer:
 	ids.append_array(codex.get("encounters", []))
 	for content_id in ids:
 		var slot := PixelUi.codex_slot()
+		var row := HBoxContainer.new()
+		UiMetrics.apply_separation(row, UiMetrics.SPACE_COMPACT)
+		slot.add_child(row)
+		# A discovered creature is recognised by its portrait long before its
+		# name is read, so the codex leads with the art it earned.
+		var portrait := _portrait(str(content_id), 32)
+		if portrait != null:
+			row.add_child(portrait)
 		var label := Label.new()
 		label.text = application.get_display_name(str(content_id), locale)
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		slot.add_child(label)
+		label.add_theme_font_size_override("font_size", UiMetrics.font_size(UiMetrics.TEXT_CAPTION))
+		row.add_child(label)
+		slot.tooltip_text = application.get_display_name(str(content_id), locale)
 		grid.add_child(slot)
+	if ids.is_empty():
+		column.add_child(PixelUi.caption(application.text("ui.codex_empty", "Noch nichts entdeckt.", locale), true))
 	return column
 
 

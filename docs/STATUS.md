@@ -77,7 +77,7 @@ Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. D
 - Reproduktion, Dateihashes und Evidenzgrenzen: [`evidence/visual-rebuild/README.md`](evidence/visual-rebuild/README.md)
 - Prompt-4.6-Evidenz: Small/Expanded/Settings/Minimal-/Stationsaufnahmen, neun Walk-GIFs, 23-Sekunden-Polish-Film und sieben Performance-Szenarien unter [`evidence/animation-polish/README.md`](evidence/animation-polish/README.md)
 - Prompt-4.7-Evidenz: sieben native Godot-Movies, zehn extrahierte Belegframes, vollständige/dichte Kontaktbögen, vier Reels und acht Performance-Szenarien unter [`evidence/living-animation/README.md`](evidence/living-animation/README.md)
-- Prompt-4.9-Evidenz: 24 native Szenarien über die eigene Viewport-Rückgabe der Anwendung, vollständige Laufzeitdiagnostik je Aufnahme und eine interaktive Aktionsmatrix mit echten Win32-Eingaben unter [`evidence/ui-rescue/README.md`](evidence/ui-rescue/README.md)
+- Prompt-4.9-Evidenz: 30 native Szenarien über die eigene Viewport-Rückgabe der Anwendung, vollständige Laufzeitdiagnostik je Aufnahme und eine interaktive Aktionsmatrix mit echten Win32-Eingaben unter [`evidence/ui-rescue/README.md`](evidence/ui-rescue/README.md)
 - Prompt-4.8-Evidenz: debug-only Runtime-Showroom, `290` klassifizierte Sequenzen, neun Form-Kontaktbögen, vier fokussierte Reels, Rechte-/Optimierungsregister und direkte Windows-Showroom-/Fokusaufnahmen unter [`evidence/visual-acceptance/README.md`](evidence/visual-acceptance/README.md)
 
 ## Validierung

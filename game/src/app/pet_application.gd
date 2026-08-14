@@ -211,6 +211,12 @@ func find_item_by_kind(kind: String) -> String:
 	return ""
 
 
+## The declared use kind of an item, so the presentation can pick a matching
+## pictogram without hardcoding item identifiers.
+func get_item_kind(item_id: String) -> String:
+	return str(_record(item_id).get("data", {}).get("use", {}).get("kind", ""))
+
+
 func get_training_activity_id() -> String:
 	return str(_first_document("training-activity").get("id", ""))
 

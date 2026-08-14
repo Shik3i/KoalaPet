@@ -18,30 +18,30 @@
 			"name": "HeaderSettings",
 			"pressed_connections": 1,
 			"rect": [
-				1816.0,
+				936.0,
 				40.0,
 				80.0,
-				102.0
+				92.0
 			],
 			"tooltip": "Einstellungen"
 		},
 		{
-			"accessible_label": "Klein",
+			"accessible_label": "Erweitert",
 			"action_id": "",
 			"component": "window_button",
 			"disabled": false,
 			"focusable": true,
-			"icon": "collapse",
+			"icon": "expand",
 			"label": "",
 			"name": "HeaderModeSwitch",
 			"pressed_connections": 1,
 			"rect": [
-				1912.0,
+				1032.0,
 				40.0,
 				80.0,
-				102.0
+				92.0
 			],
-			"tooltip": "Klein"
+			"tooltip": "Erweitert"
 		},
 		{
 			"accessible_label": "Minimal",
@@ -54,10 +54,10 @@
 			"name": "HeaderMinimalMode",
 			"pressed_connections": 1,
 			"rect": [
-				2008.0,
+				1128.0,
 				40.0,
 				80.0,
-				102.0
+				92.0
 			],
 			"tooltip": "Minimal"
 		},
@@ -72,10 +72,10 @@
 			"name": "HeaderMinimize",
 			"pressed_connections": 1,
 			"rect": [
-				2104.0,
+				1224.0,
 				40.0,
 				80.0,
-				102.0
+				92.0
 			],
 			"tooltip": "Minimieren"
 		},
@@ -90,192 +90,120 @@
 			"name": "HeaderClose",
 			"pressed_connections": 1,
 			"rect": [
-				2200.0,
+				1320.0,
 				40.0,
 				80.0,
-				102.0
+				92.0
 			],
 			"tooltip": "Schließen"
 		},
 		{
-			"accessible_label": "Übersicht",
-			"action_id": "",
-			"component": "tabs",
-			"disabled": false,
-			"focusable": true,
-			"icon": "",
-			"label": "Übersicht",
-			"name": "Tab_home",
-			"pressed_connections": 1,
-			"rect": [
-				600.0,
-				602.0,
-				216.0,
-				88.0
-			],
-			"tooltip": "Übersicht"
-		},
-		{
-			"accessible_label": "Kampf",
-			"action_id": "",
-			"component": "tabs",
-			"disabled": false,
-			"focusable": true,
-			"icon": "",
-			"label": "Kampf",
-			"name": "Tab_battle",
-			"pressed_connections": 1,
-			"rect": [
-				824.0,
-				602.0,
-				218.0,
-				88.0
-			],
-			"tooltip": "Kampf"
-		},
-		{
-			"accessible_label": "Inventar",
-			"action_id": "",
-			"component": "tabs",
-			"disabled": false,
-			"focusable": true,
-			"icon": "",
-			"label": "Inventar",
-			"name": "Tab_inventory",
-			"pressed_connections": 1,
-			"rect": [
-				1050.0,
-				602.0,
-				218.0,
-				88.0
-			],
-			"tooltip": "Inventar"
-		},
-		{
-			"accessible_label": "Kodex",
-			"action_id": "",
-			"component": "tabs",
-			"disabled": false,
-			"focusable": true,
-			"icon": "",
-			"label": "Kodex",
-			"name": "Tab_codex",
-			"pressed_connections": 1,
-			"rect": [
-				1276.0,
-				602.0,
-				218.0,
-				88.0
-			],
-			"tooltip": "Kodex"
-		},
-		{
-			"accessible_label": "Entwicklung",
-			"action_id": "",
-			"component": "tabs",
-			"disabled": false,
-			"focusable": true,
-			"icon": "",
-			"label": "Entwicklung",
-			"name": "Tab_evolution",
-			"pressed_connections": 1,
-			"rect": [
-				1502.0,
-				602.0,
-				218.0,
-				88.0
-			],
-			"tooltip": "Entwicklung"
-		},
-		{
 			"accessible_label": "Füttern",
 			"action_id": "feed",
-			"component": "primary_button",
+			"component": "primary_action",
 			"disabled": false,
 			"focusable": true,
 			"icon": "feed",
 			"label": "Füttern",
-			"name": "Context_feed",
+			"name": "Action_feed",
 			"pressed_connections": 1,
 			"rect": [
-				1768.0,
-				262.0,
-				488.0,
-				88.0
+				40.0,
+				696.0,
+				436.0,
+				128.0
 			],
 			"tooltip": "Füttern"
 		},
 		{
-			"accessible_label": "Leckerli",
-			"action_id": "treat",
-			"component": "primary_button",
+			"accessible_label": "Bandagieren",
+			"action_id": "treat_injury",
+			"component": "primary_action",
 			"disabled": false,
 			"focusable": true,
-			"icon": "treat",
-			"label": "Leckerli",
-			"name": "Context_treat",
+			"icon": "treatment",
+			"label": "Bandagieren",
+			"name": "Action_treat_injury",
 			"pressed_connections": 1,
 			"rect": [
-				1768.0,
-				374.0,
-				488.0,
-				88.0
+				500.0,
+				696.0,
+				438.0,
+				128.0
 			],
-			"tooltip": "Leckerli"
+			"tooltip": "Bandagieren"
 		},
 		{
-			"accessible_label": "Reinigen",
-			"action_id": "clean",
-			"component": "primary_button",
-			"disabled": false,
-			"focusable": true,
-			"icon": "clean",
-			"label": "Reinigen",
-			"name": "Context_clean",
-			"pressed_connections": 1,
-			"rect": [
-				1768.0,
-				486.0,
-				488.0,
-				88.0
-			],
-			"tooltip": "Reinigen"
-		},
-		{
-			"accessible_label": "Trainieren",
+			"accessible_label": "Erst die Verletzung behandeln.",
 			"action_id": "train",
-			"component": "primary_button",
-			"disabled": false,
+			"component": "primary_action",
+			"disabled": true,
 			"focusable": true,
 			"icon": "train",
 			"label": "Trainieren",
-			"name": "Context_train",
+			"name": "Action_train",
 			"pressed_connections": 1,
 			"rect": [
-				1768.0,
-				598.0,
-				488.0,
-				88.0
+				962.0,
+				696.0,
+				438.0,
+				128.0
 			],
-			"tooltip": "Trainieren"
+			"tooltip": "Erst die Verletzung behandeln."
 		},
 		{
-			"accessible_label": "Schlafen",
-			"action_id": "sleep",
-			"component": "primary_button",
+			"accessible_label": "Pflege",
+			"action_id": "",
+			"component": "nav_button",
 			"disabled": false,
 			"focusable": true,
-			"icon": "sleep",
-			"label": "Schlafen",
-			"name": "Context_sleep",
+			"icon": "health",
+			"label": "Pflege",
+			"name": "Nav_care",
 			"pressed_connections": 1,
 			"rect": [
-				1768.0,
-				710.0,
-				488.0,
-				88.0
+				40.0,
+				840.0,
+				442.0,
+				80.0
 			],
-			"tooltip": "Schlafen"
+			"tooltip": "Pflege"
+		},
+		{
+			"accessible_label": "Abenteuer",
+			"action_id": "",
+			"component": "nav_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "battle",
+			"label": "Abenteuer",
+			"name": "Nav_adventure",
+			"pressed_connections": 1,
+			"rect": [
+				498.0,
+				840.0,
+				442.0,
+				80.0
+			],
+			"tooltip": "Abenteuer"
+		},
+		{
+			"accessible_label": "Mehr",
+			"action_id": "",
+			"component": "nav_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "inventory",
+			"label": "Mehr",
+			"name": "Nav_more",
+			"pressed_connections": 1,
+			"rect": [
+				956.0,
+				840.0,
+				444.0,
+				80.0
+			],
+			"tooltip": "Mehr"
 		}
 	],
 	"diagnostics_sequence": 1,
@@ -286,79 +214,61 @@
 		270.0,
 		170.0
 	],
-	"habitat_frame_scale": 1.09375,
+	"habitat_frame_scale": 1.13541666666667,
 	"habitat_highlighted_station": "",
 	"habitat_moving": false,
 	"habitat_pending_events": 0,
-	"habitat_visual_state": "idle",
+	"habitat_visual_state": "injured",
 	"last_feedback": {},
 	"last_mode_request": "",
 	"layout_rects": {
-		"ExpandedActions": [
-			1744.0,
-			158.0,
-			536.0,
-			1430.0
-		],
-		"ExpandedBody": [
-			40.0,
-			158.0,
-			2240.0,
-			1430.0
-		],
-		"ExpandedCenter": [
-			600.0,
-			158.0,
-			1120.0,
-			1430.0
-		],
-		"ExpandedDetail": [
-			600.0,
-			714.0,
-			1120.0,
-			874.0
-		],
-		"ExpandedHabitatFrame": [
-			600.0,
-			158.0,
-			1120.0,
-			420.0
-		],
-		"ExpandedStatus": [
-			40.0,
-			158.0,
-			536.0,
-			1430.0
-		],
-		"ExpandedTabs": [
-			600.0,
-			602.0,
-			1120.0,
-			88.0
-		],
 		"PlayerTitleBar": [
 			40.0,
 			40.0,
-			2240.0,
-			102.0
+			1360.0,
+			92.0
+		],
+		"PrimaryStatusRow": [
+			40.0,
+			148.0,
+			1360.0,
+			80.0
+		],
+		"QuickActions": [
+			40.0,
+			696.0,
+			1360.0,
+			128.0
+		],
+		"SmallHabitatFrame": [
+			40.0,
+			244.0,
+			1360.0,
+			436.0
+		],
+		"SmallNavigation": [
+			40.0,
+			840.0,
+			1360.0,
+			80.0
 		],
 		"WindowFrame": [
 			16.0,
 			16.0,
-			2288.0,
-			1596.0
+			1408.0,
+			928.0
 		]
 	},
 	"locale": "de",
 	"logical_size": [
-		1160.0,
-		760.0
+		720.0,
+		480.0
 	],
 	"minimal_hit_region_updates": 0,
 	"minimal_pet_rect": [],
 	"minimal_pet_scale": 1.0,
 	"missing_icon_names": [],
-	"mode": "expanded",
+	"mode": "small",
 	"mode_switch_applied": 0,
 	"mode_switch_requests": 0,
 	"native_window": {
@@ -378,7 +288,7 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T17:39:21",
+		"captured_at_utc": "2026-08-14T17:41:42",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
@@ -424,12 +334,12 @@
 		"window_mouse_passthrough": false,
 		"window_mouse_passthrough_polygon": [],
 		"window_position": [
-			1400,
-			750
+			1840,
+			1030
 		],
 		"window_size": [
-			2320,
-			1520
+			1440,
+			960
 		],
 		"window_transparent": true,
 		"window_unfocusable": false,
@@ -441,65 +351,61 @@
 		"battle_active": false,
 		"battle_unlocked": true,
 		"care": {
-			"dirty_seconds": 0.0,
 			"discipline_bps": 5000.0,
-			"effort_bps": 1000.0,
-			"energy_bps": 7500.0,
+			"effort_bps": 3700.0,
+			"energy_bps": 4776.0,
 			"health_bps": 10000.0,
-			"hygiene_bps": 8700.0,
-			"last_feed_unix": 0.0,
-			"last_sleep_start_unix": 0.0,
-			"last_wake_unix": 0.0,
-			"mood_bps": 6500.0,
-			"satiety_bps": 6200.0,
-			"severe_hunger_seconds": 0.0,
+			"hygiene_bps": 8688.0,
+			"mood_bps": 7400.0,
+			"satiety_bps": 6161.0,
+			"waste_count": 0,
 			"weight_grams": 420.0
 		},
 		"dungeon_active": false,
 		"dungeon_unlocked": false,
-		"injured": false,
+		"injured": true,
 		"level": 1,
-		"name": "Moosling",
+		"name": "Moosblüte",
 		"open_calls": 0,
 		"screen": "pet",
 		"sickness": false,
 		"sleeping": false,
-		"stage": "hatchling"
+		"stage": "juvenile"
 	},
 	"preference_schema_version": 2,
 	"presentation_rect": [
 		0.0,
 		0.0,
-		2320.0,
-		1520.0
+		1440.0,
+		960.0
 	],
 	"reduced_motion": false,
 	"requested_window_size": [
-		2320,
-		1520
+		1440,
+		960
 	],
 	"resolved_ui_scale": 2.0,
 	"schema_version": 2,
 	"small_page": "care",
 	"standard_pet_scale": 1.0,
-	"state_revision": 2,
+	"state_revision": 8,
 	"suppressed_duplicate_commands": 0,
 	"text_scale": 1.0,
-	"texture_memory_bytes": 32919001,
+	"texture_memory_bytes": 15468375,
 	"theme_base_scale": 1.0,
 	"viewport_visible_rect": [
 		0.0,
 		0.0,
-		2320.0,
-		1520.0
+		1440.0,
+		960.0
 	],
 	"window_max_size": [
-		4400,
-		2800
+		2560,
+		1720
 	],
 	"window_min_size": [
-		1800,
-		1240
+		1200,
+		760
 	],
 	"window_resizable": true
 }

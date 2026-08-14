@@ -14,7 +14,7 @@
         2320,
         1520
       ],
-      "sha256": "7c90787271a940bc648b578805c543108cf132aa1f940eacf7e72a83c27a17eb"
+      "sha256": "28a6889cf502a97993cfac4add8963ef1167268d4f01073be0cb359e82521085"
     },
     {
       "name": "02-egg-waiting",
@@ -26,7 +26,7 @@
         1440,
         960
       ],
-      "sha256": "b8370d4f6dc2198d899a12c3892e86046b07db301cf76a875429e75b1b41c72e"
+      "sha256": "32b3e33510b1712d9a8cb5c5c22543b5f80b4129dec412df15fa906f1aab04dc"
     },
     {
       "name": "03-small-care-default",
@@ -242,7 +242,7 @@
         2320,
         1520
       ],
-      "sha256": "715208e38b2a41522cfb0ae3718c058b741334a36c18479accc52b4717f666c8"
+      "sha256": "2f7113db103a318256527ed2225907ed4bf4980ba0f20657f0ad5e1660ff09aa"
     },
     {
       "name": "21-expanded-evolution",
@@ -291,6 +291,78 @@
         960
       ],
       "sha256": "673e429d088a028be42270d7395b31d21ec82c3c68900a4ca0e13e347cb49373"
+    },
+    {
+      "name": "25-small-injured",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch,good,good,good,battle,loss",
+      "runtime_actions": "",
+      "image": "25-small-injured.png",
+      "pixels": [
+        1440,
+        960
+      ],
+      "sha256": "a7937c885ecb8d5fa5360225ad86ba411b82e480ea389c42ea502358ccfe9dd1"
+    },
+    {
+      "name": "26-expanded-codex",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch,good,good,good,dungeon_unlock,dungeon_run",
+      "runtime_actions": "tab:codex",
+      "image": "26-expanded-codex.png",
+      "pixels": [
+        2320,
+        1520
+      ],
+      "sha256": "d211a215e8a0dce4440fcf14d108d0ed098292c56e44c4dfa3e4f07d0194b213"
+    },
+    {
+      "name": "27-small-first-care-hint",
+      "mode": "small",
+      "setup": "choose:tide,hour,hatch",
+      "runtime_actions": "",
+      "image": "27-small-first-care-hint.png",
+      "pixels": [
+        1440,
+        960
+      ],
+      "sha256": "e74aa15514fb972c4adcdd0d251a7d67076ac477604f2e269eaa72fb8a5418d5"
+    },
+    {
+      "name": "28-small-text-175",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "text:175",
+      "image": "28-small-text-175.png",
+      "pixels": [
+        2520,
+        1320
+      ],
+      "sha256": "f3c11ef53f9ace20ccfa1b901ecf342a3d47277885bc7f37cba6844d665231e3"
+    },
+    {
+      "name": "29-small-high-contrast",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "contrast:on",
+      "image": "29-small-high-contrast.png",
+      "pixels": [
+        1440,
+        960
+      ],
+      "sha256": "499152dd588c6b44fd1e5c4181926e411bde07f7111782a9af1da1090fd277ff"
+    },
+    {
+      "name": "30-small-compact-density",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "density:compact",
+      "image": "30-small-compact-density.png",
+      "pixels": [
+        1440,
+        960
+      ],
+      "sha256": "c5918bad487171cd4854628d9e9323aa70b7ed99ff6119670af7b1eb7f32727b"
     }
   ]
 }

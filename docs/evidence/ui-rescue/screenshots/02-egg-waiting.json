@@ -103,7 +103,7 @@
 			"component": "primary_action",
 			"disabled": true,
 			"focusable": true,
-			"icon": "evolution",
+			"icon": "egg",
 			"label": "Dein Ei wird warm",
 			"name": "Action_hatch",
 			"pressed_connections": 1,
@@ -171,7 +171,7 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T17:20:32",
+		"captured_at_utc": "2026-08-14T17:35:46",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",

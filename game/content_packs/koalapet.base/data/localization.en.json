@@ -179,6 +179,7 @@
     "ui.click_through": "Pass outside clicks through",
     "ui.close": "Close",
     "ui.codex": "Codex",
+    "ui.codex_empty": "Nothing discovered yet.",
     "ui.codex_summary": "{forms} forms · {encounters} opponents discovered",
     "ui.comfortable": "Comfortable",
     "ui.compact": "Compact",

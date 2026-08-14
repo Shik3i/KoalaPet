@@ -221,7 +221,31 @@ def icon_level() -> Canvas:
     return canvas
 
 
+def icon_egg() -> Canvas:
+    canvas = Canvas()
+    # An egg is its own subject. The starter and hatch controls previously
+    # borrowed the evolution spiral, which reads as "transform", not "egg".
+    # A true ovoid: an ellipse whose upper half is drawn narrower than its
+    # lower half, which is what separates an egg from a plain circle.
+    center_y, radius_y, radius_x = 13.0, 10.5, 8.0
+    for y in range(3, 24):
+        normalized = (y - center_y) / radius_y
+        if abs(normalized) > 1.0:
+            continue
+        taper = 0.72 if normalized < 0.0 else 1.0
+        span = round(radius_x * ((1.0 - normalized * normalized) ** 0.5) * (taper + (1.0 - taper) * (1.0 + normalized)))
+        if span <= 0:
+            continue
+        canvas.rect(12 - span, y, 11 + span, y, "parchment")
+    canvas.disc(9, 9, 2.2, "parchment", LIGHT)
+    for x, y in ((14, 13), (10, 17), (15, 18), (12, 20)):
+        canvas.rect(x, y, x + 1, y + 1, "gold", SHADE)
+    canvas.shade()
+    return canvas
+
+
 ICONS = {
+    "egg": icon_egg,
     "close": icon_close,
     "minimize": icon_minimize,
     "collapse": icon_collapse,

@@ -17,7 +17,6 @@ const ICON_ALIASES := {
 	"attack": "battle",
 	"shield": "defensive",
 	"map": "dungeon",
-	"egg": "evolution",
 	"pet": "health",
 	"language": "settings",
 	"motion": "settings",
@@ -362,9 +361,11 @@ static func starter_egg_card() -> PanelContainer:
 	return root
 
 
+## Wide enough for a pictogram plus a full German item or creature name. At the
+## previous 128 px "Flusskiesel" wrapped mid-word into "Flusskiese / l".
 static func inventory_slot() -> PanelContainer:
 	var root := panel(true)
-	root.custom_minimum_size = Vector2(128, 72)
+	root.custom_minimum_size = Vector2(196, 64)
 	root.set_meta("component", "inventory_slot")
 	return root
 

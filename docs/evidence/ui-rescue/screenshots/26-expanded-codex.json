@@ -110,7 +110,7 @@
 			"rect": [
 				600.0,
 				602.0,
-				216.0,
+				180.0,
 				88.0
 			],
 			"tooltip": "Übersicht"
@@ -126,12 +126,30 @@
 			"name": "Tab_battle",
 			"pressed_connections": 1,
 			"rect": [
-				824.0,
+				788.0,
 				602.0,
-				218.0,
+				180.0,
 				88.0
 			],
 			"tooltip": "Kampf"
+		},
+		{
+			"accessible_label": "Dungeon",
+			"action_id": "",
+			"component": "tabs",
+			"disabled": false,
+			"focusable": true,
+			"icon": "",
+			"label": "Dungeon",
+			"name": "Tab_dungeon",
+			"pressed_connections": 1,
+			"rect": [
+				976.0,
+				602.0,
+				180.0,
+				88.0
+			],
+			"tooltip": "Dungeon"
 		},
 		{
 			"accessible_label": "Inventar",
@@ -144,9 +162,9 @@
 			"name": "Tab_inventory",
 			"pressed_connections": 1,
 			"rect": [
-				1050.0,
+				1164.0,
 				602.0,
-				218.0,
+				180.0,
 				88.0
 			],
 			"tooltip": "Inventar"
@@ -162,9 +180,9 @@
 			"name": "Tab_codex",
 			"pressed_connections": 1,
 			"rect": [
-				1276.0,
+				1352.0,
 				602.0,
-				218.0,
+				180.0,
 				88.0
 			],
 			"tooltip": "Kodex"
@@ -180,107 +198,17 @@
 			"name": "Tab_evolution",
 			"pressed_connections": 1,
 			"rect": [
-				1502.0,
+				1540.0,
 				602.0,
-				218.0,
+				180.0,
 				88.0
 			],
 			"tooltip": "Entwicklung"
-		},
-		{
-			"accessible_label": "Füttern",
-			"action_id": "feed",
-			"component": "primary_button",
-			"disabled": false,
-			"focusable": true,
-			"icon": "feed",
-			"label": "Füttern",
-			"name": "Context_feed",
-			"pressed_connections": 1,
-			"rect": [
-				1768.0,
-				262.0,
-				488.0,
-				88.0
-			],
-			"tooltip": "Füttern"
-		},
-		{
-			"accessible_label": "Leckerli",
-			"action_id": "treat",
-			"component": "primary_button",
-			"disabled": false,
-			"focusable": true,
-			"icon": "treat",
-			"label": "Leckerli",
-			"name": "Context_treat",
-			"pressed_connections": 1,
-			"rect": [
-				1768.0,
-				374.0,
-				488.0,
-				88.0
-			],
-			"tooltip": "Leckerli"
-		},
-		{
-			"accessible_label": "Reinigen",
-			"action_id": "clean",
-			"component": "primary_button",
-			"disabled": false,
-			"focusable": true,
-			"icon": "clean",
-			"label": "Reinigen",
-			"name": "Context_clean",
-			"pressed_connections": 1,
-			"rect": [
-				1768.0,
-				486.0,
-				488.0,
-				88.0
-			],
-			"tooltip": "Reinigen"
-		},
-		{
-			"accessible_label": "Trainieren",
-			"action_id": "train",
-			"component": "primary_button",
-			"disabled": false,
-			"focusable": true,
-			"icon": "train",
-			"label": "Trainieren",
-			"name": "Context_train",
-			"pressed_connections": 1,
-			"rect": [
-				1768.0,
-				598.0,
-				488.0,
-				88.0
-			],
-			"tooltip": "Trainieren"
-		},
-		{
-			"accessible_label": "Schlafen",
-			"action_id": "sleep",
-			"component": "primary_button",
-			"disabled": false,
-			"focusable": true,
-			"icon": "sleep",
-			"label": "Schlafen",
-			"name": "Context_sleep",
-			"pressed_connections": 1,
-			"rect": [
-				1768.0,
-				710.0,
-				488.0,
-				88.0
-			],
-			"tooltip": "Schlafen"
 		}
 	],
 	"diagnostics_sequence": 1,
 	"effects_intensity": "normal",
-	"expanded_tab": "home",
+	"expanded_tab": "codex",
 	"focused_control": "",
 	"habitat_anchor": [
 		270.0,
@@ -298,25 +226,25 @@
 			1744.0,
 			158.0,
 			536.0,
-			1430.0
+			1322.0
 		],
 		"ExpandedBody": [
 			40.0,
 			158.0,
 			2240.0,
-			1430.0
+			1322.0
 		],
 		"ExpandedCenter": [
 			600.0,
 			158.0,
 			1120.0,
-			1430.0
+			1322.0
 		],
 		"ExpandedDetail": [
 			600.0,
 			714.0,
 			1120.0,
-			874.0
+			766.0
 		],
 		"ExpandedHabitatFrame": [
 			600.0,
@@ -328,7 +256,7 @@
 			40.0,
 			158.0,
 			536.0,
-			1430.0
+			1322.0
 		],
 		"ExpandedTabs": [
 			600.0,
@@ -346,7 +274,7 @@
 			16.0,
 			16.0,
 			2288.0,
-			1596.0
+			1488.0
 		]
 	},
 	"locale": "de",
@@ -378,7 +306,7 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T17:39:21",
+		"captured_at_utc": "2026-08-14T17:41:58",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
@@ -407,7 +335,7 @@
 				]
 			}
 		],
-		"observed_fps": 1.0,
+		"observed_fps": 47.0,
 		"os_name": "Windows",
 		"os_version": "10.0.26200",
 		"rendering_driver": "opengl3",
@@ -435,7 +363,7 @@
 		"window_unfocusable": false,
 		"window_visible": true
 	},
-	"observed_fps": 1.0,
+	"observed_fps": 47.0,
 	"persistent_root_color_rects": 0,
 	"pet": {
 		"battle_active": false,
@@ -443,28 +371,28 @@
 		"care": {
 			"dirty_seconds": 0.0,
 			"discipline_bps": 5000.0,
-			"effort_bps": 1000.0,
-			"energy_bps": 7500.0,
+			"effort_bps": 3700.0,
+			"energy_bps": 4776.0,
 			"health_bps": 10000.0,
-			"hygiene_bps": 8700.0,
+			"hygiene_bps": 8688.0,
 			"last_feed_unix": 0.0,
 			"last_sleep_start_unix": 0.0,
 			"last_wake_unix": 0.0,
-			"mood_bps": 6500.0,
-			"satiety_bps": 6200.0,
+			"mood_bps": 7400.0,
+			"satiety_bps": 6161.0,
 			"severe_hunger_seconds": 0.0,
 			"weight_grams": 420.0
 		},
-		"dungeon_active": false,
-		"dungeon_unlocked": false,
+		"dungeon_active": true,
+		"dungeon_unlocked": true,
 		"injured": false,
-		"level": 1,
-		"name": "Moosling",
+		"level": 2,
+		"name": "Moosblüte",
 		"open_calls": 0,
 		"screen": "pet",
 		"sickness": false,
 		"sleeping": false,
-		"stage": "hatchling"
+		"stage": "juvenile"
 	},
 	"preference_schema_version": 2,
 	"presentation_rect": [
@@ -482,10 +410,10 @@
 	"schema_version": 2,
 	"small_page": "care",
 	"standard_pet_scale": 1.0,
-	"state_revision": 2,
+	"state_revision": 8,
 	"suppressed_duplicate_commands": 0,
 	"text_scale": 1.0,
-	"texture_memory_bytes": 32919001,
+	"texture_memory_bytes": 33222165,
 	"theme_base_scale": 1.0,
 	"viewport_visible_rect": [
 		0.0,

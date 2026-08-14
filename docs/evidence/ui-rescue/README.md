@@ -16,7 +16,7 @@ sits behind it, which is both unreliable evidence and a privacy risk on a real
 desktop. The viewport read-back can only ever contain KoalaPet's own rendered
 frame. This also explains why earlier prompts saw blank `PrintWindow` results.
 
-`screenshots/index.json` lists every scenario with its launch mode, setup actions,
+The set covers 30 scenarios. `screenshots/index.json` lists every scenario with its launch mode, setup actions,
 pixel size and SHA-256. Each image has a sibling `.json` with the full runtime
 diagnostics captured at the same moment.
 
@@ -45,6 +45,12 @@ diagnostics captured at the same moment.
 | `22-expanded-large-size` | Expanded enlarged, no empty bands |
 | `23-settings` | Settings sheet |
 | `24-blocked-action` | Safe localized message for a blocked action |
+| `25-small-injured` | Injury chip, bandaged pet, Treatment replacing Clean, Train disabled |
+| `26-expanded-codex` | Codex entries with the portrait each discovery earned |
+| `27-small-first-care-hint` | The one-time hint a brand new companion gets |
+| `28-small-text-175` | 175% text: nothing clipped, every window control reachable |
+| `29-small-high-contrast` | High-contrast borders |
+| `30-small-compact-density` | Compact layout density |
 
 ## Interactive action matrix
 

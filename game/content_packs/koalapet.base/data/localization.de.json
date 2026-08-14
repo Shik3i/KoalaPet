@@ -179,6 +179,7 @@
     "ui.click_through": "Klicks außerhalb durchlassen",
     "ui.close": "Schließen",
     "ui.codex": "Kodex",
+    "ui.codex_empty": "Noch nichts entdeckt.",
     "ui.codex_summary": "{forms} Formen · {encounters} Gegner entdeckt",
     "ui.comfortable": "Komfortabel",
     "ui.compact": "Kompakt",

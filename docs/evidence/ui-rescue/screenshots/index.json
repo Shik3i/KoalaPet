@@ -11,10 +11,10 @@
       "runtime_actions": "",
       "image": "01-starter-selection.png",
       "pixels": [
-        1450,
-        950
+        2320,
+        1520
       ],
-      "sha256": "479f52a8b1fc4dc4a28ee682795316faa39058ca27b1718d74baccf4352dfad2"
+      "sha256": "1ad30d6c5c41da2165b6c1c125f086962717ab93f0064fa18fcf9a4c3cc7e6e6"
     },
     {
       "name": "02-egg-waiting",
@@ -23,10 +23,10 @@
       "runtime_actions": "",
       "image": "02-egg-waiting.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "b826608ee761dfc125ae590e26d625a67eea753a1b80560b016407d312bf9b9d"
+      "sha256": "b8370d4f6dc2198d899a12c3892e86046b07db301cf76a875429e75b1b41c72e"
     },
     {
       "name": "03-small-care-default",
@@ -35,10 +35,10 @@
       "runtime_actions": "",
       "image": "03-small-care-default.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "ab5c1c91ea9609ba6728817dbafda6e9bcabe734b71292b41f9403b040f927a6"
+      "sha256": "13b23ad728448bd065ae40d4cb784377057987b4e64f76b8dad63f08e5fa343b"
     },
     {
       "name": "04-small-care-english",
@@ -47,10 +47,10 @@
       "runtime_actions": "",
       "image": "04-small-care-english.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "a34be7e4098d6b884da2f6388ba6cc95419ab4a41a5fbf14eb2d4b6fb9e1c9d4"
+      "sha256": "5fb2b56642afdb5d3e35f0646c1f38ae4eaa367985a13cc0391671619feaa3fd"
     },
     {
       "name": "05-small-urgent-hunger",
@@ -59,10 +59,10 @@
       "runtime_actions": "",
       "image": "05-small-urgent-hunger.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "d90f2969aa0a642f85b853e375458a7bf43ba670c51a56c20a0e3d2cbd4b7963"
+      "sha256": "98883dcad96dde164262584b45d392b8e55720f3809ac5eff5baf4a313405fb8"
     },
     {
       "name": "06-small-sick",
@@ -71,10 +71,10 @@
       "runtime_actions": "",
       "image": "06-small-sick.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "900f90fbdc63660815ad61a80a6834a7f4d3536ffbe3199b77110ba215b5170c"
+      "sha256": "4c464b9cc1d4bd521af54eb27f38116492096319ee5d53306dbda8a0453f3a67"
     },
     {
       "name": "07-small-sleeping",
@@ -83,10 +83,10 @@
       "runtime_actions": "",
       "image": "07-small-sleeping.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "cfb45d3b9b527e2e0ff9bce916cc8cd9711306cdadaa70bd18375e776d795de4"
+      "sha256": "f7faa945795959e69f4358e7565df8753789cae9c1f854ea533f94038639ba16"
     },
     {
       "name": "08-small-more-page",
@@ -95,10 +95,10 @@
       "runtime_actions": "page:more",
       "image": "08-small-more-page.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "081f94d88c875093f0b483152431b9efd587750fdd0588f37b4aba0bc2284d05"
+      "sha256": "464817845d0d41c86dbc98b59b8ea75d3e927f9cc8b1d895adbea327526deb71"
     },
     {
       "name": "09-small-adventure-page",
@@ -107,10 +107,10 @@
       "runtime_actions": "page:adventure",
       "image": "09-small-adventure-page.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "3bbbf1935dfb77c430092e6b6de27974d366db3718981b9488f1eeb299fb92e8"
+      "sha256": "6966ef87428b990810b60514f9b88c3749c52149a286f4f57a33cb62fb2ce16e"
     },
     {
       "name": "10-small-minimum-size",
@@ -119,10 +119,10 @@
       "runtime_actions": "size:750x475",
       "image": "10-small-minimum-size.png",
       "pixels": [
-        750,
-        475
+        1200,
+        760
       ],
-      "sha256": "c2c779aab6d59dbaea39cbfdd46f4eaf2ee0a186a2075d46b6294aa5a1a1c606"
+      "sha256": "009e8e366eae2c91b9f0bb703d8b546204e060d67a6eac4db93f50a60301fd8d"
     },
     {
       "name": "11-small-large-size",
@@ -134,7 +134,7 @@
         1400,
         860
       ],
-      "sha256": "599d20bc78cc27afe3c84682ff142e49a0992e1d3d444d1c30ae5b9d2d6e3c3c"
+      "sha256": "8048a390f225a4675090a3f826c61b8f1d059a6f6202a9687d860e42bbb28b14"
     },
     {
       "name": "12-small-ui-100",
@@ -146,7 +146,7 @@
         720,
         480
       ],
-      "sha256": "73a27b4767ce1ccb1ae2a9e595ee4905ebd4de61cb68bb2c6bca18afabbb7f65"
+      "sha256": "a1aef06a5b89dda2f4cbc2a4e0227144c11defc3d56f637a0515b97541c30405"
     },
     {
       "name": "13-small-ui-150",
@@ -158,7 +158,7 @@
         1080,
         720
       ],
-      "sha256": "e9c2d1f6cc8348d8fdf8cc968e5d22503fcfd22140d0f000d6369d9b5ed9a1d7"
+      "sha256": "18e41754bb918f38d8939339821ee44bae8d32677d28dda790802283213f333f"
     },
     {
       "name": "14-small-ui-200",
@@ -170,7 +170,7 @@
         1440,
         960
       ],
-      "sha256": "fa62fed47a330fad83b95abba8ee40972e8abd6bb7a7fd56f9bb4c524d51be8a"
+      "sha256": "bc502219a7be041647bf83513f512cd836d09325af0ad34a44547cf1799fb56c"
     },
     {
       "name": "15-small-text-150",
@@ -179,10 +179,10 @@
       "runtime_actions": "text:150",
       "image": "15-small-text-150.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "c106ba3ded4190ec2fe3dce0b5520c3f0077cca4b536b3e5114b71d39253c983"
+      "sha256": "c52c03ccacad2ad31c287990d43c9028cd8fc0f89543a4a91349c60f15de218e"
     },
     {
       "name": "16-expanded-overview",
@@ -191,10 +191,10 @@
       "runtime_actions": "",
       "image": "16-expanded-overview.png",
       "pixels": [
-        1450,
-        950
+        2320,
+        1520
       ],
-      "sha256": "9eefb1076b0ed818f4dbf305a7a148861971c488fac674f0a52736a2671b3254"
+      "sha256": "ee7b2dc47bcb963ff4ff60422ca576a4b09c3fb7e7bfbc9a3d50f7c0f0a13919"
     },
     {
       "name": "17-expanded-english",
@@ -203,10 +203,10 @@
       "runtime_actions": "",
       "image": "17-expanded-english.png",
       "pixels": [
-        1450,
-        950
+        2320,
+        1520
       ],
-      "sha256": "0894ac6726d76f519a6f873a19548135066e355edede45ec59cd609950cd3489"
+      "sha256": "a865731caaecc29b6ccaa87f6cd42249262ecf293d418195ec41bbb89640dc87"
     },
     {
       "name": "18-expanded-battle",
@@ -215,10 +215,10 @@
       "runtime_actions": "tab:battle",
       "image": "18-expanded-battle.png",
       "pixels": [
-        1450,
-        950
+        2320,
+        1520
       ],
-      "sha256": "4ff1738e7568d5116c5a751a8847abd4eb40120c01c9e6ca99efd4f3b54421ad"
+      "sha256": "941b75d243978a74028a77a00cf4ed418b07a703f6ab924ba1caae1639ef56dc"
     },
     {
       "name": "19-expanded-dungeon",
@@ -227,10 +227,10 @@
       "runtime_actions": "tab:dungeon",
       "image": "19-expanded-dungeon.png",
       "pixels": [
-        1450,
-        950
+        2320,
+        1520
       ],
-      "sha256": "60ecec174ec8d50d57102eacc26942a9b038bdb4ddcb8a49508db6ba3127745e"
+      "sha256": "560e7884bfcc17bd2a141857fea3f933c084c9fbd43308efcd3db4bcc020cdda"
     },
     {
       "name": "20-expanded-inventory",
@@ -239,10 +239,10 @@
       "runtime_actions": "tab:inventory",
       "image": "20-expanded-inventory.png",
       "pixels": [
-        1450,
-        950
+        2320,
+        1520
       ],
-      "sha256": "72072b96f115bd9ca7db40301d54a4a75baaefcae3881c11dd25a2cd66848e1b"
+      "sha256": "715208e38b2a41522cfb0ae3718c058b741334a36c18479accc52b4717f666c8"
     },
     {
       "name": "21-expanded-evolution",
@@ -251,10 +251,10 @@
       "runtime_actions": "tab:evolution",
       "image": "21-expanded-evolution.png",
       "pixels": [
-        1450,
-        950
+        2320,
+        1520
       ],
-      "sha256": "65edf292113aaac4aad3b64e0f5028fc6358c5413e260ac0006fd86da4d97117"
+      "sha256": "a3166cd4a7563e39cf327ca266320deefc6bce86f8a991275df029316d9b5082"
     },
     {
       "name": "22-expanded-large-size",
@@ -264,9 +264,9 @@
       "image": "22-expanded-large-size.png",
       "pixels": [
         1900,
-        1180
+        1240
       ],
-      "sha256": "8132ff0be2180de181cc2ca26b3059227f80c8170d6ab57184ae299761101666"
+      "sha256": "d7bc564af417c7f4fb445c815cde9ac5eb2a1c188115fb798e18b40a727790fc"
     },
     {
       "name": "23-settings",
@@ -275,10 +275,10 @@
       "runtime_actions": "settings",
       "image": "23-settings.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "35513a91c68c99093f6ae404896e67fdb8e897ccd2bfc913cfec99330e136294"
+      "sha256": "b278997c9337c3e040ec14807e1f36df3961769a05ac646c43eea473797f0f50"
     },
     {
       "name": "24-blocked-action",
@@ -287,10 +287,10 @@
       "runtime_actions": "train",
       "image": "24-blocked-action.png",
       "pixels": [
-        900,
-        600
+        1440,
+        960
       ],
-      "sha256": "30e8b8f238ff03d9456a72ca6ec4491ffb5eb4091efe010201b254c326931fb9"
+      "sha256": "673e429d088a028be42270d7395b31d21ec82c3c68900a4ca0e13e347cb49373"
     }
   ]
 }

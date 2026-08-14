@@ -18,10 +18,10 @@
 			"name": "HeaderSettings",
 			"pressed_connections": 1,
 			"rect": [
-				1135.0,
-				25.0,
-				50.0,
-				63.75
+				1816.0,
+				40.0,
+				80.0,
+				102.0
 			],
 			"tooltip": "Einstellungen"
 		},
@@ -36,10 +36,10 @@
 			"name": "HeaderModeSwitch",
 			"pressed_connections": 1,
 			"rect": [
-				1195.0,
-				25.0,
-				50.0,
-				63.75
+				1912.0,
+				40.0,
+				80.0,
+				102.0
 			],
 			"tooltip": "Klein"
 		},
@@ -54,10 +54,10 @@
 			"name": "HeaderMinimalMode",
 			"pressed_connections": 1,
 			"rect": [
-				1255.0,
-				25.0,
-				50.0,
-				63.75
+				2008.0,
+				40.0,
+				80.0,
+				102.0
 			],
 			"tooltip": "Minimal"
 		},
@@ -72,10 +72,10 @@
 			"name": "HeaderMinimize",
 			"pressed_connections": 1,
 			"rect": [
-				1315.0,
-				25.0,
-				50.0,
-				63.75
+				2104.0,
+				40.0,
+				80.0,
+				102.0
 			],
 			"tooltip": "Minimieren"
 		},
@@ -90,10 +90,10 @@
 			"name": "HeaderClose",
 			"pressed_connections": 1,
 			"rect": [
-				1375.0,
-				25.0,
-				50.0,
-				63.75
+				2200.0,
+				40.0,
+				80.0,
+				102.0
 			],
 			"tooltip": "Schließen"
 		},
@@ -108,10 +108,10 @@
 			"name": "Tab_home",
 			"pressed_connections": 1,
 			"rect": [
-				375.0,
-				376.25,
-				135.0,
-				55.0
+				600.0,
+				602.0,
+				216.0,
+				88.0
 			],
 			"tooltip": "Übersicht"
 		},
@@ -126,10 +126,10 @@
 			"name": "Tab_battle",
 			"pressed_connections": 1,
 			"rect": [
-				515.0,
-				376.25,
-				136.25,
-				55.0
+				824.0,
+				602.0,
+				218.0,
+				88.0
 			],
 			"tooltip": "Kampf"
 		},
@@ -144,10 +144,10 @@
 			"name": "Tab_inventory",
 			"pressed_connections": 1,
 			"rect": [
-				656.25,
-				376.25,
-				136.25,
-				55.0
+				1050.0,
+				602.0,
+				218.0,
+				88.0
 			],
 			"tooltip": "Inventar"
 		},
@@ -162,10 +162,10 @@
 			"name": "Tab_codex",
 			"pressed_connections": 1,
 			"rect": [
-				797.5,
-				376.25,
-				136.25,
-				55.0
+				1276.0,
+				602.0,
+				218.0,
+				88.0
 			],
 			"tooltip": "Kodex"
 		},
@@ -180,10 +180,10 @@
 			"name": "Tab_evolution",
 			"pressed_connections": 1,
 			"rect": [
-				938.75,
-				376.25,
-				136.25,
-				55.0
+				1502.0,
+				602.0,
+				218.0,
+				88.0
 			],
 			"tooltip": "Entwicklung"
 		}
@@ -197,6 +197,7 @@
 		170.0
 	],
 	"habitat_frame_scale": 1.09375,
+	"habitat_highlighted_station": "",
 	"habitat_moving": false,
 	"habitat_pending_events": 0,
 	"habitat_visual_state": "idle",
@@ -204,58 +205,58 @@
 	"last_mode_request": "",
 	"layout_rects": {
 		"ExpandedActions": [
-			1090.0,
-			98.75,
-			335.0,
-			826.25
+			1744.0,
+			158.0,
+			536.0,
+			1322.0
 		],
 		"ExpandedBody": [
-			25.0,
-			98.75,
-			1400.0,
-			826.25
+			40.0,
+			158.0,
+			2240.0,
+			1322.0
 		],
 		"ExpandedCenter": [
-			375.0,
-			98.75,
-			700.0,
-			826.25
+			600.0,
+			158.0,
+			1120.0,
+			1322.0
 		],
 		"ExpandedDetail": [
-			375.0,
-			446.25,
-			700.0,
-			478.75
+			600.0,
+			714.0,
+			1120.0,
+			766.0
 		],
 		"ExpandedHabitatFrame": [
-			375.0,
-			98.75,
-			700.0,
-			262.5
+			600.0,
+			158.0,
+			1120.0,
+			420.0
 		],
 		"ExpandedStatus": [
-			25.0,
-			98.75,
-			335.0,
-			826.25
+			40.0,
+			158.0,
+			536.0,
+			1322.0
 		],
 		"ExpandedTabs": [
-			375.0,
-			376.25,
-			700.0,
-			55.0
+			600.0,
+			602.0,
+			1120.0,
+			88.0
 		],
 		"PlayerTitleBar": [
-			25.0,
-			25.0,
-			1400.0,
-			63.75
+			40.0,
+			40.0,
+			2240.0,
+			102.0
 		],
 		"WindowFrame": [
-			10.0,
-			10.0,
-			1430.0,
-			930.0
+			16.0,
+			16.0,
+			2288.0,
+			1488.0
 		]
 	},
 	"locale": "de",
@@ -287,80 +288,36 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T15:55:23",
+		"captured_at_utc": "2026-08-14T17:08:16",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
 		"input_policy": "interactive",
 		"monitors": [
 			{
-				"dpi": 120,
+				"dpi": 192,
 				"full_rect": [
-					5600,
-					4,
-					2400,
-					1350
+					0,
+					0,
+					2560,
+					1606
 				],
 				"index": 0,
 				"position": [
-					5600,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					5600,
-					4,
-					2400,
-					1290
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
 					0,
-					4,
-					2400,
-					1500
-				],
-				"index": 1,
-				"position": [
-					0,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					0,
-					4,
-					2400,
-					1440
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
-					2400,
-					0,
-					2560,
-					1440
-				],
-				"index": 2,
-				"position": [
-					2400,
 					0
 				],
 				"primary": true,
 				"scale": 1.0,
 				"usable_rect": [
-					2400,
+					0,
 					0,
 					2560,
-					1380
+					1510
 				]
 			}
 		],
-		"observed_fps": 1.0,
+		"observed_fps": 43.0,
 		"os_name": "Windows",
 		"os_version": "10.0.26200",
 		"rendering_driver": "opengl3",
@@ -377,18 +334,18 @@
 		"window_mouse_passthrough": false,
 		"window_mouse_passthrough_polygon": [],
 		"window_position": [
-			6840,
-			534
+			1400,
+			750
 		],
 		"window_size": [
-			1450,
-			950
+			2320,
+			1520
 		],
 		"window_transparent": true,
 		"window_unfocusable": false,
 		"window_visible": true
 	},
-	"observed_fps": 1.0,
+	"observed_fps": 43.0,
 	"persistent_root_color_rects": 0,
 	"pet": {
 		"battle_active": false,
@@ -423,36 +380,36 @@
 	"presentation_rect": [
 		0.0,
 		0.0,
-		1450.0,
-		950.0
+		2320.0,
+		1520.0
 	],
 	"reduced_motion": false,
 	"requested_window_size": [
-		1450,
-		950
+		2320,
+		1520
 	],
-	"resolved_ui_scale": 1.25,
+	"resolved_ui_scale": 2.0,
 	"schema_version": 2,
 	"small_page": "care",
 	"standard_pet_scale": 1.0,
 	"state_revision": 8,
 	"suppressed_duplicate_commands": 0,
 	"text_scale": 1.0,
-	"texture_memory_bytes": 15962369,
+	"texture_memory_bytes": 33153569,
 	"theme_base_scale": 1.0,
 	"viewport_visible_rect": [
 		0.0,
 		0.0,
-		1450.0,
-		950.0
+		2320.0,
+		1520.0
 	],
 	"window_max_size": [
-		2750,
-		1750
+		4400,
+		2800
 	],
 	"window_min_size": [
-		1125,
-		775
+		1800,
+		1240
 	],
 	"window_resizable": true
 }

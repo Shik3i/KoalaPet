@@ -225,6 +225,7 @@
     "ui.high": "High",
     "ui.high_contrast": "High contrast",
     "ui.hint.adventure_unlocked": "Adventure is unlocked. Battle and dungeon live under Adventure.",
+    "ui.hint.first_action": "Pick a care action below",
     "ui.hint.first_care": "Keep satiety, mood, energy and hygiene out of the red.",
     "ui.history": "Recent history",
     "ui.history.empty": "No events yet",

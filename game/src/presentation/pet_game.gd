@@ -866,7 +866,24 @@ func _alerts(model: Dictionary) -> Array:
 			"severity": "success",
 			"text": application.text("ui.pending_evolution", "Entwicklung wartet auf einen sicheren Moment", locale),
 		})
+	# Progressive onboarding rather than a tutorial modal: a brand new companion
+	# gets one hint, and it disappears for good after the first care action.
+	if result.is_empty() and bool(model.get("hatched", false)) and _is_first_session(model):
+		result.append({
+			"id": "first_care",
+			"icon": "call",
+			"severity": "info",
+			"text": application.text("ui.hint.first_action", "Wähle unten eine Pflegeaktion", locale),
+		})
 	return result
+
+
+func _is_first_session(model: Dictionary) -> bool:
+	var aggregate: Dictionary = model.get("aggregate", {})
+	for key in ["feed_count", "treat_count", "clean_count", "training_count", "treatment_count"]:
+		if int(aggregate.get(key, 0)) > 0:
+			return false
+	return true
 
 
 func _primary_alert(model: Dictionary) -> Dictionary:
@@ -2606,6 +2623,7 @@ func _write_diagnostics() -> void:
 		"habitat_visual_state": active_habitat.current_visual_state() if active_habitat != null and is_instance_valid(active_habitat) else "",
 		"habitat_anchor": [active_habitat.current_anchor_position().x, active_habitat.current_anchor_position().y] if active_habitat != null and is_instance_valid(active_habitat) else [],
 		"habitat_moving": active_habitat.is_moving() if active_habitat != null and is_instance_valid(active_habitat) else false,
+		"habitat_highlighted_station": active_habitat.highlighted_station() if active_habitat != null and is_instance_valid(active_habitat) else "",
 		"habitat_pending_events": active_habitat.pending_event_count() if active_habitat != null and is_instance_valid(active_habitat) else 0,
 		"active_animation_processors": active_habitat.active_animation_processor_count() if active_habitat != null and is_instance_valid(active_habitat) else (1 if minimal_sprite != null and minimal_sprite.is_processing() else 0),
 		"minimal_hit_region_updates": minimal_hit_region_updates,

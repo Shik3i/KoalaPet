@@ -18,10 +18,10 @@
 			"name": "HeaderSettings",
 			"pressed_connections": 1,
 			"rect": [
-				585.0,
-				25.0,
-				50.0,
-				50.0
+				936.0,
+				40.0,
+				80.0,
+				80.0
 			],
 			"tooltip": "Einstellungen"
 		},
@@ -36,10 +36,10 @@
 			"name": "HeaderModeSwitch",
 			"pressed_connections": 1,
 			"rect": [
-				645.0,
-				25.0,
-				50.0,
-				50.0
+				1032.0,
+				40.0,
+				80.0,
+				80.0
 			],
 			"tooltip": "Erweitert"
 		},
@@ -54,10 +54,10 @@
 			"name": "HeaderMinimalMode",
 			"pressed_connections": 1,
 			"rect": [
-				705.0,
-				25.0,
-				50.0,
-				50.0
+				1128.0,
+				40.0,
+				80.0,
+				80.0
 			],
 			"tooltip": "Minimal"
 		},
@@ -72,10 +72,10 @@
 			"name": "HeaderMinimize",
 			"pressed_connections": 1,
 			"rect": [
-				765.0,
-				25.0,
-				50.0,
-				50.0
+				1224.0,
+				40.0,
+				80.0,
+				80.0
 			],
 			"tooltip": "Minimieren"
 		},
@@ -90,10 +90,10 @@
 			"name": "HeaderClose",
 			"pressed_connections": 1,
 			"rect": [
-				825.0,
-				25.0,
-				50.0,
-				50.0
+				1320.0,
+				40.0,
+				80.0,
+				80.0
 			],
 			"tooltip": "Schließen"
 		},
@@ -108,10 +108,10 @@
 			"name": "Action_hatch",
 			"pressed_connections": 1,
 			"rect": [
-				275.0,
-				422.5,
-				350.0,
-				80.0
+				440.0,
+				676.0,
+				560.0,
+				128.0
 			],
 			"tooltip": "Dein Ei wird warm"
 		}
@@ -122,6 +122,7 @@
 	"focused_control": "",
 	"habitat_anchor": [],
 	"habitat_frame_scale": 0.0,
+	"habitat_highlighted_station": "",
 	"habitat_moving": false,
 	"habitat_pending_events": 0,
 	"habitat_visual_state": "",
@@ -129,16 +130,16 @@
 	"last_mode_request": "",
 	"layout_rects": {
 		"PlayerTitleBar": [
-			25.0,
-			25.0,
-			850.0,
-			50.0
+			40.0,
+			40.0,
+			1360.0,
+			80.0
 		],
 		"WindowFrame": [
-			10.0,
-			10.0,
-			880.0,
-			580.0
+			16.0,
+			16.0,
+			1408.0,
+			928.0
 		]
 	},
 	"locale": "de",
@@ -170,76 +171,32 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T15:50:32",
+		"captured_at_utc": "2026-08-14T17:03:22",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
 		"input_policy": "interactive",
 		"monitors": [
 			{
-				"dpi": 120,
+				"dpi": 192,
 				"full_rect": [
-					5600,
-					4,
-					2400,
-					1350
+					0,
+					0,
+					2560,
+					1606
 				],
 				"index": 0,
 				"position": [
-					5600,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					5600,
-					4,
-					2400,
-					1290
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
 					0,
-					4,
-					2400,
-					1500
-				],
-				"index": 1,
-				"position": [
-					0,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					0,
-					4,
-					2400,
-					1440
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
-					2400,
-					0,
-					2560,
-					1440
-				],
-				"index": 2,
-				"position": [
-					2400,
 					0
 				],
 				"primary": true,
 				"scale": 1.0,
 				"usable_rect": [
-					2400,
+					0,
 					0,
 					2560,
-					1380
+					1510
 				]
 			}
 		],
@@ -260,12 +217,12 @@
 		"window_mouse_passthrough": false,
 		"window_mouse_passthrough_polygon": [],
 		"window_position": [
-			7280,
-			814
+			1840,
+			1030
 		],
 		"window_size": [
-			900,
-			600
+			1440,
+			960
 		],
 		"window_transparent": true,
 		"window_unfocusable": false,
@@ -302,36 +259,36 @@
 	"presentation_rect": [
 		0.0,
 		0.0,
-		900.0,
-		600.0
+		1440.0,
+		960.0
 	],
 	"reduced_motion": false,
 	"requested_window_size": [
-		900,
-		600
+		1440,
+		960
 	],
-	"resolved_ui_scale": 1.25,
+	"resolved_ui_scale": 2.0,
 	"schema_version": 2,
 	"small_page": "care",
 	"standard_pet_scale": 1.0,
 	"state_revision": 1,
 	"suppressed_duplicate_commands": 0,
 	"text_scale": 1.0,
-	"texture_memory_bytes": 5228531,
+	"texture_memory_bytes": 12317263,
 	"theme_base_scale": 1.0,
 	"viewport_visible_rect": [
 		0.0,
 		0.0,
-		900.0,
-		600.0
+		1440.0,
+		960.0
 	],
 	"window_max_size": [
-		1600,
-		1075
+		2560,
+		1720
 	],
 	"window_min_size": [
-		750,
-		475
+		1200,
+		760
 	],
 	"window_resizable": true
 }

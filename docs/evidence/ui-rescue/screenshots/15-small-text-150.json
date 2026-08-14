@@ -18,10 +18,10 @@
 			"name": "HeaderSettings",
 			"pressed_connections": 1,
 			"rect": [
-				585.0,
-				25.0,
-				50.0,
-				83.75
+				1234.0,
+				40.0,
+				80.0,
+				134.0
 			],
 			"tooltip": "Einstellungen"
 		},
@@ -36,10 +36,10 @@
 			"name": "HeaderModeSwitch",
 			"pressed_connections": 1,
 			"rect": [
-				645.0,
-				25.0,
-				50.0,
-				83.75
+				1330.0,
+				40.0,
+				80.0,
+				134.0
 			],
 			"tooltip": "Erweitert"
 		},
@@ -54,10 +54,10 @@
 			"name": "HeaderMinimalMode",
 			"pressed_connections": 1,
 			"rect": [
-				705.0,
-				25.0,
-				50.0,
-				83.75
+				1426.0,
+				40.0,
+				80.0,
+				134.0
 			],
 			"tooltip": "Minimal"
 		},
@@ -72,10 +72,10 @@
 			"name": "HeaderMinimize",
 			"pressed_connections": 1,
 			"rect": [
-				765.0,
-				25.0,
-				50.0,
-				83.75
+				1522.0,
+				40.0,
+				80.0,
+				134.0
 			],
 			"tooltip": "Minimieren"
 		},
@@ -90,10 +90,10 @@
 			"name": "HeaderClose",
 			"pressed_connections": 1,
 			"rect": [
-				825.0,
-				25.0,
-				50.0,
-				83.75
+				1618.0,
+				40.0,
+				80.0,
+				134.0
 			],
 			"tooltip": "Schließen"
 		},
@@ -108,10 +108,10 @@
 			"name": "Action_feed",
 			"pressed_connections": 1,
 			"rect": [
-				25.0,
-				401.25,
-				272.5,
-				101.25
+				40.0,
+				642.0,
+				536.0,
+				162.0
 			],
 			"tooltip": "Füttern"
 		},
@@ -126,10 +126,10 @@
 			"name": "Action_clean",
 			"pressed_connections": 1,
 			"rect": [
-				312.5,
-				401.25,
-				273.75,
-				101.25
+				600.0,
+				642.0,
+				536.0,
+				162.0
 			],
 			"tooltip": "Reinigen"
 		},
@@ -144,10 +144,10 @@
 			"name": "Action_train",
 			"pressed_connections": 1,
 			"rect": [
-				601.25,
-				401.25,
-				273.75,
-				101.25
+				1160.0,
+				642.0,
+				538.0,
+				162.0
 			],
 			"tooltip": "Trainieren"
 		},
@@ -162,10 +162,10 @@
 			"name": "Nav_care",
 			"pressed_connections": 1,
 			"rect": [
-				25.0,
-				512.5,
-				276.25,
-				62.5
+				40.0,
+				820.0,
+				542.0,
+				100.0
 			],
 			"tooltip": "Pflege"
 		},
@@ -180,10 +180,10 @@
 			"name": "Nav_adventure",
 			"pressed_connections": 1,
 			"rect": [
-				311.25,
-				512.5,
-				276.25,
-				62.5
+				598.0,
+				820.0,
+				542.0,
+				100.0
 			],
 			"tooltip": "Abenteuer"
 		},
@@ -198,10 +198,10 @@
 			"name": "Nav_more",
 			"pressed_connections": 1,
 			"rect": [
-				597.5,
-				512.5,
-				277.5,
-				62.5
+				1156.0,
+				820.0,
+				542.0,
+				100.0
 			],
 			"tooltip": "Mehr"
 		}
@@ -215,6 +215,7 @@
 		170.0
 	],
 	"habitat_frame_scale": 0.854166666666667,
+	"habitat_highlighted_station": "",
 	"habitat_moving": false,
 	"habitat_pending_events": 0,
 	"habitat_visual_state": "idle",
@@ -222,40 +223,40 @@
 	"last_mode_request": "",
 	"layout_rects": {
 		"PlayerTitleBar": [
-			25.0,
-			25.0,
-			850.0,
-			83.75
+			40.0,
+			40.0,
+			1658.0,
+			134.0
 		],
 		"PrimaryStatusRow": [
-			25.0,
-			118.75,
-			850.0,
-			57.5
+			40.0,
+			190.0,
+			1658.0,
+			92.0
 		],
 		"QuickActions": [
-			25.0,
-			401.25,
-			850.0,
-			101.25
+			40.0,
+			642.0,
+			1658.0,
+			162.0
 		],
 		"SmallHabitatFrame": [
-			25.0,
-			186.25,
-			850.0,
-			205.0
+			40.0,
+			298.0,
+			1658.0,
+			328.0
 		],
 		"SmallNavigation": [
-			25.0,
-			512.5,
-			850.0,
-			62.5
+			40.0,
+			820.0,
+			1658.0,
+			100.0
 		],
 		"WindowFrame": [
-			10.0,
-			10.0,
-			880.0,
-			580.0
+			16.0,
+			16.0,
+			1706.0,
+			928.0
 		]
 	},
 	"locale": "de",
@@ -287,80 +288,36 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T15:53:51",
+		"captured_at_utc": "2026-08-14T17:06:43",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
 		"input_policy": "interactive",
 		"monitors": [
 			{
-				"dpi": 120,
+				"dpi": 192,
 				"full_rect": [
-					5600,
-					4,
-					2400,
-					1350
+					0,
+					0,
+					2560,
+					1606
 				],
 				"index": 0,
 				"position": [
-					5600,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					5600,
-					4,
-					2400,
-					1290
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
 					0,
-					4,
-					2400,
-					1500
-				],
-				"index": 1,
-				"position": [
-					0,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					0,
-					4,
-					2400,
-					1440
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
-					2400,
-					0,
-					2560,
-					1440
-				],
-				"index": 2,
-				"position": [
-					2400,
 					0
 				],
 				"primary": true,
 				"scale": 1.0,
 				"usable_rect": [
-					2400,
+					0,
 					0,
 					2560,
-					1380
+					1510
 				]
 			}
 		],
-		"observed_fps": 1.0,
+		"observed_fps": 48.0,
 		"os_name": "Windows",
 		"os_version": "10.0.26200",
 		"rendering_driver": "opengl3",
@@ -377,18 +334,18 @@
 		"window_mouse_passthrough": false,
 		"window_mouse_passthrough_polygon": [],
 		"window_position": [
-			7100,
-			694
+			1280,
+			650
 		],
 		"window_size": [
-			900,
-			600
+			1440,
+			960
 		],
 		"window_transparent": true,
 		"window_unfocusable": false,
 		"window_visible": true
 	},
-	"observed_fps": 1.0,
+	"observed_fps": 48.0,
 	"persistent_root_color_rects": 0,
 	"pet": {
 		"battle_active": false,
@@ -419,36 +376,36 @@
 	"presentation_rect": [
 		0.0,
 		0.0,
-		900.0,
-		600.0
+		1440.0,
+		960.0
 	],
 	"reduced_motion": false,
 	"requested_window_size": [
-		900,
-		600
+		1440,
+		960
 	],
-	"resolved_ui_scale": 1.25,
+	"resolved_ui_scale": 2.0,
 	"schema_version": 2,
 	"small_page": "care",
 	"standard_pet_scale": 1.0,
 	"state_revision": 2,
 	"suppressed_duplicate_commands": 0,
 	"text_scale": 1.5,
-	"texture_memory_bytes": 9690367,
+	"texture_memory_bytes": 16884745,
 	"theme_base_scale": 1.0,
 	"viewport_visible_rect": [
 		0.0,
 		0.0,
-		900.0,
-		600.0
+		1440.0,
+		960.0
 	],
 	"window_max_size": [
-		1600,
-		1075
+		2560,
+		1720
 	],
 	"window_min_size": [
-		750,
-		475
+		1200,
+		760
 	],
 	"window_resizable": true
 }

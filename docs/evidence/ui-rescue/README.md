@@ -83,6 +83,59 @@ coordinates at all: `tabto:HeaderModeSwitch` switched Small → Expanded → Sma
 with an unchanged `mode_requests` counter are harness misses of this kind, not
 unresponsive controls.
 
+## Animation audit
+
+`animation-quality.json` measures every one of the 290 referenced animations:
+declared frames, fps, resulting cycle length, real per-frame pixel change as a
+share of the drawn area, the quietest and loudest transition, and every repeated
+frame classified as deliberate structure or waste.
+
+`tools/art_pipeline/audit_animation_quality.py --check` currently reports **0
+issues** and is a foundation-check gate.
+
+The audit found one genuine defect. The three starter eggs shipped as two-frame
+sheets, with `world` and `hatch` at 10 fps: the first animation any new player
+watches was a 0.2 second flicker, and hatching was over before it read as an
+event. `tools/art_pipeline/generate_egg_animations.py` re-poses the accepted egg
+art into a 6-frame rocking idle (1.0 s), a livelier 6-frame Minimal cycle (1.2 s)
+and an 8-frame hatch (1.0 s) that escalates from nervous jolts through the crack
+to the burst. The pristine two-pose input lives in
+`art_source/sources/egg-poses/`, so the generator can never consume its own
+output.
+
+Everything else the blunt first pass flagged turned out to be craft rather than
+defect: a one-shot returning to its rest pose, a ping-pong sharing its mirrored
+midpoint, and a breathing loop visiting rest twice per cycle. The audit now
+classifies those instead of reporting them, so the remaining signal is real.
+
+## Runtime performance
+
+`performance.json` plus the per-scenario `*-diagnostics.json` files: eight
+isolated four-second native samples.
+
+| Measure | Result |
+| --- | --- |
+| Frame rate | 60 FPS in every scenario |
+| CPU | at most 1.938% of 16-thread total capacity (Expanded idle) |
+| Peak working set | 203.12 MiB |
+| Texture memory | 1.82 MiB Minimal, 38.2 MiB Small habitat, 39.3 MiB during a battle |
+
+The Prompt 4.7 baseline was 59-60 FPS, at most 1.843% CPU and 203.44 MiB peak
+working set, so the rebuilt interface costs nothing measurable. Texture memory is
+not comparable to the 4.7 figure: it tracks which animation sheets happen to be
+resident at the sample moment, and these scenarios drive more of them.
+
+## Stability soak
+
+`stability-soak.json`: one client run driven by 307 scripted player intents —
+100 care actions, 103 mode switches and 100 Expanded tab switches.
+
+- process survived, no engine error
+- animation queue fully drained (`habitat_pending_events` 0)
+- no control accumulated a second `pressed` handler across 100+ full rebuilds
+- no leaked full-screen background node after repeated mode transitions
+- peak working set 210.6 MiB, still 60 FPS at the end
+
 ## Icon set
 
 `contact-sheets/ui-icon-set.png` shows the complete runtime icon set at 2×.

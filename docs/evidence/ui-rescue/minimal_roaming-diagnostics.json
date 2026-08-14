@@ -1,0 +1,191 @@
+{
+  "active_animation_processors": 1,
+  "ambient_animation_frequency": "normal",
+  "ambient_roaming": true,
+  "content_scale_size": [
+    0,
+    0
+  ],
+  "controls": [],
+  "diagnostics_sequence": 1,
+  "effects_intensity": "normal",
+  "expanded_tab": "home",
+  "focused_control": "",
+  "habitat_anchor": [],
+  "habitat_frame_scale": 0.0,
+  "habitat_highlighted_station": "",
+  "habitat_moving": false,
+  "habitat_pending_events": 0,
+  "habitat_visual_state": "",
+  "last_feedback": {
+    "command": "complete_hatch",
+    "fallback": "Dein Gef\u00e4hrte ist geschl\u00fcpft.",
+    "icon": "evolution",
+    "key": "feedback.hatch.ok",
+    "ok": true,
+    "severity": "success"
+  },
+  "last_mode_request": "minimal",
+  "layout_rects": {},
+  "locale": "de",
+  "logical_size": [
+    240.0,
+    160.0
+  ],
+  "minimal_hit_region_updates": 43,
+  "minimal_pet_rect": [
+    88.6654510498047,
+    24.0,
+    128.0,
+    128.0
+  ],
+  "minimal_pet_scale": 1.0,
+  "missing_icon_names": [],
+  "mode": "minimal",
+  "mode_switch_applied": 1,
+  "mode_switch_requests": 1,
+  "native_window": {
+    "adapter_host_os": "Windows",
+    "capabilities": {
+      "alt_tab_visibility_control": false,
+      "always_on_top": true,
+      "dpi_query": true,
+      "full_mouse_passthrough": true,
+      "monitor_enumeration": true,
+      "native_drag": true,
+      "native_windows": true,
+      "no_focus": true,
+      "polygonal_mouse_passthrough": true,
+      "status_indicator": true,
+      "taskbar_visibility_control": false,
+      "transparency": true,
+      "usable_rect": true
+    },
+    "captured_at_utc": "2026-08-14T16:57:18",
+    "display_server": "Windows",
+    "engine_max_fps": 0,
+    "focus_policy": "no_focus",
+    "input_policy": "hit_region",
+    "monitors": [
+      {
+        "dpi": 192,
+        "full_rect": [
+          0,
+          0,
+          2560,
+          1606
+        ],
+        "index": 0,
+        "position": [
+          0,
+          0
+        ],
+        "primary": true,
+        "scale": 1.0,
+        "usable_rect": [
+          0,
+          0,
+          2560,
+          1510
+        ]
+      }
+    ],
+    "observed_fps": 60.0,
+    "os_name": "Windows",
+    "os_version": "10.0.26200",
+    "rendering_driver": "opengl3",
+    "rendering_method": "gl_compatibility",
+    "schema_version": 1,
+    "status_indicator_rect": null,
+    "status_indicator_visible": false,
+    "video_adapter": "NVIDIA GeForce RTX 4080 SUPER",
+    "viewport_transparent_bg": true,
+    "window_always_on_top": true,
+    "window_borderless": true,
+    "window_focused": true,
+    "window_mode": 0,
+    "window_mouse_passthrough": false,
+    "window_mouse_passthrough_polygon": [
+      [
+        97.1987838745117,
+        35.0
+      ],
+      [
+        208.198791503906,
+        35.0
+      ],
+      [
+        208.198791503906,
+        144.0
+      ],
+      [
+        97.1987838745117,
+        144.0
+      ]
+    ],
+    "window_position": [
+      0,
+      1350
+    ],
+    "window_size": [
+      240,
+      160
+    ],
+    "window_transparent": true,
+    "window_unfocusable": true,
+    "window_visible": true
+  },
+  "observed_fps": 60.0,
+  "persistent_root_color_rects": 0,
+  "pet": {
+    "battle_active": false,
+    "battle_unlocked": false,
+    "care": {},
+    "dungeon_active": false,
+    "dungeon_unlocked": false,
+    "injured": false,
+    "level": 0,
+    "name": "Moosling",
+    "open_calls": 0,
+    "screen": "pet",
+    "sickness": false,
+    "sleeping": false,
+    "stage": ""
+  },
+  "preference_schema_version": 2,
+  "presentation_rect": [
+    0.0,
+    0.0,
+    240.0,
+    160.0
+  ],
+  "reduced_motion": false,
+  "requested_window_size": [
+    240,
+    160
+  ],
+  "resolved_ui_scale": 2.0,
+  "schema_version": 2,
+  "small_page": "care",
+  "standard_pet_scale": 1.0,
+  "state_revision": 2,
+  "suppressed_duplicate_commands": 0,
+  "text_scale": 1.0,
+  "texture_memory_bytes": 2258569,
+  "theme_base_scale": 1.0,
+  "viewport_visible_rect": [
+    0.0,
+    0.0,
+    240.0,
+    160.0
+  ],
+  "window_max_size": [
+    560,
+    480
+  ],
+  "window_min_size": [
+    240,
+    160
+  ],
+  "window_resizable": false
+}

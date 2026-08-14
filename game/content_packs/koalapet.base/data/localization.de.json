@@ -225,6 +225,7 @@
     "ui.high": "Hoch",
     "ui.high_contrast": "Hoher Kontrast",
     "ui.hint.adventure_unlocked": "Abenteuer ist freigeschaltet. Du findest Kampf und Dungeon unter Abenteuer.",
+    "ui.hint.first_action": "Wähle unten eine Pflegeaktion",
     "ui.hint.first_care": "Halte Sättigung, Stimmung, Energie und Hygiene im grünen Bereich.",
     "ui.history": "Letzte Ereignisse",
     "ui.history.empty": "Noch keine Ereignisse",

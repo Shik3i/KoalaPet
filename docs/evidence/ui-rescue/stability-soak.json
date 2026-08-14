@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "method": "One native client run driven by 307 scripted player intents, then the application's own diagnostics read back at the end.",
+  "host": "Windows 11 Pro 10.0.26200, Godot 4.7.1.stable.official.a13da4feb, gl_compatibility",
+  "scripted_steps": {
+    "care_actions": 100,
+    "mode_switches": 103,
+    "expanded_tab_switches": 100,
+    "total": 307
+  },
+  "result": {
+    "process_survived": true,
+    "engine_errors": 0,
+    "final_mode": "small",
+    "domain_state_revision": 85,
+    "mode_switches_applied": 104,
+    "habitat_pending_events": 0,
+    "active_animation_processors": 5,
+    "persistent_root_color_rects": 0,
+    "max_pressed_connections_per_control": 1,
+    "observed_fps": 60.0,
+    "peak_working_set_mib": 210.6,
+    "texture_memory_mib_at_end": 16.01
+  },
+  "interpretation": [
+    "The bounded animation queue drains completely: no event backlog survives 100 care actions.",
+    "No control accumulated a second pressed handler across more than 100 full UI rebuilds.",
+    "No leaked full-screen background node remained after repeated mode transitions.",
+    "Peak working set stayed within 8 MiB of the Prompt 4.7 baseline of 203.44 MiB."
+  ]
+}

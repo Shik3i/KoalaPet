@@ -92,9 +92,52 @@ Summary of the change:
 captures with diagnostics, the interactive action matrix, and an explicit note on
 what the harness could and could not verify on a mixed-DPI host.
 
+## Second pass: animation audit and polish
+
+An explicit audit pass followed the interface rebuild.
+
+**Animations.** `audit_animation_quality.py` measures all 290 referenced
+sequences. One genuine defect: the three starter eggs were two-frame sheets at
+10 fps, so the first animation any new player watches was a 0.2 second flicker
+and hatching was over before it read as an event. They are now a 6-frame rocking
+idle, a 6-frame Minimal cycle and an 8-frame hatch, generated from the accepted
+art by an anchor-pivoted whole-pixel shear. A first attempt alternated the two
+authored poses inside the loop and measured as a whole-silhouette change twice
+per second — a flicker between two eggs rather than one egg rocking — so looping
+cycles now stay on a single pose. Everything the blunt first pass flagged in the
+pet and enemy sheets turned out to be craft (return-to-rest, ping-pong midpoints,
+breathing loops), so the audit classifies those instead of reporting them. Result:
+0 issues, now a gate.
+
+**Action routing** was verified per action against the habitat anchors: Feed
+reaches the bowl, Treat the treat spot, Medicine the shelf, and Clean, Train and
+Sleep were captured travelling toward bath, training log and den.
+
+**Further defects found by reading the rendered frames:**
+
+- Alert chips rendered as a bare icon. An ellipsis overrun collapses a Label's
+  minimum width, so `Kampf läuft` and `Hat Hunger` showed nothing. Header chips
+  now reserve their natural width and fall back to icon-plus-tooltip only when
+  the window is genuinely too narrow.
+- Battle and Dungeon offered the same command twice — once in the centre panel,
+  once in the contextual column — and the dungeon column offered "next stage"
+  while the player was standing on a branch.
+- Inventory, Codex and Evolution showed a heading above empty space.
+- The status toast landed on the Expanded tab row and on the Small status bars.
+
+**Added polish:** the destination station lights up while the pet walks to it; a
+per-round battle log shows hits, misses and damage; and a single first-care hint
+appears for a brand new companion and disappears permanently after the first
+care action.
+
+**Measured:** 60 FPS across eight scenarios, at most 1.938% of 16-thread CPU and
+203.12 MiB peak working set, level with the Prompt 4.7 baseline. A 307-intent
+soak (100 care actions, 103 mode switches, 100 tab switches) ended with an empty
+animation queue, at most one handler per control and no leaked node.
+
 ## Not done
 
 - No video recording; the rationale and replacement are documented in the evidence
   README.
-- Performance was not re-measured against the Prompt 4.7 baseline.
 - Screen-reader acceptance remains blocked by the engine.
+- The reported Feed crash remains unreproduced.

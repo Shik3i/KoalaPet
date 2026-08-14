@@ -56,6 +56,21 @@ var _shake_sprite: AnimatedTextureRect
 var _flash_remaining := 0.0
 var _flash_sprite: AnimatedTextureRect
 var _ambient_effects: Array[AnimatedTextureRect] = []
+## Which habitat prop belongs to each action anchor, so the destination can be
+## lit while the pet walks to it.
+const STATION_PROPS := {
+	"feeding_bowl": "Feed",
+	"treat_position": "Feed",
+	"bath": "Bath",
+	"training": "Training",
+	"bed": "Den",
+	"medicine": "Shelf",
+	"departure": "Chest",
+	"trophy": "Shelf",
+	"plant": "Plants",
+}
+var _prop_base_modulate: Dictionary = {}
+var _highlighted_prop := ""
 
 
 func _ready() -> void:
@@ -137,6 +152,7 @@ func configure_pet(animations: Dictionary, authoritative_loop: String, options :
 
 func start_action(anchor_name: String, animation_name: String, duration := 1.1, loop_after := "idle", event := {}) -> void:
 	var resolved_anchor := anchor_name if ANCHORS.has(anchor_name) else "idle_center"
+	_highlight_station(resolved_anchor)
 	_action = {
 		"animation": animation_name,
 		"loop_after": loop_after,
@@ -190,11 +206,42 @@ func show_call(icon_name: String) -> void:
 func set_trophy_visible(unlocked: bool) -> void:
 	var shelf := get_node_or_null("Shelf") as TextureRect
 	if shelf != null:
-		shelf.modulate = Color.WHITE if unlocked else Color("#809099")
+		# Recorded as the base tint so a station highlight can brighten the
+		# shelf and then restore the locked look instead of clearing it.
+		_prop_base_modulate["Shelf"] = Color.WHITE if unlocked else Color("#809099")
+		if _highlighted_prop != "Shelf":
+			shelf.modulate = _prop_base_modulate["Shelf"]
+
+
+## Lights the destination prop while the pet is on its way, so the player can
+## see *where* an action is happening, not just that the pet started walking.
+func _highlight_station(anchor_name: String) -> void:
+	var wanted := str(STATION_PROPS.get(anchor_name, ""))
+	if wanted == _highlighted_prop:
+		return
+	if not _highlighted_prop.is_empty():
+		var previous := get_node_or_null(_highlighted_prop) as TextureRect
+		if previous != null:
+			previous.modulate = _prop_base_modulate.get(_highlighted_prop, Color.WHITE)
+	_highlighted_prop = wanted
+	if wanted.is_empty():
+		return
+	var prop := get_node_or_null(wanted) as TextureRect
+	if prop == null:
+		_highlighted_prop = ""
+		return
+	if not _prop_base_modulate.has(wanted):
+		_prop_base_modulate[wanted] = prop.modulate
+	var base: Color = _prop_base_modulate[wanted]
+	prop.modulate = Color(minf(1.0, base.r * 1.35), minf(1.0, base.g * 1.32), minf(1.0, base.b * 1.18), base.a)
 
 
 func current_anchor_position() -> Vector2:
 	return _world_ground
+
+
+func highlighted_station() -> String:
+	return _highlighted_prop
 
 
 func current_visual_state() -> String:
@@ -354,6 +401,7 @@ func _finish_action() -> void:
 	_action.clear()
 	_action_remaining = 0.0
 	_ambient_action = false
+	_highlight_station("")
 	if actor_sprite == opponent_sprite and not terminal:
 		_play_opponent("idle")
 	if terminal:

@@ -18,10 +18,10 @@
 			"name": "Starter_moss_egg",
 			"pressed_connections": 1,
 			"rect": [
-				251.25,
-				621.25,
-				282.5,
-				55.0
+				402.0,
+				994.0,
+				452.0,
+				88.0
 			],
 			"tooltip": "Wählen · Mooskeim-Ei"
 		},
@@ -36,10 +36,10 @@
 			"name": "Starter_ember_egg",
 			"pressed_connections": 1,
 			"rect": [
-				583.75,
-				621.25,
-				282.5,
-				55.0
+				934.0,
+				994.0,
+				452.0,
+				88.0
 			],
 			"tooltip": "Wählen · Glutmorgen-Ei"
 		},
@@ -54,10 +54,10 @@
 			"name": "Starter_tide_egg",
 			"pressed_connections": 1,
 			"rect": [
-				916.25,
-				621.25,
-				282.5,
-				55.0
+				1466.0,
+				994.0,
+				452.0,
+				88.0
 			],
 			"tooltip": "Wählen · Gezeitenlicht-Ei"
 		}
@@ -68,6 +68,7 @@
 	"focused_control": "",
 	"habitat_anchor": [],
 	"habitat_frame_scale": 0.0,
+	"habitat_highlighted_station": "",
 	"habitat_moving": false,
 	"habitat_pending_events": 0,
 	"habitat_visual_state": "",
@@ -103,76 +104,32 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T15:50:16",
+		"captured_at_utc": "2026-08-14T17:03:07",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
 		"input_policy": "interactive",
 		"monitors": [
 			{
-				"dpi": 120,
+				"dpi": 192,
 				"full_rect": [
-					5600,
-					4,
-					2400,
-					1350
+					0,
+					0,
+					2560,
+					1606
 				],
 				"index": 0,
 				"position": [
-					5600,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					5600,
-					4,
-					2400,
-					1290
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
 					0,
-					4,
-					2400,
-					1500
-				],
-				"index": 1,
-				"position": [
-					0,
-					4
-				],
-				"primary": false,
-				"scale": 1.0,
-				"usable_rect": [
-					0,
-					4,
-					2400,
-					1440
-				]
-			},
-			{
-				"dpi": 120,
-				"full_rect": [
-					2400,
-					0,
-					2560,
-					1440
-				],
-				"index": 2,
-				"position": [
-					2400,
 					0
 				],
 				"primary": true,
 				"scale": 1.0,
 				"usable_rect": [
-					2400,
+					0,
 					0,
 					2560,
-					1380
+					1510
 				]
 			}
 		],
@@ -193,12 +150,12 @@
 		"window_mouse_passthrough": false,
 		"window_mouse_passthrough_polygon": [],
 		"window_position": [
-			6840,
-			534
+			1400,
+			750
 		],
 		"window_size": [
-			1450,
-			950
+			2320,
+			1520
 		],
 		"window_transparent": true,
 		"window_unfocusable": false,
@@ -225,36 +182,36 @@
 	"presentation_rect": [
 		0.0,
 		0.0,
-		1450.0,
-		950.0
+		2320.0,
+		1520.0
 	],
 	"reduced_motion": false,
 	"requested_window_size": [
-		1450,
-		950
+		2320,
+		1520
 	],
-	"resolved_ui_scale": 1.25,
+	"resolved_ui_scale": 2.0,
 	"schema_version": 2,
 	"small_page": "care",
 	"standard_pet_scale": 1.0,
 	"state_revision": 0,
 	"suppressed_duplicate_commands": 0,
 	"text_scale": 1.0,
-	"texture_memory_bytes": 11685537,
+	"texture_memory_bytes": 28876737,
 	"theme_base_scale": 1.0,
 	"viewport_visible_rect": [
 		0.0,
 		0.0,
-		1450.0,
-		950.0
+		2320.0,
+		1520.0
 	],
 	"window_max_size": [
-		2750,
-		1750
+		4400,
+		2800
 	],
 	"window_min_size": [
-		1125,
-		775
+		1800,
+		1240
 	],
 	"window_resizable": true
 }

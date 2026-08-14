@@ -51,6 +51,11 @@ Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. D
 - jede Befehlsantwort wird über `ActionFeedback` auf einen lokalisierten Satz mit Schweregrad abgebildet; rohe `error_code`- oder `reason`-Texte erreichen die Oberfläche nicht mehr
 - Eingabesicherheit: ein autoritativer Befehl gleichzeitig, gleicher Befehl innerhalb von `450 ms` ist eine Absicht, Wiederaufbau ist nicht wieder eintretbar, Statusmeldungen sind klickdurchlässig
 - neun fehlende Symbole deterministisch erzeugt; Fehlzuordnungen wie `close` auf das Verletzungspflaster beseitigt; scharfe 2×-Zwillinge für große Aktionsknöpfe
+- echte Eizyklen: sechs Frames Wiegen, sechs Frames Minimal, acht Frames Schlüpfen aus der akzeptierten Eikunst; vorher zwei Frames bei 10 fps
+- Animationsaudit über alle `290` Sequenzen mit Frameanzahl, Zykluslänge, echter Bildbewegung, Sprungerkennung und Klassifikation absichtlicher Wiederholungen; aktuell `0` Befunde und Teil der Gates
+- Stationshervorhebung: das Ziel einer Pflegeaktion leuchtet, während das Pet hinläuft
+- Kampfprotokoll je Runde mit Treffer, Fehlschlag und Schaden; doppelte Aktionsknöpfe in Kampf und Dungeon entfernt
+- einmaliger Erstpflegehinweis, der nach der ersten Pflegeaktion dauerhaft verschwindet
 - Small und Expanded sind echt größenveränderbar mit gemerkter Größe je Modus; `auto`-UI-Skalierung folgt jetzt der Anzeige-DPI statt der auf Windows konstanten `screen_get_scale()`
 
 ### Visuelle Assets
@@ -83,7 +88,7 @@ Aktueller vollständiger Lauf mit Godot `4.7.1.stable.official.a13da4feb`:
 - Pet-Suite mit `44` Assertions einschließlich idempotentem Hatch
 - Milestone-4 Evolution/Battle/Dungeon-Suite mit `62` Assertions
 - platformneutrale Window-/Placement-Suite mit `46` Assertions
-- Präsentations-Suite mit `4976` Assertions einschließlich `16` Showroom-Entities, `290` Runtime-Sequenzen, vollständigem Playback, Markerreihenfolge, No-Fallback, Refresh-Stabilität, Reduced Motion, UI-Komponenten, echten Player-UI-Signalpfaden für Füttern/Pflege/Tabs/Modus/Kampf/Einstellungen, vollständiger Deferred-Connection-Prüfung, Preferences, Habitat/Minimal, DE/EN und 100–200%-Layoutgrenzen
+- Präsentations-Suite mit `4981` Assertions einschließlich `16` Showroom-Entities, `290` Runtime-Sequenzen, vollständigem Playback, Markerreihenfolge, No-Fallback, Refresh-Stabilität, Reduced Motion, UI-Komponenten, echten Player-UI-Signalpfaden für Füttern/Pflege/Tabs/Modus/Kampf/Einstellungen, vollständiger Deferred-Connection-Prüfung, Preferences, Habitat/Minimal, DE/EN und 100–200%-Layoutgrenzen
 - Asset-Validator für `373` PNGs (`372` mit Transparenz), vollständige Animationsabdeckung, Geometrie, Alpha, Chronologie, VFX und Evidenz
 - Content-Validator für zwei Packs und `86` JSON-Dokumente
 - Ruff- und GDLint-Läufe ohne Befund; Python-Abhängigkeiten ohne bekannte Advisories; kein Node-/npm-Abhängigkeitsbaum vorhanden, daher `npm audit` nicht anwendbar
@@ -105,7 +110,8 @@ Auf dem Füttern-Pfad wurden stattdessen vier reale Defekte gefunden, behoben un
 - ADR 0010 bleibt `proposed`; der erfolgreiche Präsentations-Rebuild akzeptiert die Plattformarchitektur nicht automatisch
 - der gemeldete Feed-Absturz ist nicht reproduziert; nur die dabei gefundenen Defekte sind behoben
 - die interaktive Aktionsmatrix ist auf diesem Mixed-DPI-Mehrmonitor-Host teilweise durch Koordinaten-Virtualisierung begrenzt; betroffene Bedienelemente wurden koordinatenfrei per Tastaturfokus nachgewiesen
-- für Prompt 4.9 wurde kein Video aufgenommen und keine Performance-Neumessung gegen die Prompt-4.7-Basis durchgeführt
+- für Prompt 4.9 wurde kein Video aufgenommen
+- Performance neu gemessen: `60 FPS`, höchstens `1,938 %` CPU von 16 Threads, `203,12 MiB` Spitzenarbeitsspeicher, dazu ein Stabilitätslauf mit `307` Eingaben ohne Ereignisstau, ohne Doppelverbindung und ohne Leck
 - keine Exporte, Signierung, Distribution oder Deployment
 - Habitat-Editor, Furniture Placement, Farm, Residents, zweites aktives Pet, Idle Jobs, Trading Post, Economy und Milestone 5 wurden nicht begonnen
 

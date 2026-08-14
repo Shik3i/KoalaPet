@@ -43,3 +43,22 @@ Egg profiles remain intentionally limited to `idle`, `hatch` and `world` at two 
 Contact sheets, reels, native Godot movies, extracted frames and performance results are indexed in [`evidence/living-animation/README.md`](evidence/living-animation/README.md). Current generated art is `PROVISIONAL_PRODUCT_REVIEW` with `license_status=UNDECIDED`; final production-art and accessibility acceptance remain separate gates.
 
 Prompt 4.8 classifies all `290` runtime sequences: `281 ACCEPTED_PROVISIONAL`, `9 NOT_PLAYER_FACING`, zero `NEEDS_REGENERATION` and zero `TECHNICALLY_BROKEN`. The nine non-player-facing rows are compatibility `sleep` aliases. `63` care/sleep/call sequences were regenerated after helper-hand, clipping or continuity rejection. Exact diagnostics and review media are indexed in [`evidence/visual-acceptance/README.md`](evidence/visual-acceptance/README.md).
+
+## Prompt 4.9 quality audit
+
+Coverage alone does not prove an animation reads. `tools/art_pipeline/audit_animation_quality.py`
+measures every referenced sequence for declared frames, fps, resulting cycle length, real
+per-frame pixel change, the quietest and loudest transition, and repeated frames.
+
+Thresholds: at least four frames, a cycle between `0.35 s` and `3.2 s`, mean per-frame change
+above `1.2%` of the drawn area, and no single loop transition more than `3.0x` the quietest one.
+The pop threshold is calibrated on a real defect rather than guessed: the shipped two-pose egg
+loop measured `3.37`, while every hand-weighted four-frame idle sits between `1.0` and `2.5`.
+
+Repeated frames are classified, not flagged, when they are deliberate: a one-shot returning to
+its rest pose, a ping-pong sharing its mirrored midpoint, or a breathing loop visiting rest
+twice per cycle.
+
+Current result: `290` animations audited, `0` issues. The egg sequences were rebuilt to reach
+it; every other sequence already passed. Machine-readable detail lives in
+[`evidence/ui-rescue/animation-quality.json`](evidence/ui-rescue/animation-quality.json).

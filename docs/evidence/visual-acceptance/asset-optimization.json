@@ -1,19 +1,7 @@
 {
   "decision": "Keep stable paths and lazy runtime loading; atlas migration deferred until release asset approval.",
-  "disk_bytes": 26186623,
+  "disk_bytes": 26556165,
   "duplicate_file_groups": [
-    [
-      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/ember/idle.png",
-      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/ember/world.png"
-    ],
-    [
-      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/moss/idle.png",
-      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/moss/world.png"
-    ],
-    [
-      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/tide/idle.png",
-      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/tide/world.png"
-    ],
     [
       "game/content_packs/koalapet.base/assets/vertical_slice/ember/sleep.png",
       "game/content_packs/koalapet.base/assets/vertical_slice/ember/sleep_loop.png"
@@ -51,7 +39,7 @@
       "game/content_packs/koalapet.base/assets/vertical_slice/tide/sleep_loop.png"
     ]
   ],
-  "estimated_decoded_rgba_bytes_if_all_loaded": 129948928,
+  "estimated_decoded_rgba_bytes_if_all_loaded": 132701440,
   "evidence_under_res": [],
   "high_transparent_padding": [
     {
@@ -72,9 +60,9 @@
     "runtime_png_count": 388
   },
   "prompt_4_8_after_corrections": {
-    "disk_bytes": 26186623,
-    "disk_delta_bytes": 156151,
-    "estimated_decoded_rgba_bytes_if_all_loaded": 129948928,
+    "disk_bytes": 26556165,
+    "disk_delta_bytes": 525693,
+    "estimated_decoded_rgba_bytes_if_all_loaded": 132701440,
     "runtime_png_count": 430
   },
   "runtime_png_count": 430,

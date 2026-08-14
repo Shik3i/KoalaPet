@@ -6,8 +6,8 @@
   "world_animations": {
     "idle": {
       "asset": "assets/vertical_slice/eggs/tide/idle.png",
-      "frames": 2,
-      "fps": 3,
+      "frames": 6,
+      "fps": 6,
       "loop": true,
       "frame_size": [
         128,
@@ -39,14 +39,14 @@
       ],
       "mirroring_allowed": true,
       "event_markers": [],
-      "source_brief": "Provisional idle presentation pose",
+      "source_brief": "Rocking incubation cycle re-posed from the accepted egg art with an anchor-pivoted whole-pixel shear",
       "provenance": "art_source/provenance/visual-rebuild.json",
       "review_status": "PROVISIONAL_REVIEWED"
     },
     "hatch": {
       "asset": "assets/vertical_slice/eggs/tide/hatch.png",
-      "frames": 2,
-      "fps": 10,
+      "frames": 8,
+      "fps": 8,
       "loop": false,
       "frame_size": [
         128,
@@ -79,18 +79,30 @@
       "mirroring_allowed": true,
       "event_markers": [
         {
-          "frame": 1,
-          "event": "hatch"
+          "frame": 3,
+          "event": "shell_strain"
+        },
+        {
+          "frame": 4,
+          "event": "shell_cracked"
+        },
+        {
+          "frame": 6,
+          "event": "impact"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
         }
       ],
-      "source_brief": "Provisional hatch presentation pose",
+      "source_brief": "Rocking incubation cycle re-posed from the accepted egg art with an anchor-pivoted whole-pixel shear",
       "provenance": "art_source/provenance/visual-rebuild.json",
       "review_status": "PROVISIONAL_REVIEWED"
     },
     "world": {
       "asset": "assets/vertical_slice/eggs/tide/world.png",
-      "frames": 2,
-      "fps": 10,
+      "frames": 6,
+      "fps": 5,
       "loop": true,
       "frame_size": [
         128,
@@ -121,17 +133,8 @@
         128
       ],
       "mirroring_allowed": true,
-      "event_markers": [
-        {
-          "frame": 0,
-          "event": "foot_contact"
-        },
-        {
-          "frame": 1,
-          "event": "opposite_foot_contact"
-        }
-      ],
-      "source_brief": "Sequential in-place locomotion",
+      "event_markers": [],
+      "source_brief": "Rocking incubation cycle re-posed from the accepted egg art with an anchor-pivoted whole-pixel shear",
       "provenance": "art_source/provenance/visual-rebuild.json",
       "review_status": "PROVISIONAL_REVIEWED"
     }

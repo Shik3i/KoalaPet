@@ -283,7 +283,12 @@ static func _meter_color(percent: int) -> Color:
 
 
 ## Contextual alert shown only while a state actually needs attention.
-static func alert_chip(text: String, icon_name: String, severity := "notice") -> PanelContainer:
+##
+## `sizing` decides how the chip competes for width:
+## `fill` expands inside a column and ellipsizes, `natural` claims exactly the
+## width its text needs, and `icon` drops to the pictogram plus its tooltip when
+## the surrounding row is too narrow for any label at all.
+static func alert_chip(text: String, icon_name: String, severity := "notice", sizing := "fill") -> PanelContainer:
 	var root := PanelContainer.new()
 	root.add_theme_stylebox_override("panel", PixelTheme.chip_box(severity))
 	root.set_meta("component", "alert_chip")
@@ -294,11 +299,23 @@ static func alert_chip(text: String, icon_name: String, severity := "notice") ->
 	row.add_theme_constant_override("separation", UiMetrics.space(UiMetrics.SPACE_COMPACT))
 	root.add_child(row)
 	row.add_child(icon_rect(icon_name, UiMetrics.ICON_STATUS))
+	if sizing == "icon":
+		return root
 	var label := Label.new()
+	label.name = "AlertLabel"
 	label.text = text
 	label.add_theme_font_size_override("font_size", UiMetrics.font_size(UiMetrics.TEXT_CAPTION))
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	if sizing == "natural":
+		# The chip reserves exactly its text, so a header alert is never clipped
+		# to an unreadable fragment such as "Hat Hu".
+		label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	else:
+		# An ellipsis overrun drops the label's minimum width to almost nothing,
+		# so without an explicit expand the chip rendered as a bare icon.
+		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.custom_minimum_size = Vector2(48, 0)
 	row.add_child(label)
 	return root
 

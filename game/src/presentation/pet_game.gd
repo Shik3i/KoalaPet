@@ -706,8 +706,12 @@ func _window_header(model: Dictionary) -> HBoxContainer:
 		identity.add_child(PixelUi.caption(_stage_line(model)))
 	var urgent := _primary_alert(model)
 	if not urgent.is_empty():
-		var chip := PixelUi.alert_chip(str(urgent["text"]), str(urgent["icon"]), str(urgent["severity"]))
+		# Below this width the name, the alert and five window controls cannot
+		# share one row, so the alert keeps only its pictogram and its tooltip.
+		var sizing := "natural" if logical_size.x >= 660.0 else "icon"
+		var chip := PixelUi.alert_chip(str(urgent["text"]), str(urgent["icon"]), str(urgent["severity"]), sizing)
 		chip.name = "HeaderUrgentAlert"
+		chip.size_flags_horizontal = Control.SIZE_SHRINK_END
 		row.add_child(chip)
 	var settings_button := PixelUi.window_button("settings", application.text("ui.settings", "Einstellungen", locale))
 	settings_button.name = "HeaderSettings"
@@ -1118,12 +1122,43 @@ func _expanded_context(model: Dictionary) -> PanelContainer:
 	panel.add_child(column)
 	var tab := _resolved_expanded_tab(model)
 	column.add_child(PixelUi.title(_context_title(tab), UiMetrics.TEXT_PANEL_TITLE))
-	for entry in _context_actions(tab, model):
+	var actions := _context_actions(tab, model)
+	for entry in actions:
 		_add_context_action(column, model, entry)
+	# A tab without its own actions still owes the player an explanation and a
+	# progress read, otherwise the column is a heading above empty space.
+	var summary := _context_summary(tab, model)
+	if not summary.is_empty():
+		column.add_child(PixelUi.body(summary))
 	column.add_child(HSeparator.new())
 	column.add_child(PixelUi.title(_context_detail_title(tab), UiMetrics.TEXT_CAPTION))
 	column.add_child(_context_detail(tab, model))
 	return panel
+
+
+## Short progress read for the tabs that carry no direct action of their own.
+func _context_summary(tab: String, model: Dictionary) -> String:
+	match tab:
+		"inventory":
+			var inventory: Dictionary = model.get("inventory", {})
+			var total := 0
+			for item_id in inventory:
+				total += int(inventory[item_id])
+			if inventory.is_empty():
+				return application.text("ui.inventory_empty", "Noch keine Gegenstände gesammelt.", locale)
+			return application.text("ui.inventory_summary", "{kinds} Arten · {total} Stück", locale).replace("{kinds}", str(inventory.size())).replace("{total}", str(total))
+		"codex":
+			var codex: Dictionary = model.get("codex", {})
+			return application.text("ui.codex_summary", "{forms} Formen · {encounters} Gegner entdeckt", locale) 				.replace("{forms}", str(codex.get("forms", []).size())) 				.replace("{encounters}", str(codex.get("encounters", []).size()))
+		"evolution":
+			if not model.get("pending_evolution", {}).is_empty():
+				return application.text("ui.pending_evolution", "Entwicklung wartet auf einen sicheren Moment", locale)
+			var candidates: Array = model.get("evolution", {}).get("candidates", [])
+			if candidates.is_empty():
+				return application.text("ui.evolution_hint", "Pflege und Training bestimmen den nächsten Weg.", locale)
+			return application.text("ui.evolution_candidates", "{count} mögliche Wege", locale).replace("{count}", str(candidates.size()))
+		_:
+			return ""
 
 
 func _context_title(tab: String) -> String:
@@ -1163,6 +1198,10 @@ func _context_actions(tab: String, model: Dictionary) -> Array:
 		"dungeon":
 			if model.get("active_dungeon_run", {}).is_empty():
 				return [{"id": "dungeon", "icon": "dungeon", "text": application.text("ui.start_dungeon", "Dungeon beginnen", locale), "action": _start_dungeon}]
+			if not model.get("active_battle", {}).is_empty():
+				return [{"id": "battle_round", "icon": "attack", "text": application.text("ui.next_round", "Runde ausführen", locale), "action": _battle_round}]
+			if _dungeon_awaits_choice(model):
+				return []
 			return [{"id": "dungeon_next", "icon": "map", "text": application.text("ui.next_node", "Nächste Etappe", locale), "action": _dungeon_next}]
 		"evolution":
 			return []
@@ -1238,14 +1277,30 @@ func _battle_objective(model: Dictionary) -> String:
 			return application.text("feedback.locked", "Das ist noch nicht freigeschaltet.", locale)
 		return application.text("ui.battle_objective_idle", "Wähle eine Haltung und beginne einen kurzen Kampf.", locale)
 	var encounter := application.get_encounter_presentation(str(battle.get("encounter_id", "")), locale)
-	return "%s · %s %d\n%s %d/%d" % [
+	return "%s · %s %d\n%s %d\n%s  %d/%d\n%s  %d/%d" % [
 		str(encounter.get("name", "")),
 		application.text("ui.level", "Stufe", locale),
 		int(encounter.get("level", 1)),
-		application.text("ui.next_round", "Runde ausführen", locale),
+		application.text("ui.round", "Runde", locale),
 		int(battle.get("current_round", 0)) + 1,
-		maxi(1, int(battle.get("max_rounds", int(battle.get("current_round", 0)) + 1))),
+		str(model.get("name", "")),
+		int(battle.get("pet_transient_hp", 0)),
+		int(battle.get("pet_transient_max_hp", 0)),
+		str(encounter.get("name", "")),
+		int(battle.get("opponent_transient_hp", 0)),
+		int(battle.get("opponent_transient_max_hp", 0)),
 	]
+
+
+## True while the player is standing on a branch node and must pick a route.
+func _dungeon_awaits_choice(model: Dictionary) -> bool:
+	var run: Dictionary = model.get("active_dungeon_run", {})
+	if run.is_empty():
+		return false
+	var dungeon := application.get_dungeon_presentation(str(run.get("dungeon_id", "")), locale)
+	var nodes: Array = dungeon.get("nodes", [])
+	var current := int(run.get("current_node", -1))
+	return current >= 0 and current < nodes.size() and str(nodes[current].get("kind", "")) == "event"
 
 
 func _dungeon_objective(model: Dictionary) -> String:
@@ -1362,10 +1417,7 @@ func _battle_panel(model: Dictionary) -> VBoxContainer:
 		copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(copy)
-		var start := PixelUi.button(application.text("ui.start_battle", "Kampf beginnen", locale), "battle")
-		start.disabled = not bool(model.get("battle_unlocked", false))
-		_connect_pressed(start, _start_battle)
-		column.add_child(start)
+		column.add_child(PixelUi.caption(application.text("ui.battle_hint", "Der Kampf startet über die Aktionsspalte.", locale), true))
 		return column
 	var encounter := application.get_encounter_presentation(str(battle.get("encounter_id", "")), locale)
 	column.add_child(PixelUi.title("%s · %s %d" % [str(encounter.get("name", "")), application.text("ui.level", "Stufe", locale), int(encounter.get("level", 1))], 15))
@@ -1373,23 +1425,57 @@ func _battle_panel(model: Dictionary) -> VBoxContainer:
 	hp.text = "%s HP %d/%d  ·  %s HP %d/%d  ·  R%d" % [model.get("name", "Pet"), int(battle.get("pet_transient_hp", 0)), int(battle.get("pet_transient_max_hp", 0)), encounter.get("name", "Opponent"), int(battle.get("opponent_transient_hp", 0)), int(battle.get("opponent_transient_max_hp", 0)), int(battle.get("current_round", 0)) + 1]
 	column.add_child(hp)
 	var stances := HBoxContainer.new()
+	stances.name = "BattleStances"
+	UiMetrics.apply_separation(stances, UiMetrics.SPACE_COMPACT)
 	column.add_child(stances)
 	for stance in ["aggressive", "balanced", "defensive"]:
 		var stance_button := PixelUi.battle_stance_control(application.text("ui." + stance, stance.capitalize(), locale), "attack" if stance == "aggressive" else "shield" if stance == "defensive" else "health")
+		stance_button.name = "Stance_" + stance
 		stance_button.button_pressed = str(battle.get("selected_stance", "balanced")) == stance
 		_connect_pressed(stance_button, _set_battle_stance.bind(stance))
 		stances.add_child(stance_button)
-	var round_button := PixelUi.button(application.text("ui.next_round", "Runde ausführen", locale), "attack")
-	_connect_pressed(round_button, _battle_round)
-	column.add_child(round_button)
+	column.add_child(_battle_log(model, battle))
 	return column
+
+
+## What actually happened in the last rounds. Without it a resolved round only
+## moves two numbers, and the player cannot tell a miss from a weak hit.
+func _battle_log(model: Dictionary, battle: Dictionary) -> Control:
+	var scroll := ScrollContainer.new()
+	scroll.name = "BattleLog"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_MICRO)
+	scroll.add_child(column)
+	var log: Array = battle.get("turn_event_log", []) if battle.get("turn_event_log", []) is Array else []
+	if log.is_empty():
+		column.add_child(PixelUi.caption(application.text("ui.battle_log_empty", "Noch keine Runde ausgeführt.", locale), true))
+		return scroll
+	var encounter := application.get_encounter_presentation(str(battle.get("encounter_id", "")), locale)
+	var pet_name := str(model.get("name", ""))
+	var enemy_name := str(encounter.get("name", ""))
+	for index in range(log.size() - 1, maxi(-1, log.size() - 9), -1):
+		var event: Variant = log[index]
+		if not event is Dictionary:
+			continue
+		var entry: Dictionary = event
+		var actor := pet_name if str(entry.get("actor", "pet")) == "pet" else enemy_name
+		var line := ""
+		if str(entry.get("result", "")) == "hit":
+			line = application.text("ui.battle_hit", "R{round} · {actor} trifft für {amount}", locale) 				.replace("{round}", str(int(entry.get("round", 0)))) 				.replace("{actor}", actor) 				.replace("{amount}", str(int(entry.get("amount", 0))))
+		else:
+			line = application.text("ui.battle_miss", "R{round} · {actor} verfehlt", locale) 				.replace("{round}", str(int(entry.get("round", 0)))) 				.replace("{actor}", actor)
+		column.add_child(PixelUi.event_log_entry(line))
+	return scroll
 
 
 func _dungeon_panel(model: Dictionary) -> VBoxContainer:
 	var column := VBoxContainer.new()
 	var dungeons := application.get_dungeons()
 	if dungeons.is_empty():
-		column.add_child(Label.new())
+		column.add_child(PixelUi.caption(application.text("ui.dungeon_none", "Noch kein Dungeon verfügbar.", locale), true))
 		return column
 	var dungeon_id := str(dungeons[0].get("id", ""))
 	var run: Dictionary = model.get("active_dungeon_run", {})
@@ -1407,30 +1493,24 @@ func _dungeon_panel(model: Dictionary) -> VBoxContainer:
 		node_button.button_pressed = index == current
 		node_button.tooltip_text = "%d · %s" % [index + 1, str(node.get("kind", ""))]
 		route.add_child(node_button)
+	# Starting the run and advancing it live in the contextual action column.
+	# Only the branch choices are unique to this panel, because each one is a
+	# different command rather than a repeat of the column's action.
 	if run.is_empty():
-		var start := PixelUi.button(application.text("ui.start_dungeon", "Dungeon beginnen", locale), "dungeon")
-		start.disabled = not bool(model.get("dungeon_unlocked", false))
-		_connect_pressed(start, _start_dungeon)
-		column.add_child(start)
+		column.add_child(PixelUi.caption(application.text("ui.dungeon_hint", "Der Aufbruch startet über die Aktionsspalte.", locale), true))
 		return column
 	if not model.get("active_battle", {}).is_empty():
-		var battle_notice := Label.new()
-		battle_notice.text = application.text("ui.dungeon_battle_active", "Diese Etappe wird im Kampf entschieden.", locale)
-		column.add_child(battle_notice)
-		var round_button := PixelUi.button(application.text("ui.next_round", "Runde ausführen", locale), "attack")
-		_connect_pressed(round_button, _battle_round)
-		column.add_child(round_button)
+		column.add_child(PixelUi.body(application.text("ui.dungeon_battle_active", "Diese Etappe wird im Kampf entschieden.", locale)))
 		return column
 	var nodes: Array = dungeon.get("nodes", [])
 	if current >= 0 and current < nodes.size() and str(nodes[current].get("kind", "")) == "event":
+		column.add_child(PixelUi.caption(application.text("ui.choose_route", "Route wählen", locale)))
 		for choice in nodes[current].get("choices", []):
 			var choice_button := PixelUi.button(str(choice.get("name", choice.get("id", ""))), "mood")
+			choice_button.name = "DungeonChoice_" + str(choice.get("id", ""))
+			choice_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			_connect_pressed(choice_button, _dungeon_choice.bind(str(choice.get("id", ""))))
 			column.add_child(choice_button)
-	else:
-		var next := PixelUi.button(application.text("ui.next_node", "Nächste Etappe", locale), "map")
-		_connect_pressed(next, _dungeon_next)
-		column.add_child(next)
 	return column
 
 
@@ -1781,12 +1861,14 @@ func _show_notification(text_value: String, severity := ActionFeedback.SEVERITY_
 	notice.name = "StatusToast"
 	var width := clampf(logical_size.x - 48.0, 200.0, 380.0)
 	notice.size = Vector2(width, 0)
-	# Placed over the lower habitat: clear of the header controls, the status row
-	# and the action/footer rows, and fully click-through so it can never swallow
-	# the next action even while it is fading.
+	# Placed over the upper habitat, which is the one region both modes keep free
+	# of controls: clear of the header, the status row, the tab row and the
+	# action/footer rows. It is fully click-through, so it can never swallow the
+	# next action even while it is fading.
+	var band := 130.0 if mode == MODE_SMALL else 92.0
 	notice.position = Vector2(
 		floorf((logical_size.x - width) * 0.5),
-		clampf(logical_size.y * 0.42, 96.0, maxf(96.0, logical_size.y - 190.0))
+		clampf(band, 72.0, maxf(72.0, logical_size.y - 200.0))
 	)
 	notification_layer.add_child(notice)
 	_remove_notification_later(revision)

@@ -24,6 +24,16 @@ var minimal_moving := true
 var minimal_pause_remaining := 0.0
 var minimal_target_x := 104.0
 var minimal_hit_elapsed := 0.0
+var minimal_cursor_elapsed := 0.0
+var minimal_cursor_cooldown := 0.0
+var minimal_action_remaining := 0.0
+var minimal_action_kind := ""
+var minimal_event_pause := 3.0
+var minimal_authoritative_loop := "idle"
+var minimal_roaming_allowed := true
+var minimal_open_pending := false
+var minimal_animations: Dictionary = {}
+var minimal_scheduler := AmbientAnimationScheduler.new()
 var small_page := "care"
 var expanded_tab := "home"
 var transient_animation := ""
@@ -35,10 +45,13 @@ var placement_path := PLACEMENT_PATH
 var dev_window: Window
 var animation_controller := PresentationAnimationController.new()
 var active_habitat: HabitatView
+var review_event_sequence := 0
+var minimal_hit_region_updates := 0
 
 
 func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
+	var development_actions_enabled := OS.is_debug_build()
 	requested_save_path = _argument_value(args, "--save-path=", "user://saves/koalapet.json")
 	diagnostics_path = _argument_value(args, "--diagnostics-path=", "")
 	placement_path = _argument_value(args, "--placement-path=", PLACEMENT_PATH)
@@ -48,7 +61,7 @@ func _ready() -> void:
 	var pet_preferences: Dictionary = preferences.get("pet_presentation", {})
 	var desktop_preferences: Dictionary = preferences.get("desktop", {})
 	application = PetApplication.new({"save_path": requested_save_path})
-	show_dev_tools = "--dev-tools" in args
+	show_dev_tools = development_actions_enabled and "--dev-tools" in args
 	locale = _argument_value(args, "--locale=", str(interface_preferences.get("language", "de")))
 	if locale not in ["de", "en"]:
 		locale = "de"
@@ -66,44 +79,61 @@ func _ready() -> void:
 	_apply_window_mode()
 	_refresh()
 	var review_actions := _argument_value(args, "--review-actions=", "")
-	if not review_actions.is_empty():
+	if development_actions_enabled and not review_actions.is_empty():
 		var diagnostics_delay := maxi(0, int(_argument_value(args, "--diagnostics-delay-ms=", "0")))
 		call_deferred("_run_review_actions", review_actions.split(",", false), diagnostics_delay)
 	else:
 		call_deferred("_write_diagnostics")
-	if "--animation-polish-demo" in args:
+	if development_actions_enabled and "--animation-polish-demo" in args:
 		call_deferred("_run_animation_polish_demo")
+	var living_demo := _argument_value(args, "--living-animation-demo=", "")
+	if development_actions_enabled and not living_demo.is_empty():
+		call_deferred("_run_living_animation_demo", living_demo)
 
 
 func _process(delta: float) -> void:
 	if mode != MODE_MINIMAL or minimal_sprite == null or not is_instance_valid(minimal_sprite):
 		return
 	minimal_hit_elapsed += delta
-	if minimal_hit_elapsed >= 1.0 / 30.0:
+	if minimal_hit_elapsed >= 1.0 / 20.0:
 		minimal_hit_elapsed = 0.0
 		_update_minimal_hit_region()
+	minimal_cursor_cooldown = maxf(0.0, minimal_cursor_cooldown - delta)
+	minimal_cursor_elapsed += delta
+	if minimal_cursor_elapsed >= 0.2:
+		minimal_cursor_elapsed = 0.0
+		_update_minimal_cursor_reaction()
 	var pet_preferences: Dictionary = preferences.get("pet_presentation", {})
 	var desktop_preferences: Dictionary = preferences.get("desktop", {})
-	if reduced_motion or not bool(pet_preferences.get("ambient_roaming", true)) or str(desktop_preferences.get("minimal_lane", "bottom")) == "stationary":
+	var ambient_enabled := minimal_roaming_allowed and bool(pet_preferences.get("ambient_roaming", true)) and str(desktop_preferences.get("minimal_lane", "bottom")) != "stationary"
+	if minimal_moving:
+		var speed := 46.0 if minimal_action_kind == "playful_move" else 28.0
+		minimal_sprite.position.x = move_toward(minimal_sprite.position.x, minimal_target_x, delta * speed * _walking_speed())
+		if is_equal_approx(minimal_sprite.position.x, minimal_target_x):
+			minimal_moving = false
+			if minimal_action_kind == "walk":
+				minimal_action_kind = ""
+				minimal_pause_remaining = minimal_event_pause
+				_minimal_set_animation(minimal_authoritative_loop)
+		return
+	if minimal_action_remaining > 0.0:
+		minimal_action_remaining -= delta
+		if minimal_action_remaining <= 0.0:
+			if minimal_open_pending:
+				minimal_open_pending = false
+				_set_mode(MODE_SMALL)
+				return
+			minimal_action_kind = ""
+			minimal_pause_remaining = minimal_event_pause
+			_minimal_set_animation(minimal_authoritative_loop)
+		return
+	if reduced_motion or not ambient_enabled or minimal_authoritative_loop != "idle":
 		return
 	if minimal_pause_remaining > 0.0:
 		minimal_pause_remaining -= delta
 		if minimal_pause_remaining <= 0.0:
-			minimal_moving = true
-			var bounds := _minimal_walk_bounds()
-			minimal_target_x = bounds.x if minimal_sprite.position.x > (bounds.x + bounds.y) * 0.5 else bounds.y
-			minimal_direction = -1.0 if minimal_target_x < minimal_sprite.position.x else 1.0
-			minimal_sprite.configure(application.get_animation_descriptor("walk"), reduced_motion, _animation_speed() * _walking_speed())
-			minimal_sprite.set_facing(minimal_direction)
+			_start_minimal_ambient_event(minimal_scheduler.next_event())
 		return
-	if not minimal_moving:
-		return
-	minimal_sprite.position.x = move_toward(minimal_sprite.position.x, minimal_target_x, delta * 28.0 * _walking_speed())
-	if is_equal_approx(minimal_sprite.position.x, minimal_target_x):
-		minimal_moving = false
-		minimal_pause_remaining = 2.5 if minimal_target_x < 56.0 else 4.0
-		minimal_sprite.configure(application.get_animation_descriptor("idle"), reduced_motion, _animation_speed())
-		minimal_sprite.set_facing(minimal_direction)
 
 
 func _exit_tree() -> void:
@@ -296,10 +326,14 @@ func _open_settings() -> void:
 	_add_setting_options(grid, application.text("ui.minimal_pet_scale", "Minimal-Pet", locale), ["75%", "100%", "125%", "150%", "200%"], [0.75, 1.0, 1.25, 1.5, 2.0], preferences["pet_presentation"]["minimal_pet_scale"], _set_preference.bind("pet_presentation", "minimal_pet_scale"))
 	_add_setting_options(grid, application.text("ui.animation_speed", "Animationsgeschwindigkeit", locale), ["75%", "100%", "125%"], [0.75, 1.0, 1.25], preferences["pet_presentation"]["animation_speed"], _set_preference.bind("pet_presentation", "animation_speed"))
 	_add_setting_options(grid, application.text("ui.walking_speed", "Laufgeschwindigkeit", locale), ["75%", "100%", "125%", "150%"], [0.75, 1.0, 1.25, 1.5], preferences["pet_presentation"]["walking_speed"], _set_preference.bind("pet_presentation", "walking_speed"))
-	_add_setting_options(grid, application.text("ui.effects_intensity", "Effektstärke", locale), [application.text("ui.reduced", "Reduziert", locale), application.text("ui.normal", "Normal", locale)], ["reduced", "normal"], preferences["pet_presentation"]["effects_intensity"], _set_preference.bind("pet_presentation", "effects_intensity"))
+	_add_setting_options(grid, application.text("ui.ambient_frequency", "Umgebungsanimationen", locale), [application.text("ui.low", "Niedrig", locale), application.text("ui.normal", "Normal", locale), application.text("ui.high", "Hoch", locale)], ["low", "normal", "high"], preferences["pet_presentation"]["ambient_animation_frequency"], _set_preference.bind("pet_presentation", "ambient_animation_frequency"))
+	_add_setting_options(grid, application.text("ui.effects_intensity", "Kampfeffektstärke", locale), [application.text("ui.off", "Aus", locale), application.text("ui.reduced", "Reduziert", locale), application.text("ui.normal", "Normal", locale)], ["off", "reduced", "normal"], preferences["pet_presentation"]["effects_intensity"], _set_preference.bind("pet_presentation", "effects_intensity"))
 	_add_setting_options(grid, application.text("ui.default_mode", "Startmodus", locale), ["Minimal", "Small", "Expanded"], ["minimal", "small", "expanded"], preferences["desktop"]["default_launch_mode"], _set_preference.bind("desktop", "default_launch_mode"))
 	_add_setting_options(grid, application.text("ui.desktop_lane", "Desktop-Spur", locale), [application.text("ui.bottom", "Unterer Rand", locale), application.text("ui.stationary", "Stationär", locale)], ["bottom", "stationary"], preferences["desktop"]["minimal_lane"], _set_preference.bind("desktop", "minimal_lane"))
 	_add_setting_toggle(grid, application.text("ui.ambient_roaming", "Umherlaufen", locale), bool(preferences["pet_presentation"]["ambient_roaming"]), _set_preference.bind("pet_presentation", "ambient_roaming"))
+	_add_setting_toggle(grid, application.text("ui.cursor_reaction", "Pet reagiert auf den Cursor", locale), bool(preferences["pet_presentation"]["cursor_reaction"]), _set_preference.bind("pet_presentation", "cursor_reaction"))
+	_add_setting_toggle(grid, application.text("ui.hit_shake", "Treffererschütterung", locale), bool(preferences["pet_presentation"]["hit_shake"]), _set_preference.bind("pet_presentation", "hit_shake"))
+	_add_setting_toggle(grid, application.text("ui.damage_flash", "Trefferaufhellung", locale), bool(preferences["pet_presentation"]["damage_flash"]), _set_preference.bind("pet_presentation", "damage_flash"))
 	_add_setting_toggle(grid, application.text("ui.reduced_motion", "Weniger Bewegung", locale), reduced_motion, _set_preference.bind("pet_presentation", "reduced_motion"))
 	_add_setting_toggle(grid, application.text("ui.high_contrast", "Hoher Kontrast", locale), bool(preferences["interface"]["high_contrast"]), _set_preference.bind("interface", "high_contrast"))
 	_add_setting_toggle(grid, application.text("ui.tooltips", "Tooltips", locale), bool(preferences["interface"]["tooltips_enabled"]), _set_preference.bind("interface", "tooltips_enabled"))
@@ -444,9 +478,18 @@ func _build_minimal(model: Dictionary, egg := false) -> void:
 	minimal_target_x = walk_bounds.y
 	minimal_sprite.position.x = clampf(minimal_sprite.position.x, walk_bounds.x, walk_bounds.y)
 	root_layer.add_child(minimal_sprite)
-	var animation_name := "world" if egg else ("idle" if reduced_motion else "walk" if minimal_moving else _animation_for(model))
-	var descriptor := application.get_animation_descriptor(animation_name, "", egg)
-	minimal_sprite.configure(descriptor, reduced_motion, _animation_speed() * (_walking_speed() if animation_name == "walk" else 1.0))
+	minimal_animations = application.get_animation_descriptors("", egg)
+	minimal_authoritative_loop = "world" if egg else _animation_for(model)
+	minimal_roaming_allowed = not egg and model.get("active_battle", {}).is_empty() and model.get("injury", {}).is_empty() and not bool(model.get("sickness", false)) and not bool(model.get("sleeping", false))
+	minimal_moving = false
+	minimal_action_remaining = 0.0
+	minimal_action_kind = ""
+	minimal_open_pending = false
+	minimal_pause_remaining = 1.4
+	minimal_event_pause = 3.0
+	minimal_scheduler.configure(maxi(1, str(model.get("form_id", model.get("egg_id", "pet"))).hash()), str(preferences.get("pet_presentation", {}).get("ambient_animation_frequency", "normal")), reduced_motion)
+	var descriptor: Dictionary = minimal_animations.get(minimal_authoritative_loop, minimal_animations.get("idle", {}))
+	minimal_sprite.configure(descriptor, reduced_motion, _animation_speed())
 	minimal_sprite.set_facing(minimal_direction)
 	minimal_sprite.mouse_filter = Control.MOUSE_FILTER_STOP
 	minimal_sprite.gui_input.connect(_on_minimal_input)
@@ -456,6 +499,58 @@ func _build_minimal(model: Dictionary, egg := false) -> void:
 		bubble.name = "TransientCallBubble"
 		bubble.position = Vector2(minimal_sprite.position.x + 82.0 * scale_value, maxf(2.0, minimal_sprite.position.y - 8.0))
 		root_layer.add_child(bubble)
+
+
+func _start_minimal_ambient_event(event: Dictionary) -> void:
+	minimal_event_pause = float(event.get("pause", 3.0))
+	minimal_action_kind = str(event.get("kind", "walk"))
+	if minimal_action_kind == "special_idle":
+		minimal_action_remaining = float(event.get("duration", 1.2))
+		_minimal_set_animation(str(event.get("animation", "idle_look")))
+		return
+	var bounds := _minimal_walk_bounds()
+	var available := maxf(1.0, bounds.y - bounds.x)
+	var distance := available * float(event.get("distance_factor", 0.5))
+	var center := (bounds.x + bounds.y) * 0.5
+	var direction := -1.0 if minimal_sprite.position.x > center else 1.0
+	minimal_target_x = clampf(minimal_sprite.position.x + direction * distance, bounds.x, bounds.y)
+	if is_equal_approx(minimal_target_x, minimal_sprite.position.x):
+		minimal_target_x = bounds.x if direction < 0.0 else bounds.y
+	minimal_direction = -1.0 if minimal_target_x < minimal_sprite.position.x else 1.0
+	minimal_sprite.set_facing(minimal_direction)
+	minimal_moving = true
+	if minimal_action_kind == "playful_move":
+		minimal_action_remaining = float(event.get("duration", 1.0))
+		_minimal_set_animation(str(event.get("animation", "playful_hop")), 1.0)
+	else:
+		_minimal_set_animation("walk", _walking_speed())
+
+
+func _minimal_set_animation(animation_name: String, speed_scale := 1.0) -> void:
+	var descriptor: Dictionary = minimal_animations.get(animation_name, {})
+	if descriptor.is_empty():
+		return
+	minimal_sprite.configure(descriptor, reduced_motion, _animation_speed() * speed_scale)
+	minimal_sprite.restart()
+	minimal_sprite.set_facing(minimal_direction)
+
+
+func _update_minimal_cursor_reaction() -> void:
+	if minimal_sprite == null or minimal_cursor_cooldown > 0.0 or minimal_moving or minimal_action_remaining > 0.0 or minimal_authoritative_loop != "idle":
+		return
+	if not bool(preferences.get("pet_presentation", {}).get("cursor_reaction", true)):
+		return
+	var cursor := Vector2(DisplayServer.mouse_get_position() - get_window().position)
+	var center := minimal_sprite.get_global_rect().get_center()
+	if cursor.distance_to(center) > 112.0:
+		return
+	minimal_direction = -1.0 if cursor.x < center.x else 1.0
+	minimal_sprite.set_facing(minimal_direction)
+	minimal_action_kind = "cursor"
+	minimal_action_remaining = 0.8 if not reduced_motion else 0.35
+	minimal_event_pause = 2.5
+	minimal_cursor_cooldown = 4.0
+	_minimal_set_animation("idle_look")
 
 
 func _build_small(model: Dictionary) -> void:
@@ -884,26 +979,33 @@ func _habitat(model: Dictionary) -> HabitatView:
 
 
 func _configure_habitat(habitat: HabitatView, model: Dictionary) -> void:
-	var event := animation_controller.consume_one_shot()
-	var animations := {}
-	for animation_name in ["idle", "walk", "eat", "happy", "sleep", "sick", "injured", "training", "attack", "hit", "victory", "call"]:
-		animations[animation_name] = application.get_animation_descriptor(animation_name)
-	habitat.configure_pet(animations, "idle" if not event.is_empty() else animation_controller.effective_loop(model), {
+	var events := animation_controller.drain_pending()
+	var animations := application.get_animation_descriptors()
+	habitat.configure_pet(animations, animation_controller.effective_loop(model), {
 		"reduced_motion": reduced_motion,
 		"ambient_roaming": bool(preferences.get("pet_presentation", {}).get("ambient_roaming", true)),
+		"ambient_frequency": str(preferences.get("pet_presentation", {}).get("ambient_animation_frequency", "normal")),
 		"pet_scale": float(preferences.get("pet_presentation", {}).get("standard_pet_scale", 1.0)),
 		"animation_speed": _animation_speed(),
 		"walking_speed": _walking_speed(),
 		"effects_intensity": str(preferences.get("pet_presentation", {}).get("effects_intensity", "normal")),
+		"hit_shake": bool(preferences.get("pet_presentation", {}).get("hit_shake", true)),
+		"damage_flash": bool(preferences.get("pet_presentation", {}).get("damage_flash", true)),
+		"family_id": str(model.get("family_id", "")),
+		"ambient_seed": maxi(1, str(model.get("form_id", "pet")).hash()),
 	})
-	if not event.is_empty():
-		var from_anchor := str(event.get("from_anchor", ""))
-		if not from_anchor.is_empty():
-			habitat.set_world_anchor(from_anchor)
-		habitat.start_action(str(event.get("anchor", "idle_center")), str(event.get("animation", "happy")), float(event.get("duration", 1.1)), str(event.get("loop_after", "idle")))
 	var battle: Dictionary = model.get("active_battle", {})
 	if not battle.is_empty():
-		habitat.set_opponent(application.get_animation_descriptor("idle", str(battle.get("encounter_id", ""))))
+		var encounter_id := str(battle.get("encounter_id", ""))
+		habitat.set_opponent_animations(application.get_animation_descriptors(encounter_id), encounter_id)
+	else:
+		for event in events:
+			var encounter_id := str(event.get("payload", {}).get("encounter_id", ""))
+			if not encounter_id.is_empty():
+				habitat.set_opponent_animations(application.get_animation_descriptors(encounter_id), encounter_id)
+				break
+	if not events.is_empty():
+		habitat.start_sequence(events)
 	habitat.show_call(_call_icon(model))
 	habitat.set_trophy_visible("koalapet.base:boss_memory_gate" in model.get("unlock_ids", []))
 
@@ -912,18 +1014,15 @@ func _animation_for(model: Dictionary) -> String:
 	if not transient_animation.is_empty():
 		return transient_animation
 	if not model.get("active_battle", {}).is_empty():
-		return "attack"
+		return "idle"
 	if not model.get("injury", {}).is_empty():
 		return "injured"
 	if bool(model.get("sickness", false)):
 		return "sick"
 	if bool(model.get("sleeping", false)):
-		return "sleep"
+		return "sleep_loop"
 	if not model.get("open_calls", []).is_empty():
 		return "call"
-	var last: Dictionary = model.get("last_battle_result", {})
-	if str(last.get("status", "")) == "win":
-		return "victory"
 	return "idle"
 
 
@@ -989,6 +1088,7 @@ func _update_minimal_hit_region() -> void:
 		return
 	var polygon := minimal_sprite.interaction_polygon()
 	window_adapter.set_hit_regions([OverlayHitRegion.single(polygon, 4, "minimal_pet")])
+	minimal_hit_region_updates += 1
 
 
 func _save_window_placement() -> void:
@@ -1038,7 +1138,14 @@ func _on_title_bar_input(event: InputEvent) -> void:
 
 func _on_minimal_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		_set_mode(MODE_SMALL)
+		if bool(preferences.get("pet_presentation", {}).get("cursor_reaction", true)) and minimal_animations.has("attention"):
+			minimal_moving = false
+			minimal_open_pending = true
+			minimal_action_kind = "click"
+			minimal_action_remaining = 0.18 if reduced_motion else 0.55
+			_minimal_set_animation("attention")
+		else:
+			_set_mode(MODE_SMALL)
 
 
 func _minimize() -> void:
@@ -1096,11 +1203,11 @@ func _feed() -> void:
 
 
 func _treat() -> void:
-	_command({"type": "feed", "item_id": application.find_item_by_kind("treat")}, "happy", "treat_position")
+	_command({"type": "feed", "item_id": application.find_item_by_kind("treat")}, "treat", "treat_position")
 
 
 func _clean() -> void:
-	_command({"type": "clean"}, "happy", "bath")
+	_command({"type": "clean"}, "clean", "bath")
 
 
 func _train() -> void:
@@ -1108,21 +1215,21 @@ func _train() -> void:
 
 
 func _medicine() -> void:
-	_command({"type": "medicine", "item_id": application.find_item_by_kind("medicine")}, "happy", "medicine")
+	_command({"type": "medicine", "item_id": application.find_item_by_kind("medicine")}, "medicine", "medicine")
 
 
 func _treat_injury() -> void:
-	_command({"type": "treat_injury", "item_id": application.find_item_by_kind("injury_treatment")}, "happy", "medicine")
+	_command({"type": "treat_injury", "item_id": application.find_item_by_kind("injury_treatment")}, "treatment", "medicine")
 
 
 func _sleep_or_wake(sleeping: bool) -> void:
-	_command({"type": "wake" if sleeping else "sleep"}, "idle" if sleeping else "sleep", "idle_center" if sleeping else "bed", "idle" if sleeping else "sleep", "bed" if sleeping else "idle_center")
+	_command({"type": "wake" if sleeping else "sleep"}, "wake" if sleeping else "sleep_enter", "bed", "idle" if sleeping else "sleep_loop", "bed" if sleeping else "idle_center", "sleep")
 
 
 func _resolve_first_call() -> void:
 	var calls: Array = application.get_view_model(MODE_SMALL, locale).get("open_calls", [])
 	if not calls.is_empty():
-		_command({"type": "resolve_call", "call_id": str(calls[0].get("call_id", ""))}, "happy")
+		_command({"type": "resolve_call", "call_id": str(calls[0].get("call_id", ""))}, "attention", "idle_center", "idle", "", "attention")
 
 
 func _battle_action() -> void:
@@ -1142,11 +1249,11 @@ func _dungeon_action() -> void:
 
 
 func _start_battle() -> void:
-	_command({"type": "start_battle", "encounter_id": _default_encounter_id(), "stance": "balanced"}, "attack", "departure")
+	_command({"type": "start_battle", "encounter_id": _default_encounter_id(), "stance": "balanced"}, "idle_look", "departure", "idle", "", "locomotion")
 
 
 func _set_battle_stance(stance: String) -> void:
-	_command({"type": "battle_stance", "stance": stance}, "idle")
+	_command({"type": "battle_stance", "stance": stance}, "")
 
 
 func _battle_round() -> void:
@@ -1154,7 +1261,7 @@ func _battle_round() -> void:
 
 
 func _battle_resolve(outcome: String) -> void:
-	_command({"type": "battle_resolve", "outcome": outcome}, "victory" if outcome == "win" else "injured")
+	_command({"type": "battle_resolve", "outcome": outcome}, "")
 
 
 func _start_dungeon() -> void:
@@ -1175,11 +1282,51 @@ func _dungeon_choice(choice_id: String) -> void:
 	_command({"type": "dungeon_choice", "choice_id": choice_id}, "happy")
 
 
-func _command(payload: Dictionary, animation_name: String, anchor_name := "idle_center", loop_after := "idle", from_anchor := "") -> void:
+func _command(payload: Dictionary, animation_name: String, anchor_name := "idle_center", loop_after := "idle", from_anchor := "", event_kind := "care") -> void:
 	var result := application.command(payload)
 	if result.get("ok", false):
-		animation_controller.queue_one_shot(animation_name, anchor_name, 1.1, "command:%d:%s" % [int(application.get_view_model(MODE_SMALL, locale).get("state_revision", 0)), str(payload.get("type", "action"))], loop_after, from_anchor)
+		var command_type := str(payload.get("type", "action"))
+		if command_type in ["battle_round", "battle_resolve"]:
+			_queue_battle_presentation(result)
+		elif not animation_name.is_empty():
+			animation_controller.queue_one_shot(animation_name, anchor_name, 1.1, "command:%d:%s" % [int(application.get_view_model(MODE_SMALL, locale).get("state_revision", 0)), command_type], loop_after, from_anchor, event_kind)
 	_refresh(_command_status(result))
+
+
+func _queue_battle_presentation(result: Dictionary) -> void:
+	var summary: Dictionary = result.get("summary", {})
+	var revision := int(application.get_view_model(MODE_SMALL, locale).get("state_revision", 0))
+	var battle: Dictionary = application.get_view_model(MODE_SMALL, locale).get("active_battle", {})
+	var outcome: Dictionary = summary.get("result", {})
+	var encounter_id := str(battle.get("encounter_id", outcome.get("encounter_id", "")))
+	var status := str(outcome.get("status", ""))
+	var terminal_slots := 2 if status in ["win", "draw"] else 1 if status == "loss" else 0
+	var maximum_exchanges := maxi(0, (PresentationAnimationController.MAX_PENDING_EVENTS - terminal_slots) / 2)
+	var source_events: Array = summary.get("events", []) if summary.get("events", []) is Array else []
+	var first_event := maxi(0, source_events.size() - maximum_exchanges) if terminal_slots > 0 else 0
+	var sequence := 0
+	for event_index in range(first_event, mini(source_events.size(), first_event + maximum_exchanges)):
+		var source_event: Variant = source_events[event_index]
+		if not source_event is Dictionary:
+			continue
+		var battle_event: Dictionary = source_event
+		var actor := "enemy" if str(battle_event.get("actor", "pet")) == "enemy" else "pet"
+		var target := "enemy" if actor == "pet" else "pet"
+		var move_id := str(battle_event.get("move_id", ""))
+		var move_presentation := application.get_move_presentation(move_id)
+		animation_controller.queue_one_shot("attack", "idle_center", 0.9, "battle:%d:%d:attack" % [revision, sequence], "idle", "", "battle", {"actor": actor, "encounter_id": encounter_id, "move_id": move_id, "move_tags": move_presentation.get("tags", [])})
+		sequence += 1
+		var reaction := "dodge" if str(battle_event.get("result", "miss")) == "miss" else "hit"
+		animation_controller.queue_one_shot(reaction, "idle_center", 0.75, "battle:%d:%d:%s" % [revision, sequence, reaction], "idle", "", "battle", {"actor": target, "encounter_id": encounter_id, "move_id": move_id})
+		sequence += 1
+	if status == "win":
+		animation_controller.queue_one_shot("victory", "idle_center", 0.9, "battle:%d:result:pet" % revision, "idle", "", "battle", {"actor": "pet", "encounter_id": encounter_id, "terminal": true})
+		animation_controller.queue_one_shot("defeat", "idle_center", 1.0, "battle:%d:result:enemy" % revision, "idle", "", "battle", {"actor": "enemy", "encounter_id": encounter_id, "terminal": true})
+	elif status == "loss":
+		animation_controller.queue_one_shot("defeat", "idle_center", 1.0, "battle:%d:result:pet" % revision, "injured", "", "battle", {"actor": "pet", "encounter_id": encounter_id, "terminal": true})
+	elif status == "draw":
+		animation_controller.queue_one_shot("defeat", "idle_center", 1.0, "battle:%d:result:pet" % revision, "idle", "", "battle", {"actor": "pet", "encounter_id": encounter_id, "terminal": true})
+		animation_controller.queue_one_shot("defeat", "idle_center", 1.0, "battle:%d:result:enemy" % revision, "idle", "", "battle", {"actor": "enemy", "encounter_id": encounter_id, "terminal": true})
 
 
 func _default_encounter_id() -> String:
@@ -1417,6 +1564,21 @@ func _run_review_actions(actions: PackedStringArray, diagnostics_delay_ms := 0) 
 			"minimal_pet:150": _set_preference(1.5, "pet_presentation", "minimal_pet_scale")
 			"roaming:off": _set_preference(false, "pet_presentation", "ambient_roaming")
 			"reduced:on": _set_preference(true, "pet_presentation", "reduced_motion")
+			"effects:reduced": _set_preference("reduced", "pet_presentation", "effects_intensity")
+			"effects:off": _set_preference("off", "pet_presentation", "effects_intensity")
+			"ambient:low": _set_preference("low", "pet_presentation", "ambient_animation_frequency")
+			"ambient:high": _set_preference("high", "pet_presentation", "ambient_animation_frequency")
+			"demo:idle": _review_idle_sequence()
+			"demo:care": _review_care_sequence()
+			"demo:sleep": _review_sleep_sequence()
+			"demo:combat": _review_combat_sequence("koalapet.base:creekling_encounter")
+			"demo:boss": _review_combat_sequence("koalapet.base:canopy_guardian")
+			"minimal:playful":
+				if mode == MODE_MINIMAL and minimal_sprite != null:
+					_start_minimal_ambient_event({"kind": "playful_move", "animation": "playful_pounce", "distance_factor": 0.25, "duration": 1.2, "pause": 4.0})
+			_:
+				if str(action).begins_with("anim:"):
+					_review_one_shot(str(action).trim_prefix("anim:"))
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if diagnostics_delay_ms > 0:
@@ -1444,6 +1606,111 @@ func _run_animation_polish_demo() -> void:
 	_set_mode(MODE_MINIMAL)
 
 
+func _run_living_animation_demo(scenario: String) -> void:
+	if not application.has_pet():
+		application.choose_starter("koalapet.base:moss_egg")
+		application.advance_simulated(61)
+		application.complete_hatch()
+	_set_mode(MODE_SMALL)
+	await get_tree().create_timer(1.0).timeout
+	match scenario:
+		"care-sleep":
+			_review_idle_sequence()
+			await get_tree().create_timer(4.2).timeout
+			_review_care_sequence()
+			await get_tree().create_timer(17.0).timeout
+			_review_sleep_sequence()
+		"combat":
+			_review_combat_sequence("koalapet.base:creekling_encounter")
+			await get_tree().create_timer(12.0).timeout
+			_review_combat_sequence("koalapet.base:canopy_guardian")
+		"minimal":
+			_set_mode(MODE_MINIMAL)
+			await get_tree().create_timer(1.5).timeout
+			_start_minimal_ambient_event({"kind": "special_idle", "animation": "idle_playful", "duration": 1.4, "pause": 2.0})
+			await get_tree().create_timer(3.0).timeout
+			_start_minimal_ambient_event({"kind": "playful_move", "animation": "playful_pounce", "distance_factor": 0.28, "duration": 1.2, "pause": 3.0})
+		"reduced-motion":
+			_set_preference(true, "pet_presentation", "reduced_motion")
+			_set_preference("reduced", "pet_presentation", "effects_intensity")
+			await get_tree().create_timer(1.8).timeout
+			_review_combat_sequence("koalapet.base:creekling_encounter")
+		"ambient":
+			_set_preference("high", "pet_presentation", "ambient_animation_frequency")
+			_review_idle_sequence()
+			await get_tree().create_timer(4.0).timeout
+			_review_sequence([
+				{"animation": "attention", "anchor": "idle_center", "kind": "attention"},
+				{"animation": "playful_hop", "anchor": "idle_center", "kind": "ambient"},
+			])
+		"sleep-habitat":
+			_sleep_or_wake(false)
+		"sleep-minimal":
+			_sleep_or_wake(false)
+			await get_tree().create_timer(1.4).timeout
+			_set_mode(MODE_MINIMAL)
+		_:
+			_review_idle_sequence()
+
+
+func _review_one_shot(animation_name: String, anchor := "idle_center", loop_after := "idle", kind := "care", payload := {}) -> void:
+	_review_sequence([{"animation": animation_name, "anchor": anchor, "loop_after": loop_after, "kind": kind, "payload": payload}])
+
+
+func _review_idle_sequence() -> void:
+	_review_sequence([
+		{"animation": "idle_look", "kind": "ambient"},
+		{"animation": "idle_playful", "kind": "ambient"},
+		{"animation": "idle_rest", "kind": "ambient"},
+	])
+
+
+func _review_care_sequence() -> void:
+	_review_sequence([
+		{"animation": "eat", "anchor": "feeding_bowl", "kind": "care"},
+		{"animation": "clean", "anchor": "bath", "kind": "care"},
+		{"animation": "training", "anchor": "training", "kind": "care"},
+		{"animation": "medicine", "anchor": "medicine", "kind": "care"},
+	])
+
+
+func _review_sleep_sequence() -> void:
+	_review_sequence([
+		{"animation": "sleep_enter", "anchor": "bed", "loop_after": "sleep_loop", "kind": "sleep"},
+		{"animation": "wake", "anchor": "bed", "loop_after": "idle", "kind": "sleep"},
+	])
+
+
+func _review_combat_sequence(encounter_id: String) -> void:
+	_review_sequence([
+		{"animation": "attack", "kind": "battle", "payload": {"actor": "pet", "encounter_id": encounter_id}},
+		{"animation": "hit", "kind": "battle", "payload": {"actor": "enemy", "encounter_id": encounter_id}},
+		{"animation": "attack", "kind": "battle", "payload": {"actor": "enemy", "encounter_id": encounter_id}},
+		{"animation": "dodge", "kind": "battle", "payload": {"actor": "pet", "encounter_id": encounter_id}},
+		{"animation": "victory", "kind": "battle", "payload": {"actor": "pet", "encounter_id": encounter_id, "terminal": true}},
+		{"animation": "defeat", "kind": "battle", "payload": {"actor": "enemy", "encounter_id": encounter_id, "terminal": true}},
+	])
+
+
+func _review_sequence(specs: Array) -> void:
+	for raw_spec in specs:
+		if not raw_spec is Dictionary:
+			continue
+		var spec: Dictionary = raw_spec
+		review_event_sequence += 1
+		animation_controller.queue_one_shot(
+			str(spec.get("animation", "idle")),
+			str(spec.get("anchor", "idle_center")),
+			float(spec.get("duration", 0.9)),
+			"review:%d" % review_event_sequence,
+			str(spec.get("loop_after", "idle")),
+			str(spec.get("from_anchor", "")),
+			str(spec.get("kind", "care")),
+			spec.get("payload", {}),
+		)
+	_refresh()
+
+
 func _write_diagnostics() -> void:
 	if diagnostics_path.is_empty():
 		return
@@ -1469,9 +1736,16 @@ func _write_diagnostics() -> void:
 		"theme_base_scale": theme.default_base_scale if theme != null else 0.0,
 		"reduced_motion": reduced_motion,
 		"ambient_roaming": bool(preferences.get("pet_presentation", {}).get("ambient_roaming", true)),
+		"ambient_animation_frequency": str(preferences.get("pet_presentation", {}).get("ambient_animation_frequency", "normal")),
+		"effects_intensity": str(preferences.get("pet_presentation", {}).get("effects_intensity", "normal")),
 		"habitat_visual_state": active_habitat.current_visual_state() if active_habitat != null and is_instance_valid(active_habitat) else "",
 		"habitat_anchor": [active_habitat.current_anchor_position().x, active_habitat.current_anchor_position().y] if active_habitat != null and is_instance_valid(active_habitat) else [],
 		"habitat_moving": active_habitat.is_moving() if active_habitat != null and is_instance_valid(active_habitat) else false,
+		"habitat_pending_events": active_habitat.pending_event_count() if active_habitat != null and is_instance_valid(active_habitat) else 0,
+		"active_animation_processors": active_habitat.active_animation_processor_count() if active_habitat != null and is_instance_valid(active_habitat) else (1 if minimal_sprite != null and minimal_sprite.is_processing() else 0),
+		"minimal_hit_region_updates": minimal_hit_region_updates,
+		"observed_fps": Engine.get_frames_per_second(),
+		"texture_memory_bytes": int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)),
 		"preference_schema_version": int(preferences.get("version", 0)),
 		"native_window": window_adapter.capture_diagnostics() if window_adapter != null else {},
 	}

@@ -1,20 +1,20 @@
 # Project Status / Ist-Stand
 
-**Stand:** 2026-08-13
-**Phase:** Milestone 4 implementiert; Prompt 4.5 Präsentations-Rebuild und Prompt 4.6 Animations-/UI-Polish implementiert und lokal validiert
+**Stand:** 2026-08-14
+**Phase:** Milestone 4 implementiert; Prompt 4.5 Präsentations-Rebuild, Prompt 4.6 UI-/Lokomotions-Polish und Prompt 4.7 Living-Animation-Ausbau implementiert und lokal validiert
 **Freigabe:** Spielbarer Windows-Vertical-Slice; keine Release-, Packaging- oder Milestone-5-Freigabe
 
 ## Gesamtstand
 
 KoalaPet ist ein Windows-first, local-first Godot-V-Pet. Der aktuelle Vertical Slice umfasst ein aktives Pet, drei Starter-Eier, die klassische Pflege, sechs verzweigte Juvenile-Formen, normale Kämpfe und einen fünfstufigen ersten Dungeon. Minimal, Small und Expanded sind ausschließlich Präsentationen derselben `PetApplication` und derselben versionierten Simulation.
 
-Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. Der normale Spielerpfad verwendet ein kohärentes dunkles Pixel-UI, einen geschichteten `Quiet Canopy`-Lebensraum, originale provisorische Bildassets und echte achtstufige Lokomotion. Entwicklungssteuerungen sind nur mit `--dev-tools` in einem separaten Fenster verfügbar.
+Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. Der normale Spielerpfad verwendet ein kohärentes dunkles Pixel-UI, einen geschichteten `Quiet Canopy`-Lebensraum, originale provisorische Bildassets und chronologische `4–8`-Frame-Sequenzen für Idle, Pflege, Schlaf, Zustände und Kampf. Entwicklungssteuerungen sind nur mit `--dev-tools` in einem separaten Fenster verfügbar.
 
 ## Implementiert
 
 ### Foundation, Content und Saves
 
-- ein versioniertes Registry-/Validator-System für gebündelte und externe JSON-/Safe-Media-Packs
+- ein versioniertes Registry-/Validator-System für gebündelte und externe JSON-/Safe-Media-Packs; maximal `1024` Dateien, `64 MiB` Gesamtgröße und `2 MiB` pro JSON
 - stabile namespaced IDs, DE/EN-Lokalisierung und datengetriebene Eier, Formen, Animationen, Evolutionen, Gegner, Belohnungen und Dungeon-Knoten
 - deterministische Zeit, Offline-Cap, Save v3, sequentielle Migrationen, Backup/Recovery und Missing-Content-Quarantäne
 - transaktionale Commands und Offline-Synchronisation mit Rollback bei Save-Fehlern; Save-Lock plus Fingerprint-Konfliktprüfung gegen konkurrierende Writer
@@ -38,6 +38,8 @@ Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. D
 - Text-Wrapping, Ellipsis, vergrößerte lokalisierbare Inventarkarten, Tastaturfokus, Tooltips und Reduced-Motion-Umschaltung
 - versionierte Präsentationsoptionen getrennt vom Spielstand: UI-/Text-/Pet-Skalierung, Dichte, Sprache, Kontrast, Tooltips, Roaming, Animations-/Laufgeschwindigkeit, Effekte, Startmodus und Desktopverhalten
 - feste Habitat-Anker für Futter, Leckerli, Bad, Training, Bett, Medizin und Aufbruch; Aktionen laufen zur Station, spielen einmal und kehren in den autoritativen Zustand zurück
+- begrenzte, priorisierte Animationsereignisse mit stabilen IDs, Marker-gesteuerten Effekten, autoritativer Loop-Rückkehr und pausierter Verarbeitung für versteckte Präsentationen
+- datengetriebene Umgebungsreaktionen, Cursoraufmerksamkeit, spielerische Minimal-Bewegung sowie getrennte Optionen für Frequenz, Effekte, Treffererschütterung und Trefferaufhellung
 - Battle und Dungeon bleiben hinter den vorhandenen datengetriebenen Gates
 
 ### Visuelle Assets
@@ -45,7 +47,8 @@ Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. D
 - 19 erhaltene Bildquellen für drei Eier, drei Hatchlings, sechs Juveniles, drei normale Gegner, einen Boss, Habitat und UI-Icons
 - 128×128 transparente Charakterframes, 64×64 Previews, 96×96 Portraits und 24×24 UI-Icons
 - `Quiet Canopy` mit 512×192 Hintergrund, Ground, Schlafplatz, Bad, Futterplatz, Training, Pflanzen, Trophy-Shelf, Laterne, Truhe, Vordergrund und Effekten
-- Animationen für Idle/Walk/Eat/Happy/Sleep/Sick/Injured/Training/Attack/Hit/Victory/Call sowie Ei- und Gegnerzustände; alle neun spielbaren Walk-Zyklen besitzen acht sequenzielle Frames bei 10 fps
+- je `29` Animationen mit `4–8` Frames für alle neun spielbaren Formen; je fünf Reaktions-/Kampfanimationen für drei normale Gegner und den Boss; genaue Matrix in [`ANIMATION_COVERAGE.md`](ANIMATION_COVERAGE.md)
+- zwölf getrennte familienbezogene VFX-Sequenzen für Moss, Ember und Tide; Marker, Intensität und Reaktionsfeedback bleiben reine Präsentation
 - Quellen, Prompt, Hashes und Verarbeitung sind erfasst; Art- und Lizenzstatus bleiben ausdrücklich `PROVISIONAL_PRODUCT_REVIEW` / `UNDECIDED`
 
 ## Direkte Windows-Evidenz
@@ -55,6 +58,7 @@ Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. D
 - 14-Sekunden-MJPEG-Film mit `84` Frames bei `1040×640`/`6 fps`: Pet läuft transparent, Pet-Klick öffnet Small, Care-Klick, F3 öffnet Expanded, F1 kehrt zu Minimal zurück, Klick außerhalb trifft das darunterliegende Testfenster während KoalaPet weiterläuft
 - Reproduktion, Dateihashes und Evidenzgrenzen: [`evidence/visual-rebuild/README.md`](evidence/visual-rebuild/README.md)
 - Prompt-4.6-Evidenz: Small/Expanded/Settings/Minimal-/Stationsaufnahmen, neun Walk-GIFs, 23-Sekunden-Polish-Film und sieben Performance-Szenarien unter [`evidence/animation-polish/README.md`](evidence/animation-polish/README.md)
+- Prompt-4.7-Evidenz: sieben native Godot-Movies, zehn extrahierte Belegframes, vollständige/dichte Kontaktbögen, vier Reels und acht Performance-Szenarien unter [`evidence/living-animation/README.md`](evidence/living-animation/README.md)
 
 ## Validierung
 
@@ -62,12 +66,13 @@ Aktueller vollständiger Lauf mit Godot `4.7.1.stable.official.a13da4feb`:
 
 - Content-, JSON-, Python-Compile-, Markdown-Link-, Mod-Payload-, Neutral-Term-, Repository-Artefakt- und Whitespace-Gates
 - Godot Headless Import
-- Foundation-Suite
-- Pet-Suite einschließlich idempotentem Hatch
-- Milestone-4 Evolution/Battle/Dungeon-Suite
-- platformneutrale Window-/Placement-Suite
-- Präsentations-Suite mit `312` Assertions für Transparenz, UI-Komponenten, State-Revision, achtstufige Lokomotion/Metadaten, Animationspriorität einschließlich veralteter Timer, Preferences-Recovery/Persistenz, Habitat-Anker/Reduced Motion, DE/EN, 100–200%-Bounds, Aktionszugang, Gates und Dev-UI-Isolation
-- Asset-Validator für `212` PNGs, Animationsgeometrie und Alpha
+- Foundation-Suite mit `114` Assertions
+- Pet-Suite mit `44` Assertions einschließlich idempotentem Hatch
+- Milestone-4 Evolution/Battle/Dungeon-Suite mit `62` Assertions
+- platformneutrale Window-/Placement-Suite mit `41` Assertions
+- Präsentations-Suite mit `1053` Assertions für Transparenz, UI-Komponenten, Metadaten/Marker, Queue-Grenzen, Reduced Motion, Idle-/Care-/Sleep-/Battle-Sequenzen, Preferences-Recovery, Habitat/Minimal, DE/EN, 100–200%-Bounds, Aktionszugang, Gates und Dev-UI-Isolation
+- Asset-Validator für `373` PNGs (`372` mit Transparenz), vollständige Animationsabdeckung, Geometrie, Alpha, Chronologie, VFX und Evidenz
+- Content-Validator für zwei Packs und `86` JSON-Dokumente
 - Ruff- und GDLint-Läufe ohne Befund; Python-Abhängigkeiten ohne bekannte Advisories; kein Node-/npm-Abhängigkeitsbaum vorhanden, daher `npm audit` nicht anwendbar
 
 Exakte aktuelle Zählwerte stehen nach dem finalen Gesamtlauf in [`TESTING_AND_QUALITY.md`](TESTING_AND_QUALITY.md) und der Evidenz-README.
@@ -75,7 +80,7 @@ Exakte aktuelle Zählwerte stehen nach dem finalen Gesamtlauf in [`TESTING_AND_Q
 ## Nicht produktionsreif / Grenzen
 
 - finale Bildrechte und finale Art-Abnahme sind offen; das Generationsmodell meldete keine auslesbare Versionskennung
-- Nicht-Lokomotions-Aktionen und Idle bleiben provisorische Zweiframe-Posen; sequentielle Reaktionszyklen und Idle-Varianten sind nicht fertig
+- alle neuen Sequenzen bleiben deterministisch abgeleitete, provisorische Produktreview-Art; handfinalisierte Produktionsanimation und formale Rechtefreigabe fehlen
 - Screenreader- und vollständige manuelle Kontrastabnahme fehlen; Reduced Motion, Fokus und Layout-Gates sind implementiert, aber keine vollständige Accessibility-Zertifizierung
 - Taskbar-/Alt+Tab-Sichtbarkeit ist über Godot 4.7 nicht steuerbar; Tray-Menü, Minimize/Restore, Drag, Monitorwechsel und vollständige Mixed-DPI-Matrix sind weiterhin nicht als Produktplattform abgenommen
 - ADR 0010 bleibt `proposed`; der erfolgreiche Präsentations-Rebuild akzeptiert die Plattformarchitektur nicht automatisch

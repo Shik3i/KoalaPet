@@ -1,0 +1,1297 @@
+{
+  "schema_version": 1,
+  "source_snapshot_date_utc": "2026-08-14",
+  "style_bible": "docs/ART_STYLE_BIBLE.md",
+  "prompt_record": "art_source/prompts/living-animation-expansion.md",
+  "processing_command": "python tools/art_pipeline/process_living_animation_assets.py",
+  "processing_script_sha256": "faf75ecb1795dc6539eb6d17ab70a38aa62b9e06ce7e0721b6873966e7b2681e",
+  "sources": [
+    {
+      "path": "art_source/sources/visual-rebuild/moss_hatchling.png",
+      "sha256": "9f08185ebc2b6b24812491040768b8564b350f617d6341fc24363943acaa0f9f"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/ember_hatchling.png",
+      "sha256": "8b9597cabc2f43e53d40ea789591a721d17996a8161be15708638a7980bbb8ad"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/tide_hatchling.png",
+      "sha256": "70afdc8ccd30caf0ef4eaf1b72e5c0563f3baa2c7ec52d609bf6d01bb4e892bc"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/moss_bloom.png",
+      "sha256": "4c33a461e9ef81825596ae9b4753ba6e4672fc26d32958df9287d503ec15e3a9"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/moss_bracken.png",
+      "sha256": "9f8980b84b58ebfc101e4e61fb078fdc0f6fc38cda288bf3398a6c731ea1a11b"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/ember_dawn.png",
+      "sha256": "7265202dfc192ca81ddadefc2eab8d4844545888d17139402d4fead5f02a477b"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/ember_cinder.png",
+      "sha256": "814db787c9c104710a04198b41a56b2c3500ab04e427d79b3eb2bce49f2b4849"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/tide_glass.png",
+      "sha256": "62118599dfce556ad55b38793a21f1dd09819bdb1e9e5193e48f3155455c4ee4"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/tide_reed.png",
+      "sha256": "8ca1c9946ff450d4af305032643fb9e2c561ba45ba14ac23093b964cd7e7d510"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/creekling.png",
+      "sha256": "ac18c859ef7f148a34f28a69591c3f7be598309f48d0c1f64991a5ea39276124"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/thornlet.png",
+      "sha256": "c4de3c6d509070a1439e27aaa7d6069ae1f510dbe812687aef064755a1fa9999"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/cinder_moth.png",
+      "sha256": "5c94a30dd694219d21ed0db19038935a929ddca105d7e3d5f50baacc9d7e54aa"
+    },
+    {
+      "path": "art_source/sources/visual-rebuild/canopy_guardian.png",
+      "sha256": "ef020ffaff500a27b4c7577f03b09a92054789a2663fb88ca9a213660215e48d"
+    },
+    {
+      "path": "art_source/sources/living-animation/family-effects.png",
+      "sha256": "6b123b1035edb165f1b6141c0a7e800c87a9bd525d7c20f80bdbd1b1764a50a1"
+    }
+  ],
+  "vfx_generation_tool": "Codex built-in image generation",
+  "vfx_generation_model": "built-in model version not exposed",
+  "vfx_alpha_cleanup": "deterministic border-connected neutral checker removal; transparent runtime outputs validated separately",
+  "outputs": [
+    {
+      "path": "docs/evidence/living-animation/contact-sheets/ember-players.png",
+      "sha256": "ef55952097b04b45b13105eedcec3098ba0a1b32aba30e5b57b996db7e04d604"
+    },
+    {
+      "path": "docs/evidence/living-animation/contact-sheets/enemies.png",
+      "sha256": "495a9abd11899a60b3fc0f51ddc8fa7443bc1f2874f33d24dc844ad9d4380f2b"
+    },
+    {
+      "path": "docs/evidence/living-animation/contact-sheets/moss-players.png",
+      "sha256": "91bc5ced116c4d698bb13efb683d40d24b39a597c822303f3acfbbad427b496d"
+    },
+    {
+      "path": "docs/evidence/living-animation/contact-sheets/tide-players.png",
+      "sha256": "64632634f8fb03371e6a2659782acc78e5bcd79d90fbc1309e672ede8a4b8cd5"
+    },
+    {
+      "path": "docs/evidence/living-animation/reels/all-player-highlights.gif",
+      "sha256": "9331099e94d7ee00b1ab332cf0566315b4336e3517ae589eda7b1526e4a41dc6"
+    },
+    {
+      "path": "docs/evidence/living-animation/reels/ember-family.gif",
+      "sha256": "f8dec4af77dbb83b9da90d30529fe08228daa868afee649d7ddaace24ab6a4d9"
+    },
+    {
+      "path": "docs/evidence/living-animation/reels/moss-family.gif",
+      "sha256": "8cc156f1833c4f1fd216a34f241f608583451d617aba367c3880e28449892154"
+    },
+    {
+      "path": "docs/evidence/living-animation/reels/tide-family.gif",
+      "sha256": "58828f358e173940248e5d509942e875dc9fd72c54894dec7631e4439bd655ff"
+    },
+    {
+      "path": "game/assets_generated/vfx/ember/ember_particles.png",
+      "sha256": "a44e838cbab5e73c9766f3895e177a49263fdf45de740d8bc6c8a796dd6de47e"
+    },
+    {
+      "path": "game/assets_generated/vfx/ember/flame_burst.png",
+      "sha256": "b68d1ff280b404d25e5405f8e73b79455c102e6043e804967a101356c07af83f"
+    },
+    {
+      "path": "game/assets_generated/vfx/ember/impact.png",
+      "sha256": "b6468727e244e15fdac614b700bd880441b7a7f10abb9703a00d6008371c9f0d"
+    },
+    {
+      "path": "game/assets_generated/vfx/ember/spark_trail.png",
+      "sha256": "ab7a468dcdd076d3bd99bed73df11dba188f1113ad5802e63a795eeeb9005b93"
+    },
+    {
+      "path": "game/assets_generated/vfx/moss/impact.png",
+      "sha256": "f78f1014b4a1d6371715f957884361e5fd6323b2399446a343a9d8a32c83fb31"
+    },
+    {
+      "path": "game/assets_generated/vfx/moss/leaf_slash.png",
+      "sha256": "e6e7339f674a98b0356cbbf8f5b55b074863f3f07a4ce31295c0ca5755c5f2f6"
+    },
+    {
+      "path": "game/assets_generated/vfx/moss/pollen_sparkle.png",
+      "sha256": "56746fd26de99388b8004287b01980ecee50e8d872ed22fe317217b555664e93"
+    },
+    {
+      "path": "game/assets_generated/vfx/moss/root_burst.png",
+      "sha256": "576b10207adcf56b705fe7de2f98c614cd3db8951b9f5917b8247eae4c3ba993"
+    },
+    {
+      "path": "game/assets_generated/vfx/tide/bubble_projectile.png",
+      "sha256": "1bb76d8f7b2bddff90a60deea2c925e4e39411ac4880c29635604e582a662787"
+    },
+    {
+      "path": "game/assets_generated/vfx/tide/impact.png",
+      "sha256": "f893c9502ee7f2c600d94f6027f24582ac0f23c8a343fd44de7368e4bef4bb61"
+    },
+    {
+      "path": "game/assets_generated/vfx/tide/splash.png",
+      "sha256": "a4d5c18a6b31c917e7a21a6e3b19dce31e4b8b3105c7b0a861233a2bf63dc71c"
+    },
+    {
+      "path": "game/assets_generated/vfx/tide/wave_arc.png",
+      "sha256": "b484313c935c419185a28261599fd56794c612875dc2adc423d9f1e250c7787b"
+    },
+    {
+      "path": "game/assets_generated/visual-rebuild-manifest.json",
+      "sha256": "2b7663aa56550b7c88bc5bcf897470a5b235c1c94efb2e962da1c97431f709f0"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/attack.png",
+      "sha256": "8a65f34483c040b98f475ae2c659233eb134057f2417db58fa0a6225868e801c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/attention.png",
+      "sha256": "c2e63009e9fbee3b4cd0086fa90458eb1d53613501746b7e1fe0612292766c90"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/call.png",
+      "sha256": "54417be5d79ecf67171f72960d1690c64daa19135a21142b2dfbfc1cb464d432"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/clean.png",
+      "sha256": "0e28894e8cc5daf7cf1a9b755adcc8534c0a0012ac361632f6d6712cab3b29f1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/defeat.png",
+      "sha256": "3023895b76e069aa57f8f4f87b8a11f5a93114b16419522ba7125d8322938342"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/dodge.png",
+      "sha256": "0aeebbd15424c184682d413cfffc95b6bca7a5b7e77559e1bb35d6af7f30e75f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/eat.png",
+      "sha256": "b23fe96e71609456f7cb5b5c717d49f996bce280d2ec59a6fda8050739996519"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/happy.png",
+      "sha256": "5960139d2c2446f3c6ef1e887f8a1320e633e6a110cbcc0712ad40c451fa4fc5"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/hit.png",
+      "sha256": "572840293827acb76c161c3f145fa24e23645970e5071d4f62874f2cc54cafaf"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/idle.png",
+      "sha256": "4bfd970f295c5a17d4cc27367e552f1e4990075f63fdcdc636ac4e23a4d6eafd"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/idle_look.png",
+      "sha256": "d001dbfd2df1e674b9c8e66a6a50233055a778adc2d3feff022dfa23d8f6b8c9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/idle_playful.png",
+      "sha256": "cafbfdb12c9ff4488e02313b4acf33bbdb5272c7af6995085cbfe218e703b735"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/idle_rest.png",
+      "sha256": "3ff3bcff700471fa80b9220ec90fd1029eb490b086eef71a87e967c8add5ebe2"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/injured.png",
+      "sha256": "9c521917b51c3e2cf9708f375d2d46edd6d1b5db9dff16fdfdb4a4c1028078f2"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/medicine.png",
+      "sha256": "82ff91234ae9d8d28b86bfa2f276437ac1254b3abe25194b334ef6a6784311c4"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/playful_hop.png",
+      "sha256": "2135aa6ef67dbfd2e70b9e94ada1a18f3a4aaad584bf61367301165f3c8db5ca"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/playful_pounce.png",
+      "sha256": "8f2c0ee095d2fe946754e3a8acd8b0c5043b9e418d4d36b35b076f44b90a40eb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/sick.png",
+      "sha256": "d12ec72e7f3222474984bd1e32411ff5732d971ee53316f132646745370a9758"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/sleep.png",
+      "sha256": "bd879533399d39b4c6e45b14db94a580574ecb44e409926f65fc5a5fd3da3f27"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/sleep_enter.png",
+      "sha256": "81b971cb8fe18e46bf61425a8b8d440c6525bcc4db2cd7b583336f14533d9855"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/sleep_loop.png",
+      "sha256": "bd879533399d39b4c6e45b14db94a580574ecb44e409926f65fc5a5fd3da3f27"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/training.png",
+      "sha256": "9e4955ed1175d66731308f8aec40833107dccf20688e9e11efdeb68d8f395e08"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/treat.png",
+      "sha256": "609800b66ab1fb7ae741043fb7a7ab64ff986aa4885217d7655e16c3afcd75d0"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/treatment.png",
+      "sha256": "2920a0292a1854dab69ab587202aa920aa8fc3ee73e321853e328d09d3eb2c13"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/turn_left.png",
+      "sha256": "812e6b84b5ed679aace5c0f0c383bd31a797b5735851b731fa03d047c7fbe999"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/turn_right.png",
+      "sha256": "3c659361f9b1cade0b43cdc0a2e424a47cfcf9fd4a0237926b047b0fef22f95b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/victory.png",
+      "sha256": "24f7ce63de46d0fdc32715c9fdef78c50a475dc8df1810e52e8be50846d5af0a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/ember/wake.png",
+      "sha256": "1de8faf97dfdd002b5e67ee15fcc69c4d4f0e2adb85af3a2b81005f95e6c7163"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/attack.png",
+      "sha256": "9b0006c783556f59f4d848f13a42262f6d291bbb26244ea7fdcf65ca01f05438"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/defeat.png",
+      "sha256": "17cbfe114e97884a9962aa8a7387d32d8c6969fcfbf11aaa1c99581c5dad48e6"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/dodge.png",
+      "sha256": "35d15fb8ecd23763f7b734eeeae4c895a3df9d4fdd0e886b8e27c467ad3ad0b5"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/hit.png",
+      "sha256": "dee3bf4359d8e638c91cd2723b209ad25a751d2021b97411debc3b1d236cc9d1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/idle.png",
+      "sha256": "6df1892c65d0e87b818663c0b24907884811326d300c6d1e4eca322e5320cf23"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/cinder_moth/attack.png",
+      "sha256": "90363e2dc6bb645c690a429d45d066a05e69cd4932c25762c3158969e3aaef5a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/cinder_moth/defeat.png",
+      "sha256": "4e60f8161b2e40c0aebc8e21786b2d847361530da6eaf165bb84311d3d07524a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/cinder_moth/dodge.png",
+      "sha256": "19cc0c0335ae1ee30dee17722f37675ac31fd43ba09cfece57e8f1d6c56b4e96"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/cinder_moth/hit.png",
+      "sha256": "29fb9512c26a99b4a416dba7838d1f0bad2bff667e8fca6194f87f11513e3417"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/cinder_moth/idle.png",
+      "sha256": "0129860374a77afe945a9a246b9fa638c3ff161c90769d1a26f1610a4fec8177"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/creekling/attack.png",
+      "sha256": "9f5ad012c3ec88afb70a15d9eafdeb038b57c2606a9bb0d8f9ba5d093d7d5e03"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/creekling/defeat.png",
+      "sha256": "b3b522dc7af24e7a64586fda7ebe316036d9391b3cc071557f369ac4d51ad3f9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/creekling/dodge.png",
+      "sha256": "1815bbb82c6c0582cfff2986585a0f5f785bfbdf74b57ce958fee2c542617ab4"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/creekling/hit.png",
+      "sha256": "ea9c45405de58af881ee40a86639ac7f2f10db457e9a9dcf464e6c97f9e52999"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/creekling/idle.png",
+      "sha256": "4c55d4e68ebb4ac193ce6ef572f64812b8e3adcf83a9a75e47e945b1c0e96696"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/thornlet/attack.png",
+      "sha256": "378d9cab58b52e26025e33391a7f94a0bc660ceda5bfa6baa4bf82442f9dd3cc"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/thornlet/defeat.png",
+      "sha256": "4a4124866c8960e666371f0fb6720bddf26dc4a638748af3f3c8b660bf37601a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/thornlet/dodge.png",
+      "sha256": "4f18ef39b96274a9dfd87daee76301caa0b258012443d562a85f7ecbc5eae922"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/thornlet/hit.png",
+      "sha256": "acda4bb46b69a0f106ae4bc6f6ddc9b90bf3a939569b97b26a9c51acb6ac649a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/thornlet/idle.png",
+      "sha256": "51735ed96f6f8008de3ed6b6633623b2ae1f80e5bc36836247efc1977f6dcdf0"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/attack.png",
+      "sha256": "a94fcb9f56ed3d025c489c9451513ffa13539bf0fa82cf94bb4a9d6bb9c2b821"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/attention.png",
+      "sha256": "986eb4b1b177e63afe0b132061f93e787dd767eeac9811c686c764e6b2b5e3d8"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/call.png",
+      "sha256": "f0d983629dd1c213e1785ab090ccfdc741a854b175ae23128f610d23c18d90e0"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/clean.png",
+      "sha256": "f60fd71823750cb2cd2701984e3830e10eab6f4824f680e80cc417900ae469ac"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/defeat.png",
+      "sha256": "e1be9787ad3a87d517423020aeea01604abf1256522c8bfdc9a8e87cc77c9724"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/dodge.png",
+      "sha256": "53baa93897fe3c65ed61d17bccbb6f81d899dabb45744daa2ffb51e45aa3763e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/eat.png",
+      "sha256": "7a1d2d62f2cc5c2a0f5d47009e8f110989d74b695d9003586fd994c01025ad87"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/happy.png",
+      "sha256": "7ff6dda3408643a49ac9ae8e6a27c8bda1589040e7373bee64e93917688162aa"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/hit.png",
+      "sha256": "627075e2a2bef50237b668031a60cfc6228ba1b8c9877d561eb8b59a319dfa28"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/idle.png",
+      "sha256": "85ffefa233d3067ca0baefea497d2433eccd7813bb7c34b911e821474d46575c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/idle_look.png",
+      "sha256": "5e9fccad1e191c67308545b8b0744f469cb1e8fb3e87cef2ba6fa0083b1b4599"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/idle_playful.png",
+      "sha256": "021a768cf2c43b9e8398612cd27d15522afa1c4b27b8ab725ea16f795023066c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/idle_rest.png",
+      "sha256": "6c6b83ec17bb30866d8cd93f50be69b7f80b2f62ecaaf53eb613ab2011dd564d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/injured.png",
+      "sha256": "6d9c232971b87174045d940ea2ae315fc05fe4c5a0aa0c59607977b63665e9c1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/medicine.png",
+      "sha256": "d08c4ef31084b5ec505891014b56459b202f77ed0dfbb9b9155a0ab6fbe5a8db"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/playful_hop.png",
+      "sha256": "d03e7e4890a834a93331e475a3daaace76b8d6e0e9381649056e05565e6b6a58"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/playful_pounce.png",
+      "sha256": "05c7ca4a39115d4c704f41e9ae7044d3514d381ee1e3a88cd08fd9f5894d2348"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/sick.png",
+      "sha256": "778be571f78d140976250306347a807f18067cd2c357f7b763cef34b1fc46dc9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/sleep.png",
+      "sha256": "d0da48e3b826417ed7e36fa48ecadb33d0b6c9bb55679088cea80d429203228b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/sleep_enter.png",
+      "sha256": "f0c0c0b1e9a192b6d542ce8fde4459dd0ba36eb55044545891a1b2d17f2f72dc"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/sleep_loop.png",
+      "sha256": "d0da48e3b826417ed7e36fa48ecadb33d0b6c9bb55679088cea80d429203228b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/training.png",
+      "sha256": "bfab6ff40fdc88d4711f05e2e98dd7aefb67e9b06689a74da5a93d77aca3f93c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/treat.png",
+      "sha256": "6d8d1f33a87ebaadda3f11a08592a5f8baf6e837c1468c4a69608d3fba1b0dfe"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/treatment.png",
+      "sha256": "8363ec41e9f10753dc87198eb1846f4e40f7659b4c96312b27db5339792d45db"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/turn_left.png",
+      "sha256": "204ec400d2d5225567802f2f072cee557aa05965b45531b0aa7a470aba49dbd7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/turn_right.png",
+      "sha256": "9b4d79fbcc36f68795c73deca545cb9f5cef1cd2e9bbd6171b14e6e4cfa0bd11"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/victory.png",
+      "sha256": "05e78df4a02da477ae89b9be025fc377779b059c9bcd84d8c919cd142156cb49"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/wake.png",
+      "sha256": "abcb3ed7839b6f4e063569e0dcf784018174e618a499d314208d753d1a1b0ef9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/attack.png",
+      "sha256": "319842794d4cf138af9c26697cc845dadb2e806f73374a1e235f212b7b312702"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/attention.png",
+      "sha256": "bc900f1f8cb9c586fd8995770d8b09ae8892e96ae6eb228fc0409cd2a5b68481"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/call.png",
+      "sha256": "a5feb7121af4b9892b8c550f9cf1bc9ae5550477df4cb39951486356912e600f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/clean.png",
+      "sha256": "e1b0962d873a544113ce55e9f334c624b869163c731ab2a32c71f74d6fb433b1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/defeat.png",
+      "sha256": "5762029047d1a3b7ebeb5e41f8c0069cf087bbe4790cfb6b28cdb79ea140ad08"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/dodge.png",
+      "sha256": "e75ce69ca3f6a2f2fdc5f5a104cc1d276cd45478f5b3f3a733cf2e0ff76cd28c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/eat.png",
+      "sha256": "d09a47c628c5137028fa4e6bbabd52592b26e5fda985c39fd75fb5d22de16acc"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/happy.png",
+      "sha256": "c32193195b831660842c9cc9901f9f490758949a64c06ea874a62093f8018723"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/hit.png",
+      "sha256": "342494260c06366384ffccff2630751d524b97c62a7bc947526307c188991817"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/idle.png",
+      "sha256": "6510d532843571435506266b209df9d940b6d61c521b0a27e1a88e91b8d5614e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/idle_look.png",
+      "sha256": "e0ab2a62f4936c4957b23158eb02bf5c57ccf188478573088bebd79ab8345bec"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/idle_playful.png",
+      "sha256": "eaa59fa8436ac0826821752c1a1b8d8c04bfcda3a337c80b7e535d2f643fdaf1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/idle_rest.png",
+      "sha256": "e8095237853763abb6572dca12828ff563008db7c1bbfecce202bc8e4bfbdfc3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/injured.png",
+      "sha256": "41514604423d15104164cb48a61077993d77505b81e0f06d0ceeda7538f3587b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/medicine.png",
+      "sha256": "565ddca4252832255140522d5bbd2129f879d6819be49fbd6324e5e47c7763c2"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/playful_hop.png",
+      "sha256": "a0af12d4ba2465a123a49b3e52acd546bdf2abf023db0926e7e8d8570ec9cda0"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/playful_pounce.png",
+      "sha256": "1855f301c1364e5e5b96f7c9f17e50cca5cc6a774b9509c5f342c82c4a228284"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/sick.png",
+      "sha256": "fe49e16af89ecab6a71c9478ebb1b618a96f62a9dfb9a0611865c8f9da78a11a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/sleep.png",
+      "sha256": "417808542dd51f127138d0e409a031b85b69453d5031545e7789b0f87562f565"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/sleep_enter.png",
+      "sha256": "70684df91da18e93ba3a9636310d21da5ffb3fbca57769e57d01f7b7c186b6c0"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/sleep_loop.png",
+      "sha256": "417808542dd51f127138d0e409a031b85b69453d5031545e7789b0f87562f565"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/training.png",
+      "sha256": "339a843d4ac7b4d313b7c869e0681afc7667b185767cd9131f54c6ff1fea321c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/treat.png",
+      "sha256": "60f71c17fbcf07df5e97330e5cde93b196dabf89810c60364e10a494c8ae768d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/treatment.png",
+      "sha256": "07f80c47268b91373d647239ebeca0d493945ea0bbabd2db227e2468aed0df58"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/turn_left.png",
+      "sha256": "0b247b6b93249f46aac1af3f21041c840ea0a821093355f2b0726cfb2eb2f8d7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/turn_right.png",
+      "sha256": "1e9900eec06a04f073860e506e841739ba227d9473d0a9c53de702299fa0616d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/victory.png",
+      "sha256": "c46498c5f914d7752f8c83fab5591f449029009585db71308ff75739f5f0e332"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/wake.png",
+      "sha256": "cd0abc41ac2c5b3fdd6b89fc51915994ae9c22c4435c37019a52ec12bc34a1cb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/attack.png",
+      "sha256": "d9a7e281450d057586591deba0170ed4b601f5b03c9e44b36dc6ef34bedd5735"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/attention.png",
+      "sha256": "06d783a7acf440c639fb68a84de0e92f35f045d33fc295ed5c1af6016b9c5516"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/call.png",
+      "sha256": "2a2cfe17ea126c55bfea87fc9082cf871c68bd8236476e2d8433656284f12f6a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/clean.png",
+      "sha256": "6d09e966b0bd7909b8178c4a58831b41404dd2bc08a562ae2e5d05d3606f14b8"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/defeat.png",
+      "sha256": "1ecaa36e6fdde52e27cbdba7d733b3e56e9bd52ecdbd4e1a5ade9860d804cb0a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/dodge.png",
+      "sha256": "4a500c5588387f8f697fc8e181266248c48c7dd3476f51ce47ab1cc18d1b3368"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/eat.png",
+      "sha256": "5ab8e2e7a99dc3449d45e558ce0e733b362dd8c2c17aff92f16d3666c8145464"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/happy.png",
+      "sha256": "0815d8eb5352a264a1138bb982bdeebfb69d899bca1fa8ab5d6099fb184d22be"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/hit.png",
+      "sha256": "556bf05ed3264c34ea4be425e8520b71f7a3b50efff0a328b4f1da14ad51d5fa"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/idle.png",
+      "sha256": "e4bfe0ff63a075e6be966752bdb81a25f724430f72f433bd58cd3139fd216aeb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/idle_look.png",
+      "sha256": "0add3886d8c2932ded631924964a3ba54a7f6926a45d3580057e2ee4b1126a8f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/idle_playful.png",
+      "sha256": "8c5a53bf6754c917ba42519bd0ff014d30f8f861a448a04e7f498d7042e50be3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/idle_rest.png",
+      "sha256": "d3deca1f4b6bbbfc1dccd76ea33ad09b77246ea4f49e325a6542f7be368c1d29"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/injured.png",
+      "sha256": "a8c186fd7f96571a7ff8049411f7b9eb89600527399e36271da02e71be090aec"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/medicine.png",
+      "sha256": "499e146bd77ad3aa9913901b9f60aec94d381f4be00529b2fd20526c6d66f630"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/playful_hop.png",
+      "sha256": "a861032a73163b17808282fe7b8b6ab424033e509aae149021d30323179d2c2b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/playful_pounce.png",
+      "sha256": "50905f2ba47c12b53928b25e62dbd631a80c4960e840a151598c70dbfc8f3b2b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/sick.png",
+      "sha256": "edd89717f972eea775379e3caa109a4ae82c1df58fe876061d3814faef958557"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/sleep.png",
+      "sha256": "9d90d22b05aa02d5c47bc6ccea34c748eb2e66ce13cdfac7fb90dc8fe12adee7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/sleep_enter.png",
+      "sha256": "530d8e1a02a41dcb99612c730a41ad323b996b2786533919d2abe447adb2f0a7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/sleep_loop.png",
+      "sha256": "9d90d22b05aa02d5c47bc6ccea34c748eb2e66ce13cdfac7fb90dc8fe12adee7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/training.png",
+      "sha256": "97824bf0a728fe990b04c29c057d4e071e9d1b46aa0a231c5599901cbe820d43"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/treat.png",
+      "sha256": "a4664e9c95d227c16c940fdbafae84532243766b3f0c88df6b6fde4d93ed6114"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/treatment.png",
+      "sha256": "d746abe1ee2abe5acb73c5ed2fa6cddd42b00782054968e7e23022ec02806319"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/turn_left.png",
+      "sha256": "78394574856cd98f5b898ff937c54fd5f9a82b5ffb85a049e586a6b9be889398"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/turn_right.png",
+      "sha256": "445adc8e454629265ba7d279935ed9bd43fe54c52346f03533751200e154b791"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/victory.png",
+      "sha256": "b862a4c4b50ba44d3c4e19454254c9141393c075db6e2f6febb4ff70516e5be8"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/wake.png",
+      "sha256": "837edc9a0b011209c0cb95a1467271a36aa9c4ef2c7afc6ed2232ef7921e0d76"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/attack.png",
+      "sha256": "619aef16bdbb9087797b386e6515558c13805b398eb6283584d90b76513bddbd"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/attention.png",
+      "sha256": "3af45c9ce54bbd4ba7c43d10fa226cf0f1f9f5b08d842ee7ed84de5cef9891fa"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/call.png",
+      "sha256": "7a5169aaeeaf51be0d813c8baf56bfb30007c419fbbfff83f3baabc5a013b7c7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/clean.png",
+      "sha256": "d3f5f7dfa89690753d280a160d10027407b9905979f4b96cd481dc85ce9156d5"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/defeat.png",
+      "sha256": "b15d8aa4ff3a83db18934f010a618a4c96eb25bd65956cbe963c557d3504f019"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/dodge.png",
+      "sha256": "a84d48ddc363e7ce575d2d13788f4b57e8bc56783c48af9bab7122d9874a60c3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/eat.png",
+      "sha256": "ae9a22f5fdba78eab19eb52fb0750ed265b3322b3e90c80e502526374c92f6c3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/happy.png",
+      "sha256": "a00ff0c52a1e105d4b6c27b233322e3088df694a08028897df2c291e2d46a8ec"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/hit.png",
+      "sha256": "7f707df73bc560c5d4a3d70219f15482784aec82f60420f5ea2ee111bb8d252e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/idle.png",
+      "sha256": "c31c64c2f6af8a5bc084037838a66ed4c0cd78a87b7f364fc7ff42033e7389d6"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/idle_look.png",
+      "sha256": "33329864bf215e1c2536bda9a20ab92d4ecadcdf0a0f6eaa142285d442bd24a8"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/idle_playful.png",
+      "sha256": "9cb7dd53b6f295ca810902114d9eb5e6e761abfee2a20ebb5a0a2a14e50e526d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/idle_rest.png",
+      "sha256": "72aef02c7881b67ed696227639e0a68a5a755571e612ceb98b160e60a5f4dadf"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/injured.png",
+      "sha256": "4e3cfc1225b4d701ce6f1eb36e8a7f6379fdb6f69950952a14f63cf0c7b9daa1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/medicine.png",
+      "sha256": "74a50b8bc191808efa254eaba220c4a31be19e2a827dcc5c49d9fee865009b68"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/playful_hop.png",
+      "sha256": "dc9a8edaf5869957d496271f4035300e788e5a7f4b4bb439f115486903bd3628"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/playful_pounce.png",
+      "sha256": "108a088488231c72ac1d04f44dd77f9af79976273ccc7f710d48764a821d20fb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/sick.png",
+      "sha256": "67653eae4d4976d9eb5fe85f0963716ba1029749ec1be473c81619d67f74111e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/sleep.png",
+      "sha256": "af299f25348ec11c2e4409fd8fb2640b7ff6023d5e9320d56838105eb48cb825"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/sleep_enter.png",
+      "sha256": "6d1da30b16869a942d7ab53b4329dc677bb6a65a330f3e77e1bcd4aa42c85b59"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/sleep_loop.png",
+      "sha256": "af299f25348ec11c2e4409fd8fb2640b7ff6023d5e9320d56838105eb48cb825"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/training.png",
+      "sha256": "d92452ad76bc993c782031cffd2ef2258c8ce080c84e15405702435d3a2129e7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/treat.png",
+      "sha256": "2e63963adfecf47ba99c36db7f2d1e0f703848d280c8b92933a97b75170984a9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/treatment.png",
+      "sha256": "a29ddfb7014740d1af83068e95c2b1ae8a9ff160f2208616e646a9873bc7a873"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/turn_left.png",
+      "sha256": "a3faeb8b5a293aea2df034480e73cec2aa140ef7159625d487702801f42698e3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/turn_right.png",
+      "sha256": "1b6182fd71abe90ebf5317fd513d909256e3dd9958f7575e7c19452ddffb427f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/victory.png",
+      "sha256": "8f3fc2aed437e1eebb533f8d985dc41d0d840d041d84406cc1c1244b85081c0f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/wake.png",
+      "sha256": "bb8d9e8853b7c8daf405e5ceccfd76ab20e9f58ac6f2566724bea45644b0fd13"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/attack.png",
+      "sha256": "ccf5ae7deacb25e2b3c775d848e44d75d5652f168f0a46ad748bf9ed7dfcee3f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/attention.png",
+      "sha256": "5ad3f1e8f8d92379f9aa6d7bc6931eabcc3a5237be477d03cc897058405fad1d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/call.png",
+      "sha256": "4b9925624ccc79f017a8d28d68874ffd894e5998d35441b437352da65acb9922"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/clean.png",
+      "sha256": "8c1ad85694f5eace15f88c86567a54114abdfb70dd213689ac56a2acf8b93bc4"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/defeat.png",
+      "sha256": "ac3b73097e9b6c84c1daebd1916827491077cdc1e493bdfc73eb73f264d4a5f4"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/dodge.png",
+      "sha256": "d4ce4621adda51ece14c8a2fdbc09c604c8a13ff3644478930e74166eac72eba"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/eat.png",
+      "sha256": "370125dbee44b1deb3e2fbb2884ea7ed9d2847f6e84c45e329f94d217381a70a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/happy.png",
+      "sha256": "20b908ea590e68d1d9355826c8358fa6a6a238003a4bd00d2c9ecf9e37d269bc"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/hit.png",
+      "sha256": "d0d86fb47e70e7126a3673dc87525cf8c7e7b76f09e3ccc26ddb2d40718cd7e2"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/idle.png",
+      "sha256": "fa08768ab57201f017ed5d64ac7b103f2799bc364af98234c937edfebbf6a2bb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/idle_look.png",
+      "sha256": "1740600a1af6bcb179b2c992b1109e59483c7e6666bd72092dfe0b05983141d8"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/idle_playful.png",
+      "sha256": "62a3fd028c260a15610460c99103c956c30da0a66fbed453aae26d563c6fbd42"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/idle_rest.png",
+      "sha256": "dad429d18267f420983153a10b2f873ab002dbb69fa2dbaa46fd9f930bbdc03a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/injured.png",
+      "sha256": "ef79987f01a771bce40e159d387426f6eef1482cf9aefc9851a2b974b86df5b9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/medicine.png",
+      "sha256": "f034f229a0412ce39742000f505328cbb6bb441924ccf9c3ef6e4fdb09abc229"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/playful_hop.png",
+      "sha256": "99fdebb2903e2f486c5112b55fdc2966dd1a13933c17d5b2a2f205c901c81798"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/playful_pounce.png",
+      "sha256": "3dffb000e16f1ed9717ebbe815fe1f79689dbe6d4ab5e9191bd7efd05aa0631d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/sick.png",
+      "sha256": "91d970466011e80a52ffc18832358697fd1018a8eb587e3e409f150832ed1a0b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/sleep.png",
+      "sha256": "9d68c688de58d39f639105e979f76f06c221e54766bc5431ddbcf2593129ec4c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/sleep_enter.png",
+      "sha256": "a9652e07b26e2730b32f0848b5fe6017dc3c793083d22296e34e58f2c24bb270"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/sleep_loop.png",
+      "sha256": "9d68c688de58d39f639105e979f76f06c221e54766bc5431ddbcf2593129ec4c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/training.png",
+      "sha256": "670f62c5191261df6fbf4ab5c0cbc4a085241fbb8600a710165dc48ce092d3e1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/treat.png",
+      "sha256": "4cd21da6bc0ab3c1d9db0e9bbd1a7802bad48fd65ca618cbf3f997cc81e21f70"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/treatment.png",
+      "sha256": "8931a23495458e8a5b355e6621158ad7d8d5ebf888a4d692a31e9d9badcafefb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/turn_left.png",
+      "sha256": "220405368e13dfb52a3c3ac49e3506da5b1d48098a9ad135d3863ecfe94b8a6b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/turn_right.png",
+      "sha256": "4ad97e8b4bdaf4cdb170276a017eeb9d28a677f6980c080c985fb1c0b3ab68af"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/victory.png",
+      "sha256": "367baaffb5737fc0b1e32459569ede4be3d52e462320c6df41c898db7ec148dd"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/wake.png",
+      "sha256": "cc8ee93e32281df808e3e301765af99c2de1f4f7b6129767a9ebb6f0e5ab1ea3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/attack.png",
+      "sha256": "d304643e264f5e304e28aebdf39c6b0c9f5d63a03a738e4ea8d465cd362bb65e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/attention.png",
+      "sha256": "598d41b0c94625c1c205450e56a2c9b6ab588a414ef14bccb1ff56206b91a5d1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/call.png",
+      "sha256": "a5a222ea7bc535e4358c76639afbe4f08049d9252f8da22d423a00e8ab129686"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/clean.png",
+      "sha256": "09e35b9ae38b748e67f514c6cdb8b932077224ea496a8b6eea56d01b6ee90aa1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/defeat.png",
+      "sha256": "ee10e670fcfc929007d14ee3596457ed068dc0d341826e2fea920df3347f1c19"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/dodge.png",
+      "sha256": "6f18a26dd82661505c2fe58ab11e5e37ac1db8d144cf6699b62f35835308d16f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/eat.png",
+      "sha256": "e6350f3e50ad38c9623899397ac58141d2bc61d8f27176ec373ec860bf0f49ed"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/happy.png",
+      "sha256": "f0d0ea7eb190c1d34cd44022bde2692b3f348dbad27e2008789b1690f3cbe2d3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/hit.png",
+      "sha256": "988d8ab8c78fa68b5ed8d2402a4cc59acc114804ba761505c8cea074ab08b522"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/idle.png",
+      "sha256": "199a9a325114be1c85176228f71260e30feb3cc1c0a92ae2f97e089fc23eca9b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/idle_look.png",
+      "sha256": "cc25d17b4b8faa2ee2dd0323509f105dcd9b72555c0e54a74e6f7ad44d3770d4"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/idle_playful.png",
+      "sha256": "f0381906050d1182ab343827201b5ceaba63fa061de019421f6eb5dab673f279"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/idle_rest.png",
+      "sha256": "76c975a57fddc5e2dcdb4db8e3deadcd76408bd55f92622f7db5a713870c195c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/injured.png",
+      "sha256": "6b4929e9a6c8dff2da476a3f187262d09b2074f32fe069e615ea0738fa59b6b9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/medicine.png",
+      "sha256": "0d0d58c8e3398c51d932893e56b9af41a48bd27da58e0fd47a6eb8b5d0753f7c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/playful_hop.png",
+      "sha256": "9aff96982c9e56b275206e4fefb0fdad3434b12ae31e934830a71295f557b276"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/playful_pounce.png",
+      "sha256": "21ba69b7701bcf81824ec99274a8137dac5d3659840bf0084c54b52fdeba596a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/sick.png",
+      "sha256": "ea4353ffd36c20e1cd76b165c2e2b79005fc4ae7b54e74a84c3021580badeb46"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/sleep.png",
+      "sha256": "f3ebe6f0ff81e0a93d15c49abcf329b0e741acf4a414a8723f4991cb3a1f483c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/sleep_enter.png",
+      "sha256": "bacd4267545b4c3354ce65f3461f77872ef0b5318197bd7d43f437501cbef4b8"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/sleep_loop.png",
+      "sha256": "f3ebe6f0ff81e0a93d15c49abcf329b0e741acf4a414a8723f4991cb3a1f483c"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/training.png",
+      "sha256": "3349aba662a3e15e8205cbe56dac707101b8f88ff3fa9b28e3c766a3e5127979"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/treat.png",
+      "sha256": "2fe448cf76ee294d2a09d2fb1f791bbcf2053234cc8dd98946529368bf275b3f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/treatment.png",
+      "sha256": "8edaa04be7dd32cc994a2b7327f4edbd660ece1230d6b16276c606d0c11f4ac7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/turn_left.png",
+      "sha256": "95f5bae8c68902892d3ab139f34304db49638488df6b98d101a23a76b06da0ad"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/turn_right.png",
+      "sha256": "e08e264655f4e130fda22c615a4e0d5f2b9cd308ff9e5c2b774cdbcb8a588654"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/victory.png",
+      "sha256": "d40d1f6bb8ea9478428637cee2462ebb80773baa232d56732a8980dc40f229dc"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/wake.png",
+      "sha256": "06a167797be4923245627967683dbe60ac9afa5792e51a3073fb429a2febcb5d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/attack.png",
+      "sha256": "5543633fb39196badc317b747d818456b6557d005230f1b290f53a04cb69696e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/attention.png",
+      "sha256": "f2cfee4b0a4c2faa8639ada3b27bfc276965149a7bd46e8da2484c0b70d81fa9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/call.png",
+      "sha256": "ec0c483d976f91508923d551999b567d80330cb3575ab4805dab86e8dfc17908"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/clean.png",
+      "sha256": "bd2b0cd036d4b782e3966020a3337b2736b49ee18430171f275e0cb7613dfdb2"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/defeat.png",
+      "sha256": "eef705ecfb7bd60ebc8a1833d9d0218ff6df1b49bc4c8b2da879bfec77a56d05"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/dodge.png",
+      "sha256": "30ee8e5bc1a0c4b7fb7c80a3c5519bc0e7f8253209e55ebde2a98fb2425ba33e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/eat.png",
+      "sha256": "04e8cbcee17ab456208c2756fbeb813ebc38dcb06ec706f374b55a3fde999fb3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/happy.png",
+      "sha256": "2abc1c958ef41e5aebd444d5cb5019a435e1e15ea66c496b13a5359daa05532a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/hit.png",
+      "sha256": "00f48e83ae1066700cd45ea968ae6846729859fe7d0fa4b52761218f710f21c8"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/idle.png",
+      "sha256": "c0062e1bfb475d44b8c10bea8060044963aeffd2b8e572467d0319cfac3bce02"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/idle_look.png",
+      "sha256": "0b024b1c08150342deb6a4f3c4a32e96ae817605fd3bf6072c685768e06c5cc0"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/idle_playful.png",
+      "sha256": "8cda3a7490de145ba813c61a5e2e9dbadc7227feac1572d112b2c83e7fdf1aba"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/idle_rest.png",
+      "sha256": "6495425f4a8d57da29f4cf52d1fe339de57bc00c3b15f5e2e69035d0a43f1fa4"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/injured.png",
+      "sha256": "18a220a3377af6b6bd2dc879c2b7afc0b7160753c5fd5149a1e3b11013cd7cee"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/medicine.png",
+      "sha256": "5d551a781c0f41a80924475664e8ac2e6951ddf3bd756b8057f46185aa51a3dc"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/playful_hop.png",
+      "sha256": "cbefb92bb4dcd13f6aa711369129c76d351ea89e8988364fa2fddcec41c66b5f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/playful_pounce.png",
+      "sha256": "ca94af85769e29895027846281fea1c6e610397f82f6f28c6f9969729b48b36b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/sick.png",
+      "sha256": "2013d6e0fea4ac480ad4bb0fd84c3f528f795b032658b10425aa18ec2e8280e3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/sleep.png",
+      "sha256": "4ef71a2ede56261c6960c1b2097277ae6d02969030add7ec424e90802bbd698a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/sleep_enter.png",
+      "sha256": "ff7a1c6fe3c51e49d79f54592510ebb2b21843c58679be09cd326adaace00a71"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/sleep_loop.png",
+      "sha256": "4ef71a2ede56261c6960c1b2097277ae6d02969030add7ec424e90802bbd698a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/training.png",
+      "sha256": "6dd046781418303f35d2e0ea78a7d621c330656c9ee5f9dfdb3a532a0364fb60"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/treat.png",
+      "sha256": "be7274a26d3ba5abdaa9dfba3356b483d56a2c572cd45e1c066cf3de48816efb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/treatment.png",
+      "sha256": "bcae9c4a22e5c9e8f20294a469f8e32cd72d0cf3923f60b546dde5b56104f1e1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/turn_left.png",
+      "sha256": "79dda98e2d4ec2ae9130cff4e56681ae017a3ebec5678be4439a24631347ada6"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/turn_right.png",
+      "sha256": "aa4749f21c2888127651b15d0ca0d5a366e26c060a2bf8007cd20c5878cbc219"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/victory.png",
+      "sha256": "065b470f2fce9c1f5999aecf51075d2e14253c67ee1a11ed99c91a1d7e7d2deb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/moss/wake.png",
+      "sha256": "2a68d0e0788a9c261201175ba9d1b198d1d553a42f3ebb6089bdb8285408838e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/attack.png",
+      "sha256": "19c40ffc006514811d3900e14ec094cbac15a42a972335748b5e44c9ba6fee1e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/attention.png",
+      "sha256": "f0f9cb75d944cbbfc20d8a7518102a9cf875b85a81fa73e5638f4b361dd49221"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/call.png",
+      "sha256": "a861264b25627e4d28cbadd4e050a9b7f97ece04aa726ff0ca94b8b928e44bc9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/clean.png",
+      "sha256": "c60e113ddac648153b765ab1cce96bd8d120534a3211fc674054e6a2308c4577"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/defeat.png",
+      "sha256": "297ccc95c36f27a9ae8ff4f2aa31eb3e08cb56e12795c2810b301b2cf1e2bdcd"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/dodge.png",
+      "sha256": "50c721103f76db4fecebdeab1e479b4a023591b009b4133380ea564bec8149f1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/eat.png",
+      "sha256": "ecb714552ecd7a98716c9fb62ef2385b6021120ed23c6649cb0265fa99b476ef"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/happy.png",
+      "sha256": "8ec4df5073de9311b994acb14b4a11635a362e3ac3516a3ba4b727780b08529d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/hit.png",
+      "sha256": "12f8d4c2335df172da78a62b84bf5199c13f72c2b53db0b2cec8d04772e54d3d"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/idle.png",
+      "sha256": "22f57fbedd768428eed6cbf2223bba48a7d2c3b108c6d82474f17d6ae3289e9a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/idle_look.png",
+      "sha256": "620e83e73c129052d8bf2932421a8c29889d5ec8eb677f370f2fada315687f00"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/idle_playful.png",
+      "sha256": "ea7e5d1d22edf5177a0a65e3e572d1b51a978ce1ae3faac3216def3297280908"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/idle_rest.png",
+      "sha256": "77c7bb45a802b9c176c8ec9bfb2cd4b5ae602968831793bd02dfc68897ff21a6"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/injured.png",
+      "sha256": "461e2580331e6beb3945589509c8576b9a21048173a60284e0591472f21f3ccb"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/medicine.png",
+      "sha256": "927299fba9e8530647e97cd0dfee5402fdce926e0956f3ea753ee130daf3b01a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/playful_hop.png",
+      "sha256": "40ead0ea15a6cdf06546414e9f165c2e31d8cf331d384b29f679402dc0625ba7"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/playful_pounce.png",
+      "sha256": "8c69bb5609d9c38f311721f8ea107331049c0e06eff99d797763ab286f2362a1"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/sick.png",
+      "sha256": "94f1709d1f6318647836a81c60953f56d0f437cab9917c057429bc83c8702728"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/sleep.png",
+      "sha256": "0123c4a9c1f69c15a8bc9d3d440596049019858be333e1a3d559885f32b7a555"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/sleep_enter.png",
+      "sha256": "c142a7ab79969689bff78efa6415dd76bf2a1dc63d6b0706b8eea0a349653603"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/sleep_loop.png",
+      "sha256": "0123c4a9c1f69c15a8bc9d3d440596049019858be333e1a3d559885f32b7a555"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/training.png",
+      "sha256": "3368bb64fc3b9fdff2c276c878494d9cd1656f595589f6408b6f4b746a212a85"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/treat.png",
+      "sha256": "740e6b10fa757507c0eb77e9a6793cdbaca4385325ed927c4d144b03969ec706"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/treatment.png",
+      "sha256": "d5594f41b2609bf8382c871ba0e045a676bad17c1c3af27060f4ef7bbf0d80b4"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/turn_left.png",
+      "sha256": "d2476dc292ddd053ec43436cfa1540e885ac9decfd636525ca123f683bcc3504"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/turn_right.png",
+      "sha256": "3c6ccfa1187c78d90ea134e3b0fb0afed440248d3f7c3e0538174f6f41b2417b"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/victory.png",
+      "sha256": "1f006a34982aa796ddf953d6d43d055d96539e218c9d27342dacd59edeecb320"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/tide/wake.png",
+      "sha256": "8e6d121cbe80c8d2df0d1c28c5545cc23814fbc239d6d8900e93ef2fdeb3c952"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_ember.json",
+      "sha256": "7147ff733e9486fa400ba5a0f010eacc6e61fbed03f2988b4a636bae2256befa"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_ember_cinder.json",
+      "sha256": "46e9ab0dfe1ee99dcc42f8b97b759a5f7ac86a185bb30f1fd22bd1d322e8da36"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_ember_dawn.json",
+      "sha256": "e3425610ab2ca017eef4f33b798409c3582f1e4888030887a02eb024c2eccc10"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_enemy_canopy_guardian.json",
+      "sha256": "479cb0bf0dbfc30eba470dbca778e4714e53cee43bcacee63e55625ea9fc38b3"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_enemy_cinder_moth.json",
+      "sha256": "e511b7a38b03d1bf2970e18e3b254c0bb082c987ef6508cdab92c884ae83476f"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_enemy_creekling.json",
+      "sha256": "e21bb3412891f50f835f3d456d4b36fc081e747a888147d5e685a36cd1d28871"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_enemy_thornlet.json",
+      "sha256": "505f67b0ec8be0bca1063c5143ce14ef9af4c5000edc42ae27d42138dd022c67"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_moss.json",
+      "sha256": "b5ae55b5183783c03ab2775e96a7f06695808b0a77063984ee3b18487eefdc5e"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_moss_bloom.json",
+      "sha256": "3148a8ff7a4ee6a72429a94747ceddb70e84de61a6540ad4021bf660c7068be9"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_moss_bracken.json",
+      "sha256": "2f4a97a317584652e8f07a326806cbf4bd9b8d9b2e3042f330411eb407b23478"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_tide.json",
+      "sha256": "55f663725da4f9d713c3cd03695ec496510b5bb1f8bd885edbf4595758d1073a"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_tide_glass.json",
+      "sha256": "ff17d10d94973ae938a1b1508fe0769b32a8947c58e7fad714f31956e5d430b2"
+    },
+    {
+      "path": "game/content_packs/koalapet.base/data/animation_tide_reed.json",
+      "sha256": "1f24a5c5ad32b04bf8649a0ff5a3583107b22fb194606787048e51128c222eb6"
+    }
+  ],
+  "license_status": "UNDECIDED",
+  "approval_status": "PROVISIONAL_PRODUCT_REVIEW"
+}

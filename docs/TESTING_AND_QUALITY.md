@@ -73,6 +73,17 @@ The native video directly proves the requested Minimal → Small → care → Ex
 - `performance.json`: seven native scenarios sampled for four seconds each. CPU is normalized to 16-logical-processor total capacity; RAM is working set. GPU counters were unavailable in the deterministic harness and are not claimed.
 - Computer-use initialization failed with `EPERM: operation not permitted, lstat 'C:\Users\s3ish\AppData\Local\OpenAI\Codex'`; native Godot/Win32 capture was used instead. This does not constitute formal keyboard/screen-reader accessibility testing.
 
+## Prompt 4.7 living-animation evidence
+
+- `game/tests/presentation/run_all.gd`: `1053` assertions covering 29-state playable coverage, five-state enemy coverage, geometry/markers, queue priority/dedup/overflow/cancel, marker completion, true Reduced Motion playback, preferences migration/type guards, ambient determinism, Minimal/Habitat constraints, combat terminal poses and hidden playback suspension.
+- `tools/art_pipeline/validate_vertical_slice_assets.py`: `373` PNGs, `372` with transparency; validates complete player/enemy animation sets, `4–8`-frame geometry, alpha, frame uniqueness, event markers, twelve family VFX sheets and generated review evidence.
+- Native Movie Writer evidence: seven AVI recordings, complete and dense contact sheets, ten selected PNG frames, three family reels plus a combined reel. Godot logs are rejected on `SCRIPT ERROR:` or `ERROR:` even when the process exit code is zero.
+- `tools/visual_review/make_video_contact_sheet.py` and `extract_video_frame.py`: bounded evidence-only input/output paths, maximum `256 MiB` source video and bounded sample count; pinned review dependencies stay outside the game runtime.
+- `performance.json`: eight isolated four-second native scenarios. Result: `59–60 FPS`, at most `1.843%` total 16-thread CPU capacity, `203.44 MiB` peak working set and `10.59 MiB` peak texture memory. GPU counter unavailable and not claimed.
+- Win32 `PrintWindow` returned blank Godot/Vulkan frames; the capture helper now rejects near-uniform captures. Physical-screen evidence was also rejected because occluding windows can contaminate it. Prompt 4.7 accepts only Movie Writer frames.
+- Mutating `--review-actions`, demo scenarios and `--dev-tools` require both an explicit flag and a debug build; release builds ignore those paths and may only emit requested diagnostics.
+- Formal keyboard traversal, screen-reader output, full manual contrast, all Windows DPI/monitor transitions and macOS/Linux overlay behavior remain untested.
+
 ## Prompt 4.6 hardening audit
 
 - Ruff `0.16.2`: all repository Python tools pass.

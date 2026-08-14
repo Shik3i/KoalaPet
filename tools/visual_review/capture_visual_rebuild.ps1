@@ -7,7 +7,8 @@ param(
     [string]$Mode = "expanded",
     [string]$Actions = "",
     [string]$EvidenceGroup = "visual-rebuild",
-    [string]$PreferencesName = "review-preferences",
+	[string]$PreferencesName = "review-preferences",
+	[string]$GodotPath = "C:\Users\s3ish\Documents\Workspace\Godot\Godot_v4.7.1-stable_win64.exe",
     [switch]$Desktop,
     [int]$StartupMilliseconds = 1800,
     [int]$DiagnosticsDelayMilliseconds = -1
@@ -17,7 +18,8 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
-$godot = "C:\tmp\Godot-4.7.1\Godot_v4.7.1-stable_win64.exe"
+$godot = [IO.Path]::GetFullPath($GodotPath)
+if (-not (Test-Path -LiteralPath $godot -PathType Leaf)) { throw "GODOT_NOT_FOUND: $godot" }
 $safeSegment = '^[A-Za-z0-9][A-Za-z0-9._-]*$'
 if ($Name -notmatch $safeSegment -or $SaveName -notmatch $safeSegment -or $EvidenceGroup -notmatch $safeSegment -or $PreferencesName -notmatch $safeSegment) {
     throw "REVIEW_NAME_CONTAINS_PATH_COMPONENT"
@@ -76,7 +78,7 @@ if ($Desktop) {
     & $captureScript -OutputPath $output -WindowTitle "KoalaPet (DEBUG)" -ProcessId $captureProcess.Id -WaitMilliseconds 100
 }
 else {
-    & $captureScript -OutputPath $output -WindowTitle "KoalaPet (DEBUG)" -ProcessId $captureProcess.Id -WaitMilliseconds 100 -PrintWindow
+	& $captureScript -OutputPath $output -WindowTitle "KoalaPet (DEBUG)" -ProcessId $captureProcess.Id -WaitMilliseconds 100 -PrintWindow
 }
 
 $diagnosticsDeadline = [DateTime]::UtcNow.AddSeconds(3)
@@ -91,5 +93,23 @@ if (-not $captureProcess.HasExited) {
 }
 if (-not (Test-Path -LiteralPath $diagnostics)) {
     throw "DIAGNOSTICS_NOT_WRITTEN: $diagnostics"
+}
+
+# Vulkan-backed Godot windows can make PrintWindow report success while
+# returning an effectively blank frame. Reject it instead of preserving false
+# visual evidence; native Movie Writer capture is the deterministic fallback.
+Add-Type -AssemblyName System.Drawing
+$captureBitmap = [System.Drawing.Bitmap]::FromFile($output)
+try {
+	$sampleColors = New-Object System.Collections.Generic.HashSet[string]
+	foreach ($sampleX in @(0, [int]($captureBitmap.Width / 2), $captureBitmap.Width - 1)) {
+		foreach ($sampleY in @(0, [int]($captureBitmap.Height / 2), $captureBitmap.Height - 1)) {
+			$sampleColors.Add($captureBitmap.GetPixel($sampleX, $sampleY).ToArgb().ToString()) | Out-Null
+		}
+	}
+	if ($sampleColors.Count -le 2) { throw "CAPTURE_APPEARS_BLANK: $output" }
+}
+finally {
+	$captureBitmap.Dispose()
 }
 Get-Item -LiteralPath $output | Select-Object FullName, Length

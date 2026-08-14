@@ -198,6 +198,12 @@
     "ui.settings_applied": "Settings applied",
     "ui.windows_reset": "Window positions reset",
     "ui.on": "On",
-    "ui.off": "Off"
+    "ui.off": "Off",
+    "ui.low": "Low",
+    "ui.high": "High",
+    "ui.ambient_frequency": "Ambient animation frequency",
+    "ui.cursor_reaction": "Pet reacts to cursor",
+    "ui.hit_shake": "Hit shake",
+    "ui.damage_flash": "Damage flash"
   }
 }

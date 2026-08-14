@@ -267,6 +267,34 @@ func get_animation_descriptor(animation_name := "idle", content_id := "", egg :=
 	return entry
 
 
+func get_animation_descriptors(content_id := "", egg := false) -> Dictionary:
+	var animation_id := ""
+	if not content_id.is_empty():
+		animation_id = str(_record(content_id).get("data", {}).get("animation_profile_id", ""))
+	else:
+		animation_id = str(pet_state.get("animation_profile_id", ""))
+		if egg and not pet_state.is_empty():
+			animation_id = str(_record(str(pet_state.get("egg_definition_id", ""))).get("data", {}).get("animation_profile_id", animation_id))
+	var profile := _record(animation_id)
+	var result := {}
+	for animation_name in profile.get("data", {}).get("world_animations", {}):
+		result[animation_name] = get_animation_descriptor(str(animation_name), content_id, egg)
+	return result
+
+
+func get_active_family_id() -> String:
+	if pet_state.is_empty():
+		return ""
+	var form := _record(str(pet_state.get("current_form_id", pet_state.get("definition_id", ""))))
+	return str(form.get("data", {}).get("family_id", ""))
+
+
+func get_move_presentation(move_id: String) -> Dictionary:
+	var move: Dictionary = _record(move_id).get("data", {})
+	var tags: Array = move.get("tags", []) if move.get("tags", []) is Array else []
+	return {"id": move_id, "tags": tags.duplicate(true)} if not move.is_empty() else {}
+
+
 func get_encounter_presentation(encounter_id: String, locale := "de") -> Dictionary:
 	var record := _record(encounter_id)
 	if record.is_empty():
@@ -347,6 +375,7 @@ func get_view_model(mode := "small", locale := "de") -> Dictionary:
 		"history": pet_state.get("history", []).duplicate(true),
 		"offline": last_offline_result.duplicate(true),
 		"form_id": form_id,
+		"family_id": get_active_family_id(),
 		"egg_id": str(pet_state.get("egg_definition_id", "")),
 		"state_revision": int(pet_state.get("revision", 0)),
 		"stage": str(pet_state.get("stage", "hatchling")),
@@ -369,9 +398,9 @@ func get_view_model(mode := "small", locale := "de") -> Dictionary:
 		"dungeon_unlocked": is_feature_unlocked("koalapet.base:dungeon"),
 	}
 	if mode == "minimal":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result, "state_revision": model.state_revision, "form_id": model.form_id, "egg_id": model.egg_id}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "hatched": model.hatched, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result, "state_revision": model.state_revision, "form_id": model.form_id, "family_id": model.family_id, "egg_id": model.egg_id}
 	if mode == "small":
-		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "stage": model.stage, "level": model.level, "experience": model.experience, "experience_next": model.experience_next, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0), "health_bps": care.get("health_bps", 0), "discipline_bps": care.get("discipline_bps", 0), "effort_bps": care.get("effort_bps", 0), "weight_grams": care.get("weight_grams", 0), "waste_count": pet_state.get("waste", []).size()}, "battle_unlocked": model.battle_unlocked, "dungeon_unlocked": model.dungeon_unlocked, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result, "state_revision": model.state_revision, "form_id": model.form_id, "egg_id": model.egg_id}
+		return {"screen": model.screen, "mode": mode, "name": model.name, "form_name": model.form_name, "hatched": model.hatched, "stage": model.stage, "level": model.level, "experience": model.experience, "experience_next": model.experience_next, "sleeping": model.sleeping, "sickness": model.sickness, "open_calls": model.open_calls, "hatch_progress_bps": model.hatch_progress_bps, "offline": model.offline, "care": {"satiety_bps": care.get("satiety_bps", 0), "mood_bps": care.get("mood_bps", 0), "energy_bps": care.get("energy_bps", 0), "hygiene_bps": care.get("hygiene_bps", 0), "health_bps": care.get("health_bps", 0), "discipline_bps": care.get("discipline_bps", 0), "effort_bps": care.get("effort_bps", 0), "weight_grams": care.get("weight_grams", 0), "waste_count": pet_state.get("waste", []).size()}, "battle_unlocked": model.battle_unlocked, "dungeon_unlocked": model.dungeon_unlocked, "active_battle": model.active_battle, "active_dungeon_run": model.active_dungeon_run, "injury": model.injury, "pending_evolution": model.pending_evolution, "last_battle_result": model.last_battle_result, "state_revision": model.state_revision, "form_id": model.form_id, "family_id": model.family_id, "egg_id": model.egg_id}
 	return model
 
 

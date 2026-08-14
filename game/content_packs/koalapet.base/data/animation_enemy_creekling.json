@@ -6,8 +6,8 @@
   "world_animations": {
     "idle": {
       "asset": "assets/vertical_slice/enemies/creekling/idle.png",
-      "frames": 2,
-      "fps": 3,
+      "frames": 4,
+      "fps": 4,
       "loop": true,
       "frame_size": [
         128,
@@ -29,7 +29,7 @@
         14,
         12,
         100,
-        108
+        104
       ],
       "effect_bounds": [
         0,
@@ -39,13 +39,13 @@
       ],
       "mirroring_allowed": true,
       "event_markers": [],
-      "source_brief": "Provisional idle presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
       "review_status": "PROVISIONAL_REVIEWED"
     },
     "attack": {
       "asset": "assets/vertical_slice/enemies/creekling/attack.png",
-      "frames": 2,
+      "frames": 8,
       "fps": 10,
       "loop": false,
       "frame_size": [
@@ -68,7 +68,7 @@
         14,
         12,
         100,
-        108
+        104
       ],
       "effect_bounds": [
         0,
@@ -79,17 +79,37 @@
       "mirroring_allowed": true,
       "event_markers": [
         {
-          "frame": 1,
-          "event": "attack"
+          "frame": 0,
+          "event": "windup_started"
+        },
+        {
+          "frame": 3,
+          "event": "projectile_release"
+        },
+        {
+          "frame": 4,
+          "event": "impact"
+        },
+        {
+          "frame": 5,
+          "event": "hit_stop"
+        },
+        {
+          "frame": 6,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
         }
       ],
-      "source_brief": "Provisional attack presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
       "review_status": "PROVISIONAL_REVIEWED"
     },
     "hit": {
       "asset": "assets/vertical_slice/enemies/creekling/hit.png",
-      "frames": 2,
+      "frames": 6,
       "fps": 10,
       "loop": false,
       "frame_size": [
@@ -112,7 +132,7 @@
         14,
         12,
         100,
-        108
+        104
       ],
       "effect_bounds": [
         0,
@@ -124,17 +144,29 @@
       "event_markers": [
         {
           "frame": 1,
-          "event": "hit"
+          "event": "impact"
+        },
+        {
+          "frame": 2,
+          "event": "hit_stop"
+        },
+        {
+          "frame": 4,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 5,
+          "event": "animation_complete"
         }
       ],
-      "source_brief": "Provisional hit presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
       "review_status": "PROVISIONAL_REVIEWED"
     },
-    "defeat": {
-      "asset": "assets/vertical_slice/enemies/creekling/defeat.png",
-      "frames": 2,
-      "fps": 8,
+    "dodge": {
+      "asset": "assets/vertical_slice/enemies/creekling/dodge.png",
+      "frames": 6,
+      "fps": 10,
       "loop": false,
       "frame_size": [
         128,
@@ -156,7 +188,63 @@
         14,
         12,
         100,
-        108
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 0,
+          "event": "windup_started"
+        },
+        {
+          "frame": 2,
+          "event": "evade_started"
+        },
+        {
+          "frame": 4,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 5,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "defeat": {
+      "asset": "assets/vertical_slice/enemies/creekling/defeat.png",
+      "frames": 8,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
       ],
       "effect_bounds": [
         0,
@@ -168,89 +256,19 @@
       "event_markers": [
         {
           "frame": 1,
-          "event": "defeat"
+          "event": "impact"
+        },
+        {
+          "frame": 4,
+          "event": "collapse_complete"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
         }
       ],
-      "source_brief": "Provisional defeat presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "victory": {
-      "asset": "assets/vertical_slice/enemies/creekling/victory.png",
-      "frames": 2,
-      "fps": 6,
-      "loop": true,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [],
-      "source_brief": "Provisional victory presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "injured": {
-      "asset": "assets/vertical_slice/enemies/creekling/injured.png",
-      "frames": 2,
-      "fps": 2,
-      "loop": true,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [],
-      "source_brief": "Provisional injured presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
       "review_status": "PROVISIONAL_REVIEWED"
     }
   }

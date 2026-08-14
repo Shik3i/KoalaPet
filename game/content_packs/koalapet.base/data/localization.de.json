@@ -198,6 +198,12 @@
     "ui.settings_applied": "Einstellungen angewendet",
     "ui.windows_reset": "Fensterpositionen zurückgesetzt",
     "ui.on": "An",
-    "ui.off": "Aus"
+    "ui.off": "Aus",
+    "ui.low": "Niedrig",
+    "ui.high": "Hoch",
+    "ui.ambient_frequency": "Umgebungsanimationen",
+    "ui.cursor_reaction": "Pet reagiert auf den Cursor",
+    "ui.hit_shake": "Treffererschütterung",
+    "ui.damage_flash": "Trefferaufhellung"
   }
 }

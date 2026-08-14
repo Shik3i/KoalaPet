@@ -1,7 +1,7 @@
 class_name PresentationPreferences
 extends RefCounted
 
-const VERSION := 1
+const VERSION := 2
 const DEFAULT_PATH := "user://preferences.json"
 const UI_SCALES := ["auto", 1.0, 1.25, 1.5, 1.75, 2.0]
 const TEXT_SCALES := [1.0, 1.25, 1.5, 1.75]
@@ -10,6 +10,8 @@ const ANIMATION_SCALES := [0.75, 1.0, 1.25]
 const WALKING_SCALES := [0.75, 1.0, 1.25, 1.5]
 const MODES := ["minimal", "small", "expanded"]
 const LANES := ["bottom", "top", "left", "right", "stationary"]
+const AMBIENT_FREQUENCIES := ["low", "normal", "high"]
+const EFFECT_INTENSITIES := ["off", "reduced", "normal"]
 
 
 static func defaults() -> Dictionary:
@@ -28,10 +30,14 @@ static func defaults() -> Dictionary:
 			"standard_pet_scale": 1.0,
 			"minimal_pet_scale": 1.0,
 			"ambient_roaming": true,
+			"ambient_animation_frequency": "normal",
+			"cursor_reaction": true,
 			"animation_speed": 1.0,
 			"walking_speed": 1.0,
 			"reduced_motion": false,
 			"effects_intensity": "normal",
+			"hit_shake": true,
+			"damage_flash": true,
 		},
 		"desktop": {
 			"default_launch_mode": "small",
@@ -150,10 +156,14 @@ static func sanitize(source: Dictionary) -> Dictionary:
 	pet["standard_pet_scale"] = _choice_float(pet_source.get("standard_pet_scale", pet["standard_pet_scale"]), PET_SCALES, 1.0)
 	pet["minimal_pet_scale"] = _choice_float(pet_source.get("minimal_pet_scale", pet["minimal_pet_scale"]), PET_SCALES, 1.0)
 	pet["ambient_roaming"] = _safe_bool(pet_source.get("ambient_roaming", pet["ambient_roaming"]), pet["ambient_roaming"])
+	pet["ambient_animation_frequency"] = _choice(pet_source.get("ambient_animation_frequency", pet["ambient_animation_frequency"]), AMBIENT_FREQUENCIES, "normal")
+	pet["cursor_reaction"] = _safe_bool(pet_source.get("cursor_reaction", pet["cursor_reaction"]), pet["cursor_reaction"])
 	pet["animation_speed"] = _choice_float(pet_source.get("animation_speed", pet["animation_speed"]), ANIMATION_SCALES, 1.0)
 	pet["walking_speed"] = _choice_float(pet_source.get("walking_speed", pet["walking_speed"]), WALKING_SCALES, 1.0)
 	pet["reduced_motion"] = _safe_bool(pet_source.get("reduced_motion", pet["reduced_motion"]), pet["reduced_motion"])
-	pet["effects_intensity"] = _choice(pet_source.get("effects_intensity", pet["effects_intensity"]), ["reduced", "normal"], "normal")
+	pet["effects_intensity"] = _choice(pet_source.get("effects_intensity", pet["effects_intensity"]), EFFECT_INTENSITIES, "normal")
+	pet["hit_shake"] = _safe_bool(pet_source.get("hit_shake", pet["hit_shake"]), pet["hit_shake"])
+	pet["damage_flash"] = _safe_bool(pet_source.get("damage_flash", pet["damage_flash"]), pet["damage_flash"])
 	desktop["default_launch_mode"] = _choice(desktop_source.get("default_launch_mode", desktop["default_launch_mode"]), MODES, "small")
 	desktop["always_on_top"] = _safe_bool(desktop_source.get("always_on_top", desktop["always_on_top"]), desktop["always_on_top"])
 	desktop["minimal_click_through"] = _safe_bool(desktop_source.get("minimal_click_through", desktop["minimal_click_through"]), desktop["minimal_click_through"])

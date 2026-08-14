@@ -17,8 +17,9 @@ Later archive import must defend against decompression bombs and extraction trav
 ## Implemented Milestone 2 boundary
 
 - Reject absolute/URI/drive paths, backslashes, empty/current/parent segments, paths outside declared asset roots, missing non-placeholder assets, unsupported media extensions, symlinks/reparse points, executable/script/library suffixes, and nested archive payloads.
-- Limit each pack to 512 files, 64 MiB total, and 2 MiB per JSON file before parsing.
+- Limit each pack to 1,024 files, 64 MiB total, and 2 MiB per JSON file before parsing. The file-count ceiling accommodates complete data-driven animation profiles while preserving a finite traversal budget.
 - Keep internal filesystem roots out of public diagnostics by using injected logical root labels.
 - Validate temporary saves before replacement and preserve every field of missing-content records structurally.
+- Ignore mutating review/demo and development-tool command-line flags outside debug builds; release builds may not use evidence helpers to alter the normal save.
 
 Image dimensions and audio duration are not decoded in this milestone; enforce those limits when runtime media decoding/import is introduced. Archive import remains unsupported rather than partially trusted.

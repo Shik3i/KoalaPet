@@ -3,7 +3,7 @@ extends RefCounted
 
 const CONTENT_API_VERSION := "0.1"
 const BASE_PACK_ID := "koalapet.base"
-const MAX_PACK_FILES := 512
+const MAX_PACK_FILES := 1024
 const MAX_PACK_BYTES := 64 * 1024 * 1024
 const MAX_JSON_BYTES := 2 * 1024 * 1024
 const SUPPORTED_SCHEMAS := [

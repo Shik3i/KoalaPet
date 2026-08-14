@@ -1,0 +1,164 @@
+{
+	"active_animation_processors": 5,
+	"ambient_animation_frequency": "normal",
+	"ambient_roaming": false,
+	"content_scale_size": [
+		640,
+		360
+	],
+	"effects_intensity": "normal",
+	"habitat_anchor": [
+		270.0,
+		170.0
+	],
+	"habitat_moving": false,
+	"habitat_pending_events": 0,
+	"habitat_visual_state": "idle",
+	"layout_rects": {},
+	"locale": "de",
+	"minimal_hit_region_updates": 0,
+	"minimal_pet_rect": [],
+	"minimal_pet_scale": 1.0,
+	"mode": "small",
+	"native_window": {
+		"adapter_host_os": "Windows",
+		"capabilities": {
+			"alt_tab_visibility_control": false,
+			"always_on_top": true,
+			"dpi_query": true,
+			"full_mouse_passthrough": true,
+			"monitor_enumeration": true,
+			"native_drag": true,
+			"native_windows": true,
+			"no_focus": true,
+			"polygonal_mouse_passthrough": true,
+			"status_indicator": true,
+			"taskbar_visibility_control": false,
+			"transparency": true,
+			"usable_rect": true
+		},
+		"captured_at_utc": "2026-08-14T09:34:24",
+		"display_server": "Windows",
+		"engine_max_fps": 0,
+		"focus_policy": "normal",
+		"input_policy": "interactive",
+		"monitors": [
+			{
+				"dpi": 120,
+				"full_rect": [
+					5600,
+					4,
+					2400,
+					1350
+				],
+				"index": 0,
+				"position": [
+					5600,
+					4
+				],
+				"primary": false,
+				"scale": 1.0,
+				"usable_rect": [
+					5600,
+					4,
+					2400,
+					1290
+				]
+			},
+			{
+				"dpi": 120,
+				"full_rect": [
+					0,
+					4,
+					2400,
+					1500
+				],
+				"index": 1,
+				"position": [
+					0,
+					4
+				],
+				"primary": false,
+				"scale": 1.0,
+				"usable_rect": [
+					0,
+					4,
+					2400,
+					1440
+				]
+			},
+			{
+				"dpi": 120,
+				"full_rect": [
+					2400,
+					0,
+					2560,
+					1440
+				],
+				"index": 2,
+				"position": [
+					2400,
+					0
+				],
+				"primary": true,
+				"scale": 1.0,
+				"usable_rect": [
+					2400,
+					0,
+					2560,
+					1380
+				]
+			}
+		],
+		"observed_fps": 60.0,
+		"os_name": "Windows",
+		"os_version": "10.0.26200",
+		"rendering_driver": "opengl3",
+		"rendering_method": "gl_compatibility",
+		"schema_version": 1,
+		"status_indicator_rect": null,
+		"status_indicator_visible": false,
+		"video_adapter": "NVIDIA GeForce RTX 4080 SUPER",
+		"viewport_transparent_bg": true,
+		"window_always_on_top": true,
+		"window_borderless": true,
+		"window_focused": true,
+		"window_mode": 0,
+		"window_mouse_passthrough": false,
+		"window_mouse_passthrough_polygon": [],
+		"window_position": [
+			5600,
+			934
+		],
+		"window_size": [
+			640,
+			360
+		],
+		"window_transparent": true,
+		"window_unfocusable": false,
+		"window_visible": true
+	},
+	"observed_fps": 60.0,
+	"persistent_root_color_rects": 0,
+	"preference_schema_version": 2,
+	"presentation_rect": [
+		0.0,
+		0.0,
+		640.0,
+		360.0
+	],
+	"reduced_motion": false,
+	"resolved_ui_scale": 1.0,
+	"schema_version": 1,
+	"standard_pet_scale": 1.0,
+	"state_revision": 2,
+	"text_scale": 1.0,
+	"texture_memory_bytes": 6234317,
+	"theme_base_scale": 1.0,
+	"viewport_visible_rect": [
+		0.0,
+		0.0,
+		640.0,
+		360.0
+	]
+}

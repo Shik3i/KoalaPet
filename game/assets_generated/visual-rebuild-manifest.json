@@ -81,5 +81,385 @@
     "aggressive": "game/assets_generated/ui/icons/aggressive.png",
     "balanced": "game/assets_generated/ui/icons/balanced.png",
     "defensive": "game/assets_generated/ui/icons/defensive.png"
+  },
+  "living_animation": {
+    "schema_version": 1,
+    "family_effects": {
+      "moss": {
+        "leaf_slash": {
+          "path": "game/assets_generated/vfx/moss/leaf_slash.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "root_burst": {
+          "path": "game/assets_generated/vfx/moss/root_burst.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "pollen_sparkle": {
+          "path": "game/assets_generated/vfx/moss/pollen_sparkle.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "impact": {
+          "path": "game/assets_generated/vfx/moss/impact.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        }
+      },
+      "ember": {
+        "spark_trail": {
+          "path": "game/assets_generated/vfx/ember/spark_trail.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "flame_burst": {
+          "path": "game/assets_generated/vfx/ember/flame_burst.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "ember_particles": {
+          "path": "game/assets_generated/vfx/ember/ember_particles.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "impact": {
+          "path": "game/assets_generated/vfx/ember/impact.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        }
+      },
+      "tide": {
+        "splash": {
+          "path": "game/assets_generated/vfx/tide/splash.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "bubble_projectile": {
+          "path": "game/assets_generated/vfx/tide/bubble_projectile.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "wave_arc": {
+          "path": "game/assets_generated/vfx/tide/wave_arc.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        },
+        "impact": {
+          "path": "game/assets_generated/vfx/tide/impact.png",
+          "frames": 6,
+          "fps": 12,
+          "loop": false,
+          "frame_size": [
+            128,
+            128
+          ],
+          "pivot": [
+            64,
+            64
+          ],
+          "event_markers": [
+            {
+              "frame": 3,
+              "event": "impact"
+            },
+            {
+              "frame": 5,
+              "event": "animation_complete"
+            }
+          ]
+        }
+      }
+    },
+    "family_profiles": {
+      "koalapet.base:moss_family": {
+        "effect_set": "moss",
+        "attack_effect": "leaf_slash",
+        "impact_effect": "impact",
+        "ambient_interactions": [
+          {
+            "anchor": "plant",
+            "animation": "idle_look",
+            "duration": 1.4
+          },
+          {
+            "anchor": "training",
+            "animation": "idle_playful",
+            "duration": 1.2
+          }
+        ]
+      },
+      "koalapet.base:ember_family": {
+        "effect_set": "ember",
+        "attack_effect": "flame_burst",
+        "impact_effect": "impact",
+        "ambient_interactions": [
+          {
+            "anchor": "training",
+            "animation": "idle_look",
+            "duration": 1.3
+          },
+          {
+            "anchor": "bed",
+            "animation": "idle_rest",
+            "duration": 1.5
+          }
+        ]
+      },
+      "koalapet.base:tide_family": {
+        "effect_set": "tide",
+        "attack_effect": "bubble_projectile",
+        "impact_effect": "impact",
+        "ambient_interactions": [
+          {
+            "anchor": "bath",
+            "animation": "idle_playful",
+            "duration": 1.3
+          },
+          {
+            "anchor": "feeding_bowl",
+            "animation": "idle_look",
+            "duration": 1.2
+          }
+        ]
+      }
+    },
+    "encounter_profiles": {
+      "koalapet.base:creekling_encounter": {
+        "effect_set": "tide",
+        "attack_effect": "splash",
+        "impact_effect": "impact"
+      },
+      "koalapet.base:thornlet_encounter": {
+        "effect_set": "moss",
+        "attack_effect": "root_burst",
+        "impact_effect": "impact"
+      },
+      "koalapet.base:cinder_moth_encounter": {
+        "effect_set": "ember",
+        "attack_effect": "spark_trail",
+        "impact_effect": "impact"
+      },
+      "koalapet.base:canopy_guardian": {
+        "effect_set": "moss",
+        "attack_effect": "root_burst",
+        "impact_effect": "impact"
+      }
+    },
+    "ambient_frequency": [
+      "low",
+      "normal",
+      "high"
+    ],
+    "source": "art_source/sources/living-animation/family-effects.png"
   }
 }

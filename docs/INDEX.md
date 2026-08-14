@@ -45,8 +45,11 @@
 - [Prompt 4.5 execution record](prompts/PROMPT_0045_VISUAL_PRESENTATION_REBUILD.md)
 - [Prompt 4.5 visual evidence](evidence/visual-rebuild/README.md)
 - [Animation and presentation conventions](ANIMATION_AND_PRESENTATION.md)
+- [Animation coverage matrix](ANIMATION_COVERAGE.md)
 - [Prompt 4.6 execution record](prompts/PROMPT_0046_ANIMATION_UI_POLISH.md)
 - [Prompt 4.6 animation/UI evidence](evidence/animation-polish/README.md)
+- [Prompt 4.7 execution record](prompts/PROMPT_0047_LIVING_ANIMATION_POLISH.md)
+- [Prompt 4.7 living-animation evidence](evidence/living-animation/README.md)
 - [macOS overlay validation report](spikes/MACOS_OVERLAY_SPIKE.md)
 - [macOS overlay evidence](evidence/macos-overlay/README.md)
 

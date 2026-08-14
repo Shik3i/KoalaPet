@@ -6,7 +6,313 @@
   "world_animations": {
     "idle": {
       "asset": "assets/vertical_slice/ember/idle.png",
-      "frames": 2,
+      "frames": 4,
+      "fps": 4,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "idle_look": {
+      "asset": "assets/vertical_slice/ember/idle_look.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "idle_playful": {
+      "asset": "assets/vertical_slice/ember/idle_playful.png",
+      "frames": 8,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "idle_rest": {
+      "asset": "assets/vertical_slice/ember/idle_rest.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 5,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "turn_left": {
+      "asset": "assets/vertical_slice/ember/turn_left.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": false,
+      "event_markers": [
+        {
+          "frame": 3,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "turn_right": {
+      "asset": "assets/vertical_slice/ember/turn_right.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": false,
+      "event_markers": [
+        {
+          "frame": 3,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "sleep_enter": {
+      "asset": "assets/vertical_slice/ember/sleep_enter.png",
+      "frames": 8,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 2,
+          "event": "settle_started"
+        },
+        {
+          "frame": 5,
+          "event": "eyes_closed"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "sleep": {
+      "asset": "assets/vertical_slice/ember/sleep.png",
+      "frames": 4,
       "fps": 3,
       "loop": true,
       "frame_size": [
@@ -29,7 +335,7 @@
         14,
         12,
         100,
-        108
+        104
       ],
       "effect_bounds": [
         0,
@@ -39,8 +345,1024 @@
       ],
       "mirroring_allowed": true,
       "event_markers": [],
-      "source_brief": "Provisional idle presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "sleep_loop": {
+      "asset": "assets/vertical_slice/ember/sleep_loop.png",
+      "frames": 4,
+      "fps": 3,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "wake": {
+      "asset": "assets/vertical_slice/ember/wake.png",
+      "frames": 8,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "eyes_opened"
+        },
+        {
+          "frame": 4,
+          "event": "stretch_started"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "eat": {
+      "asset": "assets/vertical_slice/ember/eat.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 2,
+          "event": "action_contact"
+        },
+        {
+          "frame": 4,
+          "event": "swallow"
+        },
+        {
+          "frame": 6,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "treat": {
+      "asset": "assets/vertical_slice/ember/treat.png",
+      "frames": 7,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 2,
+          "event": "action_contact"
+        },
+        {
+          "frame": 4,
+          "event": "reaction"
+        },
+        {
+          "frame": 6,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "clean": {
+      "asset": "assets/vertical_slice/ember/clean.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "action_contact"
+        },
+        {
+          "frame": 3,
+          "event": "shake_dry"
+        },
+        {
+          "frame": 5,
+          "event": "reaction"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "training": {
+      "asset": "assets/vertical_slice/ember/training.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "windup_started"
+        },
+        {
+          "frame": 3,
+          "event": "action_contact"
+        },
+        {
+          "frame": 5,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "medicine": {
+      "asset": "assets/vertical_slice/ember/medicine.png",
+      "frames": 7,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 2,
+          "event": "action_contact"
+        },
+        {
+          "frame": 4,
+          "event": "recovery_effect"
+        },
+        {
+          "frame": 6,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "treatment": {
+      "asset": "assets/vertical_slice/ember/treatment.png",
+      "frames": 7,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "action_contact"
+        },
+        {
+          "frame": 4,
+          "event": "recovery_effect"
+        },
+        {
+          "frame": 6,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "attention": {
+      "asset": "assets/vertical_slice/ember/attention.png",
+      "frames": 7,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "attention_noticed"
+        },
+        {
+          "frame": 3,
+          "event": "reaction"
+        },
+        {
+          "frame": 6,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "happy": {
+      "asset": "assets/vertical_slice/ember/happy.png",
+      "frames": 7,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 6,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "sick": {
+      "asset": "assets/vertical_slice/ember/sick.png",
+      "frames": 4,
+      "fps": 3,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "injured": {
+      "asset": "assets/vertical_slice/ember/injured.png",
+      "frames": 4,
+      "fps": 3,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "call": {
+      "asset": "assets/vertical_slice/ember/call.png",
+      "frames": 4,
+      "fps": 4,
+      "loop": true,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "attack": {
+      "asset": "assets/vertical_slice/ember/attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 0,
+          "event": "windup_started"
+        },
+        {
+          "frame": 3,
+          "event": "projectile_release"
+        },
+        {
+          "frame": 4,
+          "event": "impact"
+        },
+        {
+          "frame": 5,
+          "event": "hit_stop"
+        },
+        {
+          "frame": 6,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "hit": {
+      "asset": "assets/vertical_slice/ember/hit.png",
+      "frames": 7,
+      "fps": 10,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "impact"
+        },
+        {
+          "frame": 2,
+          "event": "hit_stop"
+        },
+        {
+          "frame": 4,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 6,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "dodge": {
+      "asset": "assets/vertical_slice/ember/dodge.png",
+      "frames": 7,
+      "fps": 10,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 0,
+          "event": "windup_started"
+        },
+        {
+          "frame": 2,
+          "event": "evade_started"
+        },
+        {
+          "frame": 4,
+          "event": "recovery_started"
+        },
+        {
+          "frame": 6,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "victory": {
+      "asset": "assets/vertical_slice/ember/victory.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 2,
+          "event": "reaction"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "defeat": {
+      "asset": "assets/vertical_slice/ember/defeat.png",
+      "frames": 8,
+      "fps": 7,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "impact"
+        },
+        {
+          "frame": 4,
+          "event": "collapse_complete"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "playful_hop": {
+      "asset": "assets/vertical_slice/ember/playful_hop.png",
+      "frames": 8,
+      "fps": 9,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "windup_started"
+        },
+        {
+          "frame": 3,
+          "event": "airborne"
+        },
+        {
+          "frame": 5,
+          "event": "landed"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
+      "review_status": "PROVISIONAL_REVIEWED"
+    },
+    "playful_pounce": {
+      "asset": "assets/vertical_slice/ember/playful_pounce.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "frame_size": [
+        128,
+        128
+      ],
+      "pivot": [
+        64,
+        116
+      ],
+      "ground_anchor": [
+        64,
+        116
+      ],
+      "visual_center": [
+        64,
+        68
+      ],
+      "interaction_bounds": [
+        14,
+        12,
+        100,
+        104
+      ],
+      "effect_bounds": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "mirroring_allowed": true,
+      "event_markers": [
+        {
+          "frame": 1,
+          "event": "windup_started"
+        },
+        {
+          "frame": 3,
+          "event": "airborne"
+        },
+        {
+          "frame": 5,
+          "event": "landed"
+        },
+        {
+          "frame": 7,
+          "event": "animation_complete"
+        }
+      ],
+      "source_brief": "Sequential form-specific living animation with articulated anticipation, contact and recovery",
+      "provenance": "art_source/provenance/living-animation.json",
       "review_status": "PROVISIONAL_REVIEWED"
     },
     "walk": {
@@ -88,426 +1410,6 @@
         }
       ],
       "source_brief": "Sequential in-place locomotion",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "eat": {
-      "asset": "assets/vertical_slice/ember/eat.png",
-      "frames": 2,
-      "fps": 6,
-      "loop": false,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [
-        {
-          "frame": 1,
-          "event": "eat"
-        }
-      ],
-      "source_brief": "Provisional eat presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "happy": {
-      "asset": "assets/vertical_slice/ember/happy.png",
-      "frames": 2,
-      "fps": 6,
-      "loop": false,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [
-        {
-          "frame": 1,
-          "event": "happy"
-        }
-      ],
-      "source_brief": "Provisional happy presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "sleep": {
-      "asset": "assets/vertical_slice/ember/sleep.png",
-      "frames": 2,
-      "fps": 2,
-      "loop": true,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [],
-      "source_brief": "Provisional sleep presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "sick": {
-      "asset": "assets/vertical_slice/ember/sick.png",
-      "frames": 2,
-      "fps": 2,
-      "loop": true,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [],
-      "source_brief": "Provisional sick presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "injured": {
-      "asset": "assets/vertical_slice/ember/injured.png",
-      "frames": 2,
-      "fps": 2,
-      "loop": true,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [],
-      "source_brief": "Provisional injured presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "training": {
-      "asset": "assets/vertical_slice/ember/training.png",
-      "frames": 2,
-      "fps": 8,
-      "loop": false,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [
-        {
-          "frame": 1,
-          "event": "training"
-        }
-      ],
-      "source_brief": "Provisional training presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "attack": {
-      "asset": "assets/vertical_slice/ember/attack.png",
-      "frames": 2,
-      "fps": 10,
-      "loop": false,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [
-        {
-          "frame": 1,
-          "event": "attack"
-        }
-      ],
-      "source_brief": "Provisional attack presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "hit": {
-      "asset": "assets/vertical_slice/ember/hit.png",
-      "frames": 2,
-      "fps": 10,
-      "loop": false,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [
-        {
-          "frame": 1,
-          "event": "hit"
-        }
-      ],
-      "source_brief": "Provisional hit presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "victory": {
-      "asset": "assets/vertical_slice/ember/victory.png",
-      "frames": 2,
-      "fps": 6,
-      "loop": false,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [
-        {
-          "frame": 1,
-          "event": "victory"
-        }
-      ],
-      "source_brief": "Provisional victory presentation pose",
-      "provenance": "art_source/provenance/visual-rebuild.json",
-      "review_status": "PROVISIONAL_REVIEWED"
-    },
-    "call": {
-      "asset": "assets/vertical_slice/ember/call.png",
-      "frames": 2,
-      "fps": 4,
-      "loop": true,
-      "frame_size": [
-        128,
-        128
-      ],
-      "pivot": [
-        64,
-        116
-      ],
-      "ground_anchor": [
-        64,
-        116
-      ],
-      "visual_center": [
-        64,
-        68
-      ],
-      "interaction_bounds": [
-        14,
-        12,
-        100,
-        108
-      ],
-      "effect_bounds": [
-        0,
-        0,
-        128,
-        128
-      ],
-      "mirroring_allowed": true,
-      "event_markers": [],
-      "source_brief": "Provisional call presentation pose",
       "provenance": "art_source/provenance/visual-rebuild.json",
       "review_status": "PROVISIONAL_REVIEWED"
     }

@@ -8,3 +8,4 @@ Files here preserve durable task intent and execution context. They are historic
 - [Prompt 004 branching evolution, normal battles, and first dungeon](PROMPT_004_BRANCHING_EVOLUTION_BATTLES_DUNGEON.md) — Milestone 4 execution record and evidence links
 - [Prompt 004.5 visual presentation rebuild](PROMPT_0045_VISUAL_PRESENTATION_REBUILD.md) — full player-presentation replacement, asset pipeline, native Windows evidence, and validation
 - [Prompt 004.6 animation, UI scaling and habitat-life polish](PROMPT_0046_ANIMATION_UI_POLISH.md) — eight-frame locomotion, persistent presentation options, station routing, native evidence and performance review
+- [Prompt 004.7 living animation expansion](PROMPT_0047_LIVING_ANIMATION_POLISH.md) — multi-frame playable/enemy coverage, VFX, ambient/Minimal life, native movies and full validation

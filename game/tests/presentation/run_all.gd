@@ -16,9 +16,13 @@ func _run() -> void:
 	_test_mode_sizes_and_shared_revision()
 	_test_assets_and_layers()
 	_test_walk_cycle_contracts()
+	_test_living_animation_contracts()
 	_test_animation_controller()
+	_test_ambient_scheduler()
+	await _test_animated_texture_runtime()
 	_test_preferences()
 	_test_habitat_contract()
+	await _test_habitat_runtime()
 	_test_localized_bounds_and_windows_scales()
 	_test_action_reachability_and_debug_isolation()
 	await _test_minimal_scene_hierarchy()
@@ -45,6 +49,7 @@ func _test_player_presentation_source() -> void:
 	_assert_equal("background = ColorRect" in source, false, "VIS-004 removed legacy opaque shell")
 	_assert_equal("--dev-tools" in source, true, "VIS-005 development tools require explicit flag")
 	_assert_equal("--animation-polish-demo" in source and "_run_animation_polish_demo" in source, true, "VIS-005A review-only polish sequence is explicitly gated")
+	_assert_equal("OS.is_debug_build()" in source and "development_actions_enabled and not living_demo.is_empty()" in source and "_run_living_animation_demo" in source, true, "VIS-005C living-animation review scenarios are debug-build gated")
 	_assert_equal("if revision == animation_revision:" in source, true, "VIS-005B repeated action timers are revision guarded")
 	_assert_equal("_open_dev_window" in source, true, "VIS-006 development tools isolated in separate window")
 	_assert_equal("window_adapter.set_hit_regions" in source, true, "VIS-007 Minimal uses platform hit-region abstraction")
@@ -91,6 +96,8 @@ func _test_assets_and_layers() -> void:
 	var manifest: Dictionary = JSON.parse_string(file.get_as_text())
 	file.close()
 	_assert_equal(manifest.habitat.layer_order, ["background", "ground", "rear_structures", "large_furniture", "small_props", "functional_stations", "pet", "foreground", "lighting", "ambient_effects"], "VIS-019 deterministic habitat layer order")
+	_assert_equal(manifest.get("living_animation", {}).get("family_profiles", {}).size(), 3, "VIS-019A three data-defined family VFX profiles")
+	_assert_equal(manifest.get("living_animation", {}).get("encounter_profiles", {}).size(), 4, "VIS-019B four data-defined encounter VFX profiles")
 	for icon_path in manifest.icons.values():
 		_assert_equal(ResourceLoader.exists("res://" + str(icon_path).trim_prefix("game/")), true, "VIS-ICON resolves %s" % icon_path)
 	for path in ["res://assets_generated/habitat/quiet_canopy/background_day.png", "res://assets_generated/habitat/quiet_canopy/ground.png", "res://assets_generated/habitat/quiet_canopy/props/sleeping_den.png", "res://assets_generated/habitat/quiet_canopy/props/feed_table.png", "res://assets_generated/habitat/quiet_canopy/props/bath_basin.png", "res://assets_generated/habitat/quiet_canopy/props/training_log.png"]:
@@ -115,16 +122,120 @@ func _test_walk_cycle_contracts() -> void:
 	_assert_equal(FileAccess.file_exists("res://../docs/evidence/animation-polish/contact-sheets/walk-cycles.png"), true, "VIS-WALK contact sheet exists outside runtime root")
 
 
+func _test_living_animation_contracts() -> void:
+	var player_names := ["moss", "ember", "tide", "moss_bloom", "moss_bracken", "ember_dawn", "ember_cinder", "tide_glass", "tide_reed"]
+	var required := ["idle", "idle_look", "idle_playful", "idle_rest", "walk", "turn_left", "turn_right", "sleep_enter", "sleep_loop", "wake", "eat", "treat", "clean", "training", "medicine", "treatment", "attention", "sick", "injured", "attack", "hit", "dodge", "victory", "defeat", "playful_hop", "playful_pounce"]
+	var minimums := {"idle": 4, "idle_look": 6, "idle_playful": 8, "idle_rest": 6, "walk": 8, "turn_left": 4, "turn_right": 4, "sleep_enter": 8, "sleep_loop": 4, "wake": 8, "eat": 8, "treat": 6, "clean": 8, "training": 8, "medicine": 6, "treatment": 6, "attention": 6, "sick": 4, "injured": 4, "attack": 6, "hit": 6, "dodge": 6, "victory": 6, "defeat": 6, "playful_hop": 6, "playful_pounce": 6}
+	for profile_name in player_names:
+		var document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content_packs/koalapet.base/data/animation_%s.json" % profile_name))
+		var animations: Dictionary = document.get("world_animations", {})
+		for animation_name in required:
+			_assert_equal(animations.has(animation_name), true, "VIS-LIVE-%s has %s" % [profile_name, animation_name])
+			if animations.has(animation_name):
+				_assert_equal(int(animations[animation_name].get("frames", 0)) >= int(minimums[animation_name]), true, "VIS-LIVE-%s %s minimum frames" % [profile_name, animation_name])
+		for one_shot in ["sleep_enter", "wake", "eat", "clean", "training", "medicine", "attack", "hit", "dodge", "victory", "defeat"]:
+			_assert_equal(bool(animations[one_shot].get("loop", true)), false, "VIS-LIVE-%s %s is one-shot" % [profile_name, one_shot])
+		_assert_equal(bool(animations.sleep_loop.get("loop", false)), true, "VIS-LIVE-%s sleep loop loops" % profile_name)
+		for marked in ["sleep_enter", "wake", "attack", "hit", "dodge"]:
+			var events: Array = animations[marked].get("event_markers", [])
+			_assert_equal(events.size() >= 3, true, "VIS-LIVE-%s %s synchronized markers" % [profile_name, marked])
+	var enemies := ["creekling", "thornlet", "cinder_moth", "canopy_guardian"]
+	for enemy_name in enemies:
+		var document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content_packs/koalapet.base/data/animation_enemy_%s.json" % enemy_name))
+		var animations: Dictionary = document.get("world_animations", {})
+		for animation_name in ["idle", "attack", "hit", "dodge", "defeat"]:
+			_assert_equal(animations.has(animation_name), true, "VIS-ENEMY-%s has %s" % [enemy_name, animation_name])
+			_assert_equal(int(animations.get(animation_name, {}).get("frames", 0)) >= (4 if animation_name == "idle" else 5), true, "VIS-ENEMY-%s %s meaningful frames" % [enemy_name, animation_name])
+	_assert_equal(FileAccess.file_exists("res://../docs/evidence/living-animation/reels/all-player-highlights.gif"), true, "VIS-LIVE combined highlight reel exists")
+
+
 func _test_animation_controller() -> void:
 	var controller := PresentationAnimationController.new()
-	_assert_equal(controller.effective_loop({"sleeping": true, "sickness": true}, true), "sleep", "VIS-ANIM sleep priority")
+	_assert_equal(controller.effective_loop({"sleeping": true, "sickness": true}, true), "sick", "VIS-ANIM sickness outranks sleep")
 	_assert_equal(controller.effective_loop({"sleeping": false, "sickness": true}, true), "sick", "VIS-ANIM sickness priority")
 	_assert_equal(controller.effective_loop({"injury": {"id": "sprain"}}, true), "injured", "VIS-ANIM injury priority")
+	_assert_equal(controller.effective_loop({"sleeping": true}, false), "sleep_loop", "VIS-ANIM sleeping selects sleep loop")
+	_assert_equal(controller.effective_loop({"active_battle": {"id": "battle"}}, true), "idle", "VIS-ANIM battle reactions remain one-shots")
 	_assert_equal(controller.effective_loop({}, true), "walk", "VIS-ANIM movement selects walk")
 	_assert_equal(controller.queue_one_shot("eat", "feeding_bowl", 1.0, "event:1"), true, "VIS-ANIM queue one-shot")
 	_assert_equal(controller.queue_one_shot("eat", "feeding_bowl", 1.0, "event:1"), false, "VIS-ANIM duplicate queued event rejected")
 	_assert_equal(str(controller.consume_one_shot().get("animation", "")), "eat", "VIS-ANIM one-shot consumed once")
 	_assert_equal(controller.queue_one_shot("eat", "feeding_bowl", 1.0, "event:1"), false, "VIS-ANIM consumed event cannot replay")
+	controller.queue_one_shot("idle_playful", "idle_center", 1.0, "ambient:1", "idle", "", "ambient")
+	controller.queue_one_shot("attack", "idle_center", 1.0, "battle:1", "idle", "", "battle")
+	_assert_equal(str(controller.consume_one_shot().get("event_id", "")), "battle:1", "VIS-ANIM authoritative battle event wins priority")
+	_assert_equal(controller.cancel_pending_below(PresentationAnimationController.PRIORITIES.care), 1, "VIS-ANIM low-priority ambient cancellation deterministic")
+	for index in PresentationAnimationController.MAX_PENDING_EVENTS + 4:
+		controller.queue_one_shot("attention", "idle_center", 1.0, "bounded:%d" % index)
+	_assert_equal(controller.pending_count(), PresentationAnimationController.MAX_PENDING_EVENTS, "VIS-ANIM pending queue bounded")
+	var priority_queue := PresentationAnimationController.new()
+	for index in PresentationAnimationController.MAX_PENDING_EVENTS:
+		priority_queue.queue_one_shot("idle_look", "idle_center", 1.0, "ambient-full:%d" % index, "idle", "", "ambient")
+	_assert_equal(priority_queue.queue_one_shot("victory", "idle_center", 1.0, "evolution:priority", "idle", "", "evolution"), true, "VIS-ANIM saturated queue admits authoritative higher-priority event")
+	_assert_equal(priority_queue.pending_count(), PresentationAnimationController.MAX_PENDING_EVENTS, "VIS-ANIM priority replacement preserves hard queue bound")
+	_assert_equal(str(priority_queue.consume_one_shot().get("event_id", "")), "evolution:priority", "VIS-ANIM priority replacement is selected first")
+
+
+func _test_ambient_scheduler() -> void:
+	var first := AmbientAnimationScheduler.new()
+	var second := AmbientAnimationScheduler.new()
+	first.configure(1234, "normal", false)
+	second.configure(1234, "normal", false)
+	var first_events := []
+	var second_events := []
+	for _index in 12:
+		first_events.append(first.next_event())
+		second_events.append(second.next_event())
+	_assert_equal(first_events, second_events, "VIS-AMBIENT scheduler deterministic for fixed presentation seed")
+	var previous_special := ""
+	for event in first_events:
+		if str(event.kind) in ["special_idle", "playful_move"]:
+			_assert_equal(str(event.animation) == previous_special, false, "VIS-AMBIENT special animation does not repeat immediately")
+			previous_special = str(event.animation)
+	var reduced := AmbientAnimationScheduler.new()
+	reduced.configure(42, "high", true)
+	for _index in 20:
+		_assert_equal(str(reduced.next_event().get("kind", "")) == "playful_move", false, "VIS-AMBIENT Reduced Motion excludes playful locomotion")
+	var props := AmbientAnimationScheduler.new()
+	props.configure(7, "high", false, [{"anchor": "plant", "animation": "idle_look"}, {"anchor": "bath", "animation": "idle_playful"}])
+	var saw_prop := false
+	for _index in 40:
+		var event := props.next_event()
+		if str(event.get("kind", "")) == "prop_interaction":
+			saw_prop = true
+			_assert_equal(str(event.get("anchor", "")) in ["plant", "bath"], true, "VIS-AMBIENT cosmetic prop interaction stays on declared anchors")
+	_assert_equal(saw_prop, true, "VIS-AMBIENT high-frequency scheduler eventually selects restrained prop play")
+
+
+func _test_animated_texture_runtime() -> void:
+	var document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content_packs/koalapet.base/data/animation_moss.json"))
+	var descriptor: Dictionary = document.get("world_animations", {}).get("attack", {}).duplicate(true)
+	descriptor["path"] = "res://content_packs/koalapet.base/" + str(descriptor.get("asset", ""))
+	descriptor["animation_name"] = "attack"
+	var sprite := AnimatedTextureRect.new()
+	sprite.size = Vector2(128, 128)
+	root.add_child(sprite)
+	await process_frame
+	var markers: Array[String] = []
+	var completions: Array[String] = []
+	sprite.animation_marker.connect(func(_animation: String, event_name: String, _frame: int) -> void: markers.append(event_name))
+	sprite.animation_finished.connect(func(animation_name: String) -> void: completions.append(animation_name))
+	sprite.configure(descriptor, true, 1.0)
+	for _index in 8:
+		sprite.call("_process", 1.0)
+	for required_marker in ["windup_started", "projectile_release", "impact", "hit_stop", "recovery_started", "animation_complete"]:
+		_assert_equal(required_marker in markers, true, "VIS-RUNTIME Reduced Motion preserves marker %s" % required_marker)
+	_assert_equal(completions.count("attack"), 1, "VIS-RUNTIME one-shot completion emitted once")
+	sprite.restart()
+	sprite.set_playback_enabled(false)
+	var paused_frame := sprite.frame_index
+	sprite.call("_process", 1.0)
+	_assert_equal(sprite.frame_index, paused_frame, "VIS-RUNTIME disabled playback cannot advance")
+	sprite.set_playback_enabled(true)
+	sprite.visible = false
+	sprite.call("_process", 1.0)
+	_assert_equal(sprite.frame_index, paused_frame, "VIS-RUNTIME hidden sprite cannot advance")
+	sprite.free()
 
 
 func _test_preferences() -> void:
@@ -134,6 +245,10 @@ func _test_preferences() -> void:
 	_assert_equal(defaults.interface.text_scale, 1.0, "VIS-PREF text scale default")
 	_assert_equal(defaults.pet_presentation.standard_pet_scale, 1.0, "VIS-PREF pet scale independent")
 	_assert_equal(defaults.pet_presentation.reduced_motion, false, "VIS-PREF reduced motion default")
+	_assert_equal(defaults.pet_presentation.ambient_animation_frequency, "normal", "VIS-PREF ambient frequency default")
+	_assert_equal(defaults.pet_presentation.cursor_reaction, true, "VIS-PREF cursor reaction default")
+	_assert_equal(defaults.pet_presentation.hit_shake, true, "VIS-PREF hit shake default")
+	_assert_equal(defaults.pet_presentation.damage_flash, true, "VIS-PREF damage flash default")
 	_assert_equal(defaults.desktop.minimal_lane, "bottom", "VIS-PREF bottom lane production default")
 	_assert_equal(PixelTheme.create(1.5).default_base_scale, 1.0, "VIS-PREF viewport reflow owns UI scaling")
 	var malformed := PresentationPreferences.decode_text("{broken")
@@ -145,13 +260,16 @@ func _test_preferences() -> void:
 	var wrong_types := PresentationPreferences.decode_text(JSON.stringify({
 		"version": [],
 		"interface": {"text_scale": {}, "high_contrast": [], "tooltip_delay_ms": "fast"},
-		"pet_presentation": {"ambient_roaming": "yes", "animation_speed": []},
+		"pet_presentation": {"ambient_roaming": "yes", "ambient_animation_frequency": [], "cursor_reaction": "yes", "animation_speed": [], "hit_shake": 1},
 		"desktop": {"always_on_top": 1},
 	}))
 	_assert_equal(wrong_types.data.interface.text_scale, 1.0, "VIS-PREF wrong numeric type uses default")
 	_assert_equal(wrong_types.data.interface.high_contrast, false, "VIS-PREF wrong bool type uses default")
 	_assert_equal(wrong_types.data.interface.tooltip_delay_ms, 500, "VIS-PREF wrong integer type uses default")
 	_assert_equal(wrong_types.data.pet_presentation.ambient_roaming, true, "VIS-PREF wrong roaming type uses default")
+	_assert_equal(wrong_types.data.pet_presentation.ambient_animation_frequency, "normal", "VIS-PREF wrong ambient frequency uses default")
+	_assert_equal(wrong_types.data.pet_presentation.cursor_reaction, true, "VIS-PREF wrong cursor bool uses default")
+	_assert_equal(wrong_types.data.pet_presentation.hit_shake, true, "VIS-PREF wrong shake bool uses default")
 	_assert_equal(wrong_types.data.desktop.always_on_top, true, "VIS-PREF wrong desktop bool type uses default")
 	_assert_equal(PresentationPreferences.resolved_ui_scale("auto", 1.51), 1.5, "VIS-PREF Auto scale uses nearest supported DPI")
 	var save_path := "user://tests/presentation/preferences.json"
@@ -180,7 +298,7 @@ func _test_preferences() -> void:
 
 
 func _test_habitat_contract() -> void:
-	for anchor in ["idle_center", "feeding_bowl", "treat_position", "bath", "training", "bed", "medicine", "departure", "trophy"]:
+	for anchor in ["idle_center", "feeding_bowl", "treat_position", "bath", "training", "bed", "medicine", "departure", "trophy", "plant"]:
 		_assert_equal(HabitatView.ANCHORS.has(anchor), true, "VIS-HAB anchor %s" % anchor)
 	_assert_equal(HabitatView.ANCHORS.feeding_bowl.x > HabitatView.ANCHORS.bath.x, true, "VIS-HAB stations have distinct destinations")
 	_assert_equal(HabitatView.ANCHORS.bed.x < HabitatView.ANCHORS.idle_center.x, true, "VIS-HAB sleep uses den side")
@@ -189,14 +307,49 @@ func _test_habitat_contract() -> void:
 	_assert_equal("if reduced_motion:" in source, true, "VIS-HAB reduced motion bypasses roaming")
 	_assert_equal("if _action_remaining > 0.0:" in source, true, "VIS-HAB reduced motion still completes actions")
 	_assert_equal("48.0 * walking_speed * delta" in source, true, "VIS-HAB movement is delta independent")
+	_assert_equal("animation_marker.connect" in source, true, "VIS-HAB VFX and feedback use animation markers")
+	_assert_equal("set_playback_enabled" in source and "visibility_changed" in source, true, "VIS-HAB hidden animation processing is suspended")
+	_assert_equal("MAX_PENDING_EVENTS" in source, true, "VIS-HAB presentation event queue remains bounded")
+
+
+func _test_habitat_runtime() -> void:
+	var habitat := HabitatView.new()
+	root.add_child(habitat)
+	await process_frame
+	habitat.show_call("mood")
+	var bubble := habitat.call_layer.get_child(0) as Control
+	var first_bubble_x := bubble.position.x
+	habitat.set_world_anchor("departure")
+	_assert_equal(bubble.position.x > first_bubble_x, true, "VIS-HAB call bubble follows roaming pet anchor")
+	var ambient := habitat.get_node_or_null("AmbientWater") as AnimatedTextureRect
+	habitat.visible = false
+	await process_frame
+	_assert_equal(ambient == null or not ambient.is_processing(), true, "VIS-HAB hidden ambient effects suspend processing")
+	habitat.visible = true
+	await process_frame
+	var enemy_document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content_packs/koalapet.base/data/animation_enemy_creekling.json"))
+	var enemy_animations := {}
+	for animation_name in ["idle", "attack", "defeat"]:
+		var descriptor: Dictionary = enemy_document.get("world_animations", {}).get(animation_name, {}).duplicate(true)
+		descriptor["path"] = "res://content_packs/koalapet.base/" + str(descriptor.get("asset", ""))
+		descriptor["animation_name"] = animation_name
+		enemy_animations[animation_name] = descriptor
+	habitat.set_opponent_animations(enemy_animations, "koalapet.base:creekling_encounter")
+	habitat.call("_start_actor_event", habitat.opponent_sprite, {"animation": "attack", "payload": {"actor": "enemy"}})
+	habitat.call("_finish_action")
+	_assert_equal(habitat.opponent_sprite.animation_name, "idle", "VIS-HAB nonterminal enemy action returns to idle")
+	habitat.call("_start_actor_event", habitat.opponent_sprite, {"animation": "defeat", "payload": {"actor": "enemy", "terminal": true}})
+	habitat.call("_finish_action")
+	_assert_equal(habitat.opponent_sprite.animation_name, "defeat", "VIS-HAB terminal enemy result remains visually stable")
+	habitat.free()
 
 
 func _test_localized_bounds_and_windows_scales() -> void:
 	var required_keys := [
 		"ui.feed", "ui.treat", "ui.clean", "ui.train", "ui.sleep", "ui.wake", "ui.battle", "ui.dungeon", "ui.inventory", "ui.evolution", "ui.treat_injury",
 		"ui.ui_scale", "ui.text_scale", "ui.layout_density", "ui.compact", "ui.comfortable", "ui.language", "ui.pet_scale", "ui.minimal_pet_scale",
-		"ui.animation_speed", "ui.walking_speed", "ui.effects_intensity", "ui.reduced", "ui.normal", "ui.default_mode", "ui.desktop_lane", "ui.bottom",
-		"ui.stationary", "ui.ambient_roaming", "ui.reduced_motion", "ui.high_contrast", "ui.tooltips", "ui.always_on_top", "ui.click_through",
+		"ui.animation_speed", "ui.walking_speed", "ui.effects_intensity", "ui.reduced", "ui.normal", "ui.low", "ui.high", "ui.ambient_frequency", "ui.default_mode", "ui.desktop_lane", "ui.bottom",
+		"ui.stationary", "ui.ambient_roaming", "ui.cursor_reaction", "ui.hit_shake", "ui.damage_flash", "ui.reduced_motion", "ui.high_contrast", "ui.tooltips", "ui.always_on_top", "ui.click_through",
 		"ui.remember_positions", "ui.reset_windows", "ui.settings_applied", "ui.windows_reset", "ui.on", "ui.off",
 	]
 	for locale in ["de", "en"]:

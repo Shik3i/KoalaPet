@@ -237,6 +237,16 @@ func _test_incompatible_and_malformed_content() -> void:
 
 
 func _test_path_and_payload_security() -> void:
+	_assert_equal(ContentPackRegistry.MAX_PACK_FILES, 1024, "CONTENT-028A pack file cap accommodates complete data-driven animation profiles")
+	var file_limit_root := _case_root("file_limit")
+	var file_limit_payloads := {}
+	for index in ContentPackRegistry.MAX_PACK_FILES:
+		file_limit_payloads["assets/probe-%04d.png" % index] = "x"
+	_create_pack(file_limit_root, "fixture.file_limit", {"extra_files": file_limit_payloads})
+	var file_limit := _registry_for(file_limit_root)
+	file_limit.discover_and_resolve()
+	_assert_diagnostic(file_limit, "PACK_FILE_LIMIT", "$", "CONTENT-028B pack file cap still rejects oversized payload inventories")
+
 	var traversal_root := _case_root("traversal")
 	_create_pack(traversal_root, "fixture.traversal", {"entry_points": ["../escape.json"]})
 	var traversal := _registry_for(traversal_root)

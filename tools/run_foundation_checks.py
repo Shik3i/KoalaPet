@@ -29,6 +29,18 @@ def run(command: Sequence[str], label: str) -> None:
     subprocess.run(command, cwd=ROOT, check=True)
 
 
+def run_godot(command: Sequence[str], label: str) -> None:
+    print(f"CHECK: {label}")
+    completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
+    if completed.stdout:
+        print(completed.stdout, end="")
+    if completed.stderr:
+        print(completed.stderr, end="", file=sys.stderr)
+    combined = completed.stdout + "\n" + completed.stderr
+    if completed.returncode != 0 or "SCRIPT ERROR:" in combined or "ERROR:" in combined:
+        raise RuntimeError(f"{label} reported a Godot error (exit={completed.returncode})")
+
+
 def iter_files(roots: Iterable[Path], suffixes: set[str] | None = None) -> Iterable[Path]:
     for root in roots:
         if not root.exists():
@@ -125,12 +137,12 @@ def main() -> int:
     check_mod_payloads()
     check_franchise_terms()
     check_tracked_artifacts()
-    run([godot, "--headless", "--editor", "--path", "game", "--quit-after", "8"], "Godot headless import")
-    run([godot, "--headless", "--path", "game", "--script", "res://tests/foundation/run_all.gd"], "Milestone 2 foundation tests")
-    run([godot, "--headless", "--path", "game", "--script", "res://tests/pet/run_all.gd"], "Milestone 3 pet vertical-slice tests")
-    run([godot, "--headless", "--path", "game", "--script", "res://tests/milestone_four/run_all.gd"], "Milestone 4 evolution/battle/dungeon tests")
-    run([godot, "--headless", "--path", "game", "--script", "res://tests/platform/run_all.gd"], "Platform-neutral regression tests")
-    run([godot, "--headless", "--path", "game", "--script", "res://tests/presentation/run_all.gd"], "Visual presentation tests")
+    run_godot([godot, "--headless", "--path", "game", "--import"], "Godot complete headless import")
+    run_godot([godot, "--headless", "--path", "game", "--script", "res://tests/foundation/run_all.gd"], "Milestone 2 foundation tests")
+    run_godot([godot, "--headless", "--path", "game", "--script", "res://tests/pet/run_all.gd"], "Milestone 3 pet vertical-slice tests")
+    run_godot([godot, "--headless", "--path", "game", "--script", "res://tests/milestone_four/run_all.gd"], "Milestone 4 evolution/battle/dungeon tests")
+    run_godot([godot, "--headless", "--path", "game", "--script", "res://tests/platform/run_all.gd"], "Platform-neutral regression tests")
+    run_godot([godot, "--headless", "--path", "game", "--script", "res://tests/presentation/run_all.gd"], "Visual presentation tests")
     run(["git", "diff", "--check"], "Git whitespace check")
     print("RESULT: PASS — foundation checks complete")
     return 0

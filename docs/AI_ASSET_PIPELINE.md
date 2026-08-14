@@ -37,3 +37,14 @@ Source/mockups stay outside `game/`. Approved game-ready output enters `game/ass
 - The validator now rejects bundled playable walk profiles below six frames, missing geometry metadata, opaque corners, off-canvas bounds, unstable ground anchors, isolated alpha debris and missing previews.
 - Content API `0.1` remains compatible: extra animation metadata is optional for external packs and mandatory only for the bundled official content gate.
 - Rights remain `UNDECIDED`; product status remains `PROVISIONAL_PRODUCT_REVIEW`.
+
+## Prompt 4.7 living-animation batch
+
+- Brief: [`../art_source/prompts/living-animation-expansion.md`](../art_source/prompts/living-animation-expansion.md).
+- Preserved sources: accepted Prompt-4.5 creature/enemy boards, Prompt-4.6 walk atlases and `art_source/sources/living-animation/family-effects.png`.
+- VFX generation: Codex built-in image generation; concrete model/version not exposed. The source board contained a neutral checker field, removed only by deterministic border-connected neutral cleanup.
+- Processor: `python tools/art_pipeline/process_living_animation_assets.py`. It preserves identity/ground geometry, derives chronological overlap motion, packs `4–8` frames, writes optional marker metadata, VFX profiles, family/encounter profiles, contact sheets and GIF reels.
+- Output contract: 29 animations for each of nine playable forms, five battle/reaction animations for each current enemy, and twelve separate Moss/Ember/Tide effects.
+- Validator: complete profile coverage, minimum frame counts, sheet geometry, alpha, frame uniqueness, marker bounds, VFX/evidence existence and transparent corners.
+- Provenance: [`../art_source/provenance/living-animation.json`](../art_source/provenance/living-animation.json).
+- Approval boundary remains `PROVISIONAL_PRODUCT_REVIEW`; `license_status=UNDECIDED`.

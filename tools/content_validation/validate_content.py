@@ -15,6 +15,7 @@ from jsonschema.exceptions import SchemaError
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK_ROOTS = (ROOT / "game" / "content_packs", ROOT / "mods" / "examples")
+MAX_PACK_FILES = 1_024
 FORBIDDEN_EXTENSIONS = {
     ".gd", ".gdc", ".cs", ".dll", ".so", ".dylib", ".exe", ".com", ".bat", ".cmd",
     ".ps1", ".sh", ".app", ".jar", ".class", ".py", ".rb", ".js", ".mjs", ".wasm",
@@ -141,8 +142,8 @@ def load_packs(report: ValidationReport) -> list[tuple[Path, dict[str, Any]]]:
 
 def validate_pack_payloads(pack_root: Path, manifest_path: Path, report: ValidationReport) -> None:
     files = sorted(path for path in pack_root.rglob("*") if path.is_file() or path.is_symlink())
-    if len(files) > 512:
-        report.error(manifest_path, "$", "pack exceeds 512 files")
+    if len(files) > MAX_PACK_FILES:
+        report.error(manifest_path, "$", f"pack exceeds {MAX_PACK_FILES} files")
     total_size = 0
     for path in files:
         if path.is_symlink():

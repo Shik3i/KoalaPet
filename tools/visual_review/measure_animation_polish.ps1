@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$OutputPath = "docs\evidence\animation-polish\performance.json",
-    [int]$SampleSeconds = 4
+    [int]$SampleSeconds = 4,
+    [string]$GodotPath = "C:\Users\s3ish\Documents\Workspace\Godot\Godot_v4.7.1-stable_win64.exe"
 )
 
 $ErrorActionPreference = "Stop"
@@ -13,16 +14,20 @@ $evidenceRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot "docs\evidence")).Tr
 if (-not $resolved.StartsWith($evidenceRoot, [StringComparison]::OrdinalIgnoreCase)) {
     throw "OUTPUT_PATH_MUST_BE_UNDER_DOCS_EVIDENCE: $resolved"
 }
-$godot = "C:\tmp\Godot-4.7.1\Godot_v4.7.1-stable_win64.exe"
+$godot = [IO.Path]::GetFullPath($GodotPath)
+if (-not (Test-Path -LiteralPath $godot -PathType Leaf)) { throw "GODOT_NOT_FOUND: $godot" }
 $logicalProcessors = [Environment]::ProcessorCount
+$runId = [DateTime]::UtcNow.ToString("yyyyMMddHHmmssfff")
+$diagnosticsDelayMilliseconds = [Math]::Max(1200, [Math]::Min(2500, ($SampleSeconds * 1000) - 500))
 $scenarios = @(
-    @{ name = "minimal_roaming"; mode = "minimal"; actions = "choose:moss,hatch,mode:minimal" },
-    @{ name = "minimal_stationary"; mode = "minimal"; actions = "choose:moss,hatch,roaming:off,mode:minimal" },
-    @{ name = "small_idle"; mode = "small"; actions = "choose:moss,hatch,mode:small,roaming:off" },
-    @{ name = "small_ambient_walk"; mode = "small"; actions = "choose:moss,hatch,mode:small" },
-    @{ name = "small_action_animation"; mode = "small"; actions = "choose:moss,hatch,mode:small,feed" },
-    @{ name = "expanded_idle"; mode = "expanded"; actions = "choose:moss,hatch,mode:expanded,roaming:off" },
-    @{ name = "minimal_moving_hit_region"; mode = "minimal"; actions = "choose:moss,hatch,mode:minimal" }
+    @{ name = "minimal_stationary"; mode = "minimal"; actions = "choose:moss,hour,hatch,roaming:off,mode:minimal" },
+    @{ name = "minimal_roaming"; mode = "minimal"; actions = "choose:moss,hour,hatch,mode:minimal" },
+    @{ name = "minimal_special_idle"; mode = "minimal"; actions = "choose:moss,hour,hatch,mode:minimal,minimal:playful" },
+    @{ name = "small_habitat_idle"; mode = "small"; actions = "choose:moss,hour,hatch,mode:small,roaming:off" },
+    @{ name = "small_care_action"; mode = "small"; actions = "choose:moss,hour,hatch,mode:small,demo:care" },
+    @{ name = "battle_exchange"; mode = "small"; actions = "choose:moss,hour,hatch,mode:small,demo:combat" },
+    @{ name = "expanded_idle"; mode = "expanded"; actions = "choose:moss,hour,hatch,mode:expanded,roaming:off" },
+    @{ name = "sleep_loop"; mode = "small"; actions = "choose:moss,hour,hatch,sleep,mode:small" }
 )
 $results = New-Object System.Collections.Generic.List[object]
 
@@ -32,12 +37,16 @@ foreach ($scenario in $scenarios) {
     }
     Start-Sleep -Milliseconds 250
     $slug = $scenario.name
+	$diagnostics = Join-Path ([IO.Path]::GetDirectoryName($resolved)) "$slug-diagnostics.json"
+	if (Test-Path -LiteralPath $diagnostics) { Remove-Item -LiteralPath $diagnostics -Force }
     $args = @(
         "--path", (Join-Path $repoRoot "game"), "--",
-        "--save-path=user://evidence/perf-$slug.json",
-        "--preferences-path=user://evidence/perf-$slug-preferences.json",
+		"--save-path=user://evidence/perf-$runId-$slug.json",
+		"--preferences-path=user://evidence/perf-$runId-$slug-preferences.json",
         "--mode=$($scenario.mode)",
-        "--review-actions=$($scenario.actions)"
+		"--diagnostics-path=$diagnostics",
+		"--diagnostics-delay-ms=$diagnosticsDelayMilliseconds",
+		"--review-actions=$($scenario.actions)"
     )
     $launcher = Start-Process -FilePath $godot -ArgumentList $args -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds(8)
@@ -66,6 +75,7 @@ foreach ($scenario in $scenarios) {
         working_set_mb_average = [Math]::Round(($memory | Measure-Object -Average).Average, 2)
         working_set_mb_peak = [Math]::Round(($memory | Measure-Object -Maximum).Maximum, 2)
         samples = $memory.Count
+		diagnostics = if (Test-Path -LiteralPath $diagnostics) { Get-Content -Raw -LiteralPath $diagnostics | ConvertFrom-Json } else { $null }
     })
     if (-not $game.HasExited) {
         $game.CloseMainWindow() | Out-Null

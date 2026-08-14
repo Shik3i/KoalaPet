@@ -3,13 +3,14 @@
 ## Runtime contracts
 
 - Animation descriptors are data-driven. Bundled profiles include frame count/fps/loop, `frame_size`, `pivot`, `ground_anchor`, `visual_center`, interaction/effect bounds, mirroring policy, event markers, provenance and review status.
-- All nine playable walk sheets contain eight `128×128` chronological frames at 10 fps. World movement is delta-time translation by the presentation controller; the sheet stays in place.
-- Priority: sleep, sickness, injury, battle, movement, call, idle. One-shots use stable IDs, are consumed once and return to an authoritative loop.
-- Reduced Motion disables continuous roaming, turn/bob motion and ambient dust. Care commands still route instantly to the correct anchor, show a held action pose and complete their timers.
+- All nine playable profiles expose the 29-state contract in [`ANIMATION_COVERAGE.md`](ANIMATION_COVERAGE.md), using `4–8` chronological `128×128` frames. Current enemies expose five `4–8`-frame battle/reaction states. World movement is delta-time translation by the presentation controller; sheets stay in place.
+- Priority is evolution `800`, battle `700`, care `600`, condition `500`, sleep `400`, locomotion `300`, attention `200`, ambient `100`. One-shots use stable IDs, are consumed once, cap pending events at `32`, retain `64` recent IDs and return to an authoritative loop.
+- Attack, hit, dodge, sleep, wake and care markers drive only visual effects. Gameplay outcomes and command completion remain domain-authoritative.
+- Reduced Motion disables continuous roaming/playful travel and uses reduced feedback while still advancing every chronological frame. Marker frames cannot be skipped. Care commands route instantly to the correct anchor and complete their presentation timers.
 
 ## Habitat anchors
 
-`idle_center`, `feeding_bowl`, `treat_position`, `bath`, `training`, `bed`, `medicine`, `departure`, `trophy`, `roam_left`, and `roam_right` share the ground line. Feed, clean, train, medicine, sleep/wake, battle and dungeon entry use these anchors without changing domain timing.
+`idle_center`, `feeding_bowl`, `treat_position`, `bath`, `training`, `bed`, `medicine`, `departure`, `trophy`, `roam_left`, and `roam_right` share the ground line. Feed, clean, train, medicine, sleep/wake, battle and dungeon entry use these anchors without changing domain timing. Data-defined prop interactions may temporarily route to a compatible anchor, then return to the authoritative loop.
 
 ## UI scaling
 

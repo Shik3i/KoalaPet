@@ -37,6 +37,13 @@ Direct Prompt 4.5 evidence confirms Minimal transparency and outside-pet click-t
 - Small exposes three readable context actions. Expanded keeps three columns and allocates full reflow room for enlarged German text. Settings is scrollable and keeps each label/control pair together.
 - Quiet Canopy has explicit bowl, treat, bath, training, bed, medicine and departure anchors. Domain actions move only presentation state; reduced motion uses instant routing and still completes the visual action timer.
 
+## Prompt 4.7 living presentation
+
+- Minimal uses a deterministic weighted scheduler for stationary idle, look/rest/playful variants and bounded travel. Cursor proximity turns the pet and plays attention; a pet click plays a short reaction before opening Small. Sleeping, sickness, injury and battle suppress incompatible ambient behavior.
+- Small/Expanded use the same bounded priority queue and animation profiles. Care routes to stations; sleep enters the den and loops; battle drives actor-specific attack/hit/dodge/victory/defeat sequences plus separate family effects.
+- Ambient frequency is Low/Normal/High. Reduced Motion prevents ambient travel/playful locomotion, shortens presentation cadence without skipping frame markers and uses reduced effects. Hit shake, damage flash and cursor reaction are separately configurable.
+- Hidden/removed mode trees suspend their animation and ambient processors. Mode switching still preserves one `PetApplication`, pet identity and state revision.
+
 ## Prompt 3.5 Windows evidence
 
 The first direct Windows run was completed on 2026-08-12 with Windows 11 Pro `10.0.26200`, Godot `4.7.1.stable.official.a13da4feb`, three monitors, per-monitor-aware PowerShell capture, primary 125% scaling, a bottom non-auto-hidden taskbar, and an NVIDIA RTX 4080 SUPER. The native spike reached `READY` for native window creation, borderless/transparency flags, transparent viewport, polygonal hit regions, focus policies, monitor enumeration, status indicator creation, and 60 FPS at the configured cap. Evidence is in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md).

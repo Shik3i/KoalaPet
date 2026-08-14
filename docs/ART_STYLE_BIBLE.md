@@ -50,12 +50,12 @@ Cozy, compact, readable modern pixel art with a quiet fantasy-natural tone. The 
 
 ## Animation
 
-- Idle: `2–4 fps`; walk: `8–12 fps` with eight sequential frames for every currently playable form; care reactions: `5–8 fps`; attacks/hits: `8–12 fps`; transformation/effects: `8–12 fps`; ambient habitat: `2–6 fps`.
+- Idle: `2–4 fps`; walk: `8–12 fps` with eight sequential frames for every currently playable form; care reactions: `5–8 fps`; attacks/hits: `8–12 fps`; transformation/effects: `8–12 fps`; ambient habitat: `2–6 fps`. Bundled player actions use `4–8` chronological frames.
 - Locomotion owns no world translation. Habitat/Minimal controllers move the sprite using delta time, pause before reversing, then mirror only when metadata permits. Every sheet defines pivot, ground anchor, visual center, interaction/effect bounds and event markers.
-- Presentation priority is `sleep > sick > injury > battle > movement > call > idle`. Stable one-shot event IDs prevent repeated refreshes from replaying care reactions.
-- Every player-facing form exposes `idle`, `walk`, `eat`, `happy`, `sleep`, `sick`, `injured`, `training`, `attack`, `hit`, `victory`, and `call`. Eggs expose `idle`, `hatch`, and a shared hatch effect. Enemies expose `idle`, `attack`, `hit`, and `defeat`.
+- Presentation priority is `evolution > battle > care > condition > sleep > locomotion > attention > ambient`. Stable one-shot event IDs prevent repeated refreshes from replaying reactions; bounded queues may evict only lower-priority pending events.
+- Every current player-facing form follows the 29-ID contract in [`ANIMATION_COVERAGE.md`](ANIMATION_COVERAGE.md). Eggs expose `idle`, `hatch`, and `world`. Current enemies expose `idle`, `attack`, `hit`, `dodge`, and `defeat`.
 - Loops must settle cleanly. Movement stays inside the canonical cell. Effects are separate layers and may not permanently alter the character texture.
-- Reduced motion replaces locomotion/bobbing/pulses with a held key pose, static urgent outline, and short crossfade. Gameplay timing never depends on presentation animation.
+- Reduced Motion disables ambient travel/bobbing, accelerates chronological frame cadence without skipping markers, reduces effects and uses static urgent feedback. Gameplay timing never depends on presentation animation.
 
 ## Transparency
 

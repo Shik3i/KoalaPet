@@ -24,13 +24,13 @@ Dependencies: milestone 2. Acceptance: data-defined egg choice/hatching and a co
 
 Dependencies: stable lifecycle and content registry. Acceptance: at least meaningful good-care and poor-care branches, short encounters, injuries/recovery, experience/history inputs, one multi-stage dungeon, boss and cross-system rewards.
 
-**Implemented and validated on 2026-08-13:** automatic data-defined good/poor routes for all three starter families, deterministic stanced battles with level/experience/history/injury/recovery, one five-node dungeon with event/rest/boss flow, idempotent first-clear/repeat rewards, future habitat theme/trophy unlock storage, save v3 migration, codex/discovery records, and isolated Windows gameplay evidence. Combat interaction and evolution disclosure remain provisional. Native overlay work remains parallel and ADR 0010 remains proposed.
+**Implemented and validated through 2026-08-14:** automatic data-defined good/poor routes for all three starter families, deterministic stanced battles with level/experience/history/injury/recovery, one five-node dungeon with event/rest/boss flow, idempotent first-clear/repeat rewards, future habitat theme/trophy unlock storage, save v3 migration, codex/discovery records, and isolated Windows gameplay evidence. Prompt 4.7 completes current-form living animation, reaction/VFX presentation and bounded ambient behavior without changing domain rules. Combat interaction and evolution disclosure remain provisional. Native overlay work remains parallel and ADR 0010 remains proposed.
 
 ## 5. Habitat customization and unlock rewards
 
 Dependencies: first dungeon rewards. Acceptance: layered mixable habitat components, persistent placement, functional stations, accessible editing, and rewards from progression.
 
-**Not started. Prompts 4.5/4.6 rebuilt and animated only the fixed presentation habitat; station routing is presentation behavior, not editing or furniture placement. Entry gate: product-owner visual approval, resolved provisional-art rights/license, and documented Windows shell/DPI/accessibility review.**
+**Not started. Prompts 4.5/4.6/4.7 rebuilt and animated only the fixed presentation habitat; station routing, ambient prop reactions and effects are presentation behavior, not editing or furniture placement. Entry gate: product-owner visual approval, resolved provisional-art rights/license, and documented Windows shell/DPI/accessibility review.**
 
 ## 6. Second egg, farm reveal, residents, and idle jobs
 

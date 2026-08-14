@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "generator": "tools/visual_review/capture_ui_rescue.ps1",
+  "capture_method": "in_engine_viewport_readback",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "scenarios": [
+    {
+      "name": "01-starter-selection",
+      "mode": "expanded",
+      "setup": "",
+      "runtime_actions": "",
+      "image": "01-starter-selection.png",
+      "pixels": [
+        1450,
+        950
+      ],
+      "sha256": "479f52a8b1fc4dc4a28ee682795316faa39058ca27b1718d74baccf4352dfad2"
+    },
+    {
+      "name": "02-egg-waiting",
+      "mode": "small",
+      "setup": "choose:moss",
+      "runtime_actions": "",
+      "image": "02-egg-waiting.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "b826608ee761dfc125ae590e26d625a67eea753a1b80560b016407d312bf9b9d"
+    },
+    {
+      "name": "03-small-care-default",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "",
+      "image": "03-small-care-default.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "ab5c1c91ea9609ba6728817dbafda6e9bcabe734b71292b41f9403b040f927a6"
+    },
+    {
+      "name": "04-small-care-english",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "",
+      "image": "04-small-care-english.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "a34be7e4098d6b884da2f6388ba6cc95419ab4a41a5fbf14eb2d4b6fb9e1c9d4"
+    },
+    {
+      "name": "05-small-urgent-hunger",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch,hour,hour,hour,hour,hour,hour",
+      "runtime_actions": "",
+      "image": "05-small-urgent-hunger.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "d90f2969aa0a642f85b853e375458a7bf43ba670c51a56c20a0e3d2cbd4b7963"
+    },
+    {
+      "name": "06-small-sick",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch,sick",
+      "runtime_actions": "",
+      "image": "06-small-sick.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "900f90fbdc63660815ad61a80a6834a7f4d3536ffbe3199b77110ba215b5170c"
+    },
+    {
+      "name": "07-small-sleeping",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch,sleep",
+      "runtime_actions": "",
+      "image": "07-small-sleeping.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "cfb45d3b9b527e2e0ff9bce916cc8cd9711306cdadaa70bd18375e776d795de4"
+    },
+    {
+      "name": "08-small-more-page",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "page:more",
+      "image": "08-small-more-page.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "081f94d88c875093f0b483152431b9efd587750fdd0588f37b4aba0bc2284d05"
+    },
+    {
+      "name": "09-small-adventure-page",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch,good,good,good",
+      "runtime_actions": "page:adventure",
+      "image": "09-small-adventure-page.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "3bbbf1935dfb77c430092e6b6de27974d366db3718981b9488f1eeb299fb92e8"
+    },
+    {
+      "name": "10-small-minimum-size",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "size:750x475",
+      "image": "10-small-minimum-size.png",
+      "pixels": [
+        750,
+        475
+      ],
+      "sha256": "c2c779aab6d59dbaea39cbfdd46f4eaf2ee0a186a2075d46b6294aa5a1a1c606"
+    },
+    {
+      "name": "11-small-large-size",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "size:1400x860",
+      "image": "11-small-large-size.png",
+      "pixels": [
+        1400,
+        860
+      ],
+      "sha256": "599d20bc78cc27afe3c84682ff142e49a0992e1d3d444d1c30ae5b9d2d6e3c3c"
+    },
+    {
+      "name": "12-small-ui-100",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "ui:100",
+      "image": "12-small-ui-100.png",
+      "pixels": [
+        720,
+        480
+      ],
+      "sha256": "73a27b4767ce1ccb1ae2a9e595ee4905ebd4de61cb68bb2c6bca18afabbb7f65"
+    },
+    {
+      "name": "13-small-ui-150",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "ui:150",
+      "image": "13-small-ui-150.png",
+      "pixels": [
+        1080,
+        720
+      ],
+      "sha256": "e9c2d1f6cc8348d8fdf8cc968e5d22503fcfd22140d0f000d6369d9b5ed9a1d7"
+    },
+    {
+      "name": "14-small-ui-200",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "ui:200",
+      "image": "14-small-ui-200.png",
+      "pixels": [
+        1440,
+        960
+      ],
+      "sha256": "fa62fed47a330fad83b95abba8ee40972e8abd6bb7a7fd56f9bb4c524d51be8a"
+    },
+    {
+      "name": "15-small-text-150",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "text:150",
+      "image": "15-small-text-150.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "c106ba3ded4190ec2fe3dce0b5520c3f0077cca4b536b3e5114b71d39253c983"
+    },
+    {
+      "name": "16-expanded-overview",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "",
+      "image": "16-expanded-overview.png",
+      "pixels": [
+        1450,
+        950
+      ],
+      "sha256": "9eefb1076b0ed818f4dbf305a7a148861971c488fac674f0a52736a2671b3254"
+    },
+    {
+      "name": "17-expanded-english",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "",
+      "image": "17-expanded-english.png",
+      "pixels": [
+        1450,
+        950
+      ],
+      "sha256": "0894ac6726d76f519a6f873a19548135066e355edede45ec59cd609950cd3489"
+    },
+    {
+      "name": "18-expanded-battle",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch,good,good,good",
+      "runtime_actions": "tab:battle",
+      "image": "18-expanded-battle.png",
+      "pixels": [
+        1450,
+        950
+      ],
+      "sha256": "4ff1738e7568d5116c5a751a8847abd4eb40120c01c9e6ca99efd4f3b54421ad"
+    },
+    {
+      "name": "19-expanded-dungeon",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch,good,good,good,dungeon_unlock",
+      "runtime_actions": "tab:dungeon",
+      "image": "19-expanded-dungeon.png",
+      "pixels": [
+        1450,
+        950
+      ],
+      "sha256": "60ecec174ec8d50d57102eacc26942a9b038bdb4ddcb8a49508db6ba3127745e"
+    },
+    {
+      "name": "20-expanded-inventory",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch,good,good,good",
+      "runtime_actions": "tab:inventory",
+      "image": "20-expanded-inventory.png",
+      "pixels": [
+        1450,
+        950
+      ],
+      "sha256": "72072b96f115bd9ca7db40301d54a4a75baaefcae3881c11dd25a2cd66848e1b"
+    },
+    {
+      "name": "21-expanded-evolution",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch,good,good,good",
+      "runtime_actions": "tab:evolution",
+      "image": "21-expanded-evolution.png",
+      "pixels": [
+        1450,
+        950
+      ],
+      "sha256": "65edf292113aaac4aad3b64e0f5028fc6358c5413e260ac0006fd86da4d97117"
+    },
+    {
+      "name": "22-expanded-large-size",
+      "mode": "expanded",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "size:1900x1180",
+      "image": "22-expanded-large-size.png",
+      "pixels": [
+        1900,
+        1180
+      ],
+      "sha256": "8132ff0be2180de181cc2ca26b3059227f80c8170d6ab57184ae299761101666"
+    },
+    {
+      "name": "23-settings",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch",
+      "runtime_actions": "settings",
+      "image": "23-settings.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "35513a91c68c99093f6ae404896e67fdb8e897ccd2bfc913cfec99330e136294"
+    },
+    {
+      "name": "24-blocked-action",
+      "mode": "small",
+      "setup": "choose:moss,hour,hatch,sleep",
+      "runtime_actions": "train",
+      "image": "24-blocked-action.png",
+      "pixels": [
+        900,
+        600
+      ],
+      "sha256": "30e8b8f238ff03d9456a72ca6ec4491ffb5eb4091efe010201b254c326931fb9"
+    }
+  ]
+}

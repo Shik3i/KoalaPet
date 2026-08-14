@@ -33,14 +33,14 @@
       "purpose": "Runtime PNG storage, decode and reference audit",
       "reproduction": "python tools/visual_review/audit_animation_sequences.py",
       "settings": "RGBA decode estimate; exact SHA duplicates; reference scan",
-      "sha256": "12e26fd5dc8882206e94a83b6b813dca1c8c7ba75763fda940cb5dc87daf1d10"
+      "sha256": "be1cf725d7c7a9a107a68407979044b964a26137046ca0401bdd75d9934c771e"
     },
     {
       "path": "docs/evidence/visual-acceptance/asset-rights-register.json",
       "purpose": "Machine-readable rights and provenance decision inventory",
       "reproduction": "python tools/visual_review/audit_animation_sequences.py",
       "settings": "all distributed PNGs plus three non-distributed UI references",
-      "sha256": "e2fab60cff8aa49ebd6e0dad11e7b73a116881785421ff60217fdcfd24794b78"
+      "sha256": "8aec768209a759b59d00bad1960258c5a57b920d0d3b33307bf03301f17bd9bd"
     },
     {
       "path": "docs/evidence/visual-acceptance/contact-sheets/combat-effects.png",

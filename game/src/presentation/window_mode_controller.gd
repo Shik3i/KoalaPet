@@ -31,6 +31,16 @@ func transition_to(next_mode: int) -> OverlayApplyResult:
 	return result
 
 
+## The physical size the player last left this mode at, or zero when the mode
+## has never been shown. Small and Expanded restore that size instead of
+## snapping back to the mode default on every transition.
+func remembered_size(mode: int) -> Vector2i:
+	if not _placements.has(mode):
+		return Vector2i.ZERO
+	var placement: OverlayPlacement = _placements[mode]
+	return placement.size if placement.size.x > 0 and placement.size.y > 0 else Vector2i.ZERO
+
+
 func remember_placement(placement: OverlayPlacement) -> void:
 	_placements[placement.mode] = placement.duplicate_value()
 

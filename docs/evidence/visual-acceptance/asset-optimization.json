@@ -1,6 +1,6 @@
 {
   "decision": "Keep stable paths and lazy runtime loading; atlas migration deferred until release asset approval.",
-  "disk_bytes": 26150137,
+  "disk_bytes": 26186623,
   "duplicate_file_groups": [
     [
       "game/content_packs/koalapet.base/assets/vertical_slice/eggs/ember/idle.png",
@@ -51,9 +51,20 @@
       "game/content_packs/koalapet.base/assets/vertical_slice/tide/sleep_loop.png"
     ]
   ],
-  "estimated_decoded_rgba_bytes_if_all_loaded": 129624064,
+  "estimated_decoded_rgba_bytes_if_all_loaded": 129948928,
   "evidence_under_res": [],
-  "high_transparent_padding": [],
+  "high_transparent_padding": [
+    {
+      "path": "game/assets_generated/ui/icons/minimize.png",
+      "reason": "Anchor-preserving sprite/VFX canvas; do not crop without descriptor migration.",
+      "transparent_canvas_ratio": 0.8333
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/minimize.png",
+      "reason": "Anchor-preserving sprite/VFX canvas; do not crop without descriptor migration.",
+      "transparent_canvas_ratio": 0.8333
+    }
+  ],
   "measurement_date": "2026-08-14",
   "prompt_4_7_baseline": {
     "disk_bytes": 26030472,
@@ -61,14 +72,182 @@
     "runtime_png_count": 388
   },
   "prompt_4_8_after_corrections": {
-    "disk_bytes": 26150137,
-    "disk_delta_bytes": 119665,
-    "estimated_decoded_rgba_bytes_if_all_loaded": 129624064,
-    "runtime_png_count": 388
+    "disk_bytes": 26186623,
+    "disk_delta_bytes": 156151,
+    "estimated_decoded_rgba_bytes_if_all_loaded": 129948928,
+    "runtime_png_count": 430
   },
-  "runtime_png_count": 388,
+  "runtime_png_count": 430,
   "schema_version": 1,
   "unreferenced_with_explicit_reason": [
+    {
+      "path": "game/assets_generated/ui/icons/call.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/close.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/collapse.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/discipline.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/level.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/minimize.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/sickness.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/treatment.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/wake.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/aggressive.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/balanced.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/battle.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/call.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/clean.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/close.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/codex.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/collapse.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/defensive.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/discipline.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/dungeon.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/energy.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/evolution.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/expand.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/feed.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/health.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/hygiene.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/injury.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/inventory.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/level.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/medicine.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/minimal.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/minimize.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/mood.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/rewards.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/satiety.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/settings.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/sickness.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/sleep.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/train.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/treat.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/treatment.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/assets_generated/ui/icons/x2/wake.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
     {
       "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/injured.png",
       "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."

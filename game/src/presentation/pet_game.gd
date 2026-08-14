@@ -5,6 +5,26 @@ const MODE_SMALL := "small"
 const MODE_EXPANDED := "expanded"
 const PLACEMENT_PATH := "user://presentation/placement.json"
 const PREFERENCES_PATH := "user://preferences.json"
+## Repeating the *same* command inside this window is treated as one intent, so
+## an accidental double click cannot submit the same authoritative command
+## twice. The value matches the Windows double-click threshold; a deliberate
+## repeat half a second later still goes through, and a different action is
+## never delayed.
+const COMMAND_DEBOUNCE_MSEC := 450
+
+## Logical width per care meter below which the localized name no longer fits
+## beside its percentage; the meter then shows icon and value only.
+const NARROW_METER_WIDTH := 168.0
+
+## Localization key, German fallback and icon for every care meter.
+const STATUS_KEYS := {
+	"satiety_bps": ["ui.satiety", "Sättigung", "satiety"],
+	"mood_bps": ["ui.mood", "Stimmung", "mood"],
+	"energy_bps": ["ui.energy", "Energie", "energy"],
+	"hygiene_bps": ["ui.hygiene", "Hygiene", "hygiene"],
+	"health_bps": ["ui.health", "Gesundheit", "health"],
+	"discipline_bps": ["ui.discipline", "Disziplin", "discipline"],
+}
 
 var application: PetApplication
 var window_adapter: DesktopWindowAdapter
@@ -39,8 +59,25 @@ var expanded_tab := "home"
 var transient_animation := ""
 var notification_revision := 0
 var animation_revision := 0
+var command_in_flight := false
+var last_command_msec := 0
+var last_command_key := ""
+var suppressed_duplicate_commands := 0
+var refresh_depth := 0
+var logical_size := Vector2(720, 450)
+var requested_window_size := Vector2i.ZERO
+var applied_presentation_scale := 0.0
+var mode_switch_requests := 0
+var mode_switch_applied := 0
+var last_mode_request := ""
+var active_habitat_frame: HabitatFrame
+var last_feedback: Dictionary = {}
 var requested_save_path := ""
 var diagnostics_path := ""
+var capture_path := ""
+var diagnostics_live := false
+var diagnostics_sequence := 0
+var last_feedback_record: Dictionary = {}
 var placement_path := PLACEMENT_PATH
 var dev_window: Window
 var animation_showroom_window: Window
@@ -55,6 +92,10 @@ func _ready() -> void:
 	var development_actions_enabled := OS.is_debug_build()
 	requested_save_path = _argument_value(args, "--save-path=", requested_save_path if not requested_save_path.is_empty() else "user://saves/koalapet.json")
 	diagnostics_path = _argument_value(args, "--diagnostics-path=", "")
+	capture_path = _argument_value(args, "--capture-path=", "") if development_actions_enabled else ""
+	# Development-only closed loop for the interactive action matrix: the harness
+	# clicks a real control, then reads the refreshed authoritative state back.
+	diagnostics_live = development_actions_enabled and "--diagnostics-live" in args
 	placement_path = _argument_value(args, "--placement-path=", placement_path)
 	preferences_path = _argument_value(args, "--preferences-path=", preferences_path)
 	preferences = PresentationPreferences.load_file(preferences_path).get("data", PresentationPreferences.defaults())
@@ -84,7 +125,7 @@ func _ready() -> void:
 		var diagnostics_delay := maxi(0, int(_argument_value(args, "--diagnostics-delay-ms=", "0")))
 		call_deferred("_run_review_actions", review_actions.split(",", false), diagnostics_delay)
 	else:
-		call_deferred("_write_diagnostics")
+		_write_diagnostics_after_layout()
 	if development_actions_enabled and "--animation-polish-demo" in args:
 		call_deferred("_run_animation_polish_demo")
 	var living_demo := _argument_value(args, "--living-animation-demo=", "")
@@ -163,6 +204,10 @@ func _build_root() -> void:
 	notification_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	notification_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(notification_layer)
+	if not get_window().size_changed.is_connected(_on_window_size_changed):
+		get_window().size_changed.connect(_on_window_size_changed)
+	if diagnostics_live and not get_viewport().gui_focus_changed.is_connected(_on_focus_changed):
+		get_viewport().gui_focus_changed.connect(_on_focus_changed)
 
 
 func _build_error(reason: String) -> void:
@@ -176,9 +221,17 @@ func _build_error(reason: String) -> void:
 
 
 func _refresh(status_override := "") -> void:
+	# A rebuild must never be able to re-enter itself. A deferred `pressed`
+	# callback that arrives while the tree is half rebuilt would otherwise free
+	# the controls the outer rebuild is still populating.
+	if refresh_depth > 0:
+		call_deferred("_refresh", status_override)
+		return
+	refresh_depth += 1
 	_clear(root_layer)
 	minimal_sprite = null
 	active_habitat = null
+	active_habitat_frame = null
 	var model := application.get_view_model(mode, locale)
 	match str(model.get("screen", "starter")):
 		"starter":
@@ -196,9 +249,15 @@ func _refresh(status_override := "") -> void:
 					_build_expanded(model)
 				_:
 					_build_small(model)
+	refresh_depth -= 1
 	if not status_override.is_empty():
 		_show_notification(status_override)
+	elif not last_feedback.is_empty():
+		_show_feedback(last_feedback)
+	last_feedback = {}
 	call_deferred("_update_minimal_hit_region")
+	if diagnostics_live:
+		_write_diagnostics_after_layout()
 
 
 func _build_starter() -> void:
@@ -256,7 +315,9 @@ func _starter_card(egg: Dictionary) -> PanelContainer:
 	affinity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	affinity.add_theme_color_override("font_color", PixelTheme.SILVER)
 	column.add_child(affinity)
-	var choose := PixelUi.button(application.text("ui.select", "Wählen", locale), "egg", application.text("ui.select", "Wählen", locale))
+	var choose := PixelUi.button(application.text("ui.select", "Wählen", locale), "egg", "%s · %s" % [application.text("ui.select", "Wählen", locale), application.get_display_name(egg_id, locale)])
+	choose.name = "Starter_" + egg_id.get_slice(":", 1)
+	choose.set_meta("action_id", "choose_starter")
 	_connect_pressed(choose, _show_starter_confirmation.bind(egg_id))
 	column.add_child(choose)
 	return card
@@ -280,11 +341,15 @@ func _show_starter_confirmation(egg_id: String) -> void:
 	row.alignment = BoxContainer.ALIGNMENT_END
 	column.add_child(row)
 	var cancel := PixelUi.button(application.text("ui.cancel", "Abbrechen", locale))
+	cancel.name = "StarterCancel"
 	_connect_pressed(cancel, shade.queue_free)
 	row.add_child(cancel)
 	var confirm := PixelUi.button(application.text("ui.confirm", "Bestätigen", locale), "egg")
+	confirm.name = "StarterConfirm"
+	confirm.set_meta("action_id", "choose_starter")
 	_connect_pressed(confirm, _choose_starter.bind(egg_id))
 	row.add_child(confirm)
+	_note_ui_change()
 
 
 func _open_settings() -> void:
@@ -307,11 +372,12 @@ func _open_settings() -> void:
 	var title := PixelUi.title(application.text("ui.settings", "Einstellungen", locale), 22)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_child(title)
-	var close := PixelUi.icon_button("close", application.text("ui.close", "Schließen", locale))
+	var close := PixelUi.window_button("close", application.text("ui.close", "Schließen", locale))
+	close.name = "SettingsClose"
 	_connect_pressed(close, shade.queue_free)
 	heading.add_child(close)
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, clampf(root_layer.size.y - 140.0, 180.0, 520.0))
+	scroll.custom_minimum_size = Vector2(0, clampf(logical_size.y - 160.0, 180.0, 560.0))
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(scroll)
@@ -344,8 +410,17 @@ func _open_settings() -> void:
 	_add_setting_toggle(grid, application.text("ui.click_through", "Klicks außerhalb durchlassen", locale), bool(preferences["desktop"]["minimal_click_through"]), _set_preference.bind("desktop", "minimal_click_through"))
 	_add_setting_toggle(grid, application.text("ui.remember_positions", "Fensterpositionen merken", locale), bool(preferences["desktop"]["remember_window_positions"]), _set_preference.bind("desktop", "remember_window_positions"))
 	var reset := PixelUi.button(application.text("ui.reset_windows", "Fenster sichtbar zurücksetzen", locale), "settings")
+	reset.name = "SettingsResetWindows"
 	_connect_pressed(reset, _reset_windows)
 	column.add_child(reset)
+	_note_ui_change()
+
+
+## Overlays such as the settings sheet and the starter confirmation are added
+## without a full rebuild, so the interactive harness is told to re-sample.
+func _note_ui_change() -> void:
+	if diagnostics_live:
+		_write_diagnostics_after_layout()
 
 
 func _add_setting_options(parent: GridContainer, label_text: String, labels: Array, values: Array, current: Variant, callback: Callable) -> void:
@@ -413,11 +488,18 @@ func _build_root_theme() -> void:
 	PixelUi.configure_preferences(bool(interface_preferences.get("tooltips_enabled", true)), float(interface_preferences.get("text_scale", 1.0)), str(interface_preferences.get("layout_density", "comfortable")))
 
 
+## Godot's `screen_get_scale()` reports 1.0 on Windows regardless of the display
+## setting, so the previous "auto" UI scale never left 100% and the whole
+## interface rendered at roughly 80% of its intended physical size on a 125%
+## display. DPI is the reliable signal, with the reported scale as a fallback.
 func _detected_display_scale() -> float:
-	if window_adapter != null:
-		for monitor in window_adapter.enumerate_monitors():
-			if monitor.index == get_window().current_screen:
-				return maxf(1.0, monitor.scale)
+	if window_adapter == null:
+		return 1.0
+	for monitor in window_adapter.enumerate_monitors():
+		if monitor.index != get_window().current_screen:
+			continue
+		var from_dpi := float(monitor.dpi) / 96.0 if monitor.dpi > 0 else 1.0
+		return clampf(maxf(from_dpi, monitor.scale), 1.0, 2.0)
 	return 1.0
 
 
@@ -434,11 +516,14 @@ func _walking_speed() -> float:
 
 
 func _build_egg(model: Dictionary) -> void:
-	var shell := _window_shell(application.get_display_name(str(model.get("egg_id", "")), locale), "egg")
+	var egg_model := model.duplicate(true)
+	egg_model["name"] = application.get_display_name(str(model.get("egg_id", "")), locale)
+	var shell := _window_shell(egg_model)
 	var column := VBoxContainer.new()
+	column.name = "EggScreen"
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	column.add_theme_constant_override("separation", 8)
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_SECTION)
 	shell.add_child(column)
 	var egg_sprite := AnimatedTextureRect.new()
 	egg_sprite.custom_minimum_size = Vector2(140, 140)
@@ -446,7 +531,14 @@ func _build_egg(model: Dictionary) -> void:
 	egg_sprite.configure(application.get_animation_descriptor("idle", "", true), reduced_motion)
 	column.add_child(_hatch_progress(model))
 	var ready := int(model.get("current_simulation_unix", 0)) >= int(model.get("hatch_due_unix", 1))
-	var hatch := PixelUi.button(application.text("ui.hatch_ready", "Bereit zum Schlüpfen", locale) if ready else application.text("ui.hatching", "Dein Ei wird warm", locale), "egg")
+	var hatch := PixelUi.primary_action(
+		application.text("ui.hatch_ready", "Bereit zum Schlüpfen", locale) if ready else application.text("ui.hatching", "Dein Ei wird warm", locale),
+		"egg"
+	)
+	hatch.name = "Action_hatch"
+	hatch.set_meta("action_id", "complete_hatch")
+	hatch.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	hatch.custom_minimum_size = Vector2(280, UiMetrics.primary_action_height())
 	hatch.disabled = not ready
 	hatch.tooltip_text = application.text("ui.hatching", "Dein Ei wird warm", locale) if not ready else application.text("ui.hatch_ready", "Bereit zum Schlüpfen", locale)
 	_connect_pressed(hatch, _complete_hatch)
@@ -557,188 +649,429 @@ func _update_minimal_cursor_reaction() -> void:
 
 
 func _build_small(model: Dictionary) -> void:
-	var shell := _window_shell(str(model.get("name", "KoalaPet")), "pet")
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 2)
-	shell.add_child(column)
-	column.add_child(_small_status_strip(model))
-	var habitat_center := CenterContainer.new()
-	column.add_child(habitat_center)
-	var habitat := _habitat(model)
-	habitat_center.add_child(habitat)
-	column.add_child(_small_actions(model))
+	var shell := _window_shell(model)
+	shell.add_child(_status_row(model, ["satiety_bps", "mood_bps", "energy_bps", "hygiene_bps"]))
+	var alerts := _alert_row(model)
+	if alerts != null:
+		shell.add_child(alerts)
+	var frame := HabitatFrame.new()
+	frame.name = "SmallHabitatFrame"
+	frame.attach(_habitat(model))
+	active_habitat_frame = frame
+	shell.add_child(frame)
+	shell.add_child(_small_actions(model))
+	shell.add_child(_small_navigation(model))
 
 
-func _window_shell(title_text: String, icon_name: String) -> VBoxContainer:
+## Shared window shell: margin, frame, drag/close header, and a body column.
+func _window_shell(model: Dictionary) -> VBoxContainer:
 	var margin := MarginContainer.new()
+	margin.name = "WindowMargin"
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_set_margins(margin, 4)
+	UiMetrics.apply_margins(margin, UiMetrics.SPACE_COMPACT)
 	root_layer.add_child(margin)
 	var frame := PixelUi.panel(true)
+	frame.name = "WindowFrame"
 	margin.add_child(frame)
 	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 2)
+	root.name = "WindowBody"
+	UiMetrics.apply_separation(root, UiMetrics.SPACE_COMPACT)
 	frame.add_child(root)
-	root.add_child(_title_bar(title_text, icon_name))
+	root.add_child(_window_header(model))
 	return root
 
 
-func _title_bar(title_text: String, icon_name: String) -> HBoxContainer:
+## Header shows identity plus window controls only. Care, adventure and view
+## actions live in their own regions so the header stops being an icon dump.
+func _window_header(model: Dictionary) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.name = "PlayerTitleBar"
-	row.custom_minimum_size = Vector2(0, 28)
+	row.custom_minimum_size = Vector2(0, UiMetrics.control_height(36))
+	UiMetrics.apply_separation(row, UiMetrics.SPACE_COMPACT)
 	row.gui_input.connect(_on_title_bar_input)
-	var icon_rect := TextureRect.new()
-	icon_rect.texture = PixelUi.icon(icon_name)
-	icon_rect.custom_minimum_size = Vector2(24, 24)
-	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	row.add_child(icon_rect)
-	var title_label := PixelUi.title(title_text, 14)
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	row.add_child(title_label)
-	if mode == MODE_SMALL and application.is_hatched():
-		var care_tab := PixelUi.icon_button("health", application.text("ui.care", "Pflege", locale))
-		care_tab.button_pressed = small_page == "care"
-		_connect_pressed(care_tab, _set_small_page.bind("care"))
-		row.add_child(care_tab)
-		var adventure_tab := PixelUi.icon_button("battle", application.text("ui.adventure", "Abenteuer", locale))
-		adventure_tab.button_pressed = small_page == "adventure"
-		_connect_pressed(adventure_tab, _set_small_page.bind("adventure"))
-		row.add_child(adventure_tab)
-		var more_tab := PixelUi.icon_button("settings", application.text("ui.more", "Mehr", locale))
-		more_tab.button_pressed = small_page == "more"
-		_connect_pressed(more_tab, _set_small_page.bind("more"))
-		row.add_child(more_tab)
-	var settings_button := PixelUi.icon_button("settings", application.text("ui.settings", "Einstellungen", locale))
+	var portrait_id := str(model.get("form_id", model.get("egg_id", "")))
+	var portrait := _portrait(portrait_id, 32)
+	if portrait != null:
+		row.add_child(portrait)
+	var identity := VBoxContainer.new()
+	identity.name = "HeaderIdentity"
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	identity.add_theme_constant_override("separation", 0)
+	row.add_child(identity)
+	var name_label := PixelUi.title(str(model.get("name", application.text("ui.title", "KoalaPet", locale))), UiMetrics.TEXT_SCREEN_TITLE if mode == MODE_EXPANDED else 18)
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_child(name_label)
+	if bool(model.get("hatched", false)):
+		identity.add_child(PixelUi.caption(_stage_line(model)))
+	var urgent := _primary_alert(model)
+	if not urgent.is_empty():
+		var chip := PixelUi.alert_chip(str(urgent["text"]), str(urgent["icon"]), str(urgent["severity"]))
+		chip.name = "HeaderUrgentAlert"
+		row.add_child(chip)
+	var settings_button := PixelUi.window_button("settings", application.text("ui.settings", "Einstellungen", locale))
+	settings_button.name = "HeaderSettings"
 	_connect_pressed(settings_button, _open_settings)
 	row.add_child(settings_button)
 	if show_dev_tools:
-		var dev := PixelUi.icon_button("settings", application.text("ui.dev", "Entwicklungswerkzeuge", locale))
+		var dev := PixelUi.window_button("codex", application.text("ui.dev", "Entwicklungswerkzeuge", locale))
+		dev.name = "HeaderDevTools"
 		_connect_pressed(dev, _open_dev_window)
 		row.add_child(dev)
-	var switch_mode := PixelUi.icon_button("expand", application.text("ui.expanded", "Erweitert", locale) if mode == MODE_SMALL else application.text("ui.small", "Klein", locale))
-	_connect_pressed(switch_mode, _set_mode.bind(MODE_EXPANDED if mode == MODE_SMALL else MODE_SMALL))
+	var expanding := mode == MODE_SMALL
+	var switch_mode := PixelUi.window_button(
+		"expand" if expanding else "collapse",
+		application.text("ui.expanded", "Erweitert", locale) if expanding else application.text("ui.small", "Klein", locale)
+	)
+	switch_mode.name = "HeaderModeSwitch"
+	_connect_pressed(switch_mode, _set_mode.bind(MODE_EXPANDED if expanding else MODE_SMALL))
 	row.add_child(switch_mode)
-	var minimize := PixelUi.icon_button("minimize", application.text("ui.minimize", "Minimieren", locale))
+	var minimal_button := PixelUi.window_button("minimal", application.text("ui.minimal", "Minimal", locale))
+	minimal_button.name = "HeaderMinimalMode"
+	_connect_pressed(minimal_button, _set_mode.bind(MODE_MINIMAL))
+	row.add_child(minimal_button)
+	var minimize := PixelUi.window_button("minimize", application.text("ui.minimize", "Minimieren", locale))
+	minimize.name = "HeaderMinimize"
 	_connect_pressed(minimize, _minimize)
 	row.add_child(minimize)
-	var close := PixelUi.icon_button("close", application.text("ui.close", "Schließen", locale))
-	_connect_pressed(close, get_tree().quit)
+	var close := PixelUi.window_button("close", application.text("ui.close", "Schließen", locale), true)
+	close.name = "HeaderClose"
+	_connect_pressed(close, _quit_game)
 	row.add_child(close)
 	return row
 
 
-func _small_status_strip(model: Dictionary) -> HBoxContainer:
-	var strip := HBoxContainer.new()
-	strip.name = "CompactStatusStrip"
-	strip.alignment = BoxContainer.ALIGNMENT_CENTER
-	var care: Dictionary = model.get("care", {})
-	for entry in [
-		["satiety_bps", "feed"], ["mood_bps", "mood"], ["energy_bps", "energy"],
-		["hygiene_bps", "clean"], ["health_bps", "health"], ["discipline_bps", "discipline"],
-	]:
-		var item := HBoxContainer.new()
-		var image := TextureRect.new()
-		image.texture = PixelUi.icon(str(entry[1]))
-		image.custom_minimum_size = Vector2(24, 24)
-		image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		image.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		item.add_child(image)
-		var meter := PixelUi.segmented_status(int(care.get(str(entry[0]), 0)), 3)
-		meter.tooltip_text = "%d%%" % int(care.get(str(entry[0]), 0) / 100)
-		item.add_child(meter)
-		strip.add_child(item)
-	return strip
+func _portrait(content_id: String, extent: int) -> TextureRect:
+	if content_id.is_empty():
+		return null
+	var path := application.get_preview_asset_path(content_id)
+	if path.is_empty() or not ResourceLoader.exists(path):
+		return null
+	var value := TextureRect.new()
+	value.name = "HeaderPortrait"
+	value.texture = load(path) as Texture2D
+	value.custom_minimum_size = Vector2(extent, extent)
+	value.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	value.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	value.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	value.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return value
 
 
-func _small_actions(model: Dictionary) -> HBoxContainer:
+func _stage_line(model: Dictionary) -> String:
+	return "%s · %s %d" % [
+		application.text("stage." + str(model.get("stage", "hatchling")), str(model.get("stage", "hatchling")).capitalize(), locale),
+		application.text("ui.level", "Stufe", locale),
+		int(model.get("level", 1)),
+	]
+
+
+## The four states the player needs at a glance. Health, sickness, injury,
+## sleep and calls are contextual alerts instead of permanent equal-weight bars.
+func _status_row(model: Dictionary, keys: Array) -> HBoxContainer:
 	var row := HBoxContainer.new()
-	row.name = "QuickActions"
-	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	match small_page:
-		"adventure":
-			_add_small_action(row, application.text("ui.next_round", "Runde", locale) if not model.get("active_battle", {}).is_empty() else application.text("ui.battle", "Kampf", locale), "battle", _battle_action, not bool(model.get("battle_unlocked", false)))
-			_add_small_action(row, application.text("ui.next_node", "Etappe", locale) if not model.get("active_dungeon_run", {}).is_empty() else application.text("ui.dungeon", "Dungeon", locale), "dungeon", _dungeon_action, not bool(model.get("dungeon_unlocked", false)))
-			_add_small_action(row, application.text("ui.expanded", "Erweitert", locale), "expand", _set_mode.bind(MODE_EXPANDED))
-		"more":
-			_add_small_action(row, application.text("ui.treat", "Leckerli", locale), "treat", _treat)
-			_add_small_action(row, application.text("ui.train", "Training", locale), "train", _train)
-			_add_small_action(row, application.text("ui.minimal", "Minimal", locale), "minimize", _set_mode.bind(MODE_MINIMAL))
-		_:
-			_add_small_action(row, application.text("ui.feed", "Füttern", locale), "feed", _feed)
-			_add_small_action(row, application.text("ui.clean", "Reinigen", locale), "clean", _clean)
-			_add_small_action(row, application.text("ui.wake", "Aufwecken", locale) if model.get("sleeping", false) else application.text("ui.sleep", "Schlafen", locale), "sleep", _sleep_or_wake.bind(bool(model.get("sleeping", false))))
+	row.name = "PrimaryStatusRow"
+	UiMetrics.apply_separation(row, UiMetrics.SPACE_CONTROL)
+	var care: Dictionary = model.get("care", {})
+	# Below this width four names plus four percentages cannot share one row
+	# without clipping, so the meters switch to their icon-and-value form.
+	var narrow := logical_size.x / maxf(1.0, float(keys.size())) < NARROW_METER_WIDTH
+	for key in keys:
+		var meta: Array = STATUS_KEYS.get(str(key), [])
+		if meta.is_empty():
+			continue
+		var value_bps := int(care.get(str(key), 0))
+		row.add_child(PixelUi.stat_meter(
+			str(key),
+			application.text(str(meta[0]), str(meta[1]), locale),
+			str(meta[2]),
+			value_bps,
+			_status_word(value_bps),
+			narrow
+		))
 	return row
 
 
-func _add_small_action(parent: Container, text_value: String, icon_name: String, action: Callable, disabled := false, icon_only := false) -> void:
-	var value := PixelUi.button("" if icon_only else text_value, icon_name, text_value)
-	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	value.disabled = disabled
-	_connect_pressed(value, action)
+func _status_word(value_bps: int) -> String:
+	if value_bps <= 2000:
+		return application.text("ui.status.critical", "Dringend", locale)
+	if value_bps <= 4500:
+		return application.text("ui.status.low", "Niedrig", locale)
+	if value_bps >= 9000:
+		return application.text("ui.status.full", "Voll", locale)
+	return application.text("ui.status.ok", "In Ordnung", locale)
+
+
+## Every contextual state carries readable text, never colour or an icon alone.
+func _alerts(model: Dictionary) -> Array:
+	var result: Array = []
+	if not model.get("injury", {}).is_empty():
+		result.append({
+			"id": "injury",
+			"icon": "injury",
+			"severity": "failure",
+			"text": application.text("ui.alert.injury", "Verletzt · Behandlung nötig", locale),
+		})
+	if bool(model.get("sickness", false)):
+		result.append({
+			"id": "sickness",
+			"icon": "sickness",
+			"severity": "failure",
+			"text": application.text("ui.alert.sick", "Krank · Medizin geben", locale),
+		})
+	var care: Dictionary = model.get("care", {})
+	if int(care.get("health_bps", 10000)) <= 3500:
+		result.append({
+			"id": "health",
+			"icon": "health",
+			"severity": "failure",
+			"text": application.text("ui.alert.health", "Gesundheit niedrig", locale),
+		})
+	if bool(model.get("sleeping", false)):
+		result.append({
+			"id": "sleeping",
+			"icon": "sleep",
+			"severity": "info",
+			"text": application.text("ui.alert.sleeping", "Schläft · Energie erholt sich", locale),
+		})
+	for call in model.get("open_calls", []):
+		result.append({
+			"id": "call",
+			"icon": "call",
+			"severity": "notice",
+			"text": application.text("call." + str(call.get("reason", "")), application.text("ui.alert.call", "Braucht Aufmerksamkeit", locale), locale),
+		})
+	if not model.get("active_battle", {}).is_empty():
+		result.append({
+			"id": "battle",
+			"icon": "battle",
+			"severity": "notice",
+			"text": application.text("ui.alert.battle", "Kampf läuft", locale),
+		})
+	if not model.get("active_dungeon_run", {}).is_empty():
+		result.append({
+			"id": "dungeon",
+			"icon": "dungeon",
+			"severity": "notice",
+			"text": application.text("ui.alert.dungeon", "Dungeon läuft", locale),
+		})
+	if not model.get("pending_evolution", {}).is_empty():
+		result.append({
+			"id": "evolution",
+			"icon": "evolution",
+			"severity": "success",
+			"text": application.text("ui.pending_evolution", "Entwicklung wartet auf einen sicheren Moment", locale),
+		})
+	return result
+
+
+func _primary_alert(model: Dictionary) -> Dictionary:
+	var alerts := _alerts(model)
+	return alerts[0] if not alerts.is_empty() else {}
+
+
+func _alert_row(model: Dictionary) -> HBoxContainer:
+	var alerts := _alerts(model)
+	if alerts.size() < 2:
+		return null
+	var row := HBoxContainer.new()
+	row.name = "ContextualAlerts"
+	UiMetrics.apply_separation(row, UiMetrics.SPACE_COMPACT)
+	for index in range(1, mini(alerts.size(), 4)):
+		var alert: Dictionary = alerts[index]
+		row.add_child(PixelUi.alert_chip(str(alert["text"]), str(alert["icon"]), str(alert["severity"])))
+	return row
+
+
+## Three or four current primary actions. Contextual replacements (Wake,
+## Medicine, Treatment) take the place of the action they supersede instead of
+## being added as extra permanent buttons.
+func _small_actions(model: Dictionary) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.name = "QuickActions"
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	UiMetrics.apply_separation(row, UiMetrics.SPACE_CONTROL)
+	for entry in _action_page(model):
+		_add_primary_action(row, model, entry)
+	return row
+
+
+func _action_page(model: Dictionary) -> Array:
+	var sleeping := bool(model.get("sleeping", false))
+	match small_page:
+		"adventure":
+			var adventure: Array = []
+			var in_battle: bool = not model.get("active_battle", {}).is_empty()
+			var in_dungeon: bool = not model.get("active_dungeon_run", {}).is_empty()
+			if bool(model.get("battle_unlocked", false)):
+				# Advancing a running battle is a different intent from starting
+				# one, so it keeps its own action id and stays enabled.
+				adventure.append({
+					"id": "battle_round" if in_battle else "battle",
+					"icon": "attack" if in_battle else "battle",
+					"text": application.text("ui.next_round", "Runde", locale) if in_battle else application.text("ui.battle", "Kampf", locale),
+					"action": _battle_action,
+				})
+			if bool(model.get("dungeon_unlocked", false)):
+				adventure.append({
+					"id": "dungeon_next" if in_dungeon else "dungeon",
+					"icon": "map" if in_dungeon else "dungeon",
+					"text": application.text("ui.next_node", "Etappe", locale) if in_dungeon else application.text("ui.dungeon", "Dungeon", locale),
+					"action": _dungeon_action,
+				})
+			adventure.append({
+				"id": "expand",
+				"icon": "expand",
+				"text": application.text("ui.expanded", "Erweitert", locale),
+				"action": _set_mode.bind(MODE_EXPANDED),
+			})
+			return adventure
+		"more":
+			var more: Array = [
+				{"id": "treat", "icon": "treat", "text": application.text("ui.treat", "Leckerli", locale), "action": _treat},
+				{
+					"id": "wake" if sleeping else "sleep",
+					"icon": "wake" if sleeping else "sleep",
+					"text": application.text("ui.wake", "Aufwecken", locale) if sleeping else application.text("ui.sleep", "Schlafen", locale),
+					"action": _sleep_or_wake.bind(sleeping),
+				},
+				{"id": "inventory", "icon": "inventory", "text": application.text("ui.inventory", "Inventar", locale), "action": _open_expanded_tab.bind("inventory")},
+				{"id": "codex", "icon": "codex", "text": application.text("ui.codex", "Kodex", locale), "action": _open_expanded_tab.bind("codex")},
+			]
+			return more
+		_:
+			var care: Array = [{"id": "feed", "icon": "feed", "text": application.text("ui.feed", "Füttern", locale), "action": _feed}]
+			if not model.get("injury", {}).is_empty():
+				care.append({"id": "treat_injury", "icon": "treatment", "text": application.text("ui.treat_injury", "Behandeln", locale), "action": _treat_injury})
+			elif bool(model.get("sickness", false)):
+				care.append({"id": "medicine", "icon": "medicine", "text": application.text("ui.medicine", "Medizin", locale), "action": _medicine})
+			else:
+				care.append({"id": "clean", "icon": "clean", "text": application.text("ui.clean", "Reinigen", locale), "action": _clean})
+			if sleeping:
+				care.append({"id": "wake", "icon": "wake", "text": application.text("ui.wake", "Aufwecken", locale), "action": _sleep_or_wake.bind(true)})
+			else:
+				care.append({"id": "train", "icon": "train", "text": application.text("ui.train", "Trainieren", locale), "action": _train})
+			return care
+
+
+func _add_primary_action(parent: Container, model: Dictionary, entry: Dictionary) -> void:
+	var action_id := str(entry.get("id", ""))
+	var value := PixelUi.primary_action(str(entry.get("text", "")), str(entry.get("icon", "call")), str(entry.get("text", "")))
+	value.name = "Action_" + action_id
+	value.set_meta("action_id", action_id)
+	var hint := ActionFeedback.unavailable_hint(action_id, model)
+	if not hint.is_empty():
+		value.disabled = true
+		value.tooltip_text = application.text(str(hint["key"]), str(hint["fallback"]), locale)
+		value.set_meta("accessible_label", value.tooltip_text)
+	elif command_in_flight:
+		value.disabled = true
+	_connect_pressed(value, entry.get("action", Callable()))
 	parent.add_child(value)
 
 
+## Footer navigation. Never icon-only, and adventure stays hidden until a gate
+## actually unlocks it.
+func _small_navigation(model: Dictionary) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.name = "SmallNavigation"
+	UiMetrics.apply_separation(row, UiMetrics.SPACE_COMPACT)
+	var pages: Array = [["care", "ui.care", "Pflege", "health"]]
+	if bool(model.get("battle_unlocked", false)) or bool(model.get("dungeon_unlocked", false)):
+		pages.append(["adventure", "ui.adventure", "Abenteuer", "battle"])
+	pages.append(["more", "ui.more", "Mehr", "inventory"])
+	for page in pages:
+		var button := PixelUi.nav_button(application.text(str(page[1]), str(page[2]), locale), str(page[3]), small_page == str(page[0]))
+		button.name = "Nav_" + str(page[0])
+		_connect_pressed(button, _set_small_page.bind(str(page[0])))
+		row.add_child(button)
+	return row
+
+
 func _build_expanded(model: Dictionary) -> void:
-	var shell := _window_shell(str(model.get("name", "KoalaPet")), "pet")
+	var shell := _window_shell(model)
 	var body := HBoxContainer.new()
 	body.name = "ExpandedBody"
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 8)
+	UiMetrics.apply_separation(body, UiMetrics.SPACE_CONTROL)
 	shell.add_child(body)
 	body.add_child(_expanded_status(model))
 	body.add_child(_expanded_center(model))
-	body.add_child(_expanded_actions(model))
+	body.add_child(_expanded_context(model))
 
 
 func _expanded_status(model: Dictionary) -> PanelContainer:
 	var panel := PixelUi.panel(true)
 	panel.name = "ExpandedStatus"
-	panel.custom_minimum_size = Vector2(252, 0)
+	panel.custom_minimum_size = Vector2(268, 0)
 	var column := VBoxContainer.new()
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_CONTROL)
 	panel.add_child(column)
-	column.add_child(PixelUi.title(application.text("ui.stats", "Pflegeprotokoll", locale), 20))
+	column.add_child(PixelUi.title(application.text("ui.stats", "Pflegeprotokoll", locale), UiMetrics.TEXT_PANEL_TITLE))
 	var care: Dictionary = model.get("care", {})
-	for entry in [
-		["satiety_bps", "ui.satiety", "Sättigung", "feed"],
-		["mood_bps", "ui.mood", "Stimmung", "mood"],
-		["energy_bps", "ui.energy", "Energie", "energy"],
-		["hygiene_bps", "ui.hygiene", "Hygiene", "clean"],
-		["health_bps", "ui.health", "Gesundheit", "health"],
-		["discipline_bps", "ui.discipline", "Disziplin", "discipline"],
-	]:
-		column.add_child(PixelUi.status_meter(str(entry[0]), application.text(str(entry[1]), str(entry[2]), locale), str(entry[3]), int(care.get(str(entry[0]), 0))))
-	var facts := Label.new()
-	facts.text = "%s %d · XP %d/%d\n%s %.2f kg · %s %d" % [application.text("ui.level", "Stufe", locale), int(model.get("level", 1)), int(model.get("experience", 0)), int(model.get("experience_next", 0)), application.text("ui.weight", "Gewicht", locale), float(care.get("weight_grams", 0)) / 1000.0, application.text("ui.waste", "Abfall", locale), int(care.get("waste_count", 0))]
-	facts.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	for key in ["satiety_bps", "mood_bps", "energy_bps", "hygiene_bps", "health_bps", "discipline_bps"]:
+		var meta: Array = STATUS_KEYS[key]
+		var value_bps := int(care.get(key, 0))
+		column.add_child(PixelUi.stat_meter(key, application.text(str(meta[0]), str(meta[1]), locale), str(meta[2]), value_bps, _status_word(value_bps)))
+	column.add_child(HSeparator.new())
+	var facts := GridContainer.new()
+	facts.name = "ExpandedFacts"
+	facts.columns = 2
+	UiMetrics.apply_grid_separation(facts, UiMetrics.SPACE_COMPACT)
 	column.add_child(facts)
+	for fact in [
+		[application.text("ui.experience", "Erfahrung", locale), "%d / %d" % [int(model.get("experience", 0)), int(model.get("experience_next", 0))]],
+		[application.text("ui.weight", "Gewicht", locale), "%.2f kg" % (float(care.get("weight_grams", 0)) / 1000.0)],
+		[application.text("ui.waste", "Abfall", locale), str(int(care.get("waste_count", 0)))],
+		[application.text("ui.care_mistakes", "Pflegefehler", locale), str(int(model.get("aggregate", {}).get("care_mistakes", 0)))],
+	]:
+		var fact_label := PixelUi.caption(str(fact[0]))
+		fact_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		facts.add_child(fact_label)
+		# An ellipsis overrun makes a Label's minimum width collapse, so the
+		# value column needs an explicit reservation to stay visible.
+		var value_label := PixelUi.caption(str(fact[1]))
+		value_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+		value_label.custom_minimum_size = Vector2(88, 0)
+		value_label.add_theme_color_override("font_color", PixelTheme.PARCHMENT)
+		value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		facts.add_child(value_label)
+	var alerts := _alerts(model)
+	if not alerts.is_empty():
+		column.add_child(HSeparator.new())
+		for alert in alerts.slice(0, 4):
+			column.add_child(PixelUi.alert_chip(str(alert["text"]), str(alert["icon"]), str(alert["severity"])))
 	return panel
 
 
 func _expanded_center(model: Dictionary) -> VBoxContainer:
 	var column := VBoxContainer.new()
 	column.name = "ExpandedCenter"
-	column.custom_minimum_size = Vector2(576, 0)
+	column.custom_minimum_size = Vector2(420, 0)
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var habitat_center := CenterContainer.new()
-	habitat_center.add_child(_habitat(model))
-	column.add_child(habitat_center)
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_CONTROL)
+	var frame := HabitatFrame.new()
+	frame.name = "ExpandedHabitatFrame"
+	frame.set_expand_vertical(false)
+	frame.attach(_habitat(model))
+	active_habitat_frame = frame
+	column.add_child(frame)
 	var tabs := HBoxContainer.new()
-	for entry in [["home", "ui.home", "Übersicht"], ["battle", "ui.battle", "Kampf"], ["dungeon", "ui.dungeon", "Dungeon"], ["inventory", "ui.inventory", "Inventar"], ["codex", "ui.codex", "Kodex"], ["evolution", "ui.evolution", "Entwicklung"]]:
+	tabs.name = "ExpandedTabs"
+	UiMetrics.apply_separation(tabs, UiMetrics.SPACE_MICRO)
+	for entry in _expanded_tabs(model):
 		var tab := PixelUi.tab(application.text(str(entry[1]), str(entry[2]), locale), expanded_tab == str(entry[0]))
+		tab.name = "Tab_" + str(entry[0])
 		tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_connect_pressed(tab, _set_expanded_tab.bind(str(entry[0])))
 		tabs.add_child(tab)
 	column.add_child(tabs)
 	var detail := PixelUi.panel(true)
+	detail.name = "ExpandedDetail"
 	detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail.size_flags_stretch_ratio = 0.9
 	column.add_child(detail)
-	match expanded_tab:
+	match _resolved_expanded_tab(model):
 		"battle":
 			detail.add_child(_battle_panel(model))
 		"dungeon":
@@ -754,62 +1087,261 @@ func _expanded_center(model: Dictionary) -> VBoxContainer:
 	return column
 
 
-func _expanded_actions(model: Dictionary) -> PanelContainer:
+## Battle and Dungeon stay absent until their data-driven gate opens.
+func _expanded_tabs(model: Dictionary) -> Array:
+	var entries: Array = [["home", "ui.home", "Übersicht"]]
+	if bool(model.get("battle_unlocked", false)):
+		entries.append(["battle", "ui.battle", "Kampf"])
+	if bool(model.get("dungeon_unlocked", false)):
+		entries.append(["dungeon", "ui.dungeon", "Dungeon"])
+	entries.append(["inventory", "ui.inventory", "Inventar"])
+	entries.append(["codex", "ui.codex", "Kodex"])
+	entries.append(["evolution", "ui.evolution", "Entwicklung"])
+	return entries
+
+
+func _resolved_expanded_tab(model: Dictionary) -> String:
+	for entry in _expanded_tabs(model):
+		if str(entry[0]) == expanded_tab:
+			return expanded_tab
+	return "home"
+
+
+## The right column follows the selected tab. It never shows every panel at
+## once, and it never leaves a large empty area behind.
+func _expanded_context(model: Dictionary) -> PanelContainer:
 	var panel := PixelUi.panel(true)
 	panel.name = "ExpandedActions"
-	panel.custom_minimum_size = Vector2(252, 0)
+	panel.custom_minimum_size = Vector2(268, 0)
 	var column := VBoxContainer.new()
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_CONTROL)
 	panel.add_child(column)
-	column.add_child(PixelUi.title(application.text("ui.actions", "Aktionen", locale), 20))
-	var grid := GridContainer.new()
-	grid.columns = 2
-	column.add_child(grid)
-	for entry in [
-		["ui.feed", "Füttern", "feed", _feed], ["ui.treat", "Leckerli", "treat", _treat],
-		["ui.clean", "Reinigen", "clean", _clean], ["ui.train", "Trainieren", "train", _train],
-		["ui.sleep", "Schlafen", "sleep", _sleep_or_wake.bind(bool(model.get("sleeping", false)))],
-		["ui.medicine", "Medizin", "medicine", _medicine],
-	]:
-		var action := PixelUi.button(application.text(str(entry[0]), str(entry[1]), locale), str(entry[2]))
-		_connect_pressed(action, entry[3])
-		grid.add_child(action)
-	if not model.get("injury", {}).is_empty():
-		var injury := PixelUi.button(application.text("ui.treat_injury", "Bandagieren", locale), "medicine")
-		_connect_pressed(injury, _treat_injury)
-		column.add_child(injury)
-	var calls: Array = model.get("open_calls", [])
-	if not calls.is_empty():
-		var resolve := PixelUi.button(application.text("ui.resolve", "Erledigen", locale), "call")
-		_connect_pressed(resolve, _resolve_first_call)
-		column.add_child(resolve)
+	var tab := _resolved_expanded_tab(model)
+	column.add_child(PixelUi.title(_context_title(tab), UiMetrics.TEXT_PANEL_TITLE))
+	for entry in _context_actions(tab, model):
+		_add_context_action(column, model, entry)
 	column.add_child(HSeparator.new())
-	column.add_child(PixelUi.title(application.text("ui.history", "Letzte Ereignisse", locale), 14))
+	column.add_child(PixelUi.title(_context_detail_title(tab), UiMetrics.TEXT_CAPTION))
+	column.add_child(_context_detail(tab, model))
+	return panel
+
+
+func _context_title(tab: String) -> String:
+	match tab:
+		"battle":
+			return application.text("ui.battle", "Kampf", locale)
+		"dungeon":
+			return application.text("ui.dungeon", "Dungeon", locale)
+		"inventory":
+			return application.text("ui.inventory", "Inventar", locale)
+		"codex":
+			return application.text("ui.codex", "Kodex", locale)
+		"evolution":
+			return application.text("ui.evolution", "Entwicklung", locale)
+		_:
+			return application.text("ui.actions", "Aktionen", locale)
+
+
+func _context_detail_title(tab: String) -> String:
+	if tab in ["battle", "dungeon"]:
+		return application.text("ui.objective", "Aktuelles Ziel", locale)
+	return application.text("ui.history", "Letzte Ereignisse", locale)
+
+
+func _context_actions(tab: String, model: Dictionary) -> Array:
+	var sleeping := bool(model.get("sleeping", false))
+	match tab:
+		"battle":
+			var battle: Array = []
+			if model.get("active_battle", {}).is_empty():
+				battle.append({"id": "battle", "icon": "battle", "text": application.text("ui.start_battle", "Kampf beginnen", locale), "action": _start_battle})
+			else:
+				battle.append({"id": "battle_round", "icon": "attack", "text": application.text("ui.next_round", "Runde ausführen", locale), "action": _battle_round})
+			if not model.get("injury", {}).is_empty():
+				battle.append({"id": "treat_injury", "icon": "treatment", "text": application.text("ui.treat_injury", "Behandeln", locale), "action": _treat_injury})
+			return battle
+		"dungeon":
+			if model.get("active_dungeon_run", {}).is_empty():
+				return [{"id": "dungeon", "icon": "dungeon", "text": application.text("ui.start_dungeon", "Dungeon beginnen", locale), "action": _start_dungeon}]
+			return [{"id": "dungeon_next", "icon": "map", "text": application.text("ui.next_node", "Nächste Etappe", locale), "action": _dungeon_next}]
+		"evolution":
+			return []
+		"inventory", "codex":
+			return []
+		_:
+			var care: Array = [
+				{"id": "feed", "icon": "feed", "text": application.text("ui.feed", "Füttern", locale), "action": _feed},
+				{"id": "treat", "icon": "treat", "text": application.text("ui.treat", "Leckerli", locale), "action": _treat},
+				{"id": "clean", "icon": "clean", "text": application.text("ui.clean", "Reinigen", locale), "action": _clean},
+				{"id": "train", "icon": "train", "text": application.text("ui.train", "Trainieren", locale), "action": _train},
+				{
+					"id": "wake" if sleeping else "sleep",
+					"icon": "wake" if sleeping else "sleep",
+					"text": application.text("ui.wake", "Aufwecken", locale) if sleeping else application.text("ui.sleep", "Schlafen", locale),
+					"action": _sleep_or_wake.bind(sleeping),
+				},
+			]
+			if bool(model.get("sickness", false)):
+				care.append({"id": "medicine", "icon": "medicine", "text": application.text("ui.medicine", "Medizin", locale), "action": _medicine})
+			if not model.get("injury", {}).is_empty():
+				care.append({"id": "treat_injury", "icon": "treatment", "text": application.text("ui.treat_injury", "Behandeln", locale), "action": _treat_injury})
+			if not model.get("open_calls", []).is_empty():
+				care.append({"id": "resolve_call", "icon": "call", "text": application.text("ui.resolve", "Erledigen", locale), "action": _resolve_first_call})
+			return care
+
+
+func _add_context_action(parent: Container, model: Dictionary, entry: Dictionary) -> void:
+	var action_id := str(entry.get("id", ""))
+	var value := PixelUi.button(str(entry.get("text", "")), str(entry.get("icon", "call")), str(entry.get("text", "")))
+	value.name = "Context_" + action_id
+	value.set_meta("action_id", action_id)
+	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var hint := ActionFeedback.unavailable_hint(action_id, model)
+	if not hint.is_empty():
+		value.disabled = true
+		value.tooltip_text = application.text(str(hint["key"]), str(hint["fallback"]), locale)
+		value.set_meta("accessible_label", value.tooltip_text)
+	elif command_in_flight:
+		value.disabled = true
+	_connect_pressed(value, entry.get("action", Callable()))
+	parent.add_child(value)
+
+
+func _context_detail(tab: String, model: Dictionary) -> Control:
+	if tab == "battle":
+		return PixelUi.body(_battle_objective(model))
+	if tab == "dungeon":
+		return PixelUi.body(_dungeon_objective(model))
+	var scroll := ScrollContainer.new()
+	scroll.name = "ExpandedEventHistory"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.custom_minimum_size = Vector2(0, 120)
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_MICRO)
+	scroll.add_child(column)
 	var history: Array = model.get("history", [])
-	var start := maxi(0, history.size() - 7)
-	for index in range(start, history.size()):
-		var entry: Dictionary = history[index]
-		column.add_child(PixelUi.event_log_entry(_event_label(str(entry.get("type", "")))))
 	if history.is_empty():
 		column.add_child(PixelUi.event_log_entry(application.text("ui.history.empty", "Noch keine Ereignisse", locale)))
-	return panel
+		return scroll
+	for index in range(history.size() - 1, maxi(-1, history.size() - 13), -1):
+		var entry: Dictionary = history[index]
+		column.add_child(PixelUi.event_log_entry(_event_label(str(entry.get("type", "")))))
+	return scroll
+
+
+func _battle_objective(model: Dictionary) -> String:
+	var battle: Dictionary = model.get("active_battle", {})
+	if battle.is_empty():
+		if not bool(model.get("battle_unlocked", false)):
+			return application.text("feedback.locked", "Das ist noch nicht freigeschaltet.", locale)
+		return application.text("ui.battle_objective_idle", "Wähle eine Haltung und beginne einen kurzen Kampf.", locale)
+	var encounter := application.get_encounter_presentation(str(battle.get("encounter_id", "")), locale)
+	return "%s · %s %d\n%s %d/%d" % [
+		str(encounter.get("name", "")),
+		application.text("ui.level", "Stufe", locale),
+		int(encounter.get("level", 1)),
+		application.text("ui.next_round", "Runde ausführen", locale),
+		int(battle.get("current_round", 0)) + 1,
+		maxi(1, int(battle.get("max_rounds", int(battle.get("current_round", 0)) + 1))),
+	]
+
+
+func _dungeon_objective(model: Dictionary) -> String:
+	var run: Dictionary = model.get("active_dungeon_run", {})
+	if run.is_empty():
+		if not bool(model.get("dungeon_unlocked", false)):
+			return application.text("feedback.locked", "Das ist noch nicht freigeschaltet.", locale)
+		return application.text("ui.dungeon_objective_idle", "Ein Dungeon ist eine kurze Folge aus Kämpfen, Ereignissen und einem Boss.", locale)
+	return "%s %d\n%s" % [
+		application.text("ui.next_node", "Nächste Etappe", locale),
+		int(run.get("current_node", 0)) + 1,
+		application.text("ui.dungeon", "Dungeon", locale),
+	]
 
 
 func _home_panel(model: Dictionary) -> VBoxContainer:
 	var column := VBoxContainer.new()
-	column.add_child(PixelUi.title(_state_line(model), 14))
-	var summary := Label.new()
+	column.name = "HomePanel"
+	column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_CONTROL)
+	column.add_child(PixelUi.title(_state_line(model), UiMetrics.TEXT_PANEL_TITLE))
+	column.add_child(PixelUi.body(_contextual_hint(model)))
+	column.add_child(HSeparator.new())
 	var aggregate: Dictionary = model.get("aggregate", {})
-	summary.text = "%s %d · %s %d · %s %d · %s %d" % [application.text("ui.feed", "Füttern", locale), int(aggregate.get("feed_count", 0)), application.text("ui.treat", "Leckerli", locale), int(aggregate.get("treat_count", 0)), application.text("ui.train", "Trainieren", locale), int(aggregate.get("training_count", 0)), application.text("ui.care_mistakes", "Pflegefehler", locale), int(aggregate.get("care_mistakes", 0))]
-	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(summary)
-	var route := Label.new()
-	var names: Array[String] = []
-	for form_id in model.get("discovered_forms", []):
-		names.append(application.get_display_name(str(form_id), locale))
-	route.text = application.text("ui.discovered_route", "Entdeckte Route", locale) + ": " + ", ".join(names)
-	route.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var grid := GridContainer.new()
+	grid.name = "HomeSummary"
+	grid.columns = 3
+	UiMetrics.apply_grid_separation(grid, UiMetrics.SPACE_CONTROL)
+	column.add_child(grid)
+	for entry in [
+		["ui.feed", "Füttern", "feed", int(aggregate.get("feed_count", 0))],
+		["ui.treat", "Leckerli", "treat", int(aggregate.get("treat_count", 0))],
+		["ui.train", "Trainieren", "train", int(aggregate.get("training_count", 0))],
+		["ui.clean", "Reinigen", "clean", int(aggregate.get("clean_count", 0))],
+		["ui.medicine", "Medizin", "medicine", int(aggregate.get("treatment_count", 0))],
+		["ui.calls", "Aufmerksamkeitsrufe", "call", int(aggregate.get("resolved_calls", 0))],
+		["ui.care_mistakes", "Pflegefehler", "injury", int(aggregate.get("care_mistakes", 0))],
+		["ui.battle", "Kampf", "battle", int(model.get("battle_history", {}).get("battle_count", 0))],
+	]:
+		grid.add_child(_summary_tile(application.text(str(entry[0]), str(entry[1]), locale), str(entry[2]), int(entry[3])))
+	column.add_child(HSeparator.new())
+	column.add_child(PixelUi.caption(application.text("ui.discovered_route", "Entdeckte Route", locale)))
+	var route := HBoxContainer.new()
+	route.name = "DiscoveredRoute"
+	UiMetrics.apply_separation(route, UiMetrics.SPACE_COMPACT)
 	column.add_child(route)
+	for form_id in model.get("discovered_forms", []):
+		var chip := PixelUi.panel(true)
+		var chip_row := HBoxContainer.new()
+		chip.add_child(chip_row)
+		var chip_portrait := _portrait(str(form_id), 32)
+		if chip_portrait != null:
+			chip_row.add_child(chip_portrait)
+		chip_row.add_child(PixelUi.caption(application.get_display_name(str(form_id), locale)))
+		route.add_child(chip)
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(spacer)
 	return column
+
+
+func _summary_tile(label_text: String, icon_name: String, value: int) -> PanelContainer:
+	var tile := PixelUi.panel(true)
+	tile.set_meta("component", "summary_tile")
+	tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var row := HBoxContainer.new()
+	UiMetrics.apply_separation(row, UiMetrics.SPACE_COMPACT)
+	tile.add_child(row)
+	row.add_child(PixelUi.icon_rect(icon_name, UiMetrics.ICON_STATUS))
+	var text := PixelUi.caption(label_text)
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	row.add_child(text)
+	var number := PixelUi.caption(str(value))
+	number.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	number.add_theme_color_override("font_color", PixelTheme.PARCHMENT)
+	row.add_child(number)
+	tile.tooltip_text = "%s: %d" % [label_text, value]
+	return tile
+
+
+## One short contextual hint instead of a tutorial modal sequence. It follows
+## the pet's current need, so a new player always has a next step on screen.
+func _contextual_hint(model: Dictionary) -> String:
+	if not model.get("injury", {}).is_empty():
+		return application.text("feedback.state.injured", "Erst die Verletzung behandeln.", locale)
+	if bool(model.get("sickness", false)):
+		return application.text("feedback.state.sick", "Zu krank dafür. Erst Medizin geben.", locale)
+	var care: Dictionary = model.get("care", {})
+	for key in ["satiety_bps", "mood_bps", "energy_bps", "hygiene_bps"]:
+		if int(care.get(key, 10000)) <= 3500:
+			var meta: Array = STATUS_KEYS[key]
+			return "%s: %s" % [application.text(str(meta[0]), str(meta[1]), locale), application.text("ui.status.low", "Niedrig", locale)]
+	if bool(model.get("battle_unlocked", false)) and int(model.get("battle_history", {}).get("battle_count", 0)) == 0:
+		return application.text("ui.hint.adventure_unlocked", "Abenteuer ist freigeschaltet.", locale)
+	return application.text("ui.hint.first_care", "Halte Sättigung, Stimmung, Energie und Hygiene im grünen Bereich.", locale)
 
 
 func _battle_panel(model: Dictionary) -> VBoxContainer:
@@ -1040,8 +1572,11 @@ func _call_icon(model: Dictionary) -> String:
 
 
 func _set_mode(value: String) -> void:
+	mode_switch_requests += 1
+	last_mode_request = value
 	if value not in [MODE_MINIMAL, MODE_SMALL, MODE_EXPANDED] or value == mode:
 		return
+	mode_switch_applied += 1
 	_save_window_placement()
 	mode = value
 	_apply_window_mode()
@@ -1052,22 +1587,14 @@ func _apply_window_mode() -> void:
 	get_viewport().transparent_bg = true
 	var mode_value := _mode_value(mode)
 	var text_scale := float(preferences.get("interface", {}).get("text_scale", 1.0))
-	var logical_size := WindowPresentationMode.scaled_size(mode_value, 1.0, text_scale, _minimal_pet_scale())
-	var rendered_size := WindowPresentationMode.scaled_size(mode_value, resolved_ui_scale, text_scale, _minimal_pet_scale())
-	# Keep the render viewport and the native client area on the same pixel grid.
-	# Without this, a live scale change can enlarge only the Win32 window and
-	# leave the previous Control viewport clipped inside a transparent border.
-	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
-	get_window().content_scale_size = rendered_size
 	var presentation_scale := resolved_ui_scale if mode != MODE_MINIMAL else 1.0
-	for layer in [root_layer, notification_layer]:
-		layer.anchor_right = 0.0
-		layer.anchor_bottom = 0.0
-		layer.position = Vector2.ZERO
-		layer.scale = Vector2.ONE * presentation_scale
-		layer.size = Vector2(logical_size)
+	var rendered_size := _target_window_size(mode_value, text_scale, presentation_scale)
 	if window_adapter.is_host_supported():
 		mode_controller.transition_to(mode_value)
+		window_adapter.set_size_bounds(
+			Vector2i(Vector2(WindowPresentationMode.min_size(mode_value)) * presentation_scale),
+			Vector2i(Vector2(WindowPresentationMode.max_size(mode_value)) * presentation_scale)
+		)
 		window_adapter.set_size(rendered_size)
 		window_adapter.set_transparency(true)
 		window_adapter.set_always_on_top(bool(preferences.get("desktop", {}).get("always_on_top", true)))
@@ -1077,7 +1604,85 @@ func _apply_window_mode() -> void:
 		else:
 			window_adapter.set_focus_policy(DesktopWindowAdapter.FOCUS_NORMAL)
 			window_adapter.set_input_policy(DesktopWindowAdapter.INPUT_INTERACTIVE)
+	requested_window_size = rendered_size
+	applied_presentation_scale = presentation_scale
+	_apply_presentation_extent(rendered_size, presentation_scale)
 	root_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE if mode == MODE_MINIMAL else Control.MOUSE_FILTER_PASS
+	# The main window can still be resized by the engine boot sequence after the
+	# scene's `_ready`, so the requested extent is confirmed on the next frame.
+	call_deferred("_confirm_window_size")
+
+
+func _confirm_window_size() -> void:
+	if window_adapter == null or not window_adapter.is_host_supported():
+		return
+	if requested_window_size.x <= 0 or requested_window_size.y <= 0:
+		return
+	if get_window().size == requested_window_size:
+		return
+	window_adapter.set_size(requested_window_size)
+	_apply_presentation_extent(get_window().size, resolved_ui_scale if mode != MODE_MINIMAL else 1.0)
+
+
+## Resolves the physical window size for the mode: the remembered resizable size
+## when there is one, otherwise the scaled mode default.
+func _target_window_size(mode_value: int, text_scale: float, presentation_scale: float) -> Vector2i:
+	if not WindowPresentationMode.is_user_resizable(mode_value):
+		return WindowPresentationMode.scaled_size(mode_value, presentation_scale, text_scale, _minimal_pet_scale())
+	var remembered := mode_controller.remembered_size(mode_value) if mode_controller != null else Vector2i.ZERO
+	if remembered.x <= 0 or remembered.y <= 0:
+		remembered = Vector2i(Vector2(WindowPresentationMode.default_size(mode_value)) * presentation_scale)
+	elif applied_presentation_scale > 0.0 and not is_equal_approx(applied_presentation_scale, presentation_scale):
+		# Raising the UI scale must enlarge the window rather than squeeze the
+		# same content into it, so the remembered size keeps its logical extent.
+		remembered = Vector2i(Vector2(remembered) * (presentation_scale / applied_presentation_scale))
+	var minimum := Vector2(WindowPresentationMode.min_size(mode_value)) * presentation_scale
+	var maximum := Vector2(WindowPresentationMode.max_size(mode_value)) * presentation_scale
+	return Vector2i(
+		clampi(remembered.x, roundi(minimum.x), roundi(maxf(minimum.x, maximum.x))),
+		clampi(remembered.y, roundi(minimum.y), roundi(maxf(minimum.y, maximum.y)))
+	)
+
+
+## Keeps the render viewport, the presentation layers and the native client area
+## on one pixel grid. Without this a live scale or resize change enlarges only
+## the native window and leaves the previous Control viewport clipped.
+func _apply_presentation_extent(rendered_size: Vector2i, presentation_scale: float) -> void:
+	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	# `content_scale_size` must stay unset. A non-zero override pins the root
+	# viewport, which in turn pinned the native window: the client area kept the
+	# project's boot size and a user drag on the border snapped straight back.
+	get_window().content_scale_size = Vector2i.ZERO
+	logical_size = (Vector2(rendered_size) / maxf(0.01, presentation_scale)).floor()
+	for layer in [root_layer, notification_layer]:
+		layer.anchor_right = 0.0
+		layer.anchor_bottom = 0.0
+		layer.position = Vector2.ZERO
+		layer.scale = Vector2.ONE * presentation_scale
+		layer.size = logical_size
+
+
+func _on_window_size_changed() -> void:
+	if window_adapter == null or not window_adapter.is_host_supported():
+		return
+	if mode == MODE_MINIMAL:
+		return
+	var presentation_scale := resolved_ui_scale
+	var rendered_size := get_window().size
+	if Vector2(rendered_size) / maxf(0.01, presentation_scale) == logical_size:
+		return
+	var previous_narrow := _status_row_is_narrow()
+	_apply_presentation_extent(rendered_size, presentation_scale)
+	# Godot containers reflow on their own, so a drag normally needs no rebuild
+	# and therefore never restarts an animation. The one exception is crossing
+	# the width where the status row has to drop its labels.
+	if _status_row_is_narrow() != previous_narrow:
+		_refresh()
+	_save_window_placement()
+
+
+func _status_row_is_narrow() -> bool:
+	return logical_size.x / 4.0 < NARROW_METER_WIDTH
 
 
 func _update_minimal_hit_region() -> void:
@@ -1120,6 +1725,18 @@ func _set_expanded_tab(value: String) -> void:
 	_refresh()
 
 
+## Small mode reaches management surfaces by switching to Expanded on that tab
+## instead of duplicating the whole panel inside the compact window.
+func _open_expanded_tab(value: String) -> void:
+	expanded_tab = value
+	_set_mode(MODE_EXPANDED)
+
+
+func _quit_game() -> void:
+	_save_window_placement()
+	get_tree().quit()
+
+
 func _toggle_locale() -> void:
 	locale = "en" if locale == "de" else "de"
 	preferences["interface"]["language"] = locale
@@ -1156,15 +1773,33 @@ func _minimize() -> void:
 		window_adapter.minimize_window()
 
 
-func _show_notification(text_value: String) -> void:
+func _show_notification(text_value: String, severity := ActionFeedback.SEVERITY_SUCCESS, icon_name := "call") -> void:
 	_clear(notification_layer)
 	notification_revision += 1
 	var revision := notification_revision
-	var notice := PixelUi.reward_notification(text_value)
-	notice.position = Vector2(maxf(8.0, root_layer.size.x - 300.0), 44.0)
-	notice.size = Vector2(280, 50)
+	var notice := PixelUi.reward_notification(text_value, severity, icon_name)
+	notice.name = "StatusToast"
+	var width := clampf(logical_size.x - 48.0, 200.0, 380.0)
+	notice.size = Vector2(width, 0)
+	# Placed over the lower habitat: clear of the header controls, the status row
+	# and the action/footer rows, and fully click-through so it can never swallow
+	# the next action even while it is fading.
+	notice.position = Vector2(
+		floorf((logical_size.x - width) * 0.5),
+		clampf(logical_size.y * 0.42, 96.0, maxf(96.0, logical_size.y - 190.0))
+	)
 	notification_layer.add_child(notice)
 	_remove_notification_later(revision)
+
+
+func _show_feedback(feedback: Dictionary) -> void:
+	if feedback.is_empty():
+		return
+	_show_notification(
+		application.text(str(feedback.get("key", "")), str(feedback.get("fallback", "")), locale),
+		str(feedback.get("severity", ActionFeedback.SEVERITY_SUCCESS)),
+		str(feedback.get("icon", "call"))
+	)
 
 
 func _remove_notification_later(revision: int) -> void:
@@ -1189,16 +1824,28 @@ func _reset_animation_later(revision: int) -> void:
 
 
 func _choose_starter(egg_id: String) -> void:
+	if command_in_flight:
+		suppressed_duplicate_commands += 1
+		return
+	command_in_flight = true
 	var result := application.choose_starter(egg_id)
+	command_in_flight = false
 	if result.get("ok", false):
 		mode = MODE_SMALL
 		_apply_window_mode()
-	_refresh(_command_status(result))
+	last_feedback = ActionFeedback.describe("choose_starter", result)
+	if result.get("ok", false):
+		last_feedback = {
+			"key": "feedback.starter.ok",
+			"fallback": "Dein Ei wird warm. Gleich schlüpft es.",
+			"severity": ActionFeedback.SEVERITY_SUCCESS,
+			"icon": "egg",
+		}
+	_refresh()
 
 
 func _complete_hatch() -> void:
-	var result := application.complete_hatch()
-	_refresh(application.text("ui.hatched", "Willkommen, {name}!", locale).replace("{name}", application.get_view_model(MODE_SMALL, locale).get("name", "")) if result.get("ok", false) else _command_status(result))
+	_command({"type": "complete_hatch"}, "happy", "idle_center", "idle", "", "care")
 
 
 func _feed() -> void:
@@ -1286,14 +1933,35 @@ func _dungeon_choice(choice_id: String) -> void:
 
 
 func _command(payload: Dictionary, animation_name: String, anchor_name := "idle_center", loop_after := "idle", from_anchor := "", event_kind := "care") -> void:
-	var result := application.command(payload)
+	var command_type := str(payload.get("type", "action"))
+	# Input safety: one authoritative command at a time, plus a short debounce so
+	# a double click or a repeated key press cannot submit the same intent twice.
+	if command_in_flight:
+		suppressed_duplicate_commands += 1
+		return
+	var now_msec := Time.get_ticks_msec()
+	if command_type == last_command_key and now_msec - last_command_msec < COMMAND_DEBOUNCE_MSEC:
+		suppressed_duplicate_commands += 1
+		return
+	last_command_msec = now_msec
+	last_command_key = command_type
+	command_in_flight = true
+	var result: Dictionary = {}
+	if application == null:
+		result = {"ok": false, "error_code": "APP_NOT_READY"}
+	else:
+		result = application.command(payload)
 	if result.get("ok", false):
-		var command_type := str(payload.get("type", "action"))
 		if command_type in ["battle_round", "battle_resolve"]:
 			_queue_battle_presentation(result)
 		elif not animation_name.is_empty():
 			animation_controller.queue_one_shot(animation_name, anchor_name, 1.1, "command:%d:%s" % [int(application.get_view_model(MODE_SMALL, locale).get("state_revision", 0)), command_type], loop_after, from_anchor, event_kind)
-	_refresh(_command_status(result))
+	command_in_flight = false
+	last_feedback = ActionFeedback.describe(command_type, result)
+	last_feedback_record = last_feedback.duplicate(true)
+	last_feedback_record["command"] = command_type
+	last_feedback_record["ok"] = bool(result.get("ok", false))
+	_refresh()
 
 
 func _queue_battle_presentation(result: Dictionary) -> void:
@@ -1462,8 +2130,11 @@ func _starter_affinity(egg_id: String) -> String:
 	return application.text("ui.affinity.tide", "Neugierig · Wasser · Fokus", locale)
 
 
-func _command_status(result: Dictionary) -> String:
-	return application.text("ui.saved", "Gespeichert", locale) if result.get("ok", false) else str(result.get("reason", result.get("error_code", "Action failed")))
+## Always a localized sentence. Raw `error_code` / `reason` values are internal
+## diagnostics and must never reach the player-facing status area.
+func _command_status(result: Dictionary, action_id := "") -> String:
+	var feedback := ActionFeedback.describe(action_id, result)
+	return application.text(str(feedback.get("key", "")), str(feedback.get("fallback", "")), locale)
 
 
 func _set_margins(value: MarginContainer, amount: int) -> void:
@@ -1516,9 +2187,26 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				_force_sickness()
 
 
+## Development-only scripted driver. Each entry is one deliberate player intent,
+## so the duplicate-input guard is cleared between steps instead of treating the
+## scripted sequence as an accidental double click.
+func _reset_input_guard() -> void:
+	command_in_flight = false
+	last_command_key = ""
+	last_command_msec = -COMMAND_DEBOUNCE_MSEC
+
+
+func _run_review_steps(steps: Array) -> void:
+	for step in steps:
+		if step is Callable:
+			_reset_input_guard()
+			step.call()
+
+
 func _run_review_actions(actions: PackedStringArray, diagnostics_delay_ms := 0) -> void:
 	for action in actions:
 		await get_tree().process_frame
+		_reset_input_guard()
 		match str(action):
 			"choose:moss": _choose_starter("koalapet.base:moss_egg")
 			"choose:ember": _choose_starter("koalapet.base:ember_egg")
@@ -1550,30 +2238,27 @@ func _run_review_actions(actions: PackedStringArray, diagnostics_delay_ms := 0) 
 			"mode:minimal": _set_mode(MODE_MINIMAL)
 			"mode:small": _set_mode(MODE_SMALL)
 			"mode:expanded": _set_mode(MODE_EXPANDED)
+			"page:care": _set_small_page("care")
+			"page:adventure": _set_small_page("adventure")
+			"page:more": _set_small_page("more")
 			"tab:battle": _set_expanded_tab("battle")
 			"tab:dungeon": _set_expanded_tab("dungeon")
 			"tab:inventory": _set_expanded_tab("inventory")
 			"tab:codex": _set_expanded_tab("codex")
 			"tab:evolution": _set_expanded_tab("evolution")
 			"dungeon_unlock":
-				_start_battle()
-				_battle_resolve("win")
+				_run_review_steps([_start_battle, _battle_resolve.bind("win")])
 				application.command({"type": "start_battle", "encounter_id": "koalapet.base:thornlet_encounter", "stance": "aggressive"})
 				application.command({"type": "battle_resolve", "outcome": "win"})
 				_refresh()
 			"dungeon_run":
-				_start_dungeon()
-				_dungeon_next()
-				_battle_resolve("win")
+				_run_review_steps([_start_dungeon, _dungeon_next, _battle_resolve.bind("win")])
 			"dungeon_boss":
-				_start_dungeon()
-				_dungeon_next()
-				_battle_resolve("win")
-				_dungeon_choice("quiet_pool")
-				_dungeon_next()
-				_battle_resolve("win")
-				_dungeon_next()
-				_dungeon_next()
+				_run_review_steps([
+					_start_dungeon, _dungeon_next, _battle_resolve.bind("win"),
+					_dungeon_choice.bind("quiet_pool"), _dungeon_next, _battle_resolve.bind("win"),
+					_dungeon_next, _dungeon_next,
+				])
 				_set_expanded_tab("dungeon")
 			"digest":
 				application.advance_simulated(901)
@@ -1608,6 +2293,15 @@ func _run_review_actions(actions: PackedStringArray, diagnostics_delay_ms := 0) 
 			_:
 				if str(action).begins_with("anim:"):
 					_review_one_shot(str(action).trim_prefix("anim:"))
+				elif str(action).begins_with("size:"):
+					# Review-only resize down the same path a border drag takes:
+					# the native window is resized and the presentation reflows
+					# without rebuilding the scene or restarting an animation.
+					var extent := str(action).trim_prefix("size:").split("x", false)
+					if extent.size() == 2 and window_adapter.is_host_supported():
+						window_adapter.set_size(Vector2i(int(extent[0]), int(extent[1])))
+						await get_tree().process_frame
+						_on_window_size_changed()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if diagnostics_delay_ms > 0:
@@ -1615,6 +2309,7 @@ func _run_review_actions(actions: PackedStringArray, diagnostics_delay_ms := 0) 
 		await get_tree().process_frame
 		await get_tree().process_frame
 	_write_diagnostics()
+	await _write_capture()
 
 
 func _run_animation_polish_demo() -> void:
@@ -1740,6 +2435,31 @@ func _review_sequence(specs: Array) -> void:
 	_refresh()
 
 
+## Container layout only settles on the frame after the rebuild, so diagnostics
+## must never be sampled inside the same frame or every rect is pre-layout noise.
+func _write_diagnostics_after_layout() -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_write_diagnostics()
+	_write_capture()
+
+
+## Development-only privacy-safe capture. It reads back this application's own
+## rendered viewport, so evidence can never contain unrelated desktop content
+## and is unaffected by compositor or DPI-virtualisation artefacts.
+func _write_capture() -> void:
+	if capture_path.is_empty():
+		return
+	await RenderingServer.frame_post_draw
+	var image := get_viewport().get_texture().get_image()
+	if image == null or image.is_empty():
+		return
+	var absolute := ProjectSettings.globalize_path(capture_path)
+	DirAccess.make_dir_recursive_absolute(absolute.get_base_dir())
+	image.save_png(absolute)
+
+
 func _write_diagnostics() -> void:
 	if diagnostics_path.is_empty():
 		return
@@ -1747,16 +2467,50 @@ func _write_diagnostics() -> void:
 	for child in root_layer.get_children():
 		if child is ColorRect:
 			persistent_backgrounds += 1
+	diagnostics_sequence += 1
+	var view_model := application.get_view_model(mode, locale)
 	var payload := {
-		"schema_version": 1,
+		"schema_version": 2,
+		"diagnostics_sequence": diagnostics_sequence,
 		"mode": mode,
 		"locale": locale,
-		"state_revision": int(application.get_view_model(mode, locale).get("state_revision", 0)),
+		"last_feedback": last_feedback_record,
+		"pet": {
+			"screen": str(view_model.get("screen", "")),
+			"name": str(view_model.get("name", "")),
+			"stage": str(view_model.get("stage", "")),
+			"level": int(view_model.get("level", 0)),
+			"sleeping": bool(view_model.get("sleeping", false)),
+			"sickness": bool(view_model.get("sickness", false)),
+			"injured": not view_model.get("injury", {}).is_empty(),
+			"battle_active": not view_model.get("active_battle", {}).is_empty(),
+			"dungeon_active": not view_model.get("active_dungeon_run", {}).is_empty(),
+			"battle_unlocked": bool(view_model.get("battle_unlocked", false)),
+			"dungeon_unlocked": bool(view_model.get("dungeon_unlocked", false)),
+			"open_calls": view_model.get("open_calls", []).size(),
+			"care": view_model.get("care", {}),
+		},
+		"state_revision": int(view_model.get("state_revision", 0)),
 		"persistent_root_color_rects": persistent_backgrounds,
 		"presentation_rect": _rect_array(get_rect()),
 		"viewport_visible_rect": _rect_array(get_viewport_rect()),
 		"content_scale_size": [get_window().content_scale_size.x, get_window().content_scale_size.y],
 		"layout_rects": _diagnostic_layout_rects(),
+		"controls": _diagnostic_controls(),
+		"focused_control": _focused_control_name(),
+		"logical_size": [logical_size.x, logical_size.y],
+		"requested_window_size": [requested_window_size.x, requested_window_size.y],
+		"mode_switch_requests": mode_switch_requests,
+		"mode_switch_applied": mode_switch_applied,
+		"last_mode_request": last_mode_request,
+		"window_min_size": [get_window().min_size.x, get_window().min_size.y],
+		"window_max_size": [get_window().max_size.x, get_window().max_size.y],
+		"window_resizable": not get_window().unresizable,
+		"habitat_frame_scale": active_habitat_frame.current_scale() if active_habitat_frame != null and is_instance_valid(active_habitat_frame) else 0.0,
+		"suppressed_duplicate_commands": suppressed_duplicate_commands,
+		"missing_icon_names": PixelUi.missing_icon_names(),
+		"small_page": small_page,
+		"expanded_tab": expanded_tab,
 		"minimal_pet_rect": _rect_array(minimal_sprite.get_global_rect()) if minimal_sprite != null and is_instance_valid(minimal_sprite) else [],
 		"resolved_ui_scale": resolved_ui_scale,
 		"text_scale": float(preferences.get("interface", {}).get("text_scale", 1.0)),
@@ -1780,10 +2534,18 @@ func _write_diagnostics() -> void:
 	}
 	var absolute := ProjectSettings.globalize_path(diagnostics_path)
 	DirAccess.make_dir_recursive_absolute(absolute.get_base_dir())
-	var file := FileAccess.open(absolute, FileAccess.WRITE)
-	if file != null:
-		file.store_string(JSON.stringify(payload, "\t") + "\n")
-		file.close()
+	# Written through a temporary file and renamed, so a live reader can never
+	# observe a half-serialized document.
+	var temporary := absolute + ".tmp"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return
+	file.store_string(JSON.stringify(payload, "\t") + "\n")
+	file.flush()
+	file.close()
+	if FileAccess.file_exists(absolute):
+		DirAccess.remove_absolute(absolute)
+	DirAccess.rename_absolute(temporary, absolute)
 
 
 func _rect_array(value: Rect2) -> Array:
@@ -1798,8 +2560,46 @@ func _minimal_walk_bounds(sprite_extent := Vector2.ZERO, window_extent := Vector
 
 func _diagnostic_layout_rects() -> Dictionary:
 	var result := {}
-	for node_name in ["ExpandedBody", "ExpandedStatus", "ExpandedCenter", "ExpandedActions"]:
+	for node_name in [
+		"WindowFrame", "PlayerTitleBar", "PrimaryStatusRow", "ContextualAlerts",
+		"SmallHabitatFrame", "QuickActions", "SmallNavigation",
+		"ExpandedBody", "ExpandedStatus", "ExpandedCenter", "ExpandedActions",
+		"ExpandedHabitatFrame", "ExpandedTabs", "ExpandedDetail",
+	]:
 		var node := root_layer.find_child(node_name, true, false) as Control
 		if node != null:
 			result[node_name] = _rect_array(node.get_global_rect())
+	return result
+
+
+func _on_focus_changed(_control: Control) -> void:
+	_write_diagnostics()
+
+
+func _focused_control_name() -> String:
+	var focused := get_viewport().gui_get_focus_owner()
+	return str(focused.name) if focused != null else ""
+
+
+## Every player-facing control with its resolved label, icon and enabled state.
+## The interactive matrix is generated from this instead of from source reading.
+func _diagnostic_controls() -> Array:
+	var result: Array = []
+	for node in root_layer.find_children("*", "BaseButton", true, false):
+		var button := node as BaseButton
+		if button == null or not button.is_visible_in_tree():
+			continue
+		result.append({
+			"name": button.name,
+			"component": str(button.get_meta("component", "")),
+			"action_id": str(button.get_meta("action_id", "")),
+			"icon": str(button.get_meta("icon_name", "")),
+			"label": button.text if button is Button else "",
+			"accessible_label": str(button.get_meta("accessible_label", button.tooltip_text)),
+			"tooltip": button.tooltip_text,
+			"disabled": button.disabled,
+			"focusable": button.focus_mode == Control.FOCUS_ALL,
+			"rect": _rect_array(button.get_global_rect()),
+			"pressed_connections": button.pressed.get_connections().size(),
+		})
 	return result

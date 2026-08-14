@@ -19,6 +19,7 @@
 - [Habitat customization](HABITAT_CUSTOMIZATION.md)
 - [Feature gates and onboarding](FEATURE_GATES_AND_ONBOARDING.md)
 - [Window modes](WINDOW_MODES.md)
+- [Player interface](PLAYER_INTERFACE.md) — Small/Expanded information architecture, feedback, input safety
 
 ## Engineering and production
 
@@ -55,6 +56,8 @@
 - [Asset rights decision](ASSET_RIGHTS_DECISION.md)
 - [Prompt 4.8 product-owner review package](evidence/visual-acceptance/README.md)
 - [Prompt 4.8 execution record](prompts/PROMPT_0048_VISUAL_ACCEPTANCE.md)
+- [Prompt 4.9 execution record](prompts/PROMPT_0049_UI_RESCUE.md)
+- [Prompt 4.9 UI-rescue evidence](evidence/ui-rescue/README.md)
 - [macOS overlay validation report](spikes/MACOS_OVERLAY_SPIKE.md)
 - [macOS overlay evidence](evidence/macos-overlay/README.md)
 

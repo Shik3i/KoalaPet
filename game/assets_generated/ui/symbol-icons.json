@@ -1,0 +1,26 @@
+{
+	"schema_version": 1,
+	"generator": "tools/art_pipeline/generate_ui_symbol_icons.py",
+	"icon_size": [
+		24,
+		24
+	],
+	"outline_rgba": [
+		13,
+		20,
+		26,
+		255
+	],
+	"light_direction": "top_left",
+	"icons": {
+		"call": "07b44759a17be7a771c7b2f32b5c6ca50611fa5c175f55feaf83da906474adbb",
+		"close": "82d8637b17ef5a9a84cffbd658462683ffec46b9bc44a51bbd69176a185f3192",
+		"collapse": "58760f8d997800e59730ec7983adae92ee0de089553c5a4386d3101950eab837",
+		"discipline": "7833e84c192b664e87688d780cf34c3dae684f176d255f69e797565b94c64fc5",
+		"level": "add6d48b37905945d0534b6bfa55f09f521f0662cf8856ea9d0ca124ff9c851a",
+		"minimize": "abd2d7fe25c7d221d8a4210ba8ae2f414491f731a663e26f7f4d35a3bb65f4be",
+		"sickness": "4848601d058d034b540410593c4d72cd2a50e0bd57599e4cc45abf672e1a5f1e",
+		"treatment": "e4358593479efdc9523e67d43e17f86b4d83f77281a313f5e68f56dee366c6e6",
+		"wake": "292ecb7e2c2b79b6833a6feff31ea049c849baab69aa5011b6a9d870bb640727"
+	}
+}

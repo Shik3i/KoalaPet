@@ -11,6 +11,23 @@ Cozy, compact, readable modern pixel art with a quiet fantasy-natural tone. The 
 - Logical UI grid: `4 px`. Spacing, borders, focus rings, icon padding, and control heights use multiples of four.
 - Character animation cell: `128×128 px`; silhouette occupies at most `104×104 px` with at least `8 px` transparent safety on every side.
 - Preview: `64×64 px`. Portrait: `96×96 px`. Status/action icons: `24×24 px`; high-attention bubbles: `32×32 px`.
+
+### Prompt 4.9 icon rules
+
+- One 24×24 source canvas for every player-facing icon. Larger controls load a
+  pre-exported nearest-neighbour 2× twin from `assets_generated/ui/icons/x2/`
+  rather than letting the viewport filter resample pixel art. Status and window
+  controls draw at 24, primary actions at 48.
+- Every icon name resolves to art depicting that subject. The alias table may only
+  map genuine synonyms (`attack → battle`, `map → dungeon`); it may never borrow an
+  unrelated subject, which is how `close` came to render the injury plaster.
+- Subjects the AI board never produced — the window controls and several state
+  symbols — are generated deterministically by
+  `tools/art_pipeline/generate_ui_symbol_icons.py`: shared palette ramp, one
+  automatic 1 px `#0d141a` outline pass and one top-left light direction, so they
+  stay coherent beside the AI-generated subject icons without adding a second
+  style. `--check` fails if a committed icon drifts from its generator.
+- No emoji, and no detail that disappears at the runtime size.
 - Habitat master frame: `512×192 px`; Expanded may repeat or scale it by integer factors only. Small uses a `512×192 px` crop without fractional asset scaling.
 - Runtime textures use nearest-neighbor filtering and integer placement. Fractional scale, sub-pixel sprite positions, mixed character-cell sizes, and automatic bilinear filtering are forbidden.
 - Source generation may be larger, but accepted processing must recover an intentional pixel grid, reduce the palette, and produce the canonical dimensions above. Arbitrary illustration downscaling is not accepted.

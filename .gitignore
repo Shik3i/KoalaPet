@@ -41,3 +41,6 @@ Thumbs.db
 *.pem
 *.key
 secrets/
+
+# Session scratch directory for local analysis output
+.tmp/

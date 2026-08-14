@@ -142,7 +142,19 @@ func _test_per_mode_persistence() -> void:
 	var restored := WindowModeController.new(fake)
 	restored.restore_placements(serialized)
 	_assert_equal(restored.serialize_placements().size(), 3, "PST-003 all per-mode placements restored")
-	_assert_equal(restored.serialize_placements()["EXPANDED"].size, [1120, 720], "PST-004 expanded size restored")
+	var expanded_default := WindowPresentationMode.default_size(WindowPresentationMode.Value.EXPANDED)
+	_assert_equal(restored.serialize_placements()["EXPANDED"].size, [expanded_default.x, expanded_default.y], "PST-004 expanded size restored")
+	# Small is now a genuinely resizable player window, so a remembered size must
+	# survive a round trip instead of snapping back to the mode default.
+	var resized := _placement(WindowPresentationMode.Value.SMALL, 0, Vector2i(140, 160), Vector2i(880, 600))
+	controller.remember_placement(resized)
+	var resized_restore := WindowModeController.new(fake)
+	resized_restore.restore_placements(controller.serialize_placements())
+	_assert_equal(resized_restore.remembered_size(WindowPresentationMode.Value.SMALL), Vector2i(880, 600), "PST-004A remembered Small size survives persistence")
+	_assert_equal(WindowPresentationMode.clamp_size(WindowPresentationMode.Value.SMALL, Vector2i(120, 90)), WindowPresentationMode.min_size(WindowPresentationMode.Value.SMALL), "PST-004B undersized Small request is raised to the usable minimum")
+	_assert_equal(WindowPresentationMode.clamp_size(WindowPresentationMode.Value.SMALL, Vector2i(6000, 4000)), WindowPresentationMode.max_size(WindowPresentationMode.Value.SMALL), "PST-004C oversized Small request is capped")
+	_assert_equal(WindowPresentationMode.clamp_size(WindowPresentationMode.Value.MINIMAL, Vector2i(900, 900)), WindowPresentationMode.default_size(WindowPresentationMode.Value.MINIMAL), "PST-004D Minimal stays pet-scale driven, not user resizable")
+	_assert_equal(WindowPresentationMode.is_user_resizable(WindowPresentationMode.Value.EXPANDED), true, "PST-004E Expanded is user resizable")
 
 
 func _test_mode_transition_invariants() -> void:

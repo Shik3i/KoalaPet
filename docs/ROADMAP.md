@@ -26,6 +26,8 @@ Dependencies: stable lifecycle and content registry. Acceptance: at least meanin
 
 **Implemented and validated through 2026-08-14:** automatic data-defined good/poor routes for all three starter families, deterministic stanced battles with level/experience/history/injury/recovery, one five-node dungeon with event/rest/boss flow, idempotent first-clear/repeat rewards, future habitat theme/trophy unlock storage, save v3 migration, codex/discovery records, and isolated Windows gameplay evidence. Prompt 4.8 adds exhaustive visual classification, correction and a debug-only runtime Showroom without changing domain rules. Combat interaction, evolution disclosure and final art remain provisional. Native overlay work remains parallel and ADR 0010 remains proposed.
 
+**Prompt 4.9 (2026-08-14):** the rejected Small-mode interface was rebuilt rather than enlarged. Information architecture, feedback, input safety, window resizing, icon clarity and the readable default scale are now governed by [`PLAYER_INTERFACE.md`](PLAYER_INTERFACE.md) and [`WINDOW_MODES.md`](WINDOW_MODES.md). No domain rule, content document or save format changed, and Milestone 5 remains unstarted.
+
 ## 5. Habitat customization and unlock rewards
 
 Dependencies: first dungeon rewards. Acceptance: layered mixable habitat components, persistent placement, functional stations, accessible editing, and rewards from progression.

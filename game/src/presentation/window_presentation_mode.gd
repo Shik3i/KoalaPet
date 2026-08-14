@@ -15,13 +15,51 @@ const LABELS := {
 
 const DEFAULT_SIZES := {
 	Value.MINIMAL: Vector2i(240, 160),
-	Value.SMALL: Vector2i(640, 360),
-	Value.EXPANDED: Vector2i(1120, 720),
+	Value.SMALL: Vector2i(720, 480),
+	Value.EXPANDED: Vector2i(1160, 760),
+}
+
+## Logical bounds for the genuinely resizable player windows. The minimum keeps
+## the habitat, the four primary meters, one full action row and unclipped
+## German labels visible; the maximum stops Expanded from claiming the desktop.
+const MIN_SIZES := {
+	Value.MINIMAL: Vector2i(240, 160),
+	Value.SMALL: Vector2i(600, 380),
+	Value.EXPANDED: Vector2i(900, 620),
+}
+
+const MAX_SIZES := {
+	Value.MINIMAL: Vector2i(560, 480),
+	Value.SMALL: Vector2i(1280, 860),
+	Value.EXPANDED: Vector2i(2200, 1400),
 }
 
 
 static func label(mode: int) -> String:
 	return LABELS.get(mode, "UNKNOWN")
+
+
+static func is_user_resizable(mode: int) -> bool:
+	return mode in [Value.SMALL, Value.EXPANDED]
+
+
+static func min_size(mode: int) -> Vector2i:
+	return MIN_SIZES.get(mode, MIN_SIZES[Value.SMALL])
+
+
+static func max_size(mode: int) -> Vector2i:
+	return MAX_SIZES.get(mode, MAX_SIZES[Value.SMALL])
+
+
+## Clamps a remembered logical size into the supported range for the mode.
+static func clamp_size(mode: int, requested: Vector2i) -> Vector2i:
+	if not is_user_resizable(mode):
+		return default_size(mode)
+	var minimum := min_size(mode)
+	var maximum := max_size(mode)
+	if requested.x <= 0 or requested.y <= 0:
+		return default_size(mode)
+	return Vector2i(clampi(requested.x, minimum.x, maximum.x), clampi(requested.y, minimum.y, maximum.y))
 
 
 static func from_label(value: String, fallback: int = Value.SMALL) -> int:

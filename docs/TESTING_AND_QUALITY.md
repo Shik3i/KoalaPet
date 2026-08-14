@@ -104,3 +104,12 @@ The native video directly proves the requested Minimal → Small → care → Ex
 - Native runtime scale above available host settings, tray lifecycle, Show Desktop and controlled mixed-DPI movement remain explicitly unavailable; no formal accessibility compliance is claimed.
 
 Review index: [`evidence/visual-acceptance/README.md`](evidence/visual-acceptance/README.md).
+
+## Prompt 4.9 UI-rescue gate
+
+- `game/tests/presentation/run_all.gd`: `4976` assertions. New coverage: Feed across seven pet states in Small and Expanded, the complete `ActionFeedback` × error-code × locale matrix including unmapped codes, proof that no raw `error_code` or internal `reason` reaches player-facing text, invalid-command mapping, duplicate-input suppression counts, at-most-one `pressed` connection and a readable label plus keyboard focus for every constructed control, Small layout bounds across five UI scales × two text scales, the contextual Sleep/Wake and Medicine rules, absence of gated tabs, and the full icon contract including 2x twins.
+- `game/tests/platform/run_all.gd`: `46` assertions, adding remembered-size persistence and the per-mode resizable clamp.
+- `tools/art_pipeline/generate_ui_symbol_icons.py --check`: verifies the nine generated symbol icons and every 2x twin against their generator.
+- `tools/visual_review/capture_ui_rescue.ps1`: 24 native scenarios captured through the application's own viewport read-back. Screen capture is rejected for this window: it is borderless, transparent and always-on-top, so a screen grab records whatever is behind it.
+- Interactive action matrix: real Win32 input against the running client with the state read back from live diagnostics. On a mixed-DPI multi-monitor host some mouse steps land on the neighbouring control because virtualised window metrics and pointer coordinates disagree; those controls are re-verified coordinate-free through keyboard focus and Enter. See [`evidence/ui-rescue/README.md`](evidence/ui-rescue/README.md).
+- Not measured this milestone: a performance re-run against the Prompt 4.7 baseline, and any video recording.

@@ -140,6 +140,7 @@ def main() -> int:
     run([sys.executable, "tools/content_validation/validate_content.py"], "Python content validation")
     run([sys.executable, "tools/art_pipeline/validate_vertical_slice_assets.py", "--repo-root", str(ROOT)], "Vertical-slice asset validation")
     run([sys.executable, "tools/visual_review/audit_animation_sequences.py", "--check"], "Exhaustive visual-acceptance diagnostics")
+    run([sys.executable, "tools/art_pipeline/generate_ui_symbol_icons.py", "--check"], "UI symbol icon parity")
     run([sys.executable, "tools/repository/check_markdown_links.py"], "Markdown links")
     check_mod_payloads()
     check_franchise_terms()

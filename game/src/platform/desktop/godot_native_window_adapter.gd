@@ -57,9 +57,12 @@ func apply_mode(mode: int, requested_placement: OverlayPlacement) -> OverlayAppl
 		return guard
 	var placement := requested_placement.duplicate_value()
 	placement.mode = mode
-	if mode != WindowPresentationMode.Value.EXPANDED:
-		placement.size = WindowPresentationMode.default_size(mode)
-	elif placement.size.x <= 0 or placement.size.y <= 0:
+	# Small and Expanded are genuinely resizable, so a remembered size is kept
+	# instead of being reset to the mode default on every transition. Minimal
+	# stays derived from the pet-scale preference.
+	if WindowPresentationMode.is_user_resizable(mode):
+		placement.size = WindowPresentationMode.clamp_size(mode, placement.size)
+	else:
 		placement.size = WindowPresentationMode.default_size(mode)
 	placement = sanitize_placement(placement)
 
@@ -67,7 +70,8 @@ func apply_mode(mode: int, requested_placement: OverlayPlacement) -> OverlayAppl
 	target_window.borderless = true
 	target_window.transparent = true
 	target_window.transparent_bg = true
-	target_window.unresizable = mode != WindowPresentationMode.Value.EXPANDED
+	set_size_bounds(WindowPresentationMode.min_size(mode), WindowPresentationMode.max_size(mode))
+	target_window.unresizable = not WindowPresentationMode.is_user_resizable(mode)
 	target_window.size = placement.size
 	target_window.position = placement.absolute_position
 	target_window.show()
@@ -174,6 +178,18 @@ func set_size(new_size: Vector2i) -> OverlayApplyResult:
 		return OverlayApplyResult.failure("INVALID_SIZE", "Window size must be positive")
 	target_window.size = new_size
 	return OverlayApplyResult.ok("Window size applied", ["size"])
+
+
+func set_size_bounds(minimum: Vector2i, maximum: Vector2i) -> OverlayApplyResult:
+	var guard := _guard("set_size_bounds")
+	if guard != null:
+		return guard
+	# `max_size` must be cleared first: Godot rejects a new minimum that would
+	# exceed the currently stored maximum from the previous mode.
+	target_window.max_size = Vector2i.ZERO
+	target_window.min_size = Vector2i(maxi(1, minimum.x), maxi(1, minimum.y))
+	target_window.max_size = Vector2i(maxi(minimum.x, maximum.x), maxi(minimum.y, maximum.y))
+	return OverlayApplyResult.ok("Window size bounds applied", ["size_bounds"])
 
 
 func get_current_placement(mode: int) -> OverlayPlacement:

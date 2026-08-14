@@ -1,0 +1,454 @@
+{
+	"active_animation_processors": 5,
+	"ambient_animation_frequency": "normal",
+	"ambient_roaming": true,
+	"content_scale_size": [
+		0,
+		0
+	],
+	"controls": [
+		{
+			"accessible_label": "Einstellungen",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "settings",
+			"label": "",
+			"name": "HeaderSettings",
+			"pressed_connections": 1,
+			"rect": [
+				1085.0,
+				25.0,
+				50.0,
+				57.5
+			],
+			"tooltip": "Einstellungen"
+		},
+		{
+			"accessible_label": "Erweitert",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "expand",
+			"label": "",
+			"name": "HeaderModeSwitch",
+			"pressed_connections": 1,
+			"rect": [
+				1145.0,
+				25.0,
+				50.0,
+				57.5
+			],
+			"tooltip": "Erweitert"
+		},
+		{
+			"accessible_label": "Minimal",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "minimal",
+			"label": "",
+			"name": "HeaderMinimalMode",
+			"pressed_connections": 1,
+			"rect": [
+				1205.0,
+				25.0,
+				50.0,
+				57.5
+			],
+			"tooltip": "Minimal"
+		},
+		{
+			"accessible_label": "Minimieren",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "minimize",
+			"label": "",
+			"name": "HeaderMinimize",
+			"pressed_connections": 1,
+			"rect": [
+				1265.0,
+				25.0,
+				50.0,
+				57.5
+			],
+			"tooltip": "Minimieren"
+		},
+		{
+			"accessible_label": "Schließen",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "close",
+			"label": "",
+			"name": "HeaderClose",
+			"pressed_connections": 1,
+			"rect": [
+				1325.0,
+				25.0,
+				50.0,
+				57.5
+			],
+			"tooltip": "Schließen"
+		},
+		{
+			"accessible_label": "Füttern",
+			"action_id": "feed",
+			"component": "primary_action",
+			"disabled": false,
+			"focusable": true,
+			"icon": "feed",
+			"label": "Füttern",
+			"name": "Action_feed",
+			"pressed_connections": 1,
+			"rect": [
+				25.0,
+				695.0,
+				440.0,
+				80.0
+			],
+			"tooltip": "Füttern"
+		},
+		{
+			"accessible_label": "Reinigen",
+			"action_id": "clean",
+			"component": "primary_action",
+			"disabled": false,
+			"focusable": true,
+			"icon": "clean",
+			"label": "Reinigen",
+			"name": "Action_clean",
+			"pressed_connections": 1,
+			"rect": [
+				480.0,
+				695.0,
+				440.0,
+				80.0
+			],
+			"tooltip": "Reinigen"
+		},
+		{
+			"accessible_label": "Trainieren",
+			"action_id": "train",
+			"component": "primary_action",
+			"disabled": false,
+			"focusable": true,
+			"icon": "train",
+			"label": "Trainieren",
+			"name": "Action_train",
+			"pressed_connections": 1,
+			"rect": [
+				935.0,
+				695.0,
+				440.0,
+				80.0
+			],
+			"tooltip": "Trainieren"
+		},
+		{
+			"accessible_label": "Pflege",
+			"action_id": "",
+			"component": "nav_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "health",
+			"label": "Pflege",
+			"name": "Nav_care",
+			"pressed_connections": 1,
+			"rect": [
+				25.0,
+				785.0,
+				442.5,
+				50.0
+			],
+			"tooltip": "Pflege"
+		},
+		{
+			"accessible_label": "Abenteuer",
+			"action_id": "",
+			"component": "nav_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "battle",
+			"label": "Abenteuer",
+			"name": "Nav_adventure",
+			"pressed_connections": 1,
+			"rect": [
+				477.5,
+				785.0,
+				443.75,
+				50.0
+			],
+			"tooltip": "Abenteuer"
+		},
+		{
+			"accessible_label": "Mehr",
+			"action_id": "",
+			"component": "nav_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "inventory",
+			"label": "Mehr",
+			"name": "Nav_more",
+			"pressed_connections": 1,
+			"rect": [
+				931.25,
+				785.0,
+				443.75,
+				50.0
+			],
+			"tooltip": "Mehr"
+		}
+	],
+	"diagnostics_sequence": 1,
+	"effects_intensity": "normal",
+	"expanded_tab": "home",
+	"focused_control": "",
+	"habitat_anchor": [
+		270.0,
+		170.0
+	],
+	"habitat_frame_scale": 2.109375,
+	"habitat_moving": false,
+	"habitat_pending_events": 0,
+	"habitat_visual_state": "idle",
+	"last_feedback": {},
+	"last_mode_request": "",
+	"layout_rects": {
+		"PlayerTitleBar": [
+			25.0,
+			25.0,
+			1350.0,
+			57.5
+		],
+		"PrimaryStatusRow": [
+			25.0,
+			92.5,
+			1350.0,
+			50.0
+		],
+		"QuickActions": [
+			25.0,
+			695.0,
+			1350.0,
+			80.0
+		],
+		"SmallHabitatFrame": [
+			25.0,
+			152.5,
+			1350.0,
+			532.5
+		],
+		"SmallNavigation": [
+			25.0,
+			785.0,
+			1350.0,
+			50.0
+		],
+		"WindowFrame": [
+			10.0,
+			10.0,
+			1380.0,
+			840.0
+		]
+	},
+	"locale": "de",
+	"logical_size": [
+		1120.0,
+		688.0
+	],
+	"minimal_hit_region_updates": 0,
+	"minimal_pet_rect": [],
+	"minimal_pet_scale": 1.0,
+	"missing_icon_names": [],
+	"mode": "small",
+	"mode_switch_applied": 0,
+	"mode_switch_requests": 0,
+	"native_window": {
+		"adapter_host_os": "Windows",
+		"capabilities": {
+			"alt_tab_visibility_control": false,
+			"always_on_top": true,
+			"dpi_query": true,
+			"full_mouse_passthrough": true,
+			"monitor_enumeration": true,
+			"native_drag": true,
+			"native_windows": true,
+			"no_focus": true,
+			"polygonal_mouse_passthrough": true,
+			"status_indicator": true,
+			"taskbar_visibility_control": false,
+			"transparency": true,
+			"usable_rect": true
+		},
+		"captured_at_utc": "2026-08-14T15:52:50",
+		"display_server": "Windows",
+		"engine_max_fps": 0,
+		"focus_policy": "normal",
+		"input_policy": "interactive",
+		"monitors": [
+			{
+				"dpi": 120,
+				"full_rect": [
+					5600,
+					4,
+					2400,
+					1350
+				],
+				"index": 0,
+				"position": [
+					5600,
+					4
+				],
+				"primary": false,
+				"scale": 1.0,
+				"usable_rect": [
+					5600,
+					4,
+					2400,
+					1290
+				]
+			},
+			{
+				"dpi": 120,
+				"full_rect": [
+					0,
+					4,
+					2400,
+					1500
+				],
+				"index": 1,
+				"position": [
+					0,
+					4
+				],
+				"primary": false,
+				"scale": 1.0,
+				"usable_rect": [
+					0,
+					4,
+					2400,
+					1440
+				]
+			},
+			{
+				"dpi": 120,
+				"full_rect": [
+					2400,
+					0,
+					2560,
+					1440
+				],
+				"index": 2,
+				"position": [
+					2400,
+					0
+				],
+				"primary": true,
+				"scale": 1.0,
+				"usable_rect": [
+					2400,
+					0,
+					2560,
+					1380
+				]
+			}
+		],
+		"observed_fps": 1.0,
+		"os_name": "Windows",
+		"os_version": "10.0.26200",
+		"rendering_driver": "opengl3",
+		"rendering_method": "gl_compatibility",
+		"schema_version": 1,
+		"status_indicator_rect": null,
+		"status_indicator_visible": false,
+		"video_adapter": "NVIDIA GeForce RTX 4080 SUPER",
+		"viewport_transparent_bg": true,
+		"window_always_on_top": true,
+		"window_borderless": true,
+		"window_focused": true,
+		"window_mode": 0,
+		"window_mouse_passthrough": false,
+		"window_mouse_passthrough_polygon": [],
+		"window_position": [
+			7280,
+			814
+		],
+		"window_size": [
+			1400,
+			860
+		],
+		"window_transparent": true,
+		"window_unfocusable": false,
+		"window_visible": true
+	},
+	"observed_fps": 1.0,
+	"persistent_root_color_rects": 0,
+	"pet": {
+		"battle_active": false,
+		"battle_unlocked": true,
+		"care": {
+			"discipline_bps": 5000.0,
+			"effort_bps": 1000.0,
+			"energy_bps": 7500.0,
+			"health_bps": 10000.0,
+			"hygiene_bps": 8700.0,
+			"mood_bps": 6500.0,
+			"satiety_bps": 6200.0,
+			"waste_count": 0,
+			"weight_grams": 420.0
+		},
+		"dungeon_active": false,
+		"dungeon_unlocked": false,
+		"injured": false,
+		"level": 1,
+		"name": "Moosling",
+		"open_calls": 0,
+		"screen": "pet",
+		"sickness": false,
+		"sleeping": false,
+		"stage": "hatchling"
+	},
+	"preference_schema_version": 2,
+	"presentation_rect": [
+		0.0,
+		0.0,
+		1400.0,
+		860.0
+	],
+	"reduced_motion": false,
+	"requested_window_size": [
+		900,
+		600
+	],
+	"resolved_ui_scale": 1.25,
+	"schema_version": 2,
+	"small_page": "care",
+	"standard_pet_scale": 1.0,
+	"state_revision": 2,
+	"suppressed_duplicate_commands": 0,
+	"text_scale": 1.0,
+	"texture_memory_bytes": 14038111,
+	"theme_base_scale": 1.0,
+	"viewport_visible_rect": [
+		0.0,
+		0.0,
+		1400.0,
+		860.0
+	],
+	"window_max_size": [
+		1600,
+		1075
+	],
+	"window_min_size": [
+		750,
+		475
+	],
+	"window_resizable": true
+}

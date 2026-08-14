@@ -28,6 +28,9 @@ func _run() -> void:
 	await _test_habitat_runtime()
 	_test_localized_bounds_and_windows_scales()
 	_test_action_reachability_and_debug_isolation()
+	_test_action_feedback_contract()
+	_test_icon_contract()
+	await _test_ui_rescue_runtime()
 	await _test_player_ui_signal_lifecycle()
 	await _test_minimal_scene_hierarchy()
 	if _failures.is_empty():
@@ -57,14 +60,14 @@ func _test_player_presentation_source() -> void:
 	_assert_equal("if revision == animation_revision:" in source, true, "VIS-005B repeated action timers are revision guarded")
 	_assert_equal("_open_dev_window" in source, true, "VIS-006 development tools isolated in separate window")
 	_assert_equal("window_adapter.set_hit_regions" in source, true, "VIS-007 Minimal uses platform hit-region abstraction")
-	_assert_equal("get_window().content_scale_size = rendered_size" in source, true, "VIS-007B live scaling keeps viewport and native window synchronized")
+	_assert_equal("get_window().content_scale_size = Vector2i.ZERO" in source, true, "VIS-007B viewport override cleared so the native window stays resizable")
 	_assert_equal("get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED" in source, true, "VIS-007C enlarged viewport owns UI-scale layout without cropping")
 	_assert_equal("draw_circle" in source or "draw_polygon" in source, false, "VIS-007A no geometric creature drawing in player presentation")
 
 
 func _test_component_contract() -> void:
 	var names := ["panel", "compact_panel", "title_bar", "tabs", "primary_button", "icon_button", "toggle", "status_bar", "segmented_status_indicator", "call_bubble", "modal", "card", "starter_egg_card", "inventory_slot", "codex_slot", "evolution_silhouette", "battle_stance_control", "dungeon_node", "event_log_entry", "reward_notification"]
-	var built := [PixelUi.panel(), PixelUi.panel(true), PixelUi.title("T"), PixelUi.tab("T"), PixelUi.button("T"), PixelUi.icon_button("feed", "T"), PixelUi.toggle("T", false), PixelUi.status_meter("mood", "Mood", "mood", 5000), PixelUi.segmented_status(5000), PixelUi.call_bubble(), PixelUi.modal("T", "B"), PixelUi.card(), PixelUi.starter_egg_card(), PixelUi.inventory_slot(), PixelUi.codex_slot(), PixelUi.evolution_silhouette(), PixelUi.battle_stance_control("T", "balanced"), PixelUi.dungeon_node("event", false), PixelUi.event_log_entry("T"), PixelUi.reward_notification("T")]
+	var built := [PixelUi.panel(), PixelUi.panel(true), PixelUi.title("T"), PixelUi.tab("T"), PixelUi.button("T"), PixelUi.icon_button("feed", "T"), PixelUi.toggle("T", false), PixelUi.stat_meter("mood", "Mood", "mood", 5000), PixelUi.segmented_status(5000), PixelUi.call_bubble(), PixelUi.modal("T", "B"), PixelUi.card(), PixelUi.starter_egg_card(), PixelUi.inventory_slot(), PixelUi.codex_slot(), PixelUi.evolution_silhouette(), PixelUi.battle_stance_control("T", "balanced"), PixelUi.dungeon_node("event", false), PixelUi.event_log_entry("T"), PixelUi.reward_notification("T")]
 	for index in names.size():
 		_assert_equal(str(built[index].get_meta("component", "")), names[index], "VIS-COMP-%02d %s" % [index + 1, names[index]])
 	_assert_equal(built[13].custom_minimum_size.x >= 100.0, true, "VIS-COMP-21 inventory slots fit localized item names")
@@ -74,8 +77,8 @@ func _test_component_contract() -> void:
 
 func _test_mode_sizes_and_shared_revision() -> void:
 	_assert_equal(WindowPresentationMode.default_size(WindowPresentationMode.Value.MINIMAL), Vector2i(240, 160), "VIS-008 Minimal footprint")
-	_assert_equal(WindowPresentationMode.default_size(WindowPresentationMode.Value.SMALL), Vector2i(640, 360), "VIS-009 Small readable footprint")
-	_assert_equal(WindowPresentationMode.default_size(WindowPresentationMode.Value.EXPANDED), Vector2i(1120, 720), "VIS-010 Expanded readable footprint")
+	_assert_equal(WindowPresentationMode.default_size(WindowPresentationMode.Value.SMALL), Vector2i(720, 480), "VIS-009 Small readable footprint")
+	_assert_equal(WindowPresentationMode.default_size(WindowPresentationMode.Value.EXPANDED), Vector2i(1160, 760), "VIS-010 Expanded readable footprint")
 	var save_path := "user://tests/presentation/shared-revision.json"
 	_remove_save(save_path)
 	var app := PetApplication.new({"save_path": save_path}, FakeSimulationClock.new(1770000000, 0.0))
@@ -351,8 +354,8 @@ func _test_preferences() -> void:
 	PresentationPreferences.sanitize({"interface": {"ui_scale": 2.0}})
 	_assert_equal(before.simulation_revision, 17, "VIS-PREF UI scale leaves simulation unchanged")
 	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.SMALL, 1.0, 1.75).x > WindowPresentationMode.default_size(WindowPresentationMode.Value.SMALL).x, true, "VIS-PREF text scale reflows window")
-	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.EXPANDED, 1.0, 1.5), Vector2i(1680, 1080), "VIS-PREF Expanded 150 percent text has full three-column reflow room")
-	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.SMALL, 1.5, 1.0), Vector2i(960, 540), "VIS-PREF Small 150 percent UI scale expands layout bounds")
+	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.EXPANDED, 1.0, 1.5), Vector2i(1740, 1140), "VIS-PREF Expanded 150 percent text has full three-column reflow room")
+	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.SMALL, 1.5, 1.0), Vector2i(1080, 720), "VIS-PREF Small 150 percent UI scale expands layout bounds")
 
 
 func _test_habitat_contract() -> void:
@@ -425,8 +428,8 @@ func _test_localized_bounds_and_windows_scales() -> void:
 	for scale in [1.0, 1.25, 1.5, 1.75, 2.0]:
 		var small_physical: Vector2 = Vector2(WindowPresentationMode.default_size(WindowPresentationMode.Value.SMALL)) * scale
 		var expanded_physical: Vector2 = Vector2(WindowPresentationMode.default_size(WindowPresentationMode.Value.EXPANDED)) * scale
-		_assert_equal(small_physical.x >= 640.0 and small_physical.y >= 360.0, true, "VIS-DPI Small remains above logical bounds at %.0f%%" % (scale * 100.0))
-		_assert_equal(expanded_physical.x >= 1120.0 and expanded_physical.y >= 720.0, true, "VIS-DPI Expanded remains above logical bounds at %.0f%%" % (scale * 100.0))
+		_assert_equal(small_physical.x >= 720.0 and small_physical.y >= 480.0, true, "VIS-DPI Small remains above logical bounds at %.0f%%" % (scale * 100.0))
+		_assert_equal(expanded_physical.x >= 1160.0 and expanded_physical.y >= 760.0, true, "VIS-DPI Expanded remains above logical bounds at %.0f%%" % (scale * 100.0))
 
 
 func _test_action_reachability_and_debug_isolation() -> void:
@@ -474,14 +477,18 @@ func _test_player_ui_signal_lifecycle() -> void:
 	await _emit_button_and_settle(_find_button(game.root_layer, "Füttern"), "VIS-SIGNAL feed uses the real pressed signal")
 	_assert_equal(int(game.application.get_view_model("small", "de").get("state_revision", 0)) > revision_before, true, "VIS-SIGNAL feed completes without terminating the scene")
 	await _emit_button_and_settle(_find_button(game.root_layer, "Reinigen"), "VIS-SIGNAL clean rebuilds safely")
-	await _emit_button_and_settle(_find_button(game.root_layer, "Schlafen"), "VIS-SIGNAL sleep rebuilds safely")
-	await _emit_button_and_settle(_find_button(game.root_layer, "Aufwecken"), "VIS-SIGNAL wake rebuilds safely")
-	await _emit_button_and_settle(_find_button(game.root_layer, "Mehr"), "VIS-SIGNAL More tab rebuilds safely")
+	var train_label: String = game.application.text("ui.train", "Trainieren", game.locale)
+	await _emit_button_and_settle(_find_button(game.root_layer, train_label), "VIS-SIGNAL training rebuilds safely")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Mehr"), "VIS-SIGNAL More page rebuilds safely")
 	_assert_deferred_player_controls(game.root_layer, "small more")
 	await _emit_button_and_settle(_find_button(game.root_layer, "Leckerli"), "VIS-SIGNAL treat rebuilds safely")
-	var train_label: String = game.application.text("ui.train", "Training", game.locale)
-	await _emit_button_and_settle(_find_button(game.root_layer, train_label), "VIS-SIGNAL training rebuilds safely")
-	await _emit_button_and_settle(_find_button(game.root_layer, "Pflege"), "VIS-SIGNAL Care tab rebuilds safely")
+	# Sleep and Wake replace each other in place: the contextual action must be
+	# the only one of the pair the player can reach at any moment.
+	_assert_equal(_find_button(game.root_layer, "Aufwecken"), null, "VIS-SIGNAL Wake is absent while the pet is awake")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Schlafen"), "VIS-SIGNAL sleep rebuilds safely")
+	_assert_equal(_find_button(game.root_layer, "Schlafen"), null, "VIS-SIGNAL Sleep is replaced once the pet sleeps")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Aufwecken"), "VIS-SIGNAL wake rebuilds safely")
+	await _emit_button_and_settle(_find_button(game.root_layer, "Pflege"), "VIS-SIGNAL Care page rebuilds safely")
 	await _emit_button_and_settle(_find_button(game.root_layer, "Abenteuer"), "VIS-SIGNAL Adventure tab rebuilds safely")
 	_assert_deferred_player_controls(game.root_layer, "small adventure")
 	await _emit_button_and_settle(_find_button(game.root_layer, "Kampf"), "VIS-SIGNAL battle start rebuilds safely")
@@ -494,14 +501,28 @@ func _test_player_ui_signal_lifecycle() -> void:
 		await process_frame
 	await _emit_button_and_settle(_find_button(game.root_layer, "Erweitert"), "VIS-SIGNAL mode switch rebuilds safely")
 	_assert_equal(game.mode, "expanded", "VIS-SIGNAL mode switch reaches Expanded")
-	for tab_label in ["Kampf", "Dungeon", "Inventar", "Kodex", "Entwicklung", "Übersicht"]:
+	# Dungeon is intentionally absent until its data-driven gate opens, so the
+	# reachable tab set is derived from the live model instead of hardcoded.
+	var expected_tabs: Array[String] = ["Kampf", "Inventar", "Kodex", "Entwicklung", "Übersicht"]
+	var gate_model: Dictionary = game.application.get_view_model("expanded", game.locale)
+	_assert_equal(bool(gate_model.get("dungeon_unlocked", false)), false, "VIS-SIGNAL dungeon gate still closed in this fixture")
+	_assert_equal(_find_button(game.root_layer.find_child("ExpandedCenter", true, false), "Dungeon"), null, "VIS-SIGNAL locked Dungeon tab is absent, not disabled")
+	for tab_label in expected_tabs:
 		var center: Node = game.root_layer.find_child("ExpandedCenter", true, false)
 		await _emit_button_and_settle(_find_button(center, tab_label), "VIS-SIGNAL Expanded tab %s" % tab_label)
 		_assert_deferred_player_controls(game.root_layer, "expanded %s" % tab_label)
 	var actions: Node = game.root_layer.find_child("ExpandedActions", true, false)
-	for action_label in ["Füttern", "Leckerli", "Reinigen", "Trainieren", "Schlafen", "Medizin"]:
+	# Medicine is contextual: absent while healthy, present once sick.
+	_assert_equal(_find_button(actions, "Medizin"), null, "VIS-SIGNAL Medicine is absent while the pet is healthy")
+	for action_label in ["Füttern", "Leckerli", "Reinigen", "Trainieren", "Schlafen"]:
 		await _emit_button_and_settle(_find_button(actions, action_label), "VIS-SIGNAL Expanded action %s" % action_label)
 		actions = game.root_layer.find_child("ExpandedActions", true, false)
+	game.application.command({"type": "force_sickness"})
+	game.call("_refresh")
+	await process_frame
+	await process_frame
+	actions = game.root_layer.find_child("ExpandedActions", true, false)
+	await _emit_button_and_settle(_find_button(actions, "Medizin"), "VIS-SIGNAL Medicine appears exactly when the pet is sick")
 	var settings_label: String = game.application.text("ui.settings", "Einstellungen", game.locale)
 	await _emit_button_and_settle(_find_button(game.root_layer, settings_label), "VIS-SIGNAL Settings opens from its real button")
 	var settings: Node = game.root_layer.find_child("PresentationSettings", true, false)
@@ -532,7 +553,7 @@ func _test_player_ui_signal_lifecycle() -> void:
 	var conditional_model: Dictionary = game.application.get_view_model("expanded", game.locale)
 	conditional_model["injury"] = {"injury_id": "koalapet.base:sprain"}
 	conditional_model["open_calls"] = [{"call_id": "signal-fixture"}]
-	var conditional_actions := game.call("_expanded_actions", conditional_model) as Control
+	var conditional_actions := game.call("_expanded_context", conditional_model) as Control
 	root.add_child(conditional_actions)
 	_assert_deferred_player_controls(conditional_actions, "conditional injury and call actions")
 	conditional_actions.free()
@@ -542,6 +563,207 @@ func _test_player_ui_signal_lifecycle() -> void:
 	_remove_save(preferences_path)
 	_remove_save(placement_path)
 
+
+
+## Prompt 4.9: every visible outcome must resolve to a localized sentence.
+func _test_action_feedback_contract() -> void:
+	var locales := ["de", "en"]
+	var bundles := {}
+	for locale in locales:
+		var file := FileAccess.open("res://content_packs/koalapet.base/data/localization.%s.json" % locale, FileAccess.READ)
+		bundles[locale] = JSON.parse_string(file.get_as_text()).get("strings", {})
+		file.close()
+	var actions := ["feed", "treat", "clean", "train", "sleep", "wake", "medicine", "treat_injury", "resolve_call", "start_battle", "battle_round", "start_dungeon", "dungeon_next", "dungeon_choice", "complete_hatch", "set_nickname", "unmapped_action"]
+	var codes := ["", "COMMAND_NOT_APPLICABLE", "FEATURE_LOCKED", "EGG_NOT_HATCHED", "NO_PET", "BATTLE_ALREADY_ACTIVE", "ADVENTURE_ALREADY_ACTIVE", "NO_INJURY", "SAVE_LOCKED", "TEMP_WRITE_FAILED", "CONCURRENT_SAVE_CONFLICT", "ENCOUNTER_MISSING", "TOTALLY_UNKNOWN_CODE", "INVALID_NICKNAME"]
+	for action in actions:
+		for code in codes:
+			var result := {"ok": true, "summary": {"events": []}} if code.is_empty() else {"ok": false, "error_code": code}
+			var described := ActionFeedback.describe(action, result)
+			var key := str(described.get("key", ""))
+			_assert_equal(key.is_empty(), false, "VIS-FEEDBACK %s/%s resolves a key" % [action, code])
+			_assert_equal(described.get("severity", "") in [ActionFeedback.SEVERITY_SUCCESS, ActionFeedback.SEVERITY_NOTICE, ActionFeedback.SEVERITY_BLOCKED, ActionFeedback.SEVERITY_FAILURE], true, "VIS-FEEDBACK %s/%s has a known severity" % [action, code])
+			for locale in locales:
+				_assert_equal(not str(bundles[locale].get(key, "")).is_empty(), true, "VIS-FEEDBACK %s localized in %s" % [key, locale])
+	# A raw engine code or reason may never reach the player-facing text.
+	var leaked := ActionFeedback.describe("feed", {"ok": false, "error_code": "TOTALLY_UNKNOWN_CODE", "reason": "internal diagnostic"})
+	_assert_equal("TOTALLY_UNKNOWN_CODE" in str(leaked.get("fallback", "")), false, "VIS-FEEDBACK unknown code is not shown verbatim")
+	_assert_equal("internal diagnostic" in str(leaked.get("fallback", "")), false, "VIS-FEEDBACK internal reason is not shown verbatim")
+	var overfed := ActionFeedback.describe("feed", {"ok": true, "summary": {"events": ["fed", "overfed"]}})
+	_assert_equal(str(overfed.get("key", "")), "feedback.feed.overfed", "VIS-FEEDBACK overfeeding warns on success")
+	_assert_equal(str(overfed.get("severity", "")), ActionFeedback.SEVERITY_NOTICE, "VIS-FEEDBACK overfeeding is a notice, not a failure")
+	_assert_equal(str(ActionFeedback.unavailable_hint("train", {"sleeping": true}).get("key", "")), "feedback.state.sleeping", "VIS-FEEDBACK sleeping explains a blocked training")
+	_assert_equal(str(ActionFeedback.unavailable_hint("train", {"sickness": true}).get("key", "")), "feedback.state.sick", "VIS-FEEDBACK sickness explains a blocked training")
+	_assert_equal(ActionFeedback.unavailable_hint("battle_round", {"active_battle": {"encounter_id": "x"}}).is_empty(), true, "VIS-FEEDBACK advancing a running battle stays available")
+	_assert_equal(ActionFeedback.unavailable_hint("battle", {"active_battle": {"encounter_id": "x"}}).is_empty(), false, "VIS-FEEDBACK starting a second battle is blocked")
+	_assert_equal(ActionFeedback.unavailable_hint("feed", {"sleeping": true}).is_empty(), true, "VIS-FEEDBACK feeding is never blocked by sleep")
+
+
+## Prompt 4.9: every player-facing icon must resolve to dedicated art.
+func _test_icon_contract() -> void:
+	var required := [
+		"feed", "treat", "clean", "train", "sleep", "wake", "medicine", "treatment",
+		"battle", "dungeon", "inventory", "codex", "evolution", "settings",
+		"expand", "collapse", "minimize", "close", "minimal",
+		"satiety", "mood", "energy", "hygiene", "health", "discipline", "level",
+		"injury", "sickness", "call",
+	]
+	for name in required:
+		_assert_equal(PixelUi.icon_exists(name), true, "VIS-ICON %s has dedicated art" % name)
+		var texture := PixelUi.icon(name)
+		_assert_equal(texture != null, true, "VIS-ICON %s loads" % name)
+		if texture != null:
+			_assert_equal(texture.get_width(), UiMetrics.ICON_SOURCE, "VIS-ICON %s uses the shared 24px canvas" % name)
+			_assert_equal(texture.get_height(), UiMetrics.ICON_SOURCE, "VIS-ICON %s is square" % name)
+		var doubled := PixelUi.icon(name, 2)
+		_assert_equal(doubled != null and doubled.get_width() == UiMetrics.ICON_SOURCE * 2, true, "VIS-ICON %s has a crisp 2x twin" % name)
+	# The rejected build aliased window controls onto unrelated subject art.
+	_assert_equal(PixelUi.icon_name_for("close"), "close", "VIS-ICON Close no longer renders the injury plaster")
+	_assert_equal(PixelUi.icon_name_for("minimize"), "minimize", "VIS-ICON Minimize no longer renders the Minimal-mode glyph")
+	_assert_equal(PixelUi.icon_name_for("discipline"), "discipline", "VIS-ICON Discipline no longer renders the training log")
+	_assert_equal(PixelUi.missing_icon_names().is_empty(), true, "VIS-ICON no player-facing icon fell back to the settings cog")
+
+
+## Prompt 4.9: interactive-state, layout and input-safety regressions.
+func _test_ui_rescue_runtime() -> void:
+	var save_path := "user://tests/presentation/ui-rescue.json"
+	var preferences_path := "user://tests/presentation/ui-rescue-preferences.json"
+	var placement_path := "user://tests/presentation/ui-rescue-placement.json"
+	for path in [save_path, preferences_path, placement_path]:
+		_remove_save(path)
+	var game := PET_GAME_SCENE.instantiate()
+	game.requested_save_path = save_path
+	game.preferences_path = preferences_path
+	game.placement_path = placement_path
+	root.add_child(game)
+	await process_frame
+	await process_frame
+	game.application.choose_starter("koalapet.base:moss_egg")
+	game.application.advance_simulated(3600)
+	game.application.complete_hatch()
+	game.call("_refresh")
+	await process_frame
+	await process_frame
+
+	# Feed must survive every supported pet state without terminating.
+	var states := [
+		{"name": "hatchling", "setup": []},
+		{"name": "hungry", "setup": [{"advance": 21600}]},
+		{"name": "full", "setup": [{"command": {"type": "feed", "item_id": game.application.find_item_by_kind("meal")}}]},
+		{"name": "sleeping", "setup": [{"command": {"type": "sleep"}}]},
+		{"name": "awake", "setup": [{"command": {"type": "wake"}}]},
+		{"name": "sick", "setup": [{"command": {"type": "force_sickness"}}]},
+		{"name": "cured", "setup": [{"command": {"type": "medicine", "item_id": game.application.find_item_by_kind("medicine")}}]},
+	]
+	for state in states:
+		for step in state.setup:
+			if step.has("command"):
+				game.application.command(step.command)
+			else:
+				game.application.advance_simulated(int(step.advance))
+		for mode in ["small", "expanded"]:
+			game.mode = mode
+			game.call("_refresh")
+			await process_frame
+			await process_frame
+			var feed_button := _find_named_button(game.root_layer, "Action_feed")
+			if feed_button == null:
+				feed_button = _find_named_button(game.root_layer, "Context_feed")
+			_assert_equal(feed_button != null, true, "VIS-FEED %s/%s exposes Feed" % [state.name, mode])
+			if feed_button == null:
+				continue
+			_assert_equal(feed_button.pressed.get_connections().size(), 1, "VIS-FEED %s/%s connects Feed exactly once" % [state.name, mode])
+			game.call("_reset_input_guard")
+			feed_button.emit_signal("pressed")
+			await process_frame
+			await process_frame
+			_assert_equal(is_instance_valid(game), true, "VIS-FEED %s/%s survives Feed" % [state.name, mode])
+			_assert_equal(str(game.last_feedback_record.get("key", "")).begins_with("feedback."), true, "VIS-FEED %s/%s reports localized feedback" % [state.name, mode])
+
+	# An invalid command must produce safe feedback and no crash.
+	game.mode = "small"
+	game.call("_refresh")
+	await process_frame
+	game.call("_reset_input_guard")
+	game.call("_command", {"type": "definitely_not_a_command"}, "")
+	await process_frame
+	await process_frame
+	_assert_equal(is_instance_valid(game), true, "VIS-FEED invalid command does not terminate the scene")
+	_assert_equal(str(game.last_feedback_record.get("key", "")).begins_with("feedback."), true, "VIS-FEED invalid command maps to safe feedback")
+	_assert_equal(bool(game.last_feedback_record.get("ok", true)), false, "VIS-FEED invalid command is reported as not applied")
+
+	# Rapid repeated activation is one intent.
+	game.call("_reset_input_guard")
+	var before_revision := int(game.application.get_view_model("small", "de").get("state_revision", 0))
+	var suppressed_before := int(game.suppressed_duplicate_commands)
+	for _repeat in 8:
+		game.call("_command", {"type": "clean"}, "clean", "bath")
+	await process_frame
+	await process_frame
+	var after_revision := int(game.application.get_view_model("small", "de").get("state_revision", 0))
+	_assert_equal(after_revision - before_revision, 1, "VIS-INPUT eight immediate repeats submit exactly one command")
+	_assert_equal(int(game.suppressed_duplicate_commands) - suppressed_before, 7, "VIS-INPUT every duplicate is counted, not silently dropped")
+
+	# No player-facing control may be connected twice, and every one is labelled.
+	for mode in ["small", "expanded"]:
+		game.mode = mode
+		for page in ["care", "more", "adventure"]:
+			game.small_page = page
+			game.call("_refresh")
+			await process_frame
+			await process_frame
+			for node in game.root_layer.find_children("*", "BaseButton", true, false):
+				var button := node as BaseButton
+				_assert_equal(button.pressed.get_connections().size() <= 1, true, "VIS-INPUT %s/%s %s has at most one handler" % [mode, page, button.name])
+				var label := str(button.get_meta("accessible_label", button.tooltip_text))
+				var visible_text: String = button.text if button is Button else ""
+				_assert_equal(not label.strip_edges().is_empty() or not visible_text.strip_edges().is_empty(), true, "VIS-A11Y %s/%s %s carries a readable label" % [mode, page, button.name])
+				if visible_text.strip_edges().is_empty():
+					_assert_equal(not button.tooltip_text.strip_edges().is_empty(), true, "VIS-A11Y icon-only %s has a tooltip" % button.name)
+				_assert_equal(button.focus_mode, Control.FOCUS_ALL, "VIS-A11Y %s is keyboard focusable" % button.name)
+
+	# Small keeps the habitat, four meters, the action row and the footer inside
+	# the window at every supported UI and text scale.
+	game.mode = "small"
+	game.small_page = "care"
+	for ui_scale in [1.0, 1.25, 1.5, 1.75, 2.0]:
+		for text_scale in [1.0, 1.5]:
+			game.preferences["interface"]["ui_scale"] = ui_scale
+			game.preferences["interface"]["text_scale"] = text_scale
+			game.call("_build_root_theme")
+			game.call("_apply_window_mode")
+			game.call("_refresh")
+			await process_frame
+			await process_frame
+			var frame: Control = game.root_layer.find_child("WindowFrame", true, false)
+			var status: Control = game.root_layer.find_child("PrimaryStatusRow", true, false)
+			var habitat: Control = game.root_layer.find_child("SmallHabitatFrame", true, false)
+			var quick: Control = game.root_layer.find_child("QuickActions", true, false)
+			var footer: Control = game.root_layer.find_child("SmallNavigation", true, false)
+			var tag := "%.0f/%.0f" % [ui_scale * 100.0, text_scale * 100.0]
+			_assert_equal(frame != null and status != null and habitat != null and quick != null and footer != null, true, "VIS-LAYOUT Small keeps every region at %s" % tag)
+			if frame == null or habitat == null or footer == null or quick == null or status == null:
+				continue
+			_assert_equal(status.get_child_count(), 4, "VIS-LAYOUT Small shows exactly four primary meters at %s" % tag)
+			_assert_equal(quick.get_child_count() >= 3 and quick.get_child_count() <= 4, true, "VIS-LAYOUT Small shows three or four primary actions at %s" % tag)
+			_assert_equal(habitat.size.y > 0.0, true, "VIS-LAYOUT habitat keeps a positive extent at %s" % tag)
+			_assert_equal(footer.get_global_rect().end.y <= frame.get_global_rect().end.y + 1.0, true, "VIS-LAYOUT footer stays inside the frame at %s" % tag)
+	game.preferences["interface"]["ui_scale"] = "auto"
+	game.preferences["interface"]["text_scale"] = 1.0
+	game.call("_build_root_theme")
+
+	# Auto UI scale must follow display DPI, not the always-1.0 reported scale.
+	_assert_equal(PresentationPreferences.resolved_ui_scale("auto", 1.25), 1.25, "VIS-DPI auto scale honours a 125 percent display")
+	_assert_equal(PresentationPreferences.resolved_ui_scale("auto", 1.0), 1.0, "VIS-DPI auto scale stays at 100 percent on a 96 dpi display")
+
+	game.free()
+	for path in [save_path, preferences_path, placement_path]:
+		_remove_save(path)
+
+
+func _find_named_button(node: Node, control_name: String) -> BaseButton:
+	for child in node.find_children(control_name, "BaseButton", true, false):
+		return child as BaseButton
+	return null
 
 func _test_minimal_scene_hierarchy() -> void:
 	var save_path := "user://tests/presentation/minimal-scene.json"
@@ -618,6 +840,13 @@ func _emit_button_and_settle(button: BaseButton, label: String) -> void:
 	_assert_equal(not button.disabled, true, "%s is enabled" % label)
 	if button.disabled:
 		return
+	# Each scripted emission is one deliberate intent, so the duplicate-input
+	# guard is cleared first instead of treating the batch as a double click.
+	var host: Node = button
+	while host != null and not host.has_method("_reset_input_guard"):
+		host = host.get_parent()
+	if host != null:
+		host.call("_reset_input_guard")
 	button.emit_signal("pressed")
 	_assert_equal(is_instance_valid(button), true, "%s emitter survives signal dispatch" % label)
 	await process_frame

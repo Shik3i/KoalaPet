@@ -44,6 +44,39 @@ Direct Prompt 4.5 evidence confirms Minimal transparency and outside-pet click-t
 - Ambient frequency is Low/Normal/High. Reduced Motion prevents ambient travel/playful locomotion, shortens presentation cadence without skipping frame markers and uses reduced effects. Hit shake, damage flash and cursor reaction are separately configurable.
 - Hidden/removed mode trees suspend their animation and ambient processors. Mode switching still preserves one `PetApplication`, pet identity and state revision.
 
+## Prompt 4.9 resizable player windows
+
+Small and Expanded are now genuinely user-resizable; Minimal stays derived from the
+Minimal pet-scale preference. All values are logical pixels before UI scale.
+
+| Mode | Default | Minimum | Maximum | Resizable |
+| --- | --- | --- | --- | --- |
+| Minimal | `240×160` | `240×160` | `560×480` | no |
+| Small | `720×480` | `600×380` | `1280×860` | yes |
+| Expanded | `1160×760` | `900×620` | `2200×1400` | yes |
+
+- The native minimum and maximum are pushed to the window as `min_size` / `max_size`
+  multiplied by the resolved UI scale, so the OS itself enforces the usable range.
+- Size and position are remembered per mode, restored on the next transition, and
+  clamped by `WindowPresentationMode.clamp_size` plus the existing off-screen
+  recovery in `OverlayPlacementSanitizer`.
+- A drag reflows the presentation without rebuilding the scene, so resizing never
+  restarts an animation. The single exception is crossing the width where the
+  status row switches to its icon-and-value form.
+- Raising the UI scale enlarges the window proportionally instead of compressing
+  the same content, so `Auto → 200%` grows Small from `900×600` to `1440×960`
+  physical pixels on a 125% display.
+- `Window.content_scale_size` is deliberately left unset. A non-zero override pins
+  the root viewport, which in turn pinned the native client area to the project's
+  boot size and made a border drag snap straight back.
+
+### Auto UI scale on Windows
+
+`DisplayServer.screen_get_scale()` returns `1.0` on Windows regardless of the
+display setting, so the previous `auto` UI scale never left 100% and the entire
+interface rendered at roughly 80% of its intended physical size on a 125% display.
+Auto now derives from `screen_get_dpi() / 96`, with the reported scale as a floor.
+
 ## Prompt 3.5 Windows evidence
 
 The first direct Windows run was completed on 2026-08-12 with Windows 11 Pro `10.0.26200`, Godot `4.7.1.stable.official.a13da4feb`, three monitors, per-monitor-aware PowerShell capture, primary 125% scaling, a bottom non-auto-hidden taskbar, and an NVIDIA RTX 4080 SUPER. The native spike reached `READY` for native window creation, borderless/transparency flags, transparent viewport, polygonal hit regions, focus policies, monitor enumeration, status indicator creation, and 60 FPS at the configured cap. Evidence is in [`PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md`](PROMPT_0035_INTERACTIVE_PRODUCT_REVIEW.md).

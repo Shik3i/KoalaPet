@@ -464,6 +464,28 @@
     },
     {
       "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/call",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/call.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "07b44759a17be7a771c7b2f32b5c6ca50611fa5c175f55feaf83da906474adbb",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
       "asset_id": "koalapet.base:visual/assets_generated/ui/icons/clean",
       "classification": "REPLACE_BEFORE_RELEASE",
       "file_paths": [
@@ -482,6 +504,28 @@
       "third_party_source_usage": "NONE_DOCUMENTED",
       "transformation_pipeline": [
         "tools/art_pipeline/process_visual_rebuild_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/close",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/close.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "82d8637b17ef5a9a84cffbd658462683ffec46b9bc44a51bbd69176a185f3192",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
       ]
     },
     {
@@ -508,6 +552,28 @@
     },
     {
       "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/collapse",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/collapse.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "58760f8d997800e59730ec7983adae92ee0de089553c5a4386d3101950eab837",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
       "asset_id": "koalapet.base:visual/assets_generated/ui/icons/defensive",
       "classification": "REPLACE_BEFORE_RELEASE",
       "file_paths": [
@@ -526,6 +592,28 @@
       "third_party_source_usage": "NONE_DOCUMENTED",
       "transformation_pipeline": [
         "tools/art_pipeline/process_visual_rebuild_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/discipline",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/discipline.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "7833e84c192b664e87688d780cf34c3dae684f176d255f69e797565b94c64fc5",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
       ]
     },
     {
@@ -728,6 +816,28 @@
     },
     {
       "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/level",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/level.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "add6d48b37905945d0534b6bfa55f09f521f0662cf8856ea9d0ca124ff9c851a",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
       "asset_id": "koalapet.base:visual/assets_generated/ui/icons/medicine",
       "classification": "REPLACE_BEFORE_RELEASE",
       "file_paths": [
@@ -768,6 +878,28 @@
       "third_party_source_usage": "NONE_DOCUMENTED",
       "transformation_pipeline": [
         "tools/art_pipeline/process_visual_rebuild_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/minimize",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/minimize.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "abd2d7fe25c7d221d8a4210ba8ae2f414491f731a663e26f7f4d35a3bb65f4be",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
       ]
     },
     {
@@ -860,6 +992,28 @@
     },
     {
       "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/sickness",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/sickness.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "4848601d058d034b540410593c4d72cd2a50e0bd57599e4cc45abf672e1a5f1e",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
       "asset_id": "koalapet.base:visual/assets_generated/ui/icons/sleep",
       "classification": "REPLACE_BEFORE_RELEASE",
       "file_paths": [
@@ -922,6 +1076,776 @@
       "third_party_source_usage": "NONE_DOCUMENTED",
       "transformation_pipeline": [
         "tools/art_pipeline/process_visual_rebuild_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/treatment",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/treatment.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "e4358593479efdc9523e67d43e17f86b4d83f77281a313f5e68f56dee366c6e6",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/wake",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/wake.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "292ecb7e2c2b79b6833a6feff31ea049c849baab69aa5011b6a9d870bb640727",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/aggressive",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/aggressive.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "cf7a689ad3b176896a15aeaba05225f647eb3c4354713a948f35736513efa63e",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/balanced",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/balanced.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "239a8f8c506649f6e6f73c5d8da3788f9dc2d309d5ceceb9c9e6ccdbde008cec",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/battle",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/battle.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "565d5fb0711fd8377cc6eaa624259691b80b2d7d1c1c8e62591c19214d72182c",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/call",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/call.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "77f6317d129e8734e4f5a9a860bac4663ebe21005443c851dc3cdee3f240137b",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/clean",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/clean.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "411468763f0de69a99a734ea62ef01f31755e9102e18ddfb121470978f508754",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/close",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/close.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "b00d30f542489de44c5c3b61603694f57097faa4d1999159810ddba90ded7180",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/codex",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/codex.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "acbd9b16d951667a75a784263437077527dc8a71cdc8900fd4e529ab619de57c",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/collapse",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/collapse.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "df0c84621c1aa664ef0b9e7dc59b01e4c6f16c43eadf9427141a4e24ab140c1a",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/defensive",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/defensive.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "8462e476d4c92e4bf327c51035d0e1735c62327bd612a48911f91baab0621eec",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/discipline",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/discipline.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "d58d40cfbb4039b998e6c0c0d1af9ba64ab14536805fbc7cdc3b691b95d8355b",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/dungeon",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/dungeon.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "62a2d2c0f5c0b7e043b4d9151c26ae94d161a9adea2723dca751d658fcdad007",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/energy",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/energy.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "942266a3cf8ace79e7526dc06f0a383d6a2bd0df3a70fbbba924132629eac26d",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/evolution",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/evolution.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "74556dff050c98cff033903f6d43effbac7adea70c0c00b06048e9adb220def2",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/expand",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/expand.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "d8c0397092c990aa9851e31f46d663835c58767c13409d422f2d98131c9e965d",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/feed",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/feed.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "64409927e5c8caeb4d4754aed4b5ca1834f9ecb726096ee954285a82a1d3d13c",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/health",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/health.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "797a28397a2eb948f4ef811fd5b0075dae2fccd74cacde7888f1eda5819592dc",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/hygiene",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/hygiene.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "6f3d344d3855b8796f998ac5c0485fea7a899427f55bd38d3a5138e7b68a0b8c",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/injury",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/injury.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "311d8e98172fad88473501d0965e0e9c9a60146d995802270f98a915de7b8e63",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/inventory",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/inventory.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "180fd18d8245e1a380f6f50c6802ab9f4ebe03c00aa0c9e5a34b414e0b802209",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/level",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/level.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "44eebe1994a57776bc1173357df0a9d65ecae2550b4156df5a7bb3bcc163efc5",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/medicine",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/medicine.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "af595d6c53bd7b9192d8b215c280c1082d18460ad5a3b5319197ab2c8a334b34",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/minimal",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/minimal.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "a3cf5f4a0de931e9760853103cd901af109889819d3528df475a2c2be48b16c2",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/minimize",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/minimize.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "172c2eca3b7a413900c5c3b824b45ee35f900e7a0d3be5a928362c6839f169b3",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/mood",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/mood.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "b6a0a24efbc95b69dcb5ebac4c7f029187ddba894e6c3e5b2d6ec1dda7544943",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/rewards",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/rewards.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "733b644b7df81b96f9a7532d8aa58afc99601fe815b4992f38be230ae5e496cb",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/satiety",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/satiety.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "1498491d239ef114387e59f20e495bd2a092c54f34c96d4750546c10d73e13d8",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/settings",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/settings.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "098c907c8d65a6d84b90eaa93308847564f8537466d032f5f2640bebbc01a0f6",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/sickness",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/sickness.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "382088c00e67f5173f3c0555d6fb275dc10cbe6b8a2de4bae297daedb4b501a5",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/sleep",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/sleep.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "feff38ebf8e082b88d847279d1d49ed755ada029140bdcbc224855e292cea718",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/train",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/train.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "002899ec6628a4735dcdd916e432ecec46262b45f38cccff9c5cdc5faf8cc764",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/treat",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/treat.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "615e4c01f405fd586b183c0785792b20595f7d0eb907fc8ae1347f56d9d1b5f3",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/treatment",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/treatment.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "3d246553f5ff34a84df488d5e0c5b2c8d7e3f38b4a42950407510bf68933a3d9",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
+      ]
+    },
+    {
+      "approval_status": "PROVISIONAL_PRODUCT_REVIEW",
+      "asset_id": "koalapet.base:visual/assets_generated/ui/icons/x2/wake",
+      "classification": "REPLACE_BEFORE_RELEASE",
+      "file_paths": [
+        "game/assets_generated/ui/icons/x2/wake.png"
+      ],
+      "generation_date": "2026-08-13",
+      "generation_method": "Deterministic Pillow code generation",
+      "generation_provider_tool": "Python/Pillow",
+      "human_manual_edits": "NONE_DOCUMENTED",
+      "license_status": "UNDECIDED",
+      "model_identifier": "NOT_APPLICABLE",
+      "owning_content_pack": "koalapet.base",
+      "replacement_requirement": "Resolve asset rights and product-owner approval; regenerate or replace if either is unavailable.",
+      "sha256": "b8fef4afddcc6682fdf0b56fb775cf3383664b295ace9d7c8f339dd5149289df",
+      "source_brief": "Original provisional Milestone-4 dungeon or reward visual generated from repository-owned code.",
+      "third_party_source_usage": "NONE_DOCUMENTED",
+      "transformation_pipeline": [
+        "tools/art_pipeline/generate_milestone_four_assets.py"
       ]
     },
     {
@@ -8603,7 +9527,7 @@
       ]
     }
   ],
-  "distributed_visual_count": 388,
+  "distributed_visual_count": 430,
   "inventory_date": "2026-08-14",
   "legal_decision": "NOT_MADE",
   "schema_version": 1

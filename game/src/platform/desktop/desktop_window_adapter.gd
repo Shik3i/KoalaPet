@@ -62,6 +62,10 @@ func set_size(_size: Vector2i) -> OverlayApplyResult:
 	return _unsupported("set_size")
 
 
+func set_size_bounds(_minimum: Vector2i, _maximum: Vector2i) -> OverlayApplyResult:
+	return _unsupported("set_size_bounds")
+
+
 func get_current_placement(_mode: int) -> OverlayPlacement:
 	return OverlayPlacement.new()
 

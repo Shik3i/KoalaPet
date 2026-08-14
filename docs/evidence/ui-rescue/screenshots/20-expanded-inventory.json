@@ -288,7 +288,7 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T17:08:01",
+		"captured_at_utc": "2026-08-14T17:25:11",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
@@ -317,7 +317,7 @@
 				]
 			}
 		],
-		"observed_fps": 47.0,
+		"observed_fps": 48.0,
 		"os_name": "Windows",
 		"os_version": "10.0.26200",
 		"rendering_driver": "opengl3",
@@ -345,7 +345,7 @@
 		"window_unfocusable": false,
 		"window_visible": true
 	},
-	"observed_fps": 47.0,
+	"observed_fps": 48.0,
 	"persistent_root_color_rects": 0,
 	"pet": {
 		"battle_active": false,

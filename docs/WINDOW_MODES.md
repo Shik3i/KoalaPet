@@ -70,6 +70,16 @@ Minimal pet-scale preference. All values are logical pixels before UI scale.
   the root viewport, which in turn pinned the native client area to the project's
   boot size and made a border drag snap straight back.
 
+### Text scale and window width
+
+Both modes grow their width by the full text request; Small grows its height at
+half that rate because the habitat absorbs the difference. The enforced native
+minimum follows the same ratio, so the window cannot be dragged below the size
+where its own labels fit.
+
+At half width growth a 150% text scale pushed the Small window controls past the
+right edge and left the player unable to close the window.
+
 ### Auto UI scale on Windows
 
 `DisplayServer.screen_get_scale()` returns `1.0` on Windows regardless of the

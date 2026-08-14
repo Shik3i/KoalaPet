@@ -14,7 +14,7 @@
         2320,
         1520
       ],
-      "sha256": "1ad30d6c5c41da2165b6c1c125f086962717ab93f0064fa18fcf9a4c3cc7e6e6"
+      "sha256": "7c90787271a940bc648b578805c543108cf132aa1f940eacf7e72a83c27a17eb"
     },
     {
       "name": "02-egg-waiting",
@@ -179,10 +179,10 @@
       "runtime_actions": "text:150",
       "image": "15-small-text-150.png",
       "pixels": [
-        1440,
-        960
+        2160,
+        1200
       ],
-      "sha256": "c52c03ccacad2ad31c287990d43c9028cd8fc0f89543a4a91349c60f15de218e"
+      "sha256": "a870c6204c3235ff721e82b99feae29a3c678e54c9e911109d72378e10543655"
     },
     {
       "name": "16-expanded-overview",

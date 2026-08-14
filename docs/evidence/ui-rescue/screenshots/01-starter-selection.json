@@ -8,6 +8,78 @@
 	],
 	"controls": [
 		{
+			"accessible_label": "Einstellungen",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "settings",
+			"label": "",
+			"name": "HeaderSettings",
+			"pressed_connections": 1,
+			"rect": [
+				1912.0,
+				40.0,
+				80.0,
+				80.0
+			],
+			"tooltip": "Einstellungen"
+		},
+		{
+			"accessible_label": "Klein",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "collapse",
+			"label": "",
+			"name": "HeaderModeSwitch",
+			"pressed_connections": 1,
+			"rect": [
+				2008.0,
+				40.0,
+				80.0,
+				80.0
+			],
+			"tooltip": "Klein"
+		},
+		{
+			"accessible_label": "Minimieren",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "minimize",
+			"label": "",
+			"name": "HeaderMinimize",
+			"pressed_connections": 1,
+			"rect": [
+				2104.0,
+				40.0,
+				80.0,
+				80.0
+			],
+			"tooltip": "Minimieren"
+		},
+		{
+			"accessible_label": "Schließen",
+			"action_id": "",
+			"component": "window_button",
+			"disabled": false,
+			"focusable": true,
+			"icon": "close",
+			"label": "",
+			"name": "HeaderClose",
+			"pressed_connections": 1,
+			"rect": [
+				2200.0,
+				40.0,
+				80.0,
+				80.0
+			],
+			"tooltip": "Schließen"
+		},
+		{
 			"accessible_label": "Wählen · Mooskeim-Ei",
 			"action_id": "choose_starter",
 			"component": "primary_button",
@@ -19,7 +91,7 @@
 			"pressed_connections": 1,
 			"rect": [
 				402.0,
-				994.0,
+				1044.0,
 				452.0,
 				88.0
 			],
@@ -37,7 +109,7 @@
 			"pressed_connections": 1,
 			"rect": [
 				934.0,
-				994.0,
+				1044.0,
 				452.0,
 				88.0
 			],
@@ -55,7 +127,7 @@
 			"pressed_connections": 1,
 			"rect": [
 				1466.0,
-				994.0,
+				1044.0,
 				452.0,
 				88.0
 			],
@@ -74,7 +146,20 @@
 	"habitat_visual_state": "",
 	"last_feedback": {},
 	"last_mode_request": "",
-	"layout_rects": {},
+	"layout_rects": {
+		"PlayerTitleBar": [
+			40.0,
+			40.0,
+			2240.0,
+			80.0
+		],
+		"WindowFrame": [
+			16.0,
+			16.0,
+			2288.0,
+			1488.0
+		]
+	},
 	"locale": "de",
 	"logical_size": [
 		1160.0,
@@ -104,7 +189,7 @@
 			"transparency": true,
 			"usable_rect": true
 		},
-		"captured_at_utc": "2026-08-14T17:03:07",
+		"captured_at_utc": "2026-08-14T17:20:16",
 		"display_server": "Windows",
 		"engine_max_fps": 0,
 		"focus_policy": "normal",
@@ -162,7 +247,7 @@
 		"window_visible": true
 	},
 	"observed_fps": 1.0,
-	"persistent_root_color_rects": 1,
+	"persistent_root_color_rects": 0,
 	"pet": {
 		"battle_active": false,
 		"battle_unlocked": false,
@@ -197,7 +282,7 @@
 	"state_revision": 0,
 	"suppressed_duplicate_commands": 0,
 	"text_scale": 1.0,
-	"texture_memory_bytes": 28876737,
+	"texture_memory_bytes": 29194827,
 	"theme_base_scale": 1.0,
 	"viewport_visible_rect": [
 		0.0,

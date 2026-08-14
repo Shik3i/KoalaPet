@@ -115,4 +115,7 @@ Review index: [`evidence/visual-acceptance/README.md`](evidence/visual-acceptanc
 - `tools/art_pipeline/audit_animation_quality.py --check`: all `290` referenced animations measured for frame count, cycle length, real per-frame motion, single-transition pops and wasted frames, with deliberate structure (return-to-rest, ping-pong midpoint, one-shot settle) classified rather than flagged. Reports `0` issues and is a gate, as are `generate_egg_animations.py --check` and `generate_ui_symbol_icons.py --check`.
 - Performance: eight isolated four-second native samples at `60 FPS`, at most `1.938%` of 16-thread capacity and `203.12 MiB` peak working set — level with the Prompt 4.7 baseline.
 - Stability soak: `307` scripted intents (100 care actions, 103 mode switches, 100 tab switches) left `0` queued animation events, at most one `pressed` handler per control and no leaked background node.
+- Text-scale bounds: `scaled_size` and `scaled_bounds` are asserted for 125/150/175% text in
+  both resizable modes, including that the enforced minimum follows the text request and never
+  exceeds the mode default.
 - Not measured this milestone: any video recording.

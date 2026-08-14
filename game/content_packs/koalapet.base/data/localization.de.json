@@ -80,6 +80,7 @@
     "feedback.locked": "Das ist noch nicht freigeschaltet.",
     "feedback.medicine.ok": "Die Medizin wirkt.",
     "feedback.medicine.unchanged": "Medizin wird gerade nicht gebraucht.",
+    "feedback.minimal_needs_pet": "Minimal zeigt nur deinen Gefährten. Wähle zuerst ein Ei.",
     "feedback.nickname.ok": "Name gespeichert.",
     "feedback.no_battle": "Gerade läuft kein Kampf.",
     "feedback.no_dungeon": "Gerade läuft kein Dungeon.",

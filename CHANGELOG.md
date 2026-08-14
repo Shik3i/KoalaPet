@@ -29,6 +29,9 @@ All notable changes will be documented here. The format follows Keep a Changelog
 - Fixed application content-root typing for injected test/runtime configurations and expanded quarantine checks to every persisted pet content binding.
 - Fixed starter-card clipping/import visibility, German localization fallbacks, hatch-progress visibility, mode-refresh resizing, Expanded/status clipping, and Small sickness-action clipping in the Godot product shell.
 - Fixed stale feature-gate test expectations after adding adventure gates, Python/runtime evolution-schema parity for stage-age fields, and application-layer loss of pending evolution states at unsafe transition points.
+- Fixed the Small layout overflowing its own window at 125% text scale and above, which pushed the minimise and close buttons past the right edge and left the player unable to close the window. Window width and the enforced minimum now track the full text request.
+- Fixed the starter screen shipping without any window chrome, so a first-time player could not close, minimise, move or configure the application before choosing an egg.
+- Fixed Minimal mode being offered before a pet exists, which dropped the starter choice into a 240x160 window; it is now hidden and refused with a readable reason.
 - Fixed the three starter eggs animating as a two-frame flicker at 10 fps, which was the first animation every new player saw and made hatching unreadable as an event.
 - Fixed contextual alert chips rendering as a bare icon: an ellipsis overrun collapses a Label's minimum width, so the alert text never appeared.
 - Fixed Battle and Dungeon offering the same command twice, once in the centre panel and once in the contextual action column, and offering "next stage" while the player was standing on a dungeon branch.

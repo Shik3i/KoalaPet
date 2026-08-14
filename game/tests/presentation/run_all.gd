@@ -356,6 +356,19 @@ func _test_preferences() -> void:
 	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.SMALL, 1.0, 1.75).x > WindowPresentationMode.default_size(WindowPresentationMode.Value.SMALL).x, true, "VIS-PREF text scale reflows window")
 	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.EXPANDED, 1.0, 1.5), Vector2i(1740, 1140), "VIS-PREF Expanded 150 percent text has full three-column reflow room")
 	_assert_equal(WindowPresentationMode.scaled_size(WindowPresentationMode.Value.SMALL, 1.5, 1.0), Vector2i(1080, 720), "VIS-PREF Small 150 percent UI scale expands layout bounds")
+	# Width must follow the full text request. At half growth a 150 percent text
+	# scale pushed the Small window controls past the right edge of the window.
+	for text_scale in [1.25, 1.5, 1.75]:
+		for mode in [WindowPresentationMode.Value.SMALL, WindowPresentationMode.Value.EXPANDED]:
+			var base := WindowPresentationMode.default_size(mode)
+			var scaled := WindowPresentationMode.scaled_size(mode, 1.0, text_scale)
+			var label := "Small" if mode == WindowPresentationMode.Value.SMALL else "Expanded"
+			_assert_equal(scaled.x, roundi(base.x * text_scale), "VIS-PREF %s width tracks %d percent text" % [label, roundi(text_scale * 100.0)])
+			_assert_equal(scaled.y >= base.y, true, "VIS-PREF %s height never shrinks at %d percent text" % [label, roundi(text_scale * 100.0)])
+			var bounds := WindowPresentationMode.scaled_bounds(mode, 1.0, text_scale)
+			_assert_equal(bounds["minimum"].x > WindowPresentationMode.min_size(mode).x, true, "VIS-PREF %s minimum width follows the text request" % label)
+			_assert_equal(bounds["minimum"].x <= bounds["reference"].x, true, "VIS-PREF %s minimum never exceeds its default at %d percent text" % [label, roundi(text_scale * 100.0)])
+			_assert_equal(bounds["maximum"].x >= bounds["minimum"].x, true, "VIS-PREF %s maximum stays above its minimum" % label)
 
 
 func _test_habitat_contract() -> void:

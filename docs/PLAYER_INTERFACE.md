@@ -82,6 +82,13 @@ content scrolls (event history, codex, inventory); the interface itself does not
 - Transient status toasts are click-through and sit over the habitat, so they can
   never swallow the next action.
 
+## Window chrome
+
+Every screen, including the starter choice, carries the same header: identity
+plus Settings, Expand/Collapse, Minimal, Minimize and Close. Minimal is hidden
+until a pet exists, because it is a pet-only presentation and would otherwise
+drop the starter choice into a 240x160 window.
+
 ## Accessibility
 
 - Every control is keyboard focusable, appears in the focus order and activates

@@ -67,6 +67,7 @@ var refresh_depth := 0
 var logical_size := Vector2(720, 450)
 var requested_window_size := Vector2i.ZERO
 var applied_presentation_scale := 0.0
+var applied_reference_size := Vector2i.ZERO
 var mode_switch_requests := 0
 var mode_switch_applied := 0
 var last_mode_request := ""
@@ -261,18 +262,16 @@ func _refresh(status_override := "") -> void:
 
 
 func _build_starter() -> void:
-	var backdrop := ColorRect.new()
-	backdrop.color = Color("#0d1820f2")
-	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	root_layer.add_child(backdrop)
-	var margin := MarginContainer.new()
-	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_set_margins(margin, 28)
-	root_layer.add_child(margin)
+	# The starter screen carries the same window chrome as every other screen.
+	# Without it a first-time player could not close, minimise, move or
+	# configure the application at all.
+	var shell := _window_shell({"name": application.text("ui.title", "KoalaPet", locale), "hatched": false})
 	var column := VBoxContainer.new()
+	column.name = "StarterScreen"
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
-	column.add_theme_constant_override("separation", 14)
-	margin.add_child(column)
+	column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	UiMetrics.apply_separation(column, UiMetrics.SPACE_SECTION)
+	shell.add_child(column)
 	var heading := PixelUi.title(application.text("ui.choose_egg", "Wähle ein Ei", locale), 24)
 	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(heading)
@@ -730,10 +729,13 @@ func _window_header(model: Dictionary) -> HBoxContainer:
 	switch_mode.name = "HeaderModeSwitch"
 	_connect_pressed(switch_mode, _set_mode.bind(MODE_EXPANDED if expanding else MODE_SMALL))
 	row.add_child(switch_mode)
-	var minimal_button := PixelUi.window_button("minimal", application.text("ui.minimal", "Minimal", locale))
-	minimal_button.name = "HeaderMinimalMode"
-	_connect_pressed(minimal_button, _set_mode.bind(MODE_MINIMAL))
-	row.add_child(minimal_button)
+	# Minimal is pet-only. Offering it before there is a pet would drop the
+	# starter choice into a 240x160 window with no way to complete it.
+	if application.has_pet():
+		var minimal_button := PixelUi.window_button("minimal", application.text("ui.minimal", "Minimal", locale))
+		minimal_button.name = "HeaderMinimalMode"
+		_connect_pressed(minimal_button, _set_mode.bind(MODE_MINIMAL))
+		row.add_child(minimal_button)
 	var minimize := PixelUi.window_button("minimize", application.text("ui.minimize", "Minimieren", locale))
 	minimize.name = "HeaderMinimize"
 	_connect_pressed(minimize, _minimize)
@@ -1673,6 +1675,16 @@ func _set_mode(value: String) -> void:
 	last_mode_request = value
 	if value not in [MODE_MINIMAL, MODE_SMALL, MODE_EXPANDED] or value == mode:
 		return
+	if value == MODE_MINIMAL and not application.has_pet():
+		# Refused with a readable reason rather than silently ignored.
+		last_feedback = {
+			"key": "feedback.minimal_needs_pet",
+			"fallback": "Minimal zeigt nur deinen Gefährten. Wähle zuerst ein Ei.",
+			"severity": ActionFeedback.SEVERITY_BLOCKED,
+			"icon": "minimal",
+		}
+		_refresh()
+		return
 	mode_switch_applied += 1
 	_save_window_placement()
 	mode = value
@@ -1688,10 +1700,8 @@ func _apply_window_mode() -> void:
 	var rendered_size := _target_window_size(mode_value, text_scale, presentation_scale)
 	if window_adapter.is_host_supported():
 		mode_controller.transition_to(mode_value)
-		window_adapter.set_size_bounds(
-			Vector2i(Vector2(WindowPresentationMode.min_size(mode_value)) * presentation_scale),
-			Vector2i(Vector2(WindowPresentationMode.max_size(mode_value)) * presentation_scale)
-		)
+		var native_bounds := WindowPresentationMode.scaled_bounds(mode_value, presentation_scale, text_scale)
+		window_adapter.set_size_bounds(native_bounds["minimum"], native_bounds["maximum"])
 		window_adapter.set_size(rendered_size)
 		window_adapter.set_transparency(true)
 		window_adapter.set_always_on_top(bool(preferences.get("desktop", {}).get("always_on_top", true)))
@@ -1703,6 +1713,7 @@ func _apply_window_mode() -> void:
 			window_adapter.set_input_policy(DesktopWindowAdapter.INPUT_INTERACTIVE)
 	requested_window_size = rendered_size
 	applied_presentation_scale = presentation_scale
+	applied_reference_size = WindowPresentationMode.scaled_size(mode_value, presentation_scale, text_scale, _minimal_pet_scale())
 	_apply_presentation_extent(rendered_size, presentation_scale)
 	root_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE if mode == MODE_MINIMAL else Control.MOUSE_FILTER_PASS
 	# The main window can still be resized by the engine boot sequence after the
@@ -1726,18 +1737,25 @@ func _confirm_window_size() -> void:
 func _target_window_size(mode_value: int, text_scale: float, presentation_scale: float) -> Vector2i:
 	if not WindowPresentationMode.is_user_resizable(mode_value):
 		return WindowPresentationMode.scaled_size(mode_value, presentation_scale, text_scale, _minimal_pet_scale())
+	var bounds := WindowPresentationMode.scaled_bounds(mode_value, presentation_scale, text_scale)
+	var reference: Vector2i = bounds["reference"]
 	var remembered := mode_controller.remembered_size(mode_value) if mode_controller != null else Vector2i.ZERO
 	if remembered.x <= 0 or remembered.y <= 0:
-		remembered = Vector2i(Vector2(WindowPresentationMode.default_size(mode_value)) * presentation_scale)
-	elif applied_presentation_scale > 0.0 and not is_equal_approx(applied_presentation_scale, presentation_scale):
-		# Raising the UI scale must enlarge the window rather than squeeze the
-		# same content into it, so the remembered size keeps its logical extent.
-		remembered = Vector2i(Vector2(remembered) * (presentation_scale / applied_presentation_scale))
-	var minimum := Vector2(WindowPresentationMode.min_size(mode_value)) * presentation_scale
-	var maximum := Vector2(WindowPresentationMode.max_size(mode_value)) * presentation_scale
+		remembered = reference
+	elif applied_reference_size.x > 0 and applied_reference_size.y > 0 and applied_reference_size != reference:
+		# Raising the UI or text scale must enlarge the window rather than
+		# squeeze the same content into it. At half growth a 150% text scale
+		# pushed the window controls past the right edge, so the remembered size
+		# follows the full reference change on both axes.
+		remembered = Vector2i(
+			roundi(float(remembered.x) * float(reference.x) / maxf(1.0, float(applied_reference_size.x))),
+			roundi(float(remembered.y) * float(reference.y) / maxf(1.0, float(applied_reference_size.y)))
+		)
+	var minimum: Vector2i = bounds["minimum"]
+	var maximum: Vector2i = bounds["maximum"]
 	return Vector2i(
-		clampi(remembered.x, roundi(minimum.x), roundi(maxf(minimum.x, maximum.x))),
-		clampi(remembered.y, roundi(minimum.y), roundi(maxf(minimum.y, maximum.y)))
+		clampi(remembered.x, minimum.x, maxi(minimum.x, maximum.x)),
+		clampi(remembered.y, minimum.y, maxi(minimum.y, maximum.y))
 	)
 
 
@@ -1882,7 +1900,8 @@ func _show_notification(text_value: String, severity := ActionFeedback.SEVERITY_
 	# of controls: clear of the header, the status row, the tab row and the
 	# action/footer rows. It is fully click-through, so it can never swallow the
 	# next action even while it is fading.
-	var band := 130.0 if mode == MODE_SMALL else 92.0
+	var text_scale := clampf(float(preferences.get("interface", {}).get("text_scale", 1.0)), 1.0, 1.75)
+	var band := (130.0 if mode == MODE_SMALL else 92.0) * text_scale
 	notice.position = Vector2(
 		floorf((logical_size.x - width) * 0.5),
 		clampf(band, 72.0, maxf(72.0, logical_size.y - 200.0))
@@ -2370,7 +2389,11 @@ func _run_review_actions(actions: PackedStringArray, diagnostics_delay_ms := 0) 
 			"ui:150": _set_preference(1.5, "interface", "ui_scale")
 			"ui:200": _set_preference(2.0, "interface", "ui_scale")
 			"text:100": _set_preference(1.0, "interface", "text_scale")
+			"text:125": _set_preference(1.25, "interface", "text_scale")
 			"text:150": _set_preference(1.5, "interface", "text_scale")
+			"text:175": _set_preference(1.75, "interface", "text_scale")
+			"density:compact": _set_preference("compact", "interface", "layout_density")
+			"contrast:on": _set_preference(true, "interface", "high_contrast")
 			"pet:75": _set_preference(0.75, "pet_presentation", "standard_pet_scale")
 			"pet:150": _set_preference(1.5, "pet_presentation", "standard_pet_scale")
 			"minimal_pet:75": _set_preference(0.75, "pet_presentation", "minimal_pet_scale")

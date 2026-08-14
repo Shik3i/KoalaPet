@@ -80,6 +80,7 @@
     "feedback.locked": "That is not unlocked yet.",
     "feedback.medicine.ok": "The medicine is working.",
     "feedback.medicine.unchanged": "No medicine is needed right now.",
+    "feedback.minimal_needs_pet": "Minimal shows only your companion. Choose an egg first.",
     "feedback.nickname.ok": "Name saved.",
     "feedback.no_battle": "No battle is running.",
     "feedback.no_dungeon": "No dungeon is running.",

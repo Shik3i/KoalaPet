@@ -127,7 +127,7 @@
           "event": "foot_contact"
         },
         {
-          "frame": 4,
+          "frame": 1,
           "event": "opposite_foot_contact"
         }
       ],

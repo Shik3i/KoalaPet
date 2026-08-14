@@ -93,3 +93,14 @@ The native video directly proves the requested Minimal → Small → care → Ex
 - Path and resource guards cover evidence outputs, temporary capture directories, frame count/rate/duration/dimensions, contact-sheet pixels, PNG dimensions, Save JSON bytes, malformed value types, and invalid active records.
 - Save/application race coverage includes atomic replacement, backup recovery, stale-writer rejection, action-timer revision checks, and state rollback after failed commands or persistence.
 - `.gitignore` explicitly excludes Godot imports/cache, Python bytecode/cache, Ruff/GDToolkit caches, generated source output, tool temp/output, previews, editors, OS metadata, local environment files, secrets, and exports. Committed evidence remains intentionally visible.
+
+## Prompt 4.8 visual-acceptance gate
+
+- `game/tests/presentation/run_all.gd`: `3237` assertions including `16` Showroom entities, all `290` runtime sequences, no unintended fallback, completion of every sequence, marker bounds/order, loop override caching, refresh stability, manual frame stepping and Reduced-Motion routing.
+- `tools/visual_review/audit_animation_sequences.py --check`: `281 ACCEPTED_PROVISIONAL`, `9 NOT_PLAYER_FACING`, no broken/regeneration rows; exact distributed-asset register coverage; no evidence/reference import; explicit reason for every unreferenced runtime PNG.
+- `tools/content_validation/validate_content.py`: event markers must be in range and monotonically ordered.
+- `tools/run_foundation_checks.py` and Windows spike tooling automatically resolve the sibling `_console.exe` for version, import, test, script and check operations. The GUI executable is never used as a headless CLI runner.
+- Direct Windows evidence confirms the Showroom layout, `0` missing/fallback status, visible starter focus, responsive Alt+Tab and stable minimize/restore. Godot controls exposed no usable Windows accessibility child tree.
+- Native runtime scale above available host settings, tray lifecycle, Show Desktop and controlled mixed-DPI movement remain explicitly unavailable; no formal accessibility compliance is claimed.
+
+Review index: [`evidence/visual-acceptance/README.md`](evidence/visual-acceptance/README.md).

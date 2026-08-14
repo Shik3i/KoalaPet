@@ -15,7 +15,7 @@ Each item requires product-owner acceptance or spike evidence. Do not treat defa
 | Habitat | Free placement or invisible-grid placement? | Input, collision, save stability, and small-window usability prototype. |
 | Content | What are final first-MVP counts for families, forms, moves, items, encounters, dungeons, and themes? | Production-cost and replayability estimates after vertical slice. |
 | Windows | Should a status-indicator icon be baseline, and which recovery/actions should it expose? | Prepared generated-icon/menu harness; verify visibility, callbacks, restore, and cleanup on Windows, then obtain product acceptance. |
-| Windows | How should taskbar edge, auto-hide, multi-monitor, mixed DPI, and lost-window recovery behave? | Real hardware/VM spike matrix. |
+| Windows | How should taskbar edge, auto-hide, multi-monitor, mixed DPI, and lost-window recovery behave? | Prompt 4.8 directly inventories a bottom non-auto-hidden taskbar and 100/125% monitors; controlled cross-monitor and 150–200% native runs still require a hardware/VM matrix. |
 | Windows | Must Minimal be absent from the taskbar and Alt+Tab, or merely unobtrusive? | Godot has no dedicated high-level control identified; test shell behavior and decide whether a narrow native bridge is justified. |
 | Windows | Which Minimal interaction strategy preserves both input safety and visual effects? | Compare complete passthrough, polygonal hit region, and timed interaction on Windows; polygonal passthrough may clip drawing outside the region. |
 | Windows | Is one reconfigured native window sufficient for all three modes? | Provisional harness choice; measure flicker, focus, clipping, resource lifetime, and transition stress on Windows. |
@@ -24,6 +24,7 @@ Each item requires product-owner acceptance or spike evidence. Do not treat defa
 | macOS | Is Godot `StatusIndicator` reliable enough for recovery on supported macOS versions? | Current native run reported an off-screen rect and produced no visible item; reproduce on a packaged app before any commitment. |
 | Platforms | When, if ever, should Linux and macOS support begin? | Windows architecture findings and platform demand. |
 | Licensing | What open-source code license and asset/content licenses apply? | Product-owner/legal choice. No `LICENSE` until chosen. |
+| Accessibility | How will Godot controls expose usable Windows UI Automation names, roles and focus order? | Prompt 4.8 accessibility-tree inspection found only native window chrome; evaluate engine support or a narrow accessible native bridge before release acceptance. |
 
 ## Resolved during Prompt 0
 

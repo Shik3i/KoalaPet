@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-08-14",
+  "host_evidence": "environment.windows.json",
+  "runtime": {
+    "build": "debug",
+    "godot": "4.7.1.stable.official.a13da4feb",
+    "launch_flags": [
+      "--dev-tools",
+      "--animation-showroom"
+    ],
+    "isolated_save": true,
+    "clean_exit": true,
+    "crash_dialog_after_console_executable_fix": false
+  },
+  "results": [
+    {
+      "row": "showroom native layout and playback",
+      "status": "PASS",
+      "evidence": "showroom-runtime-secondary.png",
+      "note": "All controls remained visible; status reported 16 entities, 290 sequences and 0 missing/fallback."
+    },
+    {
+      "row": "starter selection keyboard focus",
+      "status": "PASS",
+      "evidence": "game-starter-focus-secondary.png",
+      "note": "Tab reached the first starter action and rendered a persistent non-color-only focus outline."
+    },
+    {
+      "row": "Alt+Tab",
+      "status": "PARTIAL",
+      "evidence": "interactive computer-use observation",
+      "note": "Focus left the Showroom for the main KoalaPet window and both windows remained responsive; external-application policy was not accepted."
+    },
+    {
+      "row": "minimize and restore",
+      "status": "PASS",
+      "evidence": "interactive computer-use observation",
+      "note": "The Showroom minimized through the native system menu, restored, resumed rendering and remained responsive."
+    },
+    {
+      "row": "taskbar geometry",
+      "status": "PASS",
+      "evidence": "environment.windows.json",
+      "note": "Bottom taskbar, 2560x60 physical pixels, auto-hide disabled. Product taskbar policy remains undecided."
+    },
+    {
+      "row": "display scale inventory",
+      "status": "PASS",
+      "evidence": "environment.windows.json",
+      "note": "Two 100% displays and one 125% primary display were directly enumerated."
+    },
+    {
+      "row": "screen-reader accessibility tree",
+      "status": "BLOCKED_ENGINE_LIMITATION",
+      "evidence": "interactive accessibility-tree inspection",
+      "note": "Native window chrome was discoverable, but Godot Control children exposed no usable accessibility tree or accessible names."
+    },
+    {
+      "row": "tray visibility, callbacks and cleanup",
+      "status": "UNAVAILABLE",
+      "evidence": null,
+      "note": "No direct callback interaction was completed in this pass."
+    },
+    {
+      "row": "Show Desktop and hide/show recovery",
+      "status": "UNAVAILABLE",
+      "evidence": null,
+      "note": "Not exercised by the approved interaction tool; no claim made."
+    },
+    {
+      "row": "mixed-DPI movement",
+      "status": "UNAVAILABLE",
+      "evidence": "environment.windows.json",
+      "note": "Mixed 100/125% monitors exist, but a controlled cross-monitor move and resulting geometry capture were not completed."
+    }
+  ]
+}

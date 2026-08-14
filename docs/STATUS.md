@@ -1,7 +1,7 @@
 # Project Status / Ist-Stand
 
 **Stand:** 2026-08-14
-**Phase:** Milestone 4 implementiert; Prompt 4.5 Präsentations-Rebuild, Prompt 4.6 UI-/Lokomotions-Polish und Prompt 4.7 Living-Animation-Ausbau implementiert und lokal validiert
+**Phase:** Milestone 4 implementiert; Prompt 4.8 Visual-Acceptance-/Showroom-Gate implementiert und lokal validiert
 **Freigabe:** Spielbarer Windows-Vertical-Slice; keine Release-, Packaging- oder Milestone-5-Freigabe
 
 ## Gesamtstand
@@ -59,6 +59,7 @@ Die verworfene Debug-/Programmer-Art-Präsentation wurde vollständig ersetzt. D
 - Reproduktion, Dateihashes und Evidenzgrenzen: [`evidence/visual-rebuild/README.md`](evidence/visual-rebuild/README.md)
 - Prompt-4.6-Evidenz: Small/Expanded/Settings/Minimal-/Stationsaufnahmen, neun Walk-GIFs, 23-Sekunden-Polish-Film und sieben Performance-Szenarien unter [`evidence/animation-polish/README.md`](evidence/animation-polish/README.md)
 - Prompt-4.7-Evidenz: sieben native Godot-Movies, zehn extrahierte Belegframes, vollständige/dichte Kontaktbögen, vier Reels und acht Performance-Szenarien unter [`evidence/living-animation/README.md`](evidence/living-animation/README.md)
+- Prompt-4.8-Evidenz: debug-only Runtime-Showroom, `290` klassifizierte Sequenzen, neun Form-Kontaktbögen, vier fokussierte Reels, Rechte-/Optimierungsregister und direkte Windows-Showroom-/Fokusaufnahmen unter [`evidence/visual-acceptance/README.md`](evidence/visual-acceptance/README.md)
 
 ## Validierung
 
@@ -70,7 +71,7 @@ Aktueller vollständiger Lauf mit Godot `4.7.1.stable.official.a13da4feb`:
 - Pet-Suite mit `44` Assertions einschließlich idempotentem Hatch
 - Milestone-4 Evolution/Battle/Dungeon-Suite mit `62` Assertions
 - platformneutrale Window-/Placement-Suite mit `41` Assertions
-- Präsentations-Suite mit `1053` Assertions für Transparenz, UI-Komponenten, Metadaten/Marker, Queue-Grenzen, Reduced Motion, Idle-/Care-/Sleep-/Battle-Sequenzen, Preferences-Recovery, Habitat/Minimal, DE/EN, 100–200%-Bounds, Aktionszugang, Gates und Dev-UI-Isolation
+- Präsentations-Suite mit `3237` Assertions einschließlich `16` Showroom-Entities, `290` Runtime-Sequenzen, vollständigem Playback, Markerreihenfolge, No-Fallback, Refresh-Stabilität, Reduced Motion, UI-Komponenten, Preferences, Habitat/Minimal, DE/EN und 100–200%-Layoutgrenzen
 - Asset-Validator für `373` PNGs (`372` mit Transparenz), vollständige Animationsabdeckung, Geometrie, Alpha, Chronologie, VFX und Evidenz
 - Content-Validator für zwei Packs und `86` JSON-Dokumente
 - Ruff- und GDLint-Läufe ohne Befund; Python-Abhängigkeiten ohne bekannte Advisories; kein Node-/npm-Abhängigkeitsbaum vorhanden, daher `npm audit` nicht anwendbar
@@ -81,12 +82,12 @@ Exakte aktuelle Zählwerte stehen nach dem finalen Gesamtlauf in [`TESTING_AND_Q
 
 - finale Bildrechte und finale Art-Abnahme sind offen; das Generationsmodell meldete keine auslesbare Versionskennung
 - alle neuen Sequenzen bleiben deterministisch abgeleitete, provisorische Produktreview-Art; handfinalisierte Produktionsanimation und formale Rechtefreigabe fehlen
-- Screenreader- und vollständige manuelle Kontrastabnahme fehlen; Reduced Motion, Fokus und Layout-Gates sind implementiert, aber keine vollständige Accessibility-Zertifizierung
-- Taskbar-/Alt+Tab-Sichtbarkeit ist über Godot 4.7 nicht steuerbar; Tray-Menü, Minimize/Restore, Drag, Monitorwechsel und vollständige Mixed-DPI-Matrix sind weiterhin nicht als Produktplattform abgenommen
+- Windows-Accessibility-Tree-Inspektion fand keine nutzbaren Namen/Child-Nodes für Godot-Controls; sichtbarer Tastaturfokus, Reduced Motion und Layout-Gates sind implementiert, aber Screenreader-Abnahme und formale Compliance fehlen
+- Alt+Tab sowie Minimize/Restore waren im interaktiven Debug-Lauf stabil; Tray-Menü/Callbacks/Cleanup, Show Desktop, Hide/Show-Recovery, kontrollierter Monitorwechsel und vollständige Mixed-DPI-Matrix bleiben nicht abgenommen
 - ADR 0010 bleibt `proposed`; der erfolgreiche Präsentations-Rebuild akzeptiert die Plattformarchitektur nicht automatisch
 - keine Exporte, Signierung, Distribution oder Deployment
 - Habitat-Editor, Furniture Placement, Farm, Residents, zweites aktives Pet, Idle Jobs, Trading Post, Economy und Milestone 5 wurden nicht begonnen
 
 ## Exakte Empfehlung vor Milestone 5
 
-Milestone 5 noch nicht starten. Zuerst Product-Owner-Abnahme der neuen Bildsprache und aller drei Modi, Entscheidung über Rechte/Lizenz der provisorischen Quellen sowie ein separater Windows-10/11-DPI-/Shell-/Accessibility-Pass. Erst wenn diese drei Gates dokumentiert akzeptiert sind, Milestone 5 `Habitat customization and unlock rewards` freigeben.
+Milestone 5 noch nicht starten. Zuerst Product-Owner-Abnahme anhand des Prompt-4.8-Reviewpakets, Entscheidung über Rechte/Lizenz der `388` provisorischen Runtime-PNGs sowie Auflösung des Screenreader-Blockers und der fehlenden nativen DPI-/Tray-/Mixed-DPI-Zeilen. Erst wenn diese Gates dokumentiert akzeptiert sind, Milestone 5 `Habitat customization and unlock rewards` freigeben.

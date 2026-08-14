@@ -37,7 +37,7 @@ func _ready() -> void:
 func configure(descriptor: Dictionary, reduce_motion := false, speed_scale := 1.0) -> void:
 	reduced_motion = reduce_motion
 	playback_scale = clampf(speed_scale, 0.25, 2.0)
-	var next_key := "%s|%d|%.3f|%s" % [str(descriptor.get("path", "")), int(descriptor.get("frames", 1)), float(descriptor.get("fps", 1.0)), str(descriptor.get("animation_name", "idle"))]
+	var next_key := "%s|%d|%.3f|%s|%s" % [str(descriptor.get("path", "")), int(descriptor.get("frames", 1)), float(descriptor.get("fps", 1.0)), str(descriptor.get("animation_name", "idle")), str(descriptor.get("loop", true))]
 	if next_key == _descriptor_key and _source != null:
 		_update_processing()
 		return
@@ -80,6 +80,42 @@ func configure(descriptor: Dictionary, reduce_motion := false, speed_scale := 1.
 func set_playback_enabled(enabled: bool) -> void:
 	_playback_enabled = enabled
 	_update_processing()
+
+
+func is_playback_enabled() -> bool:
+	return _playback_enabled
+
+
+func current_frame() -> int:
+	return frame_index
+
+
+func set_frame(value: int) -> void:
+	if _source == null:
+		return
+	frame_index = clampi(value, 0, frame_count - 1)
+	_elapsed = 0.0
+	_update_region()
+	_emit_current_markers()
+
+
+func step_frame(offset: int) -> void:
+	if _source == null or frame_count <= 0:
+		return
+	var next := frame_index + offset
+	if frame_loop:
+		next = posmod(next, frame_count)
+	else:
+		next = clampi(next, 0, frame_count - 1)
+	set_frame(next)
+
+
+func markers_for_frame(value: int) -> Array:
+	return (_event_markers.get(value, []) as Array).duplicate()
+
+
+func current_visual_bounds() -> Rect2:
+	return _frame_bounds[frame_index] if frame_index >= 0 and frame_index < _frame_bounds.size() else interaction_bounds
 
 
 func restart() -> void:

@@ -20,6 +20,7 @@ func _run() -> void:
 	_test_animation_controller()
 	_test_ambient_scheduler()
 	await _test_animated_texture_runtime()
+	await _test_animation_showroom_runtime()
 	_test_preferences()
 	_test_habitat_contract()
 	await _test_habitat_runtime()
@@ -236,6 +237,60 @@ func _test_animated_texture_runtime() -> void:
 	sprite.call("_process", 1.0)
 	_assert_equal(sprite.frame_index, paused_frame, "VIS-RUNTIME hidden sprite cannot advance")
 	sprite.free()
+
+
+func _test_animation_showroom_runtime() -> void:
+	var save_path := "user://tests/presentation/showroom.json"
+	_remove_save(save_path)
+	var app := PetApplication.new({"save_path": save_path}, FakeSimulationClock.new(1770000000, 0.0))
+	_assert_equal(app.initialize().get("ok", false), true, "VIS-SHOWROOM application initializes")
+	var entries := app.get_animation_review_entries("en")
+	_assert_equal(entries.size(), 16, "VIS-SHOWROOM loads eggs, nine forms, enemies and boss")
+	var kinds := {"egg": 0, "form": 0, "enemy": 0}
+	var sequence_count := 0
+	for entry in entries:
+		var kind := str(entry.get("kind", ""))
+		kinds[kind] = int(kinds.get(kind, 0)) + 1
+		for animation_name in (entry.get("animations", {}) as Dictionary):
+			sequence_count += 1
+			var descriptor: Dictionary = entry.animations[animation_name]
+			_assert_equal(str(descriptor.get("animation_name", "")), str(animation_name), "VIS-SHOWROOM %s/%s resolves without fallback" % [entry.content_id, animation_name])
+			var frames := int(descriptor.get("frames", 0))
+			var previous_marker := -1
+			for marker in descriptor.get("event_markers", []):
+				var marker_frame := int(marker.get("frame", -1))
+				_assert_equal(marker_frame >= 0 and marker_frame < frames, true, "VIS-SHOWROOM %s/%s marker in range" % [entry.content_id, animation_name])
+				_assert_equal(marker_frame >= previous_marker, true, "VIS-SHOWROOM %s/%s markers ordered" % [entry.content_id, animation_name])
+				previous_marker = marker_frame
+	_assert_equal(kinds, {"egg": 3, "form": 9, "enemy": 4}, "VIS-SHOWROOM entity kind coverage")
+	_assert_equal(sequence_count, 290, "VIS-SHOWROOM exhaustive sequence count")
+	var runtime := AnimatedTextureRect.new()
+	runtime.size = Vector2(128, 128)
+	root.add_child(runtime)
+	await process_frame
+	for entry in entries:
+		for animation_name in (entry.get("animations", {}) as Dictionary):
+			var descriptor: Dictionary = entry.animations[animation_name].duplicate(true)
+			descriptor["loop"] = false
+			runtime.configure(descriptor, false, 2.0)
+			for _frame in range(int(descriptor.get("frames", 1))):
+				runtime.call("_process", 10.0)
+			_assert_equal(runtime.current_frame(), int(descriptor.get("frames", 1)) - 1, "VIS-SHOWROOM %s/%s completes runtime playback" % [entry.content_id, animation_name])
+			runtime.configure(descriptor, true, 2.0)
+			_assert_equal(runtime.current_frame(), int(descriptor.get("frames", 1)) - 1, "VIS-SHOWROOM refresh does not restart active descriptor")
+	runtime.set_frame(0)
+	runtime.step_frame(1)
+	_assert_equal(runtime.current_frame(), 1, "VIS-SHOWROOM manual frame step uses runtime controller")
+	runtime.free()
+	var showroom := AnimationShowroom.new()
+	showroom.setup(app, "en")
+	root.add_child(showroom)
+	await process_frame
+	_assert_equal(showroom.reviewed_entity_count(), 16, "VIS-SHOWROOM UI loads every review entity")
+	_assert_equal(showroom.reviewed_animation_count(), 290, "VIS-SHOWROOM UI loads every sequence")
+	_assert_equal(showroom.missing_or_fallback_animations().is_empty(), true, "VIS-SHOWROOM UI flags no missing or fallback animation")
+	showroom.free()
+	_remove_save(save_path)
 
 
 func _test_preferences() -> void:

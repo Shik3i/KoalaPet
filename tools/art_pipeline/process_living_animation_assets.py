@@ -73,24 +73,24 @@ PLAYER_SPECS: dict[str, list[tuple[int, str]]] = {
     "idle": [(0, "still"), (0, "breathe_up"), (12, "look"), (0, "breathe_down")],
     "idle_look": [(0, "still"), (12, "look_left"), (12, "look"), (0, "still"), (12, "look_right"), (0, "still")],
     "idle_playful": [(0, "still"), (3, "anticipate"), (14, "lift"), (10, "lift_high"), (14, "settle"), (3, "look"), (12, "breathe_up"), (0, "still")],
-    "idle_rest": [(0, "still"), (11, "look"), (15, "settle"), (4, "breathe_down"), (15, "breathe_up"), (0, "still")],
+    "idle_rest": [(0, "still"), (11, "look"), (4, "settle"), (4, "breathe_down"), (4, "breathe_up"), (0, "still")],
     "turn_left": [(0, "still"), (13, "turn_narrow"), (13, "turn_flip"), (0, "flip")],
     "turn_right": [(0, "flip"), (13, "turn_flip"), (13, "turn_narrow"), (0, "still")],
-    "sleep_enter": [(0, "still"), (12, "look"), (11, "anticipate"), (15, "settle"), (4, "lower"), (4, "breathe_down"), (4, "breathe_up"), (4, "still")],
+    "sleep_enter": [(0, "still"), (12, "look"), (1, "anticipate"), (1, "lower"), (4, "lower"), (4, "breathe_down"), (4, "breathe_up"), (4, "still")],
     "sleep": [(4, "still"), (4, "breathe_down"), (4, "still"), (4, "breathe_up")],
     "sleep_loop": [(4, "still"), (4, "breathe_down"), (4, "still"), (4, "breathe_up")],
-    "wake": [(4, "still"), (4, "breathe_up"), (15, "lift"), (11, "look"), (12, "stretch"), (3, "settle"), (0, "breathe_up"), (0, "still")],
+    "wake": [(4, "still"), (4, "breathe_up"), (1, "lift"), (11, "look"), (12, "stretch"), (3, "settle"), (0, "breathe_up"), (0, "still")],
     "eat": [(0, "still"), (1, "anticipate"), (2, "lower"), (2, "bite"), (2, "chew"), (3, "settle"), (12, "breathe_up"), (0, "still")],
     "treat": [(0, "still"), (11, "look"), (2, "bite"), (3, "lift"), (14, "lift_high"), (3, "settle"), (0, "still")],
-    "clean": [(0, "still"), (15, "anticipate"), (15, "shake_left"), (15, "shake_right"), (3, "lift"), (14, "settle"), (10, "look"), (0, "still")],
+    "clean": [(0, "still"), (1, "anticipate"), (3, "shake_left"), (3, "shake_right"), (3, "lift"), (14, "settle"), (10, "look"), (0, "still")],
     "training": [(0, "still"), (7, "anticipate"), (7, "strike_left"), (8, "commit"), (7, "strike_right"), (10, "lift"), (3, "settle"), (0, "still")],
-    "medicine": [(5, "still"), (11, "look"), (15, "anticipate"), (6, "settle"), (3, "lift"), (12, "breathe_up"), (0, "still")],
-    "treatment": [(6, "still"), (15, "anticipate"), (15, "shake_left"), (3, "lift"), (14, "settle"), (12, "breathe_up"), (0, "still")],
+    "medicine": [(5, "still"), (11, "look"), (6, "anticipate"), (6, "settle"), (3, "lift"), (12, "breathe_up"), (0, "still")],
+    "treatment": [(6, "still"), (6, "anticipate"), (6, "shake_left"), (3, "lift"), (14, "settle"), (12, "breathe_up"), (0, "still")],
     "attention": [(11, "still"), (11, "look"), (3, "lift"), (14, "lift_high"), (10, "settle"), (3, "breathe_up"), (0, "still")],
     "happy": [(0, "still"), (3, "lift"), (14, "lift_high"), (10, "settle"), (14, "lift"), (3, "settle"), (0, "still")],
     "sick": [(5, "still"), (5, "breathe_down"), (5, "still"), (5, "breathe_up")],
     "injured": [(6, "still"), (6, "breathe_down"), (6, "still"), (6, "breathe_up")],
-    "call": [(11, "still"), (11, "look_left"), (15, "look_right"), (11, "still")],
+    "call": [(11, "still"), (11, "look_left"), (12, "look_right"), (11, "still")],
     "attack": [(0, "still"), (1, "anticipate"), (8, "windup"), (8, "commit"), (8, "strike_right"), (9, "follow"), (13, "recovery"), (0, "still")],
     "hit": [(0, "still"), (9, "impact"), (9, "compress"), (6, "recoil"), (6, "settle"), (12, "recovery"), (0, "still")],
     "dodge": [(0, "still"), (1, "anticipate"), (13, "dodge_left"), (8, "dodge_right"), (13, "dodge_left"), (12, "recovery"), (0, "still")],
@@ -129,6 +129,46 @@ def relative(path: Path) -> str:
 
 def clean_frame(frame: Image.Image) -> Image.Image:
     return baseline.remove_isolated_components(baseline.clean_transparent_rgb(frame), 12)
+
+
+def remove_source_cell_bleed(frame: Image.Image) -> Image.Image:
+    """Remove narrow neighbor-cell fragments without stripping nearby effects."""
+    output = frame.copy().convert("RGBA")
+    alpha = output.getchannel("A")
+    active = {(x, y) for y in range(output.height) for x in range(output.width) if alpha.getpixel((x, y)) >= 16}
+    components: list[set[tuple[int, int]]] = []
+    while active:
+        start = active.pop()
+        component = {start}
+        frontier = [start]
+        while frontier:
+            x, y = frontier.pop()
+            for neighbor in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                if neighbor in active:
+                    active.remove(neighbor)
+                    component.add(neighbor)
+                    frontier.append(neighbor)
+        components.append(component)
+    if not components:
+        return output
+    largest = max(components, key=len)
+    largest_bounds = (
+        min(x for x, _y in largest),
+        max(x for x, _y in largest) + 1,
+    )
+    pixels = output.load()
+    for component in components:
+        if component is largest or len(component) > len(largest) * 0.1:
+            continue
+        left = min(x for x, _y in component)
+        right = max(x for x, _y in component) + 1
+        remote_left = left <= 20 and right <= largest_bounds[0] + 1
+        remote_right = right >= 108 and left >= largest_bounds[1] - 1
+        if not (remote_left or remote_right):
+            continue
+        for x, y in component:
+            pixels[x, y] = (0, 0, 0, 0)
+    return baseline.clean_transparent_rgb(output)
 
 
 def transform_pose(frame: Image.Image, motion: str) -> Image.Image:
@@ -197,7 +237,12 @@ def articulate(frame: Image.Image, upper_x: int, upper_y: int, lower_x: int, low
 
 def player_poses(name: str) -> list[Image.Image]:
     board = Image.open(SOURCE / f"{name}.png").convert("RGBA")
-    return [baseline.normalize_cell(cell, FRAME_SIZE, 104) for cell in baseline.grid_cells(board, 4, 4)]
+    cells = baseline.grid_cells(board, 4, 4)
+    # Generated pose boards bleed neighboring silhouettes across some 4x4 cell
+    # edges. Twelve source pixels remove those fragments while retaining the
+    # accepted silhouette padding in every reviewed pose.
+    cells = [cell.crop((12, 12, cell.width - 12, cell.height - 12)) for cell in cells]
+    return [remove_source_cell_bleed(baseline.normalize_cell(cell, FRAME_SIZE, 104)) for cell in cells]
 
 
 def enemy_poses(name: str) -> list[Image.Image]:
@@ -262,7 +307,18 @@ def animation_entry(path: Path, name: str, loop: bool) -> dict:
 
 def save_gif(frames: list[Image.Image], path: Path, fps: int) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    frames[0].save(path, save_all=True, append_images=frames[1:], duration=round(1000 / fps), loop=0, disposal=2, optimize=False)
+    temporary = path.with_name(path.name + ".tmp")
+    frames[0].save(temporary, format="GIF", save_all=True, append_images=frames[1:], duration=round(1000 / fps), loop=0, disposal=2, optimize=False)
+    try:
+        temporary.replace(path)
+    except PermissionError:
+        # The desktop review renderer can hold an existing GIF open on Windows.
+        # Preserve that valid evidence file; the dedicated acceptance package is
+        # generated separately from the same current runtime sheets.
+        temporary.unlink(missing_ok=True)
+        if not path.is_file():
+            raise
+        print(f"Review GIF locked; retained existing file: {relative(path)}")
 
 
 def process_players(outputs: list[Path]) -> dict[str, dict[str, list[Image.Image]]]:

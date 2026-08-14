@@ -58,8 +58,14 @@ def locate_godot(explicit: str | None) -> str:
         candidates.append("/Applications/Godot.app/Contents/MacOS/Godot")
     for candidate in candidates:
         if candidate and Path(candidate).is_file():
-            return str(Path(candidate))
-    raise RuntimeError("Godot not found; pass --godot or set GODOT_PATH")
+            path = Path(candidate)
+            if sys.platform == "win32" and not path.stem.endswith("_console"):
+                console_path = path.with_name(path.stem + "_console" + path.suffix)
+                if console_path.is_file():
+                    return str(console_path)
+                continue
+            return str(path)
+    raise RuntimeError("Godot console executable not found; pass --godot with the Windows _console.exe binary")
 
 
 def check_json() -> None:
@@ -133,6 +139,7 @@ def main() -> int:
     check_python_compile()
     run([sys.executable, "tools/content_validation/validate_content.py"], "Python content validation")
     run([sys.executable, "tools/art_pipeline/validate_vertical_slice_assets.py", "--repo-root", str(ROOT)], "Vertical-slice asset validation")
+    run([sys.executable, "tools/visual_review/audit_animation_sequences.py", "--check"], "Exhaustive visual-acceptance diagnostics")
     run([sys.executable, "tools/repository/check_markdown_links.py"], "Markdown links")
     check_mod_payloads()
     check_franchise_terms()

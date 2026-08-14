@@ -3,6 +3,8 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$GodotPath,
 
+    [string]$GodotCliPath = "",
+
     [string]$OutputPath = (Join-Path $PSScriptRoot "../../docs/evidence/windows-overlay/environment.windows.json")
 )
 
@@ -23,6 +25,15 @@ if (-not [Environment]::UserInteractive) {
 }
 if (-not (Test-Path -LiteralPath $GodotPath -PathType Leaf)) {
     throw "GODOT_NOT_FOUND: $GodotPath"
+}
+if ([string]::IsNullOrWhiteSpace($GodotCliPath)) {
+    $GodotCliPath = $GodotPath
+    if ([IO.Path]::GetFileNameWithoutExtension($GodotPath) -notmatch '_console$') {
+        $GodotCliPath = Join-Path (Split-Path -Parent $GodotPath) (([IO.Path]::GetFileNameWithoutExtension($GodotPath)) + "_console.exe")
+    }
+}
+if (-not (Test-Path -LiteralPath $GodotCliPath -PathType Leaf)) {
+    throw "GODOT_CONSOLE_NOT_FOUND: $GodotCliPath"
 }
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -85,7 +96,7 @@ $screens = @([System.Windows.Forms.Screen]::AllScreens | ForEach-Object {
         scale_percent = [int]($dpi[1] * 100 / 96)
     }
 })
-$godotVersion = (& $GodotPath --version | Select-Object -First 1).Trim()
+$godotVersion = (& $GodotCliPath --version | Select-Object -First 1).Trim()
 $taskbar = [KoalaWindowsEnvironmentNative]::GetTaskbar()
 
 $environment = [ordered]@{

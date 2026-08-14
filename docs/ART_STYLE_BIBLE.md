@@ -79,3 +79,5 @@ Cozy, compact, readable modern pixel art with a quiet fantasy-natural tone. The 
 - Creature silhouettes remain distinguishable in monochrome at `64×64 px`.
 - Habitat layers load in documented order and each functional station remains independently replaceable.
 - No reference image, geometric placeholder creature, opaque Minimal background, or development-only text is reachable through the normal player path.
+- Every current sequence must appear in the runtime-backed debug Showroom and machine-readable classification. `TECHNICALLY_BROKEN` and `NEEDS_REGENERATION` block the visual gate.
+- Care and sleep sources must be rejected when a helper object, neighboring source cell or clipped alpha component enters a runtime frame.

@@ -43,6 +43,7 @@ var requested_save_path := ""
 var diagnostics_path := ""
 var placement_path := PLACEMENT_PATH
 var dev_window: Window
+var animation_showroom_window: Window
 var animation_controller := PresentationAnimationController.new()
 var active_habitat: HabitatView
 var review_event_sequence := 0
@@ -89,6 +90,8 @@ func _ready() -> void:
 	var living_demo := _argument_value(args, "--living-animation-demo=", "")
 	if development_actions_enabled and not living_demo.is_empty():
 		call_deferred("_run_living_animation_demo", living_demo)
+	if show_dev_tools and "--animation-showroom" in args:
+		call_deferred("_open_animation_showroom")
 
 
 func _process(delta: float) -> void:
@@ -1375,7 +1378,7 @@ func _open_dev_window() -> void:
 		return
 	dev_window = Window.new()
 	dev_window.title = "KoalaPet Development Tools"
-	dev_window.size = Vector2i(360, 220)
+	dev_window.size = Vector2i(360, 270)
 	dev_window.transient = true
 	dev_window.exclusive = false
 	add_child(dev_window)
@@ -1386,12 +1389,33 @@ func _open_dev_window() -> void:
 	var column := VBoxContainer.new()
 	margin.add_child(column)
 	column.add_child(PixelUi.title(application.text("ui.dev", "Entwicklungswerkzeuge", locale), 16))
-	for entry in [[application.text("ui.dev_advance_hour", "1 Stunde vor", locale), _advance_hour], [application.text("ui.dev_force_sick", "Krankheit erzwingen", locale), _force_sickness]]:
+	for entry in [[application.text("ui.dev_advance_hour", "1 Stunde vor", locale), _advance_hour], [application.text("ui.dev_force_sick", "Krankheit erzwingen", locale), _force_sickness], ["Animation Showroom", _open_animation_showroom]]:
 		var button := PixelUi.button(str(entry[0]))
 		button.pressed.connect(entry[1])
 		column.add_child(button)
 	dev_window.close_requested.connect(dev_window.hide)
 	dev_window.show()
+
+
+func _open_animation_showroom() -> void:
+	if not show_dev_tools:
+		return
+	if animation_showroom_window != null and is_instance_valid(animation_showroom_window):
+		animation_showroom_window.show()
+		animation_showroom_window.grab_focus()
+		return
+	animation_showroom_window = Window.new()
+	animation_showroom_window.title = "KoalaPet Animation Showroom"
+	animation_showroom_window.size = Vector2i(1360, 860)
+	animation_showroom_window.min_size = Vector2i(960, 680)
+	animation_showroom_window.transient = false
+	animation_showroom_window.exclusive = false
+	var showroom := AnimationShowroom.new()
+	showroom.setup(application, locale)
+	animation_showroom_window.add_child(showroom)
+	add_child(animation_showroom_window)
+	animation_showroom_window.close_requested.connect(animation_showroom_window.hide)
+	animation_showroom_window.show()
 
 
 func _advance_hour() -> void:

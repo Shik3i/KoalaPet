@@ -50,6 +50,11 @@
 - [Prompt 4.6 animation/UI evidence](evidence/animation-polish/README.md)
 - [Prompt 4.7 execution record](prompts/PROMPT_0047_LIVING_ANIMATION_POLISH.md)
 - [Prompt 4.7 living-animation evidence](evidence/living-animation/README.md)
+- [Prompt 4.8 visual acceptance results](VISUAL_ACCEPTANCE_RESULTS.md)
+- [Prompt 4.8 accessibility and DPI findings](ACCESSIBILITY_DPI_FINDINGS.md)
+- [Asset rights decision](ASSET_RIGHTS_DECISION.md)
+- [Prompt 4.8 product-owner review package](evidence/visual-acceptance/README.md)
+- [Prompt 4.8 execution record](prompts/PROMPT_0048_VISUAL_ACCEPTANCE.md)
 - [macOS overlay validation report](spikes/MACOS_OVERLAY_SPIKE.md)
 - [macOS overlay evidence](evidence/macos-overlay/README.md)
 

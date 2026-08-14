@@ -1,0 +1,195 @@
+{
+  "artifacts": [
+    {
+      "path": "docs/evidence/living-animation/reels/ember-family.gif",
+      "purpose": "Ember family motion-language reel",
+      "reproduction": "python tools/art_pipeline/process_living_animation_assets.py",
+      "settings": "family highlight animations",
+      "sha256": "cafd6e725d462f8c86ab41c5f770705d217910ba9b96a6cf028a7976c7464f38"
+    },
+    {
+      "path": "docs/evidence/living-animation/reels/moss-family.gif",
+      "purpose": "Moss family motion-language reel",
+      "reproduction": "python tools/art_pipeline/process_living_animation_assets.py",
+      "settings": "family highlight animations",
+      "sha256": "d44f42cefa3cc0af27a0397becaa0d0107107109456799e888f6485a3ca72f09"
+    },
+    {
+      "path": "docs/evidence/living-animation/reels/tide-family.gif",
+      "purpose": "Tide family motion-language reel",
+      "reproduction": "python tools/art_pipeline/process_living_animation_assets.py",
+      "settings": "family highlight animations",
+      "sha256": "79734046cf70c0a1cb3b6ddf1cb3ff4e8a421cd74fe0773558f4e35aab1de54e"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/animation-classifications.json",
+      "purpose": "Machine-readable exhaustive animation classification",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "all nine forms, three enemies, boss and eggs",
+      "sha256": "43a026d554e470a6cbd40d024773e1ad56b22de274d59fb08671085a5d1ab0d5"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/asset-optimization.json",
+      "purpose": "Runtime PNG storage, decode and reference audit",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "RGBA decode estimate; exact SHA duplicates; reference scan",
+      "sha256": "12e26fd5dc8882206e94a83b6b813dca1c8c7ba75763fda940cb5dc87daf1d10"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/asset-rights-register.json",
+      "purpose": "Machine-readable rights and provenance decision inventory",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "all distributed PNGs plus three non-distributed UI references",
+      "sha256": "e2fab60cff8aa49ebd6e0dad11e7b73a116881785421ff60217fdcfd24794b78"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/combat-effects.png",
+      "purpose": "Combat VFX progression review",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "all generated family VFX; four representative frames",
+      "sha256": "ffde1b49cb7532eb0693d88637e197e80616650ce11627177bb84caeb9c37f71"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/ember_cinder_juvenile.png",
+      "purpose": "All runtime sequences for koalapet.base:ember_cinder_juvenile",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "8add4c0ddc4ee204dccc1781b455a9d1283a732c5f318a69247e1e5d83b9b05b"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/ember_dawn_juvenile.png",
+      "purpose": "All runtime sequences for koalapet.base:ember_dawn_juvenile",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "c9069d7d56bfca62b6bd04c6b7717938cbc81bb765d0c9407dd143f8d1871eaf"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/ember_hatchling.png",
+      "purpose": "All runtime sequences for koalapet.base:ember_hatchling",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "15ff60d990655fb33102cbe004f037f2145d91bd354b4b1795d7de0dc0601642"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/enemies-and-boss.png",
+      "purpose": "Normal enemy and boss combat comparison",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "idle, attack, dodge, hit, victory, defeat",
+      "sha256": "4e3db572058747e0d6976273917a7c49fddcdc923c2fbd2aba369488c8db6b27"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/moss_bloom_juvenile.png",
+      "purpose": "All runtime sequences for koalapet.base:moss_bloom_juvenile",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "4367989883ad08055ed2cddf668f36d817b5b8ebb8afd2027b8f9a7d3b5bc055"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/moss_bracken_juvenile.png",
+      "purpose": "All runtime sequences for koalapet.base:moss_bracken_juvenile",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "1c2dbab56128b857ed37130f257f2318e7ef806b13b1f28ca6805368c781d6d9"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/moss_hatchling.png",
+      "purpose": "All runtime sequences for koalapet.base:moss_hatchling",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "2d0a472c370bf97bf9ff79d87b14942cce886288a536a9fa718aa75e37f273c0"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/regenerated-examples.png",
+      "purpose": "Rejected source-pose contamination versus corrected runtime rows",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "three starter families; sleep_enter",
+      "sha256": "837b3e8ba8cdb16e750f8c6031303fe13b115b3bb0519b42c6f668f03f449c39"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/tide_glass_juvenile.png",
+      "purpose": "All runtime sequences for koalapet.base:tide_glass_juvenile",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "01d49eb9bb3e663aa77fc912138d6a4a2717f43c6edfd9e30f65c2a6456afd59"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/tide_hatchling.png",
+      "purpose": "All runtime sequences for koalapet.base:tide_hatchling",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "b8809eaf6dec03ab159df54d8736431101b62d67fa877a05f6389a5144a54ad2"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/tide_reed_juvenile.png",
+      "purpose": "All runtime sequences for koalapet.base:tide_reed_juvenile",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "dark neutral background; four representative frames",
+      "sha256": "21065c85fdc700a14e4aa60104d4d1ffafe00a66d28b7fa5eb6830c2e44d5330"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/contact-sheets/ui-scaling-comparison.png",
+      "purpose": "Project UI/text scaling comparison",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "Small and Expanded; 100% and 150% project settings",
+      "sha256": "8fca7caae1d6ae69aae724d24dccc0ed1e94b09300b85044472767dec9be2182"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/reels/enemy-boss-combat.gif",
+      "purpose": "Concise animated visual acceptance reel",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "90 ms review cadence; runtime sprite sheets",
+      "sha256": "372c4e6ae5291da2ef30bf9eef72374d672506fe839b99a92e3f5399dff0dc68"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/reels/minimal-desktop.gif",
+      "purpose": "Concise animated visual acceptance reel",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "90 ms review cadence; runtime sprite sheets",
+      "sha256": "6d7bb055144b9c38aaa6748ba17deeb0622633a609c6ff3cabd1956291992b44"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/reels/reduced-motion-comparison.gif",
+      "purpose": "Concise animated visual acceptance reel",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "90 ms review cadence; runtime sprite sheets",
+      "sha256": "1b5f809fedf7af952881ca6dbdecb8638e9e31e1e6f82ead31ed1c7ad268f806"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/reels/sleep-care.gif",
+      "purpose": "Concise animated visual acceptance reel",
+      "reproduction": "python tools/visual_review/audit_animation_sequences.py",
+      "settings": "90 ms review cadence; runtime sprite sheets",
+      "sha256": "34d85f035b2c280631a6b7d6f024a1e960c7e7e9fb7e8369f119e1d8fa01c15d"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/windows/environment.windows.json",
+      "purpose": "Direct interactive Windows monitor, DPI and taskbar environment",
+      "reproduction": "tools/windows_overlay_spike/collect_environment.ps1",
+      "settings": "Windows 11; three displays; unlocked local session",
+      "sha256": "1e0dc840c5ea88b92207cc766e620b1d6f7e70411178db3d3dd438187eff7ed1"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/windows/game-starter-focus-secondary.png",
+      "purpose": "Direct native starter-selection readability and visible keyboard focus",
+      "reproduction": "tools/windows_overlay_spike/capture_interactive.ps1 -PrintWindow",
+      "settings": "secondary display; English; Tab focus on first starter",
+      "sha256": "75bac41482db745dde29fc968c1fe7c425c571a247859f36bb2a1cdb6db71290"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/windows/native-review.json",
+      "purpose": "Direct native Windows visual-acceptance evidence",
+      "reproduction": "tools/windows_overlay_spike",
+      "settings": "interactive Windows session",
+      "sha256": "4955d44f37a179ca90cc705bf57d47095f947ff2d07f11cc45ec493e08f89bde"
+    },
+    {
+      "path": "docs/evidence/visual-acceptance/windows/showroom-runtime-secondary.png",
+      "purpose": "Direct native Animation Showroom layout and runtime playback",
+      "reproduction": "tools/windows_overlay_spike/capture_interactive.ps1 -PrintWindow",
+      "settings": "secondary display; dark background; egg hatch; 100% playback",
+      "sha256": "f2b30513f0bb4ae928bef1a4797c15be615d174901e294761ca1ae90424fe2ec"
+    }
+  ],
+  "review_date": "2026-08-14",
+  "schema_version": 1
+}

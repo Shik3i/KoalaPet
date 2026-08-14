@@ -485,6 +485,14 @@ def animation_entry(path: Path, name: str, loop: bool | None = None) -> dict:
     relative_asset = path.resolve().relative_to((ROOT / "game" / "content_packs" / "koalapet.base").resolve()).as_posix()
     with Image.open(path) as image:
         frames = image.width // image.height
+    event_markers: list[dict[str, int | str]] = []
+    if name == "walk":
+        event_markers = [
+            {"frame": 0, "event": "foot_contact"},
+            {"frame": max(0, frames // 2), "event": "opposite_foot_contact"},
+        ]
+    elif not loop:
+        event_markers = [{"frame": max(0, frames - 1), "event": name}]
     value = {
         "asset": relative_asset,
         "frames": frames,
@@ -497,7 +505,7 @@ def animation_entry(path: Path, name: str, loop: bool | None = None) -> dict:
         "interaction_bounds": list(INTERACTION_BOUNDS),
         "effect_bounds": [0, 0, FRAME_SIZE, FRAME_SIZE],
         "mirroring_allowed": True,
-        "event_markers": ([{"frame": 0, "event": "foot_contact"}, {"frame": 4, "event": "opposite_foot_contact"}] if name == "walk" else ([{"frame": 1, "event": name}] if not loop else [])),
+        "event_markers": event_markers,
         "source_brief": "Sequential in-place locomotion" if name == "walk" else f"Provisional {name} presentation pose",
         "provenance": "art_source/provenance/visual-rebuild.json",
         "review_status": "PROVISIONAL_REVIEWED",

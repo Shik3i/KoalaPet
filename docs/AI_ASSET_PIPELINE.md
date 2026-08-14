@@ -48,3 +48,11 @@ Source/mockups stay outside `game/`. Approved game-ready output enters `game/ass
 - Validator: complete profile coverage, minimum frame counts, sheet geometry, alpha, frame uniqueness, marker bounds, VFX/evidence existence and transparent corners.
 - Provenance: [`../art_source/provenance/living-animation.json`](../art_source/provenance/living-animation.json).
 - Approval boundary remains `PROVISIONAL_PRODUCT_REVIEW`; `license_status=UNDECIDED`.
+
+## Prompt 4.8 correction and inventory
+
+- `process_living_animation_assets.py` now substitutes safe source poses for `call`, `clean`, `idle_rest`, `medicine`, `sleep_enter`, `treatment` and `wake`, trims source-cell seams, removes remote alpha components and writes GIFs atomically.
+- `tools/visual_review/audit_animation_sequences.py` deterministically emits all sequence diagnostics, form/enemy/VFX contact sheets, short reels, SHA-256 evidence manifest, complete rights register and optimization report.
+- The rights register exactly covers all `388` distributed runtime PNGs. Every record retains `license_status=UNDECIDED`; the model stays `NOT_DISCLOSED` where the provider did not expose it.
+- Eight current enemy compatibility-reserve PNGs are intentionally unreferenced by animation profiles and carry an explicit retention reason. Evidence and supplied UI references remain outside `res://`.
+- Final rights decisions are listed in [`ASSET_RIGHTS_DECISION.md`](ASSET_RIGHTS_DECISION.md); no legal conclusion is inferred.

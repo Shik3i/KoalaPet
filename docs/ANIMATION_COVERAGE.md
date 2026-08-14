@@ -41,3 +41,5 @@ Egg profiles remain intentionally limited to `idle`, `hatch` and `world` at two 
 ## Evidence and limits
 
 Contact sheets, reels, native Godot movies, extracted frames and performance results are indexed in [`evidence/living-animation/README.md`](evidence/living-animation/README.md). Current generated art is `PROVISIONAL_PRODUCT_REVIEW` with `license_status=UNDECIDED`; final production-art and accessibility acceptance remain separate gates.
+
+Prompt 4.8 classifies all `290` runtime sequences: `281 ACCEPTED_PROVISIONAL`, `9 NOT_PLAYER_FACING`, zero `NEEDS_REGENERATION` and zero `TECHNICALLY_BROKEN`. The nine non-player-facing rows are compatibility `sleep` aliases. `63` care/sleep/call sequences were regenerated after helper-hand, clipping or continuity rejection. Exact diagnostics and review media are indexed in [`evidence/visual-acceptance/README.md`](evidence/visual-acceptance/README.md).

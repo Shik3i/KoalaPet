@@ -346,6 +346,13 @@ def validate_cross_references(packs: list[tuple[Path, dict[str, Any]]], report: 
             validate_asset_path(document, manifest, data.get("portrait", ""), "$.portrait", report)
             for name, animation in data.get("world_animations", {}).items():
                 validate_asset_path(document, manifest, animation.get("asset", ""), f"$.world_animations.{name}.asset", report)
+                frames = animation.get("frames", 0)
+                marker_frames = [marker.get("frame", -1) for marker in animation.get("event_markers", []) if isinstance(marker, dict)]
+                for index, marker_frame in enumerate(marker_frames):
+                    if not isinstance(marker_frame, int) or not isinstance(frames, int) or marker_frame < 0 or marker_frame >= frames:
+                        report.error(document.path, f"$.world_animations.{name}.event_markers[{index}].frame", f"marker frame must be within 0..{max(0, frames - 1)}")
+                if marker_frames != sorted(marker_frames):
+                    report.error(document.path, f"$.world_animations.{name}.event_markers", "marker frames must be ordered")
         elif schema == "habitat-theme.schema.json":
             validate_asset_path(document, manifest, data.get("background_asset", ""), "$.background_asset", report)
             validate_asset_path(document, manifest, data.get("ground_asset", ""), "$.ground_asset", report)

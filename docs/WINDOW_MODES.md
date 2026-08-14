@@ -64,3 +64,13 @@ On Windows 10/11 test transparency, passthrough, hit regions, always-on-top, dra
 - The code-drawn spike visual is diagnostic only. The supplied concept references are not runtime assets.
 
 The native macOS pass validated transparency, input routing, topmost behavior, drag, Retina coordinates, per-mode placement, and selected focus behavior. It also found platform-specific activation, hide, minimize, and status-item gaps. The Windows evidence is partial and does not supersede the proposed ADR; see [`spikes/MACOS_OVERLAY_SPIKE.md`](spikes/MACOS_OVERLAY_SPIKE.md) and [`spikes/WINDOWS_OVERLAY_SPIKE.md`](spikes/WINDOWS_OVERLAY_SPIKE.md).
+
+## Prompt 4.8 Windows findings
+
+- Direct Windows 11 review confirmed responsive Alt+Tab between the two KoalaPet windows and stable native minimize/restore for the separate debug Showroom.
+- The host directly enumerated two 100% displays and one 125% primary display. Controlled cross-monitor movement and native 150/175/200% display-scale rows remain unavailable.
+- The taskbar was bottom-aligned, 2560×60 physical pixels and not auto-hidden. Taskbar product policy remains undecided.
+- Tray visibility/callback/cleanup, Show Desktop and hide/show recovery remain unavailable. ADR 0010 stays proposed.
+- CLI/import/test calls must use `Godot_v4.7.1-stable_win64_console.exe`; the GUI executable is reserved for visible interactive runtime launches.
+
+Exact classifications: [`evidence/visual-acceptance/windows/native-review.json`](evidence/visual-acceptance/windows/native-review.json).

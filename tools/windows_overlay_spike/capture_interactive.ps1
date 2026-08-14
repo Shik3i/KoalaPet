@@ -47,12 +47,16 @@ public static class KoalaInteractiveWin32 {
     [DllImport("user32.dll")] public static extern bool EnumWindows(EnumWindowsProc callback, IntPtr extraInfo);
     [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
     [DllImport("user32.dll")] public static extern int GetWindowText(IntPtr hWnd, System.Text.StringBuilder text, int maxCount);
-    public static IntPtr FindWindowForProcess(uint processId) {
+    public static IntPtr FindWindowForProcess(uint processId, string expectedTitle) {
         IntPtr found = IntPtr.Zero;
         EnumWindows((hWnd, lParam) => {
             uint owner;
             GetWindowThreadProcessId(hWnd, out owner);
-            if (owner == processId && found == IntPtr.Zero && IsWindow(hWnd) && IsWindowVisible(hWnd)) found = hWnd;
+            if (owner == processId && found == IntPtr.Zero && IsWindow(hWnd) && IsWindowVisible(hWnd)) {
+                var title = new System.Text.StringBuilder(512);
+                GetWindowText(hWnd, title, title.Capacity);
+                if (String.IsNullOrEmpty(expectedTitle) || title.ToString() == expectedTitle) found = hWnd;
+            }
             return true;
         }, IntPtr.Zero);
         return found;
@@ -82,12 +86,9 @@ if ($null -eq $process) {
     throw "WINDOW_NOT_FOUND: $WindowTitle"
 }
 
-$windowHandle = $process.MainWindowHandle
+$windowHandle = [KoalaInteractiveWin32]::FindWindowForProcess([uint32]$process.Id, $WindowTitle)
 if ($windowHandle -eq [IntPtr]::Zero) {
-	$windowHandle = [KoalaInteractiveWin32]::FindWindowForProcess([uint32]$process.Id)
-}
-if ($windowHandle -eq [IntPtr]::Zero) {
-	throw "WINDOW_HANDLE_NOT_FOUND: PID $($process.Id)"
+	throw "WINDOW_HANDLE_NOT_FOUND: PID $($process.Id), title '$WindowTitle'"
 }
 
 [KoalaInteractiveWin32]::SetForegroundWindow($windowHandle) | Out-Null
@@ -128,7 +129,7 @@ $windowRect = New-Object KoalaInteractiveWin32+RECT
 if (-not [KoalaInteractiveWin32]::GetWindowRect($windowHandle, [ref]$windowRect)) {
     # Godot may replace the native HWND while switching transparent presentation
     # properties. Resolve the current visible top-level window before failing.
-    $windowHandle = [KoalaInteractiveWin32]::FindWindowForProcess([uint32]$process.Id)
+    $windowHandle = [KoalaInteractiveWin32]::FindWindowForProcess([uint32]$process.Id, $WindowTitle)
     if ($windowHandle -eq [IntPtr]::Zero -or -not [KoalaInteractiveWin32]::GetWindowRect($windowHandle, [ref]$windowRect)) {
         throw "WINDOW_RECT_FAILED"
     }

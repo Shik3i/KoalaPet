@@ -1,0 +1,105 @@
+{
+  "decision": "Keep stable paths and lazy runtime loading; atlas migration deferred until release asset approval.",
+  "disk_bytes": 26150137,
+  "duplicate_file_groups": [
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/ember/idle.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/ember/world.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/moss/idle.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/moss/world.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/tide/idle.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/eggs/tide/world.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/ember/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/ember/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_cinder/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/ember_dawn/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bloom/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/moss_bracken/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_glass/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/juveniles/tide_reed/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/moss/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/moss/sleep_loop.png"
+    ],
+    [
+      "game/content_packs/koalapet.base/assets/vertical_slice/tide/sleep.png",
+      "game/content_packs/koalapet.base/assets/vertical_slice/tide/sleep_loop.png"
+    ]
+  ],
+  "estimated_decoded_rgba_bytes_if_all_loaded": 129624064,
+  "evidence_under_res": [],
+  "high_transparent_padding": [],
+  "measurement_date": "2026-08-14",
+  "prompt_4_7_baseline": {
+    "disk_bytes": 26030472,
+    "estimated_decoded_rgba_bytes_if_all_loaded": 129624064,
+    "runtime_png_count": 388
+  },
+  "prompt_4_8_after_corrections": {
+    "disk_bytes": 26150137,
+    "disk_delta_bytes": 119665,
+    "estimated_decoded_rgba_bytes_if_all_loaded": 129624064,
+    "runtime_png_count": 388
+  },
+  "runtime_png_count": 388,
+  "schema_version": 1,
+  "unreferenced_with_explicit_reason": [
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/injured.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/canopy_guardian/victory.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/cinder_moth/injured.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/cinder_moth/victory.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/creekling/injured.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/creekling/victory.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/thornlet/injured.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    },
+    {
+      "path": "game/content_packs/koalapet.base/assets/vertical_slice/enemies/thornlet/victory.png",
+      "reason": "Generated compatibility reserve not referenced by a current animation profile; retained for deterministic pipeline parity until the release-art decision."
+    }
+  ]
+}

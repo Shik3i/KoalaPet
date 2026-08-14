@@ -8,7 +8,7 @@ Dependencies: none. Acceptance: authority hierarchy, useful system docs, accepte
 
 ## 1. Windows desktop-overlay technical spike
 
-Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable cross-platform harness, 41 logic assertions, direct Windows 11 native diagnostics, separate Windows/macOS matrices, and supplementary native macOS findings completed. Shell interaction, tray recovery, and mixed-DPI parity remain open; ADR 0010 stays proposed. This pending platform gate does not block platform-neutral simulation milestones.**
+Dependencies: Godot version pin and Windows test environment. Acceptance: measured evidence for transparency, passthrough, always-on-top, dragging, DPI, taskbar edges, multi-monitor geometry, minimize/restore, saved placement, and Minimal/Small/Expanded transitions; risks and adapter contract documented. No production UI or gameplay. **Current: reusable cross-platform harness, 41 logic assertions, direct Windows 11 native diagnostics, separate Windows/macOS matrices, and supplementary native macOS findings completed. Prompt 4.8 directly confirms Alt+Tab responsiveness, minimize/restore, taskbar geometry and a 100/125% monitor inventory. Tray recovery/callback/cleanup, Show Desktop and controlled mixed-DPI parity remain open; ADR 0010 stays proposed. This pending platform gate does not block platform-neutral simulation milestones.**
 
 ## 2. Content and simulation foundation
 
@@ -24,13 +24,13 @@ Dependencies: milestone 2. Acceptance: data-defined egg choice/hatching and a co
 
 Dependencies: stable lifecycle and content registry. Acceptance: at least meaningful good-care and poor-care branches, short encounters, injuries/recovery, experience/history inputs, one multi-stage dungeon, boss and cross-system rewards.
 
-**Implemented and validated through 2026-08-14:** automatic data-defined good/poor routes for all three starter families, deterministic stanced battles with level/experience/history/injury/recovery, one five-node dungeon with event/rest/boss flow, idempotent first-clear/repeat rewards, future habitat theme/trophy unlock storage, save v3 migration, codex/discovery records, and isolated Windows gameplay evidence. Prompt 4.7 completes current-form living animation, reaction/VFX presentation and bounded ambient behavior without changing domain rules. Combat interaction and evolution disclosure remain provisional. Native overlay work remains parallel and ADR 0010 remains proposed.
+**Implemented and validated through 2026-08-14:** automatic data-defined good/poor routes for all three starter families, deterministic stanced battles with level/experience/history/injury/recovery, one five-node dungeon with event/rest/boss flow, idempotent first-clear/repeat rewards, future habitat theme/trophy unlock storage, save v3 migration, codex/discovery records, and isolated Windows gameplay evidence. Prompt 4.8 adds exhaustive visual classification, correction and a debug-only runtime Showroom without changing domain rules. Combat interaction, evolution disclosure and final art remain provisional. Native overlay work remains parallel and ADR 0010 remains proposed.
 
 ## 5. Habitat customization and unlock rewards
 
 Dependencies: first dungeon rewards. Acceptance: layered mixable habitat components, persistent placement, functional stations, accessible editing, and rewards from progression.
 
-**Not started. Prompts 4.5/4.6/4.7 rebuilt and animated only the fixed presentation habitat; station routing, ambient prop reactions and effects are presentation behavior, not editing or furniture placement. Entry gate: product-owner visual approval, resolved provisional-art rights/license, and documented Windows shell/DPI/accessibility review.**
+**Not started. Prompts 4.5–4.8 rebuilt, animated and reviewed only the fixed presentation habitat; station routing, ambient prop reactions, Showroom tooling and effects are presentation behavior, not editing or furniture placement. Entry gate remains closed: product-owner visual approval, resolved provisional-art rights/license, usable screen-reader exposure, and the remaining native Windows DPI/tray/mixed-DPI rows are required.**
 
 ## 6. Second egg, farm reveal, residents, and idle jobs
 

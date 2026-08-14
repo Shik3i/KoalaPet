@@ -282,6 +282,33 @@ func get_animation_descriptors(content_id := "", egg := false) -> Dictionary:
 	return result
 
 
+func get_animation_review_entries(locale := "en") -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for kind in ["egg", "form", "enemy-encounter"]:
+		for record in _documents_of_kind(kind):
+			var content_id := str(record.get("id", ""))
+			var animation_profile_id := str(record.get("data", {}).get("animation_profile_id", ""))
+			if content_id.is_empty() or animation_profile_id.is_empty():
+				continue
+			var descriptors := get_animation_descriptors(content_id, kind == "egg")
+			if descriptors.is_empty():
+				continue
+			result.append({
+				"content_id": content_id,
+				"display_name": get_display_name(content_id, locale),
+				"kind": "enemy" if kind == "enemy-encounter" else kind,
+				"animation_profile_id": animation_profile_id,
+				"family_id": str(record.get("data", {}).get("family_id", "")),
+				"animations": descriptors,
+			})
+	result.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		var left_key := "%s|%s" % [str(left.get("kind", "")), str(left.get("content_id", ""))]
+		var right_key := "%s|%s" % [str(right.get("kind", "")), str(right.get("content_id", ""))]
+		return left_key < right_key
+	)
+	return result
+
+
 func get_active_family_id() -> String:
 	if pet_state.is_empty():
 		return ""

@@ -32,19 +32,27 @@ $repositoryRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "../.."))
 $gamePath = Join-Path $repositoryRoot "game"
 $scenePath = "res://scenes/spikes/windows_overlay_spike.tscn"
 $testPath = "res://tests/platform/run_all.gd"
-$godotVersion = (& $GodotPath --version | Select-Object -First 1).Trim()
+$godotCliPath = $GodotPath
+if ([IO.Path]::GetFileNameWithoutExtension($GodotPath) -notmatch '_console$') {
+    $consoleCandidate = Join-Path (Split-Path -Parent $GodotPath) (([IO.Path]::GetFileNameWithoutExtension($GodotPath)) + "_console.exe")
+    if (-not (Test-Path -LiteralPath $consoleCandidate -PathType Leaf)) {
+        throw "GODOT_CONSOLE_NOT_FOUND: $consoleCandidate"
+    }
+    $godotCliPath = $consoleCandidate
+}
+$godotVersion = (& $godotCliPath --version | Select-Object -First 1).Trim()
 if ($godotVersion -ne "4.7.1.stable.official.a13da4feb") {
     throw "GODOT_VERSION_MISMATCH: expected 4.7.1.stable.official.a13da4feb, got $godotVersion"
 }
 
 if (-not $SkipPlatformNeutralTests) {
-    & $GodotPath --headless --path $gamePath --script $testPath
+    & $godotCliPath --headless --path $gamePath --script $testPath
     if ($LASTEXITCODE -ne 0) {
         throw "PLATFORM_NEUTRAL_TESTS_FAILED: exit code $LASTEXITCODE"
     }
 }
 if (-not $SkipEnvironmentCapture) {
-    & (Join-Path $PSScriptRoot "collect_environment.ps1") -GodotPath $GodotPath
+    & (Join-Path $PSScriptRoot "collect_environment.ps1") -GodotPath $GodotPath -GodotCliPath $godotCliPath
 }
 
 Write-Host "Launching: $GodotPath --path $gamePath --scene $scenePath"

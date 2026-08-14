@@ -7,7 +7,7 @@
     "art_source/prompts/animation-polish-walk-cycles.md"
   ],
   "processing_command": "python tools/art_pipeline/process_visual_rebuild_assets.py",
-  "processing_script_sha256": "962f2239ef921bb417d2240b699549e1225123e5f932e406a0681a5352fc0737",
+  "processing_script_sha256": "919fb0df4385f64b72cad5712722243a0c0184989809acab14abc78d0a70fbc0",
   "source_groups": [
     {
       "asset_group": "moss_hatchling",
@@ -1235,15 +1235,15 @@
     },
     {
       "path": "game/content_packs/koalapet.base/data/animation_egg_ember.json",
-      "sha256": "f50a763a93a3911be293a2a8ddb6569cb98404fa51cb709125a83c73136e9164"
+      "sha256": "4f2a2afec8e34bdfdd56c319220d0fcd30d9fd10a5d9dbc2cd6de108bab3193e"
     },
     {
       "path": "game/content_packs/koalapet.base/data/animation_egg_moss.json",
-      "sha256": "96126093d150472ed2d500f75ec901ba8d519f2f64e0052343f51b4f815f4fa1"
+      "sha256": "333db30012e873f9e8ccf06ff0842511151094bae3026c6edc7b176627110b9e"
     },
     {
       "path": "game/content_packs/koalapet.base/data/animation_egg_tide.json",
-      "sha256": "644659e1f864dac0331b4aa88e934957b243954fa2a47ec72fe0fba950d72a3e"
+      "sha256": "60ab1c3a9a28ec4bca4a8f75d313aca77d443eaa8d708c908d4047f81fbd5cfa"
     },
     {
       "path": "game/content_packs/koalapet.base/data/animation_ember.json",

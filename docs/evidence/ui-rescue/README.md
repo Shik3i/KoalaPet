@@ -75,6 +75,26 @@ Confirmed by that harness:
   (`tabto:HeaderModeSwitch`, `F1`/`F2`/`F3`) and the settings sheet all respond.
 - No step terminated the process; no engine error was logged.
 
+### Keyboard verification of the full care loop
+
+Because the mouse path is unreliable on this host (see below), the complete care
+loop was also driven coordinate-free: Tab to the control the application reports
+as focused, then Enter. All eight steps passed —
+
+| Step | Control | Revision delta | Feedback | Habitat |
+| --- | --- | --- | --- | --- |
+| 1 | Füttern | +1 | `feedback.feed.ok` | `turn_left` |
+| 2 | Reinigen | +1 | `feedback.clean.ok` | `turn_left` |
+| 3 | Trainieren | +1 | `feedback.train.ok` | `walk` |
+| 4 | Mehr | 0 | — | page → more |
+| 5 | Leckerli | +1 | `feedback.feed.overfed` | `walk` |
+| 6 | Schlafen | +1 | `feedback.sleep.ok` | `turn_left` |
+| 7 | Pflege | 0 | — | `sleep_loop` |
+| 8 | Aufwecken | +1 | `feedback.wake.ok` | `wake` |
+
+Each control was reached in 5–10 Tab presses, every action produced exactly one
+domain revision and one localized message, and Wake correctly replaced Sleep.
+
 ### Harness limitation, not a product defect
 
 On this mixed-DPI multi-monitor host, Win32 window metrics queried from a
